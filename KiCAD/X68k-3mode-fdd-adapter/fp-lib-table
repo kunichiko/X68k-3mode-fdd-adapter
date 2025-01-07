@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "x68k-lib")(type "KiCad")(uri "/Users/ohnaka/work/X68000/X68k-3mode-fdd-adapter/KiCAD/lib/X68k-kicad-library/x68000-ext.pretty")(options "")(descr ""))
+)

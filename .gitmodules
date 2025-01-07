@@ -1,0 +1,3 @@
+[submodule "KiCAD/lib/X68k-kicad-library"]
+	path = KiCAD/lib/X68k-kicad-library
+	url = https://github.com/kunichiko/X68k-kicad-library.git
