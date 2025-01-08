@@ -4814,7 +4814,7 @@
 					(hide yes)
 				)
 			)
-			(property "LCIC" "C2922787"
+			(property "LCSC" "C2922787"
 				(at 0 0 0)
 				(effects
 					(font
@@ -9533,7 +9533,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" "C168701"
+		(property "LCSC" "C168701"
 			(at 44.45 77.47 90)
 			(effects
 				(font
@@ -9757,7 +9757,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" "C49257"
+		(property "LCSC" "C3294661"
 			(at 287.02 35.56 0)
 			(effects
 				(font
@@ -9904,7 +9904,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" "C2922787"
+		(property "LCSC" "C2922787"
 			(at 341.63 50.8 0)
 			(effects
 				(font
@@ -10118,7 +10118,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" "C2321"
+		(property "LCSC" "C2321"
 			(at 50.8 46.99 0)
 			(effects
 				(font
@@ -10335,7 +10335,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" "C411052"
+		(property "LCSC" "C411052"
 			(at 78.74 203.2 0)
 			(effects
 				(font
@@ -10456,7 +10456,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" "C53334"
+		(property "LCSC" "C53334"
 			(at 276.86 129.54 0)
 			(effects
 				(font
@@ -11245,7 +11245,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" "C53334"
+		(property "LCSC" "C53334"
 			(at 275.59 236.22 0)
 			(effects
 				(font
@@ -12310,7 +12310,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" "C590635"
+		(property "LCSC" "C590635"
 			(at 25.4 46.99 0)
 			(effects
 				(font
@@ -14476,7 +14476,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" "C725929"
+		(property "LCSC" "C725929"
 			(at 67.31 121.92 0)
 			(effects
 				(font
@@ -14784,7 +14784,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" "C268712"
+		(property "LCSC" "C268712"
 			(at 90.17 33.02 90)
 			(effects
 				(font
@@ -15892,7 +15892,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" "C49257"
+		(property "LCSC" "C49257"
 			(at 97.79 142.24 0)
 			(effects
 				(font
@@ -16043,7 +16043,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" "C49257"
+		(property "LCSC" "C49257"
 			(at 336.55 27.94 0)
 			(effects
 				(font
@@ -16788,7 +16788,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" "C2922787"
+		(property "LCSC" "C2922787"
 			(at 368.3 50.8 0)
 			(effects
 				(font
