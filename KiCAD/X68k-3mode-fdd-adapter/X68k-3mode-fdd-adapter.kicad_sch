@@ -3132,260 +3132,6 @@
 				)
 			)
 		)
-		(symbol "LED:WS2812B"
-			(pin_names
-				(offset 0.254)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "D"
-				(at 5.08 5.715 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify right bottom)
-				)
-			)
-			(property "Value" "WS2812B"
-				(at 1.27 -5.715 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Footprint" "LED_SMD:LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm"
-				(at 1.27 -7.62 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf"
-				(at 2.54 -9.525 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-					(hide yes)
-				)
-			)
-			(property "Description" "RGB LED with integrated controller"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "RGB LED NeoPixel addressable"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "LED*WS2812*PLCC*5.0x5.0mm*P3.2mm*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "WS2812B_0_0"
-				(text "RGB"
-					(at 2.286 -4.191 0)
-					(effects
-						(font
-							(size 0.762 0.762)
-						)
-					)
-				)
-			)
-			(symbol "WS2812B_0_1"
-				(polyline
-					(pts
-						(xy 1.27 -3.556) (xy 1.778 -3.556)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.27 -2.54) (xy 1.778 -2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 4.699 -3.556) (xy 2.667 -3.556)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.286 -2.54) (xy 1.27 -3.556) (xy 1.27 -3.048)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.286 -1.524) (xy 1.27 -2.54) (xy 1.27 -2.032)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 3.683 -1.016) (xy 3.683 -3.556) (xy 3.683 -4.064)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 4.699 -1.524) (xy 2.667 -1.524) (xy 3.683 -3.556) (xy 4.699 -1.524)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start 5.08 5.08)
-					(end -5.08 -5.08)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-			)
-			(symbol "WS2812B_1_1"
-				(pin power_in line
-					(at 0 7.62 270)
-					(length 2.54)
-					(name "VDD"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin output line
-					(at 7.62 0 180)
-					(length 2.54)
-					(name "DOUT"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 0 -7.62 90)
-					(length 2.54)
-					(name "VSS"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -7.62 0 0)
-					(length 2.54)
-					(name "DIN"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
 		(symbol "Mechanical:MountingHole_Pad"
 			(pin_numbers hide)
 			(pin_names
@@ -5019,6 +4765,160 @@
 				)
 			)
 		)
+		(symbol "X68k-lib:SK6812MINI-HS"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "LED"
+				(at 3.81 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "SK6812MINI-HS"
+				(at 5.08 8.89 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "x68k-lib:SK6812MINI-HS"
+				(at 15.24 -7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 -1.27 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "RGB LED with integrated controller"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "LCIC" "C2922787"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "RGB LED NeoPixel"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "SK6812MINI-HS_0_1"
+				(rectangle
+					(start -6.35 6.35)
+					(end 6.35 -3.81)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "SK6812MINI-HS_1_1"
+				(pin power_in line
+					(at 0 -6.35 90)
+					(length 2.54)
+					(name "VSS"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -8.89 1.27 0)
+					(length 2.54)
+					(name "DIN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 8.89 270)
+					(length 2.54)
+					(name "VDD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 8.89 1.27 180)
+					(length 2.54)
+					(name "DOUT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "power:+5V"
 			(power)
 			(pin_numbers hide)
@@ -5351,12 +5251,6 @@
 		(uuid "1b1091d6-f518-42a0-bcb8-e780608bbabb")
 	)
 	(junction
-		(at 325.12 49.53)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "1dd6559e-f267-4a45-a660-1d9d0ba94790")
-	)
-	(junction
 		(at 40.64 52.07)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5639,6 +5533,12 @@
 		(uuid "d4aa0a96-7603-4d7b-9864-1231374acc1a")
 	)
 	(junction
+		(at 325.12 49.53)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d8d78707-92ec-465f-a59e-8c88ef012ee3")
+	)
+	(junction
 		(at 172.72 118.11)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5707,8 +5607,8 @@
 		(uuid "4e963ce5-9c18-4082-8a12-08bac4d2c1a6")
 	)
 	(no_connect
-		(at 375.92 49.53)
-		(uuid "537e97bc-0692-49e0-9e3c-60246ab2fd59")
+		(at 377.19 49.53)
+		(uuid "501fd7dc-f48f-41c7-ad59-04c1d8389ca5")
 	)
 	(no_connect
 		(at 62.23 213.36)
@@ -5743,6 +5643,16 @@
 			(type default)
 		)
 		(uuid "00e983c2-d43c-4b8d-8833-3d8ca9e79057")
+	)
+	(wire
+		(pts
+			(xy 350.52 49.53) (xy 359.41 49.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "00fea4c8-d6e8-445d-ba16-a7f771852e4c")
 	)
 	(wire
 		(pts
@@ -6133,6 +6043,16 @@
 			(type default)
 		)
 		(uuid "2aa8039c-fb2e-4dbf-879c-d09f4080411a")
+	)
+	(wire
+		(pts
+			(xy 325.12 49.53) (xy 332.74 49.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2ceb8bed-760f-40b8-89e1-025810cf1d8a")
 	)
 	(wire
 		(pts
@@ -7466,16 +7386,6 @@
 	)
 	(wire
 		(pts
-			(xy 325.12 49.53) (xy 334.01 49.53)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b0e4ab81-e10f-40b9-ae81-731a0c057c78")
-	)
-	(wire
-		(pts
 			(xy 110.49 45.72) (xy 110.49 36.83)
 		)
 		(stroke
@@ -8083,16 +7993,6 @@
 			(type default)
 		)
 		(uuid "f70b4f3e-7a52-4bb7-96f6-adc697bf83c7")
-	)
-	(wire
-		(pts
-			(xy 349.25 49.53) (xy 360.68 49.53)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f7642e11-35cf-4ba0-9946-ff3a87854d28")
 	)
 	(wire
 		(pts
@@ -9633,7 +9533,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" "C456012"
+		(property "LCIC" "C168701"
 			(at 44.45 77.47 90)
 			(effects
 				(font
@@ -9830,7 +9730,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Button_Switch_SMD:SW_DIP_SPSTx02_Slide_Copal_CHS-02A_W5.08mm_P1.27mm_JPin"
+		(property "Footprint" "Button_Switch_SMD:SW_DIP_SPSTx02_Slide_Copal_CHS-02B_W7.62mm_P1.27mm"
 			(at 287.02 35.56 0)
 			(effects
 				(font
@@ -9849,6 +9749,15 @@
 			)
 		)
 		(property "Description" "2x DIP Switch, Single Pole Single Throw (SPST) switch, small symbol"
+			(at 287.02 35.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" "C49257"
 			(at 287.02 35.56 0)
 			(effects
 				(font
@@ -9939,6 +9848,86 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "#PWR037")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "X68k-lib:SK6812MINI-HS")
+		(at 341.63 50.8 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1e5e3d49-dd60-47cb-b13b-7d939758e519")
+		(property "Reference" "D1"
+			(at 346.71 39.878 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SK6812MINI"
+			(at 349.758 42.418 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "x68k-lib:SK6812MINI-HS"
+			(at 356.87 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/2686/SK6812MINI_REV.01-1-2.pdf"
+			(at 341.63 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "RGB LED with integrated controller"
+			(at 341.63 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" "C2922787"
+			(at 341.63 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "4"
+			(uuid "3eb2aecf-4fb7-4221-842e-d2f6ed940a40")
+		)
+		(pin "2"
+			(uuid "35656227-31e9-4104-bd9f-4bfec10397e1")
+		)
+		(pin "3"
+			(uuid "2500caad-e4fd-4924-b048-96f1f3b0f971")
+		)
+		(pin "1"
+			(uuid "dc296d55-be68-47e9-9287-6aa83cd7bdde")
+		)
+		(instances
+			(project ""
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "D1")
 					(unit 1)
 				)
 			)
@@ -10094,7 +10083,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_01x04"
+		(property "Value" "PH-4A"
 			(at 50.8 55.88 0)
 			(effects
 				(font
@@ -10121,6 +10110,15 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 50.8 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" "C2321"
 			(at 50.8 46.99 0)
 			(effects
 				(font
@@ -10277,82 +10275,6 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "#PWR048")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "LED:WS2812B")
-		(at 368.3 49.53 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "2cd550fa-901e-4ca4-b497-9cf6528f45e0")
-		(property "Reference" "D2"
-			(at 379.73 43.2114 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "FDD EJECT"
-			(at 379.73 45.7514 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "LED_SMD:LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm"
-			(at 369.57 57.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf"
-			(at 370.84 59.055 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Description" "RGB LED with integrated controller"
-			(at 368.3 49.53 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "4"
-			(uuid "b71a10e9-236f-4927-bd1a-2778af300fdb")
-		)
-		(pin "1"
-			(uuid "bde1c646-cc48-419f-8f4f-076522b6c3c6")
-		)
-		(pin "2"
-			(uuid "af848eac-1220-4fc8-8cf0-0cbedc32faf8")
-		)
-		(pin "3"
-			(uuid "974f0cb8-2cf8-44af-bc7a-4e0f72a7d94a")
-		)
-		(instances
-			(project "X68k-3mode-fdd-adapter"
-				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "D2")
 					(unit 1)
 				)
 			)
@@ -11528,7 +11450,7 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "5974733d-97e2-449a-ad5a-14aaa89d5744")
 		(property "Reference" "TP4"
@@ -12380,6 +12302,15 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 25.4 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" "C590635"
 			(at 25.4 46.99 0)
 			(effects
 				(font
@@ -14545,6 +14476,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" "C725929"
+			(at 67.31 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "8c161546-0aae-4ce7-ab19-a8cc89058e89")
 		)
@@ -14808,7 +14748,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "D_Schottky"
+		(property "Value" "SS2040FL"
 			(at 92.71 33.9724 90)
 			(effects
 				(font
@@ -14837,6 +14777,15 @@
 		)
 		(property "Description" "Schottky diode"
 			(at 90.17 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" "C268712"
+			(at 90.17 33.02 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14879,7 +14828,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "2SC4213"
+		(property "Value" "2SC2712"
 			(at 83.82 46.9899 0)
 			(effects
 				(font
@@ -14888,7 +14837,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-323_SC-70"
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
 			(at 83.82 47.625 0)
 			(effects
 				(font
@@ -15943,6 +15892,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" "C49257"
+			(at 97.79 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "52a02b84-fde4-4bdc-bf5c-2c7a20d6f86c")
 		)
@@ -16077,6 +16035,15 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x03, script generated"
+			(at 336.55 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" "C49257"
 			(at 336.55 27.94 0)
 			(effects
 				(font
@@ -16296,82 +16263,6 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "#PWR011")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "LED:WS2812B")
-		(at 341.63 49.53 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "e74d36cb-d842-4ff9-8bd4-e58b13bcec96")
-		(property "Reference" "D1"
-			(at 353.06 43.2114 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "FDD ACCESS"
-			(at 353.06 45.7514 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "LED_SMD:LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm"
-			(at 342.9 57.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf"
-			(at 344.17 59.055 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 341.63 49.53 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "4"
-			(uuid "af997630-aaf9-4638-80c5-694fb6e690aa")
-		)
-		(pin "1"
-			(uuid "e44e1ea1-78ae-4d28-afa1-3cb49413cabd")
-		)
-		(pin "2"
-			(uuid "7003a35d-9951-41d4-ba58-42ad16eb2615")
-		)
-		(pin "3"
-			(uuid "d54e2476-d267-4e9d-b809-437ffed76ed4")
-		)
-		(instances
-			(project ""
-				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "D1")
 					(unit 1)
 				)
 			)
@@ -16841,6 +16732,86 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "#PWR039")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "X68k-lib:SK6812MINI-HS")
+		(at 368.3 50.8 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "ffa86407-b713-4c0c-88d7-9cc49dca57f9")
+		(property "Reference" "D2"
+			(at 372.618 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SK6812MINI"
+			(at 376.428 42.672 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "x68k-lib:SK6812MINI-HS"
+			(at 383.54 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/2686/SK6812MINI_REV.01-1-2.pdf"
+			(at 368.3 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "RGB LED with integrated controller"
+			(at 368.3 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" "C2922787"
+			(at 368.3 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "1f37f0f9-f48f-4777-a801-7e6301932594")
+		)
+		(pin "3"
+			(uuid "8d4a83f3-dbf1-4265-a76f-c68ab3d5205b")
+		)
+		(pin "4"
+			(uuid "946278ff-c0b8-47f6-82dd-65b19be18267")
+		)
+		(pin "2"
+			(uuid "b9178f5f-2c8b-4e57-ae65-1e97f36a4f31")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "D2")
 					(unit 1)
 				)
 			)
