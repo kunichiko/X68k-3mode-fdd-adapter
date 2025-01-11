@@ -15298,7 +15298,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_02x17_Odd_Even"
+		(property "Value" "Double Row 3A Copper Alloy 34P Female Headers (PM254-2-17-W-8.5)"
 			(at 342.9 97.79 0)
 			(effects
 				(font
@@ -15315,7 +15315,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2306091006_HCTL-PM254-2-17-W-8-5_C2897437.pdf"
 			(at 341.63 121.92 0)
 			(effects
 				(font
@@ -15325,6 +15325,15 @@
 			)
 		)
 		(property "Description" "Generic connector, double row, 02x17, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 341.63 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C2897437"
 			(at 341.63 121.92 0)
 			(effects
 				(font
