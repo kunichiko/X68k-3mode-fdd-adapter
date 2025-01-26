@@ -26,6 +26,12 @@ typedef struct context {
 
 } context_t;
 
+// 3mode driveのMODE_SELECT信号の論理反転フラグ
+// 9scdrvはOPTION_SELECTとOPTION_SELECT_PAIRをアサートした時に、300RPMで1.44MBモードにするので
+// MODE_SELECTもそれを合わせた論理を通常動作とするが、このフラグをアサートすると論理が逆になる
+// まとめると、mode_select_invertの意味は以下のようになる。
+// falseの時: MODE_SELECT=1(インアクティブ)の時に1.2MB, MODE_SELECT=0(アクティブ)の時に1.44MB
+// trueの時 : MODE_SELECT=1(インアクティブ)の時に1.44MB, MODE_SELECT=0(アクティブ)の時に1.2MB
 extern bool mode_select_invert;
 
 volatile extern bool in_access;

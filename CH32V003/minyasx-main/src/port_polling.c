@@ -57,12 +57,18 @@ uint32_t last_index_detected = 0;
  */
 bool revolution_2hd_144 = 0;  // 0: 1.2MB, 1: 1.44MB
 
+// チャタリング対策用のフラグ
+bool option_both_asserted_prev = 0;
+
+uint32_t revolution_2hd_144_lastsame = 0;
 /*
  * revolution_2hdの値が変化した時刻を保持するフラグ
  * 回転数が変更されてから、0.5秒(500msec)の間はモーターの回転が安定しないため、
  * このフラグが立っている間は、READY信号をアクティブにしないようにする
  */
 uint32_t revolution_2hd_changed = 0;
+
+bool index_detected = 0;
 
 /*
  * SysTick ISR - must be lightweight to prevent the CPU from bogging down.
@@ -87,8 +93,6 @@ void SysTick_Handler(void) {
     uint32_t PC = GPIOC->INDR;
     uint32_t drive_select_n = (PC >> 5) & 1;
 
-    bool index_detected = 0;
-
     if (drive_select_n) {
         // drive_select は負論理なので、ここは非選択状態
 
@@ -97,7 +101,6 @@ void SysTick_Handler(void) {
         GPIOD->BCR = GPIO_Pin_0;   // DISK_IN_GEN(D0)をOFFにする
                                    // (NOTバッファがあるので正論理)
         GPIOD->BSHR = GPIO_Pin_2;  // DRIVE_SELECT_DOSV_1(D2)をOFFにする
-        GPIOD->BSHR = GPIO_Pin_3;  // MODE_SELECT_DOSV(D3)をOFFにする
         drive_selected = 0;
         in_access = 0;
         index_detected = 0;
@@ -111,17 +114,40 @@ void SysTick_Handler(void) {
         // そうでなければMODE_SELECTをInactive (High)
         // にして360RPMに、1.2KBモードにする
         // ただし、mode_select_invertがアサートされていたら、論理を逆にする
-        bool option_both_asserted = (((PC >> 6) & 1) == 0) && (((PC >> 7) & 1) == 0) ? 1 : 0;
-        if (option_both_asserted != revolution_2hd_144) {
-            revolution_2hd_144 = option_both_asserted;
+        bool revolution_changed = false;
+        bool option_both_asserted_now = (((PC >> 6) & 1) == 0) && (((PC >> 7) & 1) == 0) ? 1 : 0;
+        if ( option_both_asserted_now != revolution_2hd_144 ) {
+            // 1ms以上変化が続いたら、安定して変化したとみなし、受け入れる
+            if (SysTick->CNT - revolution_2hd_144_lastsame > 1 * SYSTICK_ONE_MILLISECOND) {
+                revolution_changed = true;
+                revolution_2hd_144 = option_both_asserted_now;
+                revolution_2hd_144_lastsame = SysTick->CNT;
+            }
+        } else {
+            // 同じ値だったら、変化がないとみなし、時刻を記録
+            revolution_2hd_144_lastsame = SysTick->CNT;
+        }
+
+        // 回転数の変化要求があった場合、MODE_SELECT信号を変更する
+        if (revolution_changed) {
             revolution_2hd_changed = SysTick->CNT;
-            // OPTION_SELECT, OPTION_SELECT_PAIRの両方がアサートされている
-            if (revolution_2hd_144 ^ mode_select_invert) {
-                // MODE_SELECT_DOSV(D3)をインアクティブ(High)にする
-                GPIOD->BSHR = GPIO_Pin_3;
+            // OPTION_SELECT, OPTION_SELECT_PAIRの両方がアサートされたら、
+            if (revolution_2hd_144) {
+                if(mode_select_invert) {
+                    // 反転時はMODE_SELECT_DOSV(D3)をインアクティブ(High)にすると1.44MB
+                    GPIOD->BSHR = GPIO_Pin_3;
+                } else {
+                    // 通常時はMODE_SELECT_DOSV(D3)をアクティブ(Low)にすると1.44MB
+                    GPIOD->BCR = GPIO_Pin_3;
+                }
             } else {
-                // MODE_SELECT_DOSV(D3)をアクティブLowにする
-                GPIOD->BCR = GPIO_Pin_3;
+                if(mode_select_invert) {
+                    // 反転時はMODE_SELECT_DOSV(D3)をアクティブ(Low)にすると1.2MB
+                    GPIOD->BCR = GPIO_Pin_3;
+                } else {
+                    // 通常時はMODE_SELECT_DOSV(D3)をインアクティブ(High)にすると1.2MB
+                    GPIOD->BSHR = GPIO_Pin_3;
+                }
             }
         }
 
@@ -133,6 +159,7 @@ void SysTick_Handler(void) {
             media_inserted = 1;  // TODO: DISK_CHANGE_DOSV(C1)がアクティブなら未挿入にする
         }
 
+#if 0
         // READY信号(A1)を生成する
         // * 0.5秒以内に回転数が変更されていたら、READY信号をアクティブにしない
         // * DRIVE_SELECT中にINDEXが検出されていたら、READY信号をアクティブにする
@@ -147,16 +174,39 @@ void SysTick_Handler(void) {
                 GPIOD->BCR = GPIO_Pin_0;
             }
         }
+#elsif 0
+        // メディアが挿入されているならREADY信号をアクティブにする
+        if( media_inserted && index_detected) {
+            // READY信号(A1)とDISK_IN_GEN(D0)をONにする
+            GPIOA->BSHR = GPIO_Pin_1;
+            GPIOD->BSHR = GPIO_Pin_0;
+        } else {
+            // READY信号(A1)とDISK_IN_GEN(D0)をOFFにする
+            GPIOA->BCR = GPIO_Pin_1;
+            GPIOD->BCR = GPIO_Pin_0;
+        }
+#else
+        // MOTOR ON信号(C4)がアクティブならREADY信号をアクティブにする
+        if (((PC >> 4) & 1) == 0) {
+            // MOTOR ON信号がアクティブ
+            GPIOA->BSHR = GPIO_Pin_1;
+            GPIOD->BSHR = GPIO_Pin_0;
+        } else {
+            // MOTOR ON信号が非アクティブ
+            GPIOA->BCR = GPIO_Pin_1;
+            GPIOD->BCR = GPIO_Pin_0;
+        }
+#endif
 
         buzzer_counter++;
         int buzzer_on = 0;
-        // 0.1秒ごとに鳴らす/鳴らさないを切り替える
-        switch (buzzer_counter / (100 * 10)) {
+        // 0.05秒ごとに鳴らす/鳴らさないを切り替える
+        switch (buzzer_counter / (100 * 5)) {
             case 0:
                 buzzer_on = 1;
                 break;
             case 1:
-                buzzer_on = !option_both_asserted;
+                buzzer_on = revolution_2hd_144 ? 0 : 1;
                 break;
             case 2:
                 buzzer_on = 1;

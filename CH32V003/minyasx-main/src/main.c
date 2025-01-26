@@ -71,6 +71,8 @@ int main() {
     } else {
         mode_select_invert = 0;
     }
+    debugprint("MODE_SELECT_INVERT: %d\n", mode_select_invert);
+
     // C0を出力にする
     GPIOC->CFGLR &= ~(0xf << (4 * 0));
     GPIOC->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 0);
@@ -115,6 +117,16 @@ int main() {
     GPIOD->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * 6);
     GPIOD->CFGLR &= ~(0xf << (4 * 7));
     GPIOD->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 7);
+
+    // MODE_SELECTの論理の初期設定
+    // 初期状態はX68000の標準フォーマット(360RPM, 1.2MB)とする
+    if (mode_select_invert) {
+        // 反転時はMODE_SELECT_DOSV(D3)をアクティブ(Low)にすると1.2MB
+        GPIOD->BCR = GPIO_Pin_3;
+    } else {
+        // 通常時はMODE_SELECT_DOSV(D3)をインアクティブ(High)にすると1.2MB
+        GPIOD->BSHR = GPIO_Pin_3;
+    }
 
     // Timer 1 を 10us で割り込みを発生させる
     // 10us = 100kHz で割り込みを発生させる
@@ -217,12 +229,23 @@ void update_fdd_led() {
             led_data[EJECT_G] = 0;
         } else {
             // イジェクト可能 = 緑点灯
-            led_data[EJECT_G] = LED_BRIGTHNESS;
+            if (revolution_2hd_144) {
+                led_data[EJECT_B] = LED_BRIGTHNESS;  // 1.44MBの場合は青点灯
+            } else {
+                led_data[EJECT_G] = LED_BRIGTHNESS;
+            }
         }
     } else {
         // メディア未挿入の場合は消灯
         led_data[EJECT_G] = 0;
     }
+
+    // PD1 (SWIOとの共用ピン) が読めるかどうかのテスト
+    // if(GPIOD->INDR & GPIO_Pin_1) {
+    //     led_data[EJECT_B] = LED_BRIGTHNESS;
+    // } else {
+    //     led_data[EJECT_R] = 0;
+    // }
 
     // 更新
     WS2812BSimpleSend(GPIOC, 0, led_data, 6);
