@@ -61,6 +61,11 @@ bool revolution_2hd_144 = 0;  // 0: 1.2MB, 1: 1.44MB
 bool option_both_asserted_prev = 0;
 
 uint32_t revolution_2hd_144_lastsame = 0;
+
+// エッジ検出用のフラグ
+bool option_asserted_prev = 0;
+uint32_t PD_prev;
+
 /*
  * revolution_2hdの値が変化した時刻を保持するフラグ
  * 回転数が変更されてから、0.5秒(500msec)の間はモーターの回転が安定しないため、
@@ -116,7 +121,7 @@ void SysTick_Handler(void) {
         // ただし、mode_select_invertがアサートされていたら、論理を逆にする
         bool revolution_changed = false;
         bool option_both_asserted_now = (((PC >> 6) & 1) == 0) && (((PC >> 7) & 1) == 0) ? 1 : 0;
-        if ( option_both_asserted_now != revolution_2hd_144 ) {
+        if (option_both_asserted_now != revolution_2hd_144) {
             // 1ms以上変化が続いたら、安定して変化したとみなし、受け入れる
             if (SysTick->CNT - revolution_2hd_144_lastsame > 1 * SYSTICK_ONE_MILLISECOND) {
                 revolution_changed = true;
@@ -133,7 +138,7 @@ void SysTick_Handler(void) {
             revolution_2hd_changed = SysTick->CNT;
             // OPTION_SELECT, OPTION_SELECT_PAIRの両方がアサートされたら、
             if (revolution_2hd_144) {
-                if(mode_select_invert) {
+                if (mode_select_invert) {
                     // 反転時はMODE_SELECT_DOSV(D3)をインアクティブ(High)にすると1.44MB
                     GPIOD->BSHR = GPIO_Pin_3;
                 } else {
@@ -141,7 +146,7 @@ void SysTick_Handler(void) {
                     GPIOD->BCR = GPIO_Pin_3;
                 }
             } else {
-                if(mode_select_invert) {
+                if (mode_select_invert) {
                     // 反転時はMODE_SELECT_DOSV(D3)をアクティブ(Low)にすると1.2MB
                     GPIOD->BCR = GPIO_Pin_3;
                 } else {
@@ -198,6 +203,7 @@ void SysTick_Handler(void) {
         }
 #endif
 
+#if BUZZER_ENABLE
         buzzer_counter++;
         int buzzer_on = 0;
         // 0.05秒ごとに鳴らす/鳴らさないを切り替える
@@ -231,7 +237,25 @@ void SysTick_Handler(void) {
         } else {
             GPIOA->BCR = GPIO_Pin_2;
         }
+#endif
     }
+
+    // OPTION信号のチェック
+    bool option_asserted = ((PC >> 7) & 1) == 0;
+    if (!option_asserted && option_asserted_prev) {
+        // OPTION_SELECTの立ち上がりエッジで、以下の信号を受信
+        // D4: EJECT_MASK,          Input, pull-up
+        // D5: EJECT,               Input, pull-up
+        // D6: LED_BLINK,           Input, pull-up
+        eject_mask = ((PD_prev >> 4) & 1) == 0;
+        eject = ((PD_prev >> 5) & 1) == 0;
+        led_blink = ((PD_prev >> 6) & 1) == 0;
+        if (eject) {
+            media_inserted = 0;
+        }
+    }
+    option_asserted_prev = option_asserted;
+    PD_prev = GPIOD->INDR;
 
     // FDD_INT_GEN(D7)をOFFにする
     GPIOD->BCR = GPIO_Pin_7;

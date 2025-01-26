@@ -37,6 +37,7 @@ extern bool mode_select_invert;
 volatile extern bool in_access;
 volatile extern bool media_inserted;
 volatile extern bool led_blink;
+volatile extern bool eject;
 volatile extern bool eject_mask;
 
 #endif

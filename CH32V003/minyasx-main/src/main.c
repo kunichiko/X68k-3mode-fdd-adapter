@@ -118,6 +118,10 @@ int main() {
     GPIOD->CFGLR &= ~(0xf << (4 * 7));
     GPIOD->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 7);
 
+    // PUPDモードの入力ピンに1を出力すると、プルアップになる
+    // D1, D4, D5, D6をプルアップにする
+    GPIOD->BSHR = GPIO_Pin_1 | GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6;
+
     // MODE_SELECTの論理の初期設定
     // 初期状態はX68000の標準フォーマット(360RPM, 1.2MB)とする
     if (mode_select_invert) {
@@ -174,6 +178,7 @@ int main() {
 volatile bool in_access = 0;
 volatile bool media_inserted = 0;
 volatile bool led_blink = 0;
+volatile bool eject = 0;
 volatile bool eject_mask = 0;
 
 int led_blink_counter = 0;
