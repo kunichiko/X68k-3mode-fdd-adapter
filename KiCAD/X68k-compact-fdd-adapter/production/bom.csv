@@ -1,0 +1,6 @@
+﻿Designator,Footprint,Quantity,Value,LCSC Part #
+J1,JST-34FE-FFC,1,Conn_01x34,
+J2,PinHeader_2x17_P2.54mm_Horizontal_Mirror,1,Conn_02x17_Odd_Even,C725929
+J3,TE_AMP_171826-4,1,Conn_01x04,C590635
+P1,USB_C_Receptacle_GCT_USB4125-xx-x-0190_6P_TopMnt_Horizontal,1,USB_C_Plug_USB2.0,C168701
+"R1, R2",0603,2,5.1k,

@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "x68k-lib")(type "KiCad")(uri "${KIPRJMOD}/../lib/X68k-kicad-library/x68000-ext.pretty")(options "")(descr ""))
+)
