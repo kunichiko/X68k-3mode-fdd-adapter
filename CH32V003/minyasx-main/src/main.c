@@ -5,6 +5,9 @@
 
 #include "ch32v003_GPIO_branchless.h"
 #include "ch32v003fun.h"
+
+#include <ssd1306_txt.h>        // OLED text functions
+
 #include "port_polling.h"
 
 #define WS2812BSIMPLE_IMPLEMENTATION
@@ -24,6 +27,11 @@ int main() {
     SystemInit();
 
     Delay_Ms(100);
+  
+    // Setup OLED
+    OLED_init();
+    OLED_clear();
+    OLED_printf("Minyax-X");
 
     debugprint("UP\n");
 
