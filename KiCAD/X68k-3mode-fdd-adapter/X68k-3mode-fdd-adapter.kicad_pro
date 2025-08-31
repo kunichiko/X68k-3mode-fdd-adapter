@@ -647,6 +647,46 @@
     [
       "13b3a4ee-84d6-44b3-962d-9cf7c36d7564",
       "Root"
+    ],
+    [
+      "7c6e16a6-28e5-47b9-9be0-ad5d3831ccb1",
+      "open_drain_buffer"
+    ],
+    [
+      "3ccc8d01-8dd1-4ee1-93af-5f8ae51e89fb",
+      "open_drain_buffer1"
+    ],
+    [
+      "d6da9acf-2c0f-472b-bd13-090081146f1c",
+      "open_drain_buffer2"
+    ],
+    [
+      "f784cf01-9185-4b0d-a7aa-310b9401e919",
+      "open_drain_buffer3"
+    ],
+    [
+      "7c572d15-5342-4a0d-a7b8-fb857bc06701",
+      "open_drain_buffer4"
+    ],
+    [
+      "c2abac05-60a9-4f31-ae0a-4fb09f1bb7c3",
+      "open_drain_buffer5"
+    ],
+    [
+      "c19cf1e4-5f5c-448d-ae21-bf7541d2ee9f",
+      "open_drain_buffer6"
+    ],
+    [
+      "d34270f1-cb25-4647-b985-051d89f069e5",
+      "open_drain_buffer7"
+    ],
+    [
+      "e2bad364-aaa3-4f08-8f3b-45fc5db28f5a",
+      "USB-PD-PWR"
+    ],
+    [
+      "31293df3-a871-47ca-8f5f-1d9e3b862849",
+      "SerialLEDs"
     ]
   ],
   "text_variables": {}
