@@ -3839,7 +3839,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0b2dfad9-1c4b-4da6-9f7b-920deb4451ec")
-		(property "Reference" "#PWR01011"
+		(property "Reference" "#PWR01010"
 			(at 72.39 226.06 0)
 			(effects
 				(font
@@ -3889,7 +3889,7 @@
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/e2bad364-aaa3-4f08-8f3b-45fc5db28f5a"
-					(reference "#PWR01011")
+					(reference "#PWR01010")
 					(unit 1)
 				)
 			)
@@ -4925,7 +4925,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6f887131-6e86-4405-959d-3f4327077aea")
-		(property "Reference" "#PWR01010"
+		(property "Reference" "#PWR01011"
 			(at 80.01 226.06 0)
 			(effects
 				(font
@@ -4975,7 +4975,7 @@
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/e2bad364-aaa3-4f08-8f3b-45fc5db28f5a"
-					(reference "#PWR01010")
+					(reference "#PWR01011")
 					(unit 1)
 				)
 			)
