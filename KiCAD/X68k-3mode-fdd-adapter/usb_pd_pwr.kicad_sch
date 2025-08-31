@@ -1434,7 +1434,209 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "X68k-lib:FDS4935A"
+		(symbol "power:GND"
+			(power)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "GND"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "GND_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GND_1_1"
+				(pin power_in line
+					(at 0 0 270)
+					(length 0)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "power:PWR_FLAG"
+			(power)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#FLG"
+				(at 0 1.905 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "PWR_FLAG"
+				(at 0 3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Special symbol for telling ERC where power comes from"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "flag power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "PWR_FLAG_0_0"
+				(pin power_out line
+					(at 0 0 90)
+					(length 0)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "PWR_FLAG_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "x68000-ext:FDS4935A"
 			(pin_names
 				(hide yes)
 			)
@@ -1862,7 +2064,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "X68k-lib:K7805M-1000R3"
+		(symbol "x68000-ext:K7805M-1000R3"
 			(pin_names
 				(offset 0.254)
 			)
@@ -2013,113 +2215,18 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "power:GND"
-			(power)
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0 -6.35 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "GND"
-				(at 0 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "global power"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "GND_0_1"
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "GND_1_1"
-				(pin power_in line
-					(at 0 0 270)
-					(length 0)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 	)
 	(junction
 		(at 120.65 185.42)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "1601675c-fa25-43ce-a001-84513a7310c0")
+	)
+	(junction
+		(at 156.21 180.34)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "172b359f-23c2-4611-a8cf-a0a732d6d071")
 	)
 	(junction
 		(at 101.6 180.34)
@@ -2216,12 +2323,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "a2ef459f-ea52-4e82-a48e-b45c918a4911")
-	)
-	(junction
-		(at 214.63 120.65)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "a5f73cb9-159a-4bdb-b623-cae020668496")
 	)
 	(junction
 		(at 111.76 180.34)
@@ -2621,7 +2722,7 @@
 	)
 	(wire
 		(pts
-			(xy 123.19 180.34) (xy 160.02 180.34)
+			(xy 123.19 180.34) (xy 156.21 180.34)
 		)
 		(stroke
 			(width 0)
@@ -2961,16 +3062,6 @@
 	)
 	(wire
 		(pts
-			(xy 214.63 119.38) (xy 214.63 120.65)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bd56a2bb-76b8-4990-99c2-55d96f8d717a")
-	)
-	(wire
-		(pts
 			(xy 176.53 88.9) (xy 176.53 90.17)
 		)
 		(stroke
@@ -3161,6 +3252,16 @@
 	)
 	(wire
 		(pts
+			(xy 156.21 180.34) (xy 160.02 180.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eaa2545f-f686-47fd-b5a5-ae532dc590a2")
+	)
+	(wire
+		(pts
 			(xy 181.61 81.28) (xy 187.96 81.28)
 		)
 		(stroke
@@ -3269,16 +3370,6 @@
 		)
 		(uuid "1a99827b-746f-4896-a188-66fb315e199d")
 	)
-	(label "+5V_ENABLE_n"
-		(at 170.18 162.56 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "1aadf73d-37f7-4e08-90c4-c0412254d5d8")
-	)
 	(label "+12V_FDD"
 		(at 264.16 97.79 180)
 		(effects
@@ -3298,16 +3389,6 @@
 			(justify right bottom)
 		)
 		(uuid "79523f9b-e318-4542-9490-1e2c5e575554")
-	)
-	(label "+12V_EXT_ENABLE_n"
-		(at 170.18 100.33 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "857b41f9-921e-405b-b29a-29070202aeeb")
 	)
 	(label "CC1"
 		(at 140.97 185.42 180)
@@ -3369,25 +3450,16 @@
 		)
 		(uuid "e556f5e1-d66c-440b-93dc-e28c668da601")
 	)
-	(label "+12V_ENABLE_n"
-		(at 170.18 132.08 180)
+	(hierarchical_label "USB_D+"
+		(shape input)
+		(at 106.68 198.12 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right bottom)
+			(justify left)
 		)
-		(uuid "e6d79c0f-7b4d-47c4-a2e1-087ba4a26f99")
-	)
-	(label "+12V_EXT_DET"
-		(at 163.83 68.58 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "f68f677d-37e5-4e8a-aabb-6cc6770ccd3b")
+		(uuid "01857f78-a679-4290-82b9-da1cd3d77fde")
 	)
 	(hierarchical_label "VBUS"
 		(shape input)
@@ -3510,6 +3582,17 @@
 		)
 		(uuid "888171cf-927e-497b-8c2b-aa45f5b3d429")
 	)
+	(hierarchical_label "USB_D-"
+		(shape input)
+		(at 106.68 195.58 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d9190de2-1571-4d07-8f33-8e9313b03c50")
+	)
 	(hierarchical_label "CC2"
 		(shape input)
 		(at 140.97 187.96 0)
@@ -3588,7 +3671,7 @@
 		)
 	)
 	(symbol
-		(lib_id "X68k-lib:K7805M-1000R3")
+		(lib_id "x68000-ext:K7805M-1000R3")
 		(at 214.63 113.03 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3741,6 +3824,72 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/e2bad364-aaa3-4f08-8f3b-45fc5db28f5a"
 					(reference "D1002")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 72.39 219.71 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0b2dfad9-1c4b-4da6-9f7b-920deb4451ec")
+		(property "Reference" "#PWR01011"
+			(at 72.39 226.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 72.39 224.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 72.39 219.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 72.39 219.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 72.39 219.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e45011a2-59ad-4342-bf2b-f9dfad2da143")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/e2bad364-aaa3-4f08-8f3b-45fc5db28f5a"
+					(reference "#PWR01011")
 					(unit 1)
 				)
 			)
@@ -3948,6 +4097,72 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/e2bad364-aaa3-4f08-8f3b-45fc5db28f5a"
 					(reference "U1002")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 156.21 180.34 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1da2d85a-e465-4284-879c-809c0ae13172")
+		(property "Reference" "#FLG01001"
+			(at 156.21 178.435 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 156.21 175.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 156.21 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 156.21 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 156.21 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "5f322f91-3d5f-4495-a53f-d72b2d1871ad")
+		)
+		(instances
+			(project ""
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/e2bad364-aaa3-4f08-8f3b-45fc5db28f5a"
+					(reference "#FLG01001")
 					(unit 1)
 				)
 			)
@@ -4309,7 +4524,7 @@
 		)
 	)
 	(symbol
-		(lib_id "X68k-lib:FDS4935A")
+		(lib_id "x68000-ext:FDS4935A")
 		(at 163.83 146.05 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4543,7 +4758,7 @@
 		)
 	)
 	(symbol
-		(lib_id "X68k-lib:FDS4935A")
+		(lib_id "x68000-ext:FDS4935A")
 		(at 176.53 115.57 270)
 		(mirror x)
 		(unit 2)
@@ -4695,6 +4910,72 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/e2bad364-aaa3-4f08-8f3b-45fc5db28f5a"
 					(reference "R1006")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 80.01 219.71 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "6f887131-6e86-4405-959d-3f4327077aea")
+		(property "Reference" "#PWR01010"
+			(at 80.01 226.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 80.01 224.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 80.01 219.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 80.01 219.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 80.01 219.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "6bdd0e27-bd37-47db-b0a0-271e2811fbc5")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/e2bad364-aaa3-4f08-8f3b-45fc5db28f5a"
+					(reference "#PWR01010")
 					(unit 1)
 				)
 			)
@@ -4905,7 +5186,7 @@
 		)
 	)
 	(symbol
-		(lib_id "X68k-lib:FDS4935A")
+		(lib_id "x68000-ext:FDS4935A")
 		(at 163.83 115.57 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5197,7 +5478,7 @@
 		)
 	)
 	(symbol
-		(lib_id "X68k-lib:FDS4935A")
+		(lib_id "x68000-ext:FDS4935A")
 		(at 163.83 83.82 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5908,7 +6189,7 @@
 		)
 	)
 	(symbol
-		(lib_id "X68k-lib:FDS4935A")
+		(lib_id "x68000-ext:FDS4935A")
 		(at 176.53 146.05 270)
 		(mirror x)
 		(unit 2)
@@ -6441,7 +6722,7 @@
 		)
 	)
 	(symbol
-		(lib_id "X68k-lib:FDS4935A")
+		(lib_id "x68000-ext:FDS4935A")
 		(at 176.53 83.82 270)
 		(mirror x)
 		(unit 2)

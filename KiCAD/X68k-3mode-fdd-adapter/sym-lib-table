@@ -1,4 +1,4 @@
 (sym_lib_table
   (version 7)
-  (lib (name "X68k-lib")(type "KiCad")(uri "${KIPRJMOD}/../lib/X68k-kicad-library/x68000-ext.kicad_sym")(options "")(descr ""))
+  (lib (name "x68000-ext")(type "KiCad")(uri "${KIPRJMOD}/../lib/X68k-kicad-library/x68000-ext.kicad_sym")(options "")(descr ""))
 )
