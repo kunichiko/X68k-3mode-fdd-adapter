@@ -14520,7 +14520,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm"
 			(at 138.43 203.2 0)
 			(effects
 				(font
@@ -14929,7 +14929,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 193.04 218.44 0)
 			(effects
 				(font
@@ -16136,7 +16136,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 200.66 218.44 0)
 			(effects
 				(font
@@ -16206,7 +16206,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
 			(at 69.85 100.33 0)
 			(effects
 				(font
@@ -16344,7 +16344,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm"
 			(at 187.96 44.45 0)
 			(effects
 				(font
@@ -17678,7 +17678,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm"
 			(at 138.43 260.35 0)
 			(effects
 				(font
@@ -18404,7 +18404,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-523"
 			(at 49.53 106.68 0)
 			(effects
 				(font
@@ -18425,6 +18425,15 @@
 			)
 		)
 		(property "Description" "Digital NPN Transistor, 4k7/47k, SOT-23"
+			(at 49.53 106.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C5273798"
 			(at 49.53 106.68 0)
 			(effects
 				(font
@@ -18478,7 +18487,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_JST:JST_VH_B2P-VH-FB-B_1x02_P3.96mm_Vertical"
 			(at 33.02 106.68 0)
 			(effects
 				(font
@@ -19190,7 +19199,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b961b18a-c1d2-4181-afc5-9d867d206ef1")
-		(property "Reference" "J107"
+		(property "Reference" "J106"
 			(at 50.8 130.81 0)
 			(effects
 				(font
@@ -19347,7 +19356,7 @@
 		(instances
 			(project ""
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "J107")
+					(reference "J106")
 					(unit 1)
 				)
 			)
@@ -19512,7 +19521,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Button_Switch_SMD:SW_DIP_SPSTx04_Slide_Copal_CHS-04B_W7.62mm_P1.27mm"
 			(at 259.08 55.88 0)
 			(effects
 				(font
@@ -19531,6 +19540,15 @@
 			)
 		)
 		(property "Description" "4x DIP Switch, Single Pole Single Throw (SPST) switch, small symbol"
+			(at 259.08 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C319050"
 			(at 259.08 55.88 0)
 			(effects
 				(font
@@ -19599,7 +19617,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 264.16 181.61 0)
 			(effects
 				(font
@@ -19667,7 +19685,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_IDC:IDC-Header_2x17_P2.54mm_Vertical"
 			(at 370.84 209.55 0)
 			(effects
 				(font
@@ -20188,7 +20206,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_2x06_P2.54mm_Horizontal"
 			(at 370.84 68.58 0)
 			(effects
 				(font
@@ -21027,7 +21045,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Button_Switch_SMD:SW_Push_SPST_NO_Alps_SKRK"
 			(at 189.23 257.81 0)
 			(effects
 				(font
@@ -21298,7 +21316,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 194.31 248.92 0)
 			(effects
 				(font
@@ -22216,7 +22234,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f364cf80-a0d1-4639-8618-3ac33515bf29")
-		(property "Reference" "J106"
+		(property "Reference" "J107"
 			(at 372.11 120.65 0)
 			(effects
 				(font
@@ -22232,7 +22250,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_IDC:IDC-Header_2x17_P2.54mm_Vertical"
 			(at 370.84 147.32 0)
 			(effects
 				(font
@@ -22364,7 +22382,7 @@
 		(instances
 			(project ""
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "J106")
+					(reference "J107")
 					(unit 1)
 				)
 			)
@@ -22529,7 +22547,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 191.77 67.945 90)
 			(effects
 				(font
