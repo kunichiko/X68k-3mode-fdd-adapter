@@ -2528,16 +2528,6 @@
 	)
 	(wire
 		(pts
-			(xy 132.08 185.42) (xy 140.97 185.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1ce7461c-db67-448b-bcb4-9d0ba4353222")
-	)
-	(wire
-		(pts
 			(xy 163.83 152.4) (xy 170.18 152.4)
 		)
 		(stroke
@@ -2855,16 +2845,6 @@
 			(type default)
 		)
 		(uuid "797284b2-5bb8-4639-bc51-3ba0f266652a")
-	)
-	(wire
-		(pts
-			(xy 132.08 187.96) (xy 140.97 187.96)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7a719828-d6e6-413a-8adc-e86828294af4")
 	)
 	(wire
 		(pts
@@ -3457,7 +3437,7 @@
 		(uuid "79523f9b-e318-4542-9490-1e2c5e575554")
 	)
 	(label "CC1"
-		(at 140.97 185.42 180)
+		(at 127 185.42 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3467,7 +3447,7 @@
 		(uuid "98ff35f4-604a-4499-9fd9-35bf3eb14bfe")
 	)
 	(label "CC2"
-		(at 140.97 187.96 180)
+		(at 127 187.96 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3595,7 +3575,7 @@
 	)
 	(hierarchical_label "CC1"
 		(shape input)
-		(at 140.97 185.42 0)
+		(at 127 185.42 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3661,7 +3641,7 @@
 	)
 	(hierarchical_label "CC2"
 		(shape input)
-		(at 140.97 187.96 0)
+		(at 127 187.96 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6118,73 +6098,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 129.54 187.96 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "bb0313e1-7baa-44f9-9c9d-ef7942e594f3")
-		(property "Reference" "R1011"
-			(at 127 189.738 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "1k"
-			(at 133.35 189.738 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
-			(at 129.54 187.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 129.54 187.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor, small US symbol"
-			(at 129.54 187.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "c2facbc1-a28a-47ca-b8d7-a3f33c3831d6")
-		)
-		(pin "1"
-			(uuid "16db59a1-3846-45fe-a031-1964382d2236")
-		)
-		(instances
-			(project "X68k-3mode-fdd-adapter"
-				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/e2bad364-aaa3-4f08-8f3b-45fc5db28f5a"
-					(reference "R1011")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 156.21 90.17 0)
 		(unit 1)
@@ -6556,73 +6469,6 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/e2bad364-aaa3-4f08-8f3b-45fc5db28f5a"
 					(reference "C1001")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 129.54 185.42 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "d57b1b12-ee8d-482d-bce9-d657065fc1a5")
-		(property "Reference" "R1009"
-			(at 127 183.642 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "1k"
-			(at 133.35 183.642 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
-			(at 129.54 185.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 129.54 185.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor, small US symbol"
-			(at 129.54 185.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "a052c0c6-6841-47f4-a350-531c3cedc67f")
-		)
-		(pin "1"
-			(uuid "f765711a-e79b-4a49-832c-ad49fa1afe47")
-		)
-		(instances
-			(project "X68k-3mode-fdd-adapter"
-				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/e2bad364-aaa3-4f08-8f3b-45fc5db28f5a"
-					(reference "R1009")
 					(unit 1)
 				)
 			)
