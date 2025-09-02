@@ -6826,6 +6826,12 @@
 		(uuid "7d4a7c51-6988-4b10-ae1a-73d6037d685b")
 	)
 	(junction
+		(at 247.65 58.42)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7fc8ba75-179b-4f09-b64f-87c3df7db654")
+	)
+	(junction
 		(at 36.83 165.1)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -6854,12 +6860,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "8ba3b1cf-acd1-48c0-89da-60436d63e1b1")
-	)
-	(junction
-		(at 59.69 231.14)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "8f92b207-bf30-4ecd-b220-a126e0b1272b")
 	)
 	(junction
 		(at 59.69 218.44)
@@ -6988,12 +6988,6 @@
 		(uuid "d4aa0a96-7603-4d7b-9864-1231374acc1a")
 	)
 	(junction
-		(at 247.65 55.88)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "dae26c0d-9992-4c4b-a0f6-9012088d0d8d")
-	)
-	(junction
 		(at 358.14 207.01)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -7012,7 +7006,7 @@
 		(uuid "e064a0d0-25e8-4be4-b13a-a7cc8467c2bc")
 	)
 	(junction
-		(at 387.35 33.02)
+		(at 365.76 35.56)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "e2c3268a-c0a4-47a4-b72d-4b243ca128ae")
@@ -7317,6 +7311,16 @@
 	)
 	(wire
 		(pts
+			(xy 247.65 58.42) (xy 247.65 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0c6c09bf-4d94-4459-8aca-21c143e37ba9")
+	)
+	(wire
+		(pts
 			(xy 46.99 200.66) (xy 59.69 200.66)
 		)
 		(stroke
@@ -7337,7 +7341,7 @@
 	)
 	(wire
 		(pts
-			(xy 384.81 97.79) (xy 387.35 97.79)
+			(xy 364.49 97.79) (xy 367.03 97.79)
 		)
 		(stroke
 			(width 0)
@@ -7417,7 +7421,17 @@
 	)
 	(wire
 		(pts
-			(xy 374.65 35.56) (xy 388.62 35.56)
+			(xy 304.8 24.13) (xy 304.8 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "12859077-37dc-4933-9030-2ce284f1cabf")
+	)
+	(wire
+		(pts
+			(xy 353.06 38.1) (xy 367.03 38.1)
 		)
 		(stroke
 			(width 0)
@@ -7547,16 +7561,6 @@
 	)
 	(wire
 		(pts
-			(xy 294.64 24.13) (xy 294.64 27.94)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1d2cbcca-1a5e-4a1f-9486-288269cbe1ca")
-	)
-	(wire
-		(pts
 			(xy 264.16 184.15) (xy 264.16 186.69)
 		)
 		(stroke
@@ -7567,7 +7571,7 @@
 	)
 	(wire
 		(pts
-			(xy 387.35 105.41) (xy 382.27 105.41)
+			(xy 367.03 105.41) (xy 361.95 105.41)
 		)
 		(stroke
 			(width 0)
@@ -7777,16 +7781,6 @@
 	)
 	(wire
 		(pts
-			(xy 247.65 55.88) (xy 247.65 62.23)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "30f3d1a5-36ca-4d7b-9abc-0a2184bb1bc2")
-	)
-	(wire
-		(pts
 			(xy 358.14 157.48) (xy 358.14 160.02)
 		)
 		(stroke
@@ -7887,7 +7881,7 @@
 	)
 	(wire
 		(pts
-			(xy 243.84 55.88) (xy 247.65 55.88)
+			(xy 243.84 55.88) (xy 251.46 55.88)
 		)
 		(stroke
 			(width 0)
@@ -7927,7 +7921,7 @@
 	)
 	(wire
 		(pts
-			(xy 378.46 25.4) (xy 378.46 27.94)
+			(xy 356.87 27.94) (xy 356.87 30.48)
 		)
 		(stroke
 			(width 0)
@@ -8067,7 +8061,7 @@
 	)
 	(wire
 		(pts
-			(xy 59.69 231.14) (xy 59.69 233.68)
+			(xy 59.69 228.6) (xy 59.69 233.68)
 		)
 		(stroke
 			(width 0)
@@ -8267,6 +8261,16 @@
 	)
 	(wire
 		(pts
+			(xy 247.65 58.42) (xy 251.46 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "57e314b1-a1d4-4661-92eb-1b29ce2c38f4")
+	)
+	(wire
+		(pts
 			(xy 184.15 46.99) (xy 199.39 46.99)
 		)
 		(stroke
@@ -8387,6 +8391,16 @@
 	)
 	(wire
 		(pts
+			(xy 284.48 24.13) (xy 284.48 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "63bcc221-f138-4f7e-af39-b56d5e304412")
+	)
+	(wire
+		(pts
 			(xy 46.99 220.98) (xy 59.69 220.98)
 		)
 		(stroke
@@ -8424,16 +8438,6 @@
 			(type default)
 		)
 		(uuid "649ccc2d-e8ba-4f71-a36d-9624d8a2c19f")
-	)
-	(wire
-		(pts
-			(xy 41.91 231.14) (xy 36.83 231.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "655bcc21-157b-4827-b379-870dac5b01a4")
 	)
 	(wire
 		(pts
@@ -8507,7 +8511,7 @@
 	)
 	(wire
 		(pts
-			(xy 387.35 30.48) (xy 388.62 30.48)
+			(xy 365.76 33.02) (xy 367.03 33.02)
 		)
 		(stroke
 			(width 0)
@@ -8587,7 +8591,7 @@
 	)
 	(wire
 		(pts
-			(xy 228.6 58.42) (xy 251.46 58.42)
+			(xy 228.6 58.42) (xy 247.65 58.42)
 		)
 		(stroke
 			(width 0)
@@ -8604,6 +8608,16 @@
 			(type default)
 		)
 		(uuid "71c56657-d409-4ffb-99d5-6f9118ad868a")
+	)
+	(wire
+		(pts
+			(xy 294.64 24.13) (xy 294.64 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7206d5ed-ef2e-4695-86f4-a8bb011bf2a4")
 	)
 	(wire
 		(pts
@@ -9127,7 +9141,7 @@
 	)
 	(wire
 		(pts
-			(xy 374.65 21.59) (xy 374.65 35.56)
+			(xy 353.06 24.13) (xy 353.06 38.1)
 		)
 		(stroke
 			(width 0)
@@ -9297,7 +9311,17 @@
 	)
 	(wire
 		(pts
-			(xy 387.35 33.02) (xy 387.35 40.64)
+			(xy 396.24 62.23) (xy 392.43 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a8811221-12d6-4e53-b5df-77b0ae715f7c")
+	)
+	(wire
+		(pts
+			(xy 365.76 35.56) (xy 365.76 43.18)
 		)
 		(stroke
 			(width 0)
@@ -9587,17 +9611,7 @@
 	)
 	(wire
 		(pts
-			(xy 247.65 55.88) (xy 251.46 55.88)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bd1a504c-b333-4eb3-8e3d-1aaca5c796ae")
-	)
-	(wire
-		(pts
-			(xy 387.35 100.33) (xy 384.81 100.33)
+			(xy 367.03 100.33) (xy 364.49 100.33)
 		)
 		(stroke
 			(width 0)
@@ -9644,6 +9658,16 @@
 			(type default)
 		)
 		(uuid "c1ec3470-cc34-472a-9c9c-74c3f4e534ae")
+	)
+	(wire
+		(pts
+			(xy 396.24 73.66) (xy 392.43 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c31f7188-9b8d-440f-a868-0d24b260f4e9")
 	)
 	(wire
 		(pts
@@ -9917,7 +9941,7 @@
 	)
 	(wire
 		(pts
-			(xy 387.35 102.87) (xy 382.27 102.87)
+			(xy 367.03 102.87) (xy 361.95 102.87)
 		)
 		(stroke
 			(width 0)
@@ -10127,7 +10151,7 @@
 	)
 	(wire
 		(pts
-			(xy 387.35 30.48) (xy 387.35 33.02)
+			(xy 365.76 33.02) (xy 365.76 35.56)
 		)
 		(stroke
 			(width 0)
@@ -10167,16 +10191,6 @@
 	)
 	(wire
 		(pts
-			(xy 304.8 24.13) (xy 304.8 27.94)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e5decb61-969e-40a2-bacb-f4adf82fa1e6")
-	)
-	(wire
-		(pts
 			(xy 193.04 212.09) (xy 193.04 215.9)
 		)
 		(stroke
@@ -10204,16 +10218,6 @@
 			(type default)
 		)
 		(uuid "e7298d79-cb88-4181-8e77-26ad0cfcf62a")
-	)
-	(wire
-		(pts
-			(xy 59.69 228.6) (xy 59.69 231.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e7b2d6fd-7ab8-4ca6-b2f8-ed26a27ff314")
 	)
 	(wire
 		(pts
@@ -10287,7 +10291,7 @@
 	)
 	(wire
 		(pts
-			(xy 387.35 33.02) (xy 388.62 33.02)
+			(xy 365.76 35.56) (xy 367.03 35.56)
 		)
 		(stroke
 			(width 0)
@@ -10377,7 +10381,7 @@
 	)
 	(wire
 		(pts
-			(xy 378.46 27.94) (xy 388.62 27.94)
+			(xy 356.87 30.48) (xy 367.03 30.48)
 		)
 		(stroke
 			(width 0)
@@ -10414,16 +10418,6 @@
 			(type default)
 		)
 		(uuid "f63d2157-44f4-4d65-8d78-379fd34de276")
-	)
-	(wire
-		(pts
-			(xy 284.48 24.13) (xy 284.48 27.94)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f6539ab7-8db9-4957-bdb6-e76773540d7a")
 	)
 	(wire
 		(pts
@@ -10494,16 +10488,6 @@
 			(type default)
 		)
 		(uuid "f9f74b44-49a1-48d7-8303-75cfa97160e5")
-	)
-	(wire
-		(pts
-			(xy 46.99 231.14) (xy 59.69 231.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "fbea9dd0-a6e2-4f69-871c-08d6b9137bd1")
 	)
 	(wire
 		(pts
@@ -10606,7 +10590,7 @@
 		(uuid "09168a9b-5b1c-4ace-81e4-20b960d1cdf6")
 	)
 	(label "I2C_SDA"
-		(at 382.27 105.41 180)
+		(at 361.95 105.41 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -10626,7 +10610,7 @@
 		(uuid "0e8c9383-b4c0-478f-be54-dd57d12ddda6")
 	)
 	(label "I2C_SCL"
-		(at 382.27 102.87 180)
+		(at 361.95 102.87 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -11815,16 +11799,6 @@
 		)
 		(uuid "9b2e084c-abd1-4fda-94c7-b01273aa40f7")
 	)
-	(label "SIDE_SELECT"
-		(at 36.83 231.14 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "a29bc089-e80c-4393-b518-9c5ee7d5ec13")
-	)
 	(label "IN_USE_DOSV"
 		(at 331.47 146.05 0)
 		(effects
@@ -12566,73 +12540,6 @@
 		(uuid "feb3935c-2741-4596-b8d8-762b60f32264")
 	)
 	(symbol
-		(lib_id "Mechanical:MountingHole_Pad")
-		(at 294.64 21.59 0)
-		(unit 1)
-		(exclude_from_sim yes)
-		(in_bom no)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "0365d12d-5019-45cc-be26-4399378cace4")
-		(property "Reference" "H103"
-			(at 297.18 19.0499 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "MountingHole_Pad"
-			(at 297.18 21.5899 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5_Pad"
-			(at 294.64 21.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 294.64 21.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Mounting Hole with connection"
-			(at 294.64 21.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "157e75a8-6966-4c60-9b82-e0e64bc7b2b3")
-		)
-		(instances
-			(project "X68k-3mode-fdd-adapter"
-				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "H103")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R_Small_US")
 		(at 44.45 238.76 270)
 		(unit 1)
@@ -12969,6 +12876,83 @@
 		)
 	)
 	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 398.78 73.66 270)
+		(unit 1)
+		(exclude_from_sim yes)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "073c4353-27ca-4a5d-817e-b08a16c06a28")
+		(property "Reference" "H106"
+			(at 401.3201 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 398.7801 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "x68k-lib:PCB_WeldingTerminal_M3_L-angle_PCB-54R"
+			(at 398.78 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 398.78 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 398.78 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C962334"
+			(at 398.78 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b2125a48-fde6-466f-887b-9fba28736a58")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "H106")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 52.07 113.03 0)
 		(unit 1)
@@ -13158,6 +13142,72 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 284.48 27.94 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0cf57e0c-2c04-4d36-8a85-de7f8cd06a42")
+		(property "Reference" "#PWR0110"
+			(at 284.48 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 284.48 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 284.48 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 284.48 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 284.48 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "f29d1612-2f4a-4566-bd6b-5e60fd3717e1")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "#PWR0110")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R_Small_US")
 		(at 44.45 205.74 270)
 		(unit 1)
@@ -13221,6 +13271,72 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "R111")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 392.43 62.23 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0f094e49-1b65-4afe-86ca-3346ffa8fb2c")
+		(property "Reference" "#PWR0163"
+			(at 386.08 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 387.35 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 392.43 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 392.43 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 392.43 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "705052af-c26b-471f-b490-8c392854d9b2")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "#PWR0163")
 					(unit 1)
 				)
 			)
@@ -13317,9 +13433,10 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
+				(hide yes)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5_Pad"
+		(property "Footprint" "x68k-lib:PCB_WeldingTerminal_M3_L-angle"
 			(at 274.32 21.59 0)
 			(effects
 				(font
@@ -13346,6 +13463,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C962334"
+			(at 274.32 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "755083f9-7c20-49c3-9aea-9f9a1aa95416")
 		)
@@ -13353,6 +13479,83 @@
 			(project ""
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "H101")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 304.8 21.59 0)
+		(unit 1)
+		(exclude_from_sim yes)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "18d8c9b8-30de-4a5d-8d6a-6c14088c1bce")
+		(property "Reference" "H104"
+			(at 307.34 19.0499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 307.34 21.5899 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "x68k-lib:PCB_WeldingTerminal_M3_L-angle"
+			(at 304.8 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 304.8 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 304.8 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C962334"
+			(at 304.8 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0bcbb0fc-17f7-4160-aa39-c7e863cb2908")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "H104")
 					(unit 1)
 				)
 			)
@@ -13757,7 +13960,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x04")
-		(at 393.7 30.48 0)
+		(at 372.11 33.02 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -13765,7 +13968,7 @@
 		(dnp no)
 		(uuid "24aee355-cd91-46b2-ad99-a738b7c2c665")
 		(property "Reference" "J101"
-			(at 393.7 41.91 0)
+			(at 372.11 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13774,15 +13977,15 @@
 			)
 		)
 		(property "Value" "4pin"
-			(at 393.7 39.37 0)
+			(at 372.11 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical"
-			(at 393.7 30.48 0)
+		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-4-2.54_1x04_P2.54mm_Horizontal"
+			(at 372.11 33.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13790,8 +13993,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
-			(at 393.7 30.48 0)
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C2927505.html"
+			(at 372.11 33.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13800,7 +14003,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 393.7 30.48 0)
+			(at 372.11 33.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13808,8 +14011,8 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C2321"
-			(at 393.7 30.48 0)
+		(property "LCSC" "C2927505"
+			(at 372.11 33.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14033,6 +14236,72 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "#PWR0160")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 392.43 73.66 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2b4bfe0d-f1ef-4b9a-9307-0b21caba8465")
+		(property "Reference" "#PWR0164"
+			(at 386.08 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 387.35 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 392.43 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 392.43 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 392.43 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a3522ab1-24b2-440e-afd7-396a8be8b474")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "#PWR0164")
 					(unit 1)
 				)
 			)
@@ -14557,6 +14826,72 @@
 			(project ""
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "JP102")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 294.64 27.94 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3aeafd3e-be5e-4772-b783-d8bc7939c82a")
+		(property "Reference" "#PWR0111"
+			(at 294.64 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 294.64 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 294.64 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 294.64 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 294.64 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ea90dcf3-a2b7-408c-aea6-67cb72559bed")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "#PWR0111")
 					(unit 1)
 				)
 			)
@@ -15174,73 +15509,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Mechanical:MountingHole_Pad")
-		(at 284.48 21.59 0)
-		(unit 1)
-		(exclude_from_sim yes)
-		(in_bom no)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "4ccbdfa9-2cf9-4966-bea8-df707668a52a")
-		(property "Reference" "H102"
-			(at 287.02 19.0499 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "MountingHole_Pad"
-			(at 287.02 21.5899 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5_Pad"
-			(at 284.48 21.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 284.48 21.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Mounting Hole with connection"
-			(at 284.48 21.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "ba7d28d2-3c0d-4b16-8230-c896e07e1a95")
-		)
-		(instances
-			(project "X68k-3mode-fdd-adapter"
-				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "H102")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R_Small_US")
 		(at 233.68 113.03 0)
 		(mirror y)
@@ -15635,7 +15903,7 @@
 	)
 	(symbol
 		(lib_id "power:+5V")
-		(at 374.65 21.59 0)
+		(at 356.87 27.94 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -15643,7 +15911,7 @@
 		(dnp no)
 		(uuid "5864aa94-ba9d-4e19-a984-63c055f6ad13")
 		(property "Reference" "#PWR0102"
-			(at 374.65 25.4 0)
+			(at 356.87 31.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15652,7 +15920,7 @@
 			)
 		)
 		(property "Value" "+12V_FDD"
-			(at 374.65 17.526 0)
+			(at 356.87 23.876 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15661,7 +15929,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 374.65 21.59 0)
+			(at 356.87 27.94 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15670,7 +15938,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 374.65 21.59 0)
+			(at 356.87 27.94 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15679,7 +15947,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+5V\""
-			(at 374.65 21.59 0)
+			(at 356.87 27.94 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15970,7 +16238,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x04")
-		(at 392.43 100.33 0)
+		(at 372.11 100.33 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -15979,7 +16247,7 @@
 		(fields_autoplaced yes)
 		(uuid "682bdd43-57a3-4d47-a6fd-6ab46f5321fc")
 		(property "Reference" "J104"
-			(at 398.78 101.6 90)
+			(at 378.46 101.6 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15987,7 +16255,7 @@
 			)
 		)
 		(property "Value" "Conn_01x04"
-			(at 396.24 101.6 90)
+			(at 375.92 101.6 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15995,7 +16263,7 @@
 			)
 		)
 		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x04_P2.54mm_Vertical"
-			(at 392.43 100.33 0)
+			(at 372.11 100.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16004,7 +16272,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 392.43 100.33 0)
+			(at 372.11 100.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16013,7 +16281,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 392.43 100.33 0)
+			(at 372.11 100.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16319,6 +16587,83 @@
 		)
 	)
 	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 294.64 21.59 0)
+		(unit 1)
+		(exclude_from_sim yes)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "6c970498-37d2-43b1-8e3b-95c4f408c29a")
+		(property "Reference" "H103"
+			(at 297.18 19.0499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 297.18 21.5899 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "x68k-lib:PCB_WeldingTerminal_M3_L-angle"
+			(at 294.64 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 294.64 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 294.64 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C962334"
+			(at 294.64 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "345f7a37-1c65-43c6-be68-c51aff6b8861")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "H103")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Jumper:Jumper_2_Small_Bridged")
 		(at 187.96 44.45 0)
 		(unit 1)
@@ -16590,72 +16935,6 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 304.8 27.94 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "72daf115-8f16-4421-911f-e119c619ba67")
-		(property "Reference" "#PWR0112"
-			(at 304.8 34.29 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 304.8 33.02 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 304.8 27.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 304.8 27.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 304.8 27.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "c14aca86-b9b7-4279-8bf5-78117cacca37")
-		)
-		(instances
-			(project "X68k-3mode-fdd-adapter"
-				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "#PWR0112")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
 		(at 160.02 114.3 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -16857,7 +17136,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 387.35 40.64 0)
+		(at 365.76 43.18 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -16866,7 +17145,7 @@
 		(fields_autoplaced yes)
 		(uuid "767df18e-58f3-4861-9885-be3bb0bc3a12")
 		(property "Reference" "#PWR0113"
-			(at 387.35 46.99 0)
+			(at 365.76 49.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16875,7 +17154,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 387.35 45.72 0)
+			(at 365.76 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16883,7 +17162,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 387.35 40.64 0)
+			(at 365.76 43.18 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16892,7 +17171,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 387.35 40.64 0)
+			(at 365.76 43.18 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16901,7 +17180,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 387.35 40.64 0)
+			(at 365.76 43.18 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16983,6 +17262,83 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "R106")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 284.48 21.59 0)
+		(unit 1)
+		(exclude_from_sim yes)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7b4df609-b2d8-41fa-91d5-7ea700178120")
+		(property "Reference" "H102"
+			(at 287.02 19.0499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 287.02 21.5899 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "x68k-lib:PCB_WeldingTerminal_M3_L-angle"
+			(at 284.48 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 284.48 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 284.48 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C962334"
+			(at 284.48 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "55ab27cf-f28b-485d-b2e7-837f3fea94e6")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "H102")
 					(unit 1)
 				)
 			)
@@ -17125,7 +17481,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 384.81 97.79 270)
+		(at 364.49 97.79 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -17133,7 +17489,7 @@
 		(dnp no)
 		(uuid "7fd8a682-9636-48f7-af95-14920b9f9529")
 		(property "Reference" "#PWR0124"
-			(at 378.46 97.79 0)
+			(at 358.14 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17142,7 +17498,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 380.238 96.774 90)
+			(at 359.918 96.774 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17150,7 +17506,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 384.81 97.79 0)
+			(at 364.49 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17159,7 +17515,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 384.81 97.79 0)
+			(at 364.49 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17168,7 +17524,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 384.81 97.79 0)
+			(at 364.49 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17589,7 +17945,7 @@
 	)
 	(symbol
 		(lib_id "power:+5V")
-		(at 384.81 100.33 90)
+		(at 364.49 100.33 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -17597,7 +17953,7 @@
 		(dnp no)
 		(uuid "86c75a6e-f4e0-46df-be91-635d77ea7e6d")
 		(property "Reference" "#PWR0125"
-			(at 388.62 100.33 0)
+			(at 368.3 100.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17606,7 +17962,7 @@
 			)
 		)
 		(property "Value" "VDD_MCU"
-			(at 377.952 99.314 90)
+			(at 357.632 99.314 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17614,7 +17970,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 384.81 100.33 0)
+			(at 364.49 100.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17623,7 +17979,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 384.81 100.33 0)
+			(at 364.49 100.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17632,7 +17988,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+5V\""
-			(at 384.81 100.33 0)
+			(at 364.49 100.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18042,75 +18398,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 44.45 231.14 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "8fc5feff-88e6-44ab-8afb-a397cc282ce0")
-		(property "Reference" "R123"
-			(at 46.228 229.87 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "1K"
-			(at 39.878 229.87 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
-			(at 44.45 231.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 44.45 231.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor, small US symbol"
-			(at 44.45 231.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "a0f5705b-43bd-4f58-8b82-50a747418d20")
-		)
-		(pin "2"
-			(uuid "6f6a6aa6-2e28-433a-92cd-21934ba380e1")
-		)
-		(instances
-			(project "X68k-3mode-fdd-adapter"
-				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "R123")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:+5V")
 		(at 34.29 22.86 0)
 		(unit 1)
@@ -18305,6 +18592,72 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "R112")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 304.8 27.94 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9c27e6c5-22d7-4628-8503-2e0a14d8c2fd")
+		(property "Reference" "#PWR0112"
+			(at 304.8 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 304.8 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 304.8 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 304.8 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 304.8 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0e3e980d-aeb0-4bfb-8603-346646b189f1")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "#PWR0112")
 					(unit 1)
 				)
 			)
@@ -19363,72 +19716,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 294.64 27.94 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "be51699a-d339-4153-bbbc-37559863651a")
-		(property "Reference" "#PWR0111"
-			(at 294.64 34.29 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 294.64 33.02 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 294.64 27.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 294.64 27.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 294.64 27.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "6f2c3a71-515e-471e-907f-128fdceae605")
-		)
-		(instances
-			(project "X68k-3mode-fdd-adapter"
-				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "#PWR0111")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector:TestPoint")
 		(at 393.7 134.62 0)
 		(unit 1)
@@ -19685,7 +19972,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_IDC:IDC-Header_2x17_P2.54mm_Vertical"
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x17_P2.54mm_Horizontal"
 			(at 370.84 209.55 0)
 			(effects
 				(font
@@ -20544,72 +20831,6 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "#FLG0103")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 284.48 27.94 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "ce3d7d5a-346d-4d38-91ef-19d8f89cbcd6")
-		(property "Reference" "#PWR0110"
-			(at 284.48 34.29 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 284.48 33.02 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 284.48 27.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 284.48 27.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 284.48 27.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "30ded3ad-5381-481f-8ffc-407ee61b25b0")
-		)
-		(instances
-			(project "X68k-3mode-fdd-adapter"
-				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "#PWR0110")
 					(unit 1)
 				)
 			)
@@ -21822,7 +22043,7 @@
 	)
 	(symbol
 		(lib_id "power:+5V")
-		(at 378.46 25.4 0)
+		(at 353.06 24.13 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -21830,7 +22051,7 @@
 		(dnp no)
 		(uuid "e951290d-a688-412c-a350-c52109201cde")
 		(property "Reference" "#PWR0107"
-			(at 378.46 29.21 0)
+			(at 353.06 27.94 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21839,7 +22060,7 @@
 			)
 		)
 		(property "Value" "+5V_FDD"
-			(at 378.206 21.082 0)
+			(at 352.806 19.812 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21848,7 +22069,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 378.46 25.4 0)
+			(at 353.06 24.13 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21857,7 +22078,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 378.46 25.4 0)
+			(at 353.06 24.13 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21866,7 +22087,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+5V\""
-			(at 378.46 25.4 0)
+			(at 353.06 24.13 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22250,7 +22471,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_IDC:IDC-Header_2x17_P2.54mm_Vertical"
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x17_P2.54mm_Horizontal"
 			(at 370.84 147.32 0)
 			(effects
 				(font
@@ -22539,7 +22760,7 @@
 				)
 			)
 		)
-		(property "Value" "4.7k"
+		(property "Value" "4.7k x4"
 			(at 191.77 52.07 90)
 			(effects
 				(font
@@ -22547,7 +22768,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_Array_Concave_4x0603"
 			(at 191.77 67.945 90)
 			(effects
 				(font
@@ -22567,6 +22788,15 @@
 		)
 		(property "Description" "4 resistor network, parallel topology"
 			(at 191.77 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C1980"
+			(at 191.77 60.96 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22602,6 +22832,83 @@
 			(project ""
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "RN101")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 398.78 62.23 270)
+		(unit 1)
+		(exclude_from_sim yes)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "fb75ca7f-269b-4ae1-942e-7d7c7a1b54a5")
+		(property "Reference" "H105"
+			(at 401.3201 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 398.7801 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "x68k-lib:PCB_WeldingTerminal_M3_L-angle_PCB-54L"
+			(at 398.78 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 398.78 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 398.78 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C962334"
+			(at 398.78 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e49e91aa-2b10-4ae2-81ce-4233fba51105")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "H105")
 					(unit 1)
 				)
 			)
@@ -22734,73 +23041,6 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "#PWR0117")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Mechanical:MountingHole_Pad")
-		(at 304.8 21.59 0)
-		(unit 1)
-		(exclude_from_sim yes)
-		(in_bom no)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "fd806e68-4cef-49b5-b72f-06e25fb84686")
-		(property "Reference" "H104"
-			(at 307.34 19.0499 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "MountingHole_Pad"
-			(at 307.34 21.5899 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5_Pad"
-			(at 304.8 21.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 304.8 21.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Mounting Hole with connection"
-			(at 304.8 21.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "be190d4e-38bd-4ea6-9aca-f8b22c9b5f17")
-		)
-		(instances
-			(project "X68k-3mode-fdd-adapter"
-				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "H104")
 					(unit 1)
 				)
 			)
