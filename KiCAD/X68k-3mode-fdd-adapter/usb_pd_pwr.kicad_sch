@@ -3950,7 +3950,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "15461a34-fa48-4cb0-8eff-bf458c658341")
-		(property "Reference" "R1013"
+		(property "Reference" "R1011"
 			(at 121.92 202.946 0)
 			(effects
 				(font
@@ -4004,7 +4004,7 @@
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/e2bad364-aaa3-4f08-8f3b-45fc5db28f5a"
-					(reference "R1013")
+					(reference "R1011")
 					(unit 1)
 				)
 			)
@@ -4019,7 +4019,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "197bf385-85f2-44c5-a8f4-2fc2183b67d9")
-		(property "Reference" "R1010"
+		(property "Reference" "R1009"
 			(at 105.918 189.992 90)
 			(effects
 				(font
@@ -4071,7 +4071,7 @@
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/e2bad364-aaa3-4f08-8f3b-45fc5db28f5a"
-					(reference "R1010")
+					(reference "R1009")
 					(unit 1)
 				)
 			)
@@ -4684,7 +4684,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "4c3fb112-329c-43c8-83da-0c0fdf4a295b")
-		(property "Reference" "R1012"
+		(property "Reference" "R1010"
 			(at 114.3 202.946 0)
 			(effects
 				(font
@@ -4738,7 +4738,7 @@
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/e2bad364-aaa3-4f08-8f3b-45fc5db28f5a"
-					(reference "R1012")
+					(reference "R1010")
 					(unit 1)
 				)
 			)
@@ -5551,7 +5551,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8808ccfe-695c-4bdf-a0c1-c94da050d68c")
-		(property "Reference" "J1003"
+		(property "Reference" "J1002"
 			(at 80.01 172.72 0)
 			(effects
 				(font
@@ -5657,7 +5657,7 @@
 		(instances
 			(project ""
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/e2bad364-aaa3-4f08-8f3b-45fc5db28f5a"
-					(reference "J1003")
+					(reference "J1002")
 					(unit 1)
 				)
 			)
