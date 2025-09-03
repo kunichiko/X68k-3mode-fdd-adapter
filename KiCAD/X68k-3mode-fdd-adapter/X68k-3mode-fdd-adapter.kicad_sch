@@ -14639,7 +14639,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_ISO14580_Pad"
+		(property "Footprint" "x68k-lib:MountingHole_3.2mm_M3_Pad_Small"
 			(at 304.8 41.91 0)
 			(effects
 				(font
@@ -18287,7 +18287,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_ISO14580_Pad"
+		(property "Footprint" "x68k-lib:MountingHole_3.2mm_M3_Pad_Small"
 			(at 325.12 41.91 0)
 			(effects
 				(font
@@ -19232,7 +19232,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_VH_B2P-VH-FB-B_1x02_P3.96mm_Vertical"
+		(property "Footprint" "Connector_JST:JST_XH_S2B-XH-A_1x02_P2.50mm_Horizontal"
 			(at 33.02 106.68 0)
 			(effects
 				(font
@@ -21649,7 +21649,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "RESET_SW"
+		(property "Value" "RESET"
 			(at 195.58 259.0799 90)
 			(effects
 				(font
@@ -21930,7 +21930,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_ISO14580_Pad"
+		(property "Footprint" "x68k-lib:MountingHole_3.2mm_M3_Pad_Small"
 			(at 294.64 41.91 0)
 			(effects
 				(font
@@ -22470,7 +22470,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_ISO14580_Pad"
+		(property "Footprint" "x68k-lib:MountingHole_3.2mm_M3_Pad_Small"
 			(at 314.96 41.91 0)
 			(effects
 				(font
