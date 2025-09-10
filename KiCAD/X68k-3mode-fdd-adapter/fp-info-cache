@@ -1,4 +1,4 @@
-26507087653648964
+26505331339846732
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -105732,8 +105732,8 @@ OLED_Dispaly_1.29inch_I2C_4pin
 
 
 0
-0
-0
+4
+4
 x68k-lib
 PCB_WeldingTerminal_M3_L-angle
 terminal block MaiXu MX126-5.0-02P, 2 pins, pitch 5mm, size 10.5x7.8mm, drill diameter 1.3mm, pad diameter 2.8mm, https://www.lcsc.com/datasheet/lcsc_datasheet_2309150913_MAX-MX126-5-0-03P-GN01-Cu-S-A_C5188435.pdf, script-generated using https://gitlab.com/kicad/libraries/kicad-footprint-generator/-/tree/master/scripts/TerminalBlock_MaiXu
@@ -105902,10 +105902,3 @@ x68000-ext-cardedge-long
 0
 100
 100
-x68k-lib
-名称未設定
-
-
-0
-0
-0
