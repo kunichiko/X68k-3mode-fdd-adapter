@@ -1,4 +1,4 @@
-26505331339846732
+26508847021041552
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -105819,6 +105819,13 @@ SSOP 0.635
 48
 48
 x68k-lib
+SW_Push_TS1088R_02026
+
+SMD SMT button
+0
+2
+2
+x68k-lib
 TE_AMP_171826-4
 
 
@@ -105839,6 +105846,13 @@ TSSOP SO
 0
 48
 48
+x68k-lib
+TerminalBlock_WANJIE_WJ15EDGRC_1x04_P2.54mm_Horizontal
+Terminal Block Phoenix MPT-0,5-4-2.54, 4 pins, pitch 2.54mm, size 10.6x6.2mm, drill diameter 1.1mm, pad diameter 2.2mm, http://www.mouser.com/ds/2/324/ItemDetail_1725672-916605.pdf, script-generated using https://gitlab.com/kicad/libraries/kicad-footprint-generator/-/tree/master/scripts/TerminalBlock_Phoenix
+THT Terminal Block Phoenix MPT-0,5-4-2.54 pitch 2.54mm size 10.6x6.2mm drill 1.1mm pad 2.2mm
+0
+4
+4
 x68k-lib
 UGCT7525AN4
 
