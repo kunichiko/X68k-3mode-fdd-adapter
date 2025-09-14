@@ -57,7 +57,7 @@ void WS2812_SPI()
     int k;
     WS2812BDMAInit();
 
-    frameno = 100;
+    frameno = 0;
 
     for (k = 0; k < NR_LEDS; k++)
         phases[k] = k << 8;

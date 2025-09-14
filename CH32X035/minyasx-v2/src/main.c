@@ -19,7 +19,10 @@
 
 #include "funconfig.h"
 
+#include "oled/oled_control.h"
 #include "led/led_control.h"
+#include "greenpak/greenpak_auto.h"
+#include "greenpak/greenpak_control.h"
 
 int main()
 {
@@ -47,7 +50,18 @@ int main()
 	// OLEDテスト
 	OLED_init();
 	OLED_clear();
+	OLED_flip(0, 0);
 	OLED_print("Hello, OLED!");
+
+	Delay_Ms(3000);
+
+	// GreenPAKの自動プログラムと検証
+	greenpak_autoprogram_verify();
+
+	Delay_Ms(3000);
+
+	// GreenPAKのコンフィグを読み出してOLEDに表示
+	greenpak_dump_oled();
 
 	// LED制御を開始する
 	WS2812_SPI();
