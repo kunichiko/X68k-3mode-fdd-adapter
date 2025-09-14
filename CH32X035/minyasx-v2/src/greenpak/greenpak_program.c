@@ -50,4 +50,15 @@ void gp_program_with_erase(uint8_t nvm_addr7, uint16_t base, const uint8_t *img,
         Delay_Ms(100);
         gp_write_seq(nvm_addr7, base + i * 16, &img[i * 16], (size - i * 16 > 16) ? 16 : (size - i * 16));
     }
+
+    Delay_Ms(100);
+
+    // 書き込み終わったらICをリセットする (リセットしないとI2Cアドレスが変化しない)
+    // レジスタ番号 0xc8 に 0x02 を書き込むとリセットされる
+    I2C_start((nvm_addr7 << 1) | 0); // SLA+W
+    I2C_write(0xC8);                 // レジスタ番号
+    I2C_write(0x02);                 // 書き込みデータ
+    I2C_stop();
+
+    Delay_Ms(1000);
 }

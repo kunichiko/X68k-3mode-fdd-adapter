@@ -55,6 +55,8 @@ int main()
 
 	Delay_Ms(3000);
 
+	greenpak_force_program_verify(0x02, 2); // GreenPAK3を強制プログラム
+
 	// GreenPAKの自動プログラムと検証
 	greenpak_autoprogram_verify();
 
