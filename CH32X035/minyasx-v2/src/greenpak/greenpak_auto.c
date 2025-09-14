@@ -32,68 +32,6 @@ static const gp_img_t gp_img[4] = {
     {GREENPAK4_BASE, GREENPAK4_SIZE, GREENPAK4_IMAGE},
 };
 
-// ---------------- I2Cユーティリティ ----------------
-
-// 在否確認（ACKプローブ）。成功で1、失敗で0。
-// 7bitアドレスを渡す（例: 0x0A）
-// i2cdetect と同じ “SMBus Quick (write)” 方式の ACK プローブ
-// 引数: 7bit アドレス（例: 0x0A）
-// 戻り: 在席=1 / 不在=0
-static int i2c_probe7(uint8_t addr7)
-{
-    // 1) BUSY解除待ち
-    uint32_t to = I2C_TIMEOUT_MAX;
-    while ((I2C1->STAR2 & I2C_STAR2_BUSY) && --to)
-        ;
-    if (!to)
-    {
-        I2C_error(0);
-        return 0;
-    }
-
-    // 2) START
-    I2C1->CTLR1 |= I2C_CTLR1_START;
-    //    マスタモード突入 (SB/MSL/BUSY) を待つ
-    if (I2C_wait_evt(I2C_EVENT_MASTER_MODE_SELECT, 1))
-    {
-        I2C1->CTLR1 |= I2C_CTLR1_STOP;
-        return 0;
-    }
-
-    // 3) SLA+W 送出（ACK を見る）
-    I2C1->DATAR = (addr7 << 1); // write方向
-
-    //    ADDR(ACK) or AF(NACK) を待つ
-    int present = 0;
-    to = I2C_TIMEOUT_MAX;
-    while (--to)
-    {
-        uint16_t sr1 = I2C1->STAR1;
-        if (sr1 & I2C_STAR1_ADDR)
-        {                      // ACK=在席
-            (void)I2C1->STAR2; // ADDR クリア（SR1→SR2 読み）
-            present = 1;
-            break;
-        }
-        if (sr1 & I2C_STAR1_AF)
-        { // NACK=不在
-            present = 0;
-            break;
-        }
-    }
-
-    // 4) STOP（バス解放）
-    I2C1->CTLR1 |= I2C_CTLR1_STOP;
-
-    // 5) 後始末（NACK/Timeout 時は I2C を立て直す）
-    if (!present || !to)
-    {
-        // AF はソフトクリアも可能だが、確実さ重視で全体リカバリ
-        I2C_error(0);
-    }
-    return present;
-}
-
 // 連続書込み（ページ分割, STOPはwriteBufferが発行）
 void gp_write_seq(uint8_t addr7, uint16_t start, const uint8_t *data, uint16_t len)
 {
@@ -172,12 +110,12 @@ void greenpak_autoprogram_verify(void)
 
     // まず既定の最終配置（0x12, 0x1A, 0x22, 0x2A）と 0x0A（作業用）をスキャン
     int present[4] = {
-        i2c_probe7(gp_target_nvm[0]),
-        i2c_probe7(gp_target_nvm[1]),
-        i2c_probe7(gp_target_nvm[2]),
-        i2c_probe7(gp_target_nvm[3]),
+        I2C_probe(gp_target_nvm[0]),
+        I2C_probe(gp_target_nvm[1]),
+        I2C_probe(gp_target_nvm[2]),
+        I2C_probe(gp_target_nvm[3]),
     };
-    int def_present = i2c_probe7(GP_DEF_NVM);
+    int def_present = I2C_probe(GP_DEF_NVM);
 
     if (!present[0] && !present[1] && !present[2] && !present[3] && !def_present)
     {
@@ -264,7 +202,7 @@ void greenpak_autoprogram_verify(void)
             return;
         }
 
-        if (!i2c_probe7(GP_DEF_NVM))
+        if (!I2C_probe(GP_DEF_NVM))
         {
             // 作業用 0x0A 自体が見えない → 表示して終了
             show_not_found_and_exit();
@@ -289,7 +227,7 @@ void greenpak_autoprogram_verify(void)
         }
 
         // 再スキャン（当該ICが最終番地に現れるはず）
-        present[target] = i2c_probe7(gp_target_nvm[target]);
+        present[target] = I2C_probe(gp_target_nvm[target]);
         // 次ループへ
     }
 }

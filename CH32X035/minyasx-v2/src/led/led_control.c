@@ -11,6 +11,7 @@
 uint16_t phases[NR_LEDS];
 int frameno;
 volatile int tween = -NR_LEDS;
+int tweendir = 0;
 
 // 1/8 にスケール（シフトで軽量）
 static inline uint32_t scale_q8(uint32_t c)
@@ -52,7 +53,7 @@ uint8_t led_data[2][3 * 2] = {{0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0}};
 #define EJECT_B 5
 #define LED_BRIGTHNESS 10
 
-void WS2812_SPI()
+void WS2812_SPI_init()
 {
     int k;
     WS2812BDMAInit();
@@ -61,47 +62,44 @@ void WS2812_SPI()
 
     for (k = 0; k < NR_LEDS; k++)
         phases[k] = k << 8;
+}
 
-    int tweendir = 0;
+void WS2812_SPI_poll()
+{
+    GPIOA->BSHR = 1 << 7; // Turn on PA7
+    // Wait for LEDs to totally finish.
+    Delay_Ms(12);
+    GPIOA->BSHR = 1 << (7 + 16); // Turn it off
 
-    while (1)
+    while (WS2812BLEDInUse)
+        ;
+
+    frameno++;
+
+    if (frameno == 1024)
     {
-
-        GPIOA->BSHR = 1 << 7; // Turn on PA7
-        // Wait for LEDs to totally finish.
-        Delay_Ms(12);
-        GPIOA->BSHR = 1 << (7 + 16); // Turn it off
-
-        while (WS2812BLEDInUse)
-            ;
-
-        frameno++;
-
-        if (frameno == 1024)
-        {
-            tweendir = 1;
-        }
-        if (frameno == 2048)
-        {
-            tweendir = -1;
-            frameno = 0;
-        }
-
-        if (tweendir)
-        {
-            int t = tween + tweendir;
-            if (t > 255)
-                t = 255;
-            if (t < -NR_LEDS)
-                t = -NR_LEDS;
-            tween = t;
-        }
-
-        for (k = 0; k < NR_LEDS; k++)
-        {
-            phases[k] += ((((rands[k & 0xff]) + 0xf) << 2) + (((rands[k & 0xff]) + 0xf) << 1)) >> 1;
-        }
-
-        WS2812BDMAStart(NR_LEDS);
+        tweendir = 1;
     }
+    if (frameno == 2048)
+    {
+        tweendir = -1;
+        frameno = 0;
+    }
+
+    if (tweendir)
+    {
+        int t = tween + tweendir;
+        if (t > 255)
+            t = 255;
+        if (t < -NR_LEDS)
+            t = -NR_LEDS;
+        tween = t;
+    }
+
+    for (int k = 0; k < NR_LEDS; k++)
+    {
+        phases[k] += ((((rands[k & 0xff]) + 0xf) << 2) + (((rands[k & 0xff]) + 0xf) << 1)) >> 1;
+    }
+
+    WS2812BDMAStart(NR_LEDS);
 }

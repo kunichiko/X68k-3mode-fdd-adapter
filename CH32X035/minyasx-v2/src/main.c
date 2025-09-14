@@ -23,6 +23,9 @@
 #include "led/led_control.h"
 #include "greenpak/greenpak_auto.h"
 #include "greenpak/greenpak_control.h"
+#include "ina3221/ina3221_control.h"
+
+void ina3221_poll(uint64_t systick);
 
 int main()
 {
@@ -55,16 +58,49 @@ int main()
 
 	Delay_Ms(3000);
 
-	greenpak_force_program_verify(0x02, 2); // GreenPAK3を強制プログラム
+	// INA3221
+	ina3221_init();
+
+	// greenpak_force_program_verify(0x02, 2); // GreenPAK3を強制プログラム
 
 	// GreenPAKの自動プログラムと検証
 	greenpak_autoprogram_verify();
 
-	Delay_Ms(3000);
+	Delay_Ms(1000);
 
 	// GreenPAKのコンフィグを読み出してOLEDに表示
 	greenpak_dump_oled();
 
 	// LED制御を開始する
-	WS2812_SPI();
+	WS2812_SPI_init();
+
+	while (1)
+	{
+		uint64_t systick = SysTick->CNT;
+		uint32_t ms = systick / (F_CPU / 1000);
+		WS2812_SPI_poll();
+		ina3221_poll(ms);
+	}
+}
+
+void ina3221_poll(uint64_t systick_ms)
+{
+	static uint64_t last_tick = 0;
+	if (systick_ms - last_tick < 1000)
+	{
+		return;
+	}
+	last_tick = systick_ms;
+	uint16_t ch1_current, ch1_voltage, ch2_current, ch2_voltage, ch3_current, ch3_voltage;
+
+	ina3221_read_all_channels(&ch1_current, &ch1_voltage, &ch2_current, &ch2_voltage, &ch3_current, &ch3_voltage);
+
+	OLED_clear();
+	OLED_write('\n');
+	OLED_printf("VBUS:%2d.%02dV %4dmA", ch1_voltage / 1000, (ch1_voltage % 1000) / 10, ch1_current);
+	OLED_write('\n');
+	OLED_printf("+12V:%2d.%02dV %4dmA", ch2_voltage / 1000, (ch2_voltage % 1000) / 10, ch2_current);
+	OLED_write('\n');
+	OLED_printf("+5V :%2d.%02dV %4dmA", ch3_voltage / 1000, (ch3_voltage % 1000) / 10, ch3_current);
+	OLED_write('\n');
 }

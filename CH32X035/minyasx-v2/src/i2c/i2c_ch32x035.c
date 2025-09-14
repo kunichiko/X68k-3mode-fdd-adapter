@@ -238,6 +238,24 @@ uint8_t I2C_read(uint8_t ack)
 }
 
 /*
+ * I2C receive 16-bit word (ack=0 for last word, ack>0 if more to follow)
+ * Reads two bytes MSB first.
+ */
+uint16_t I2C_readW(uint8_t ack)
+{
+    uint16_t value = 0;
+
+    // 1st byte (MSB), must ACK because we expect another byte
+    uint8_t msb = I2C_read(1);
+
+    // 2nd byte (LSB), ACK depends on caller (0 = last word, >0 = more words)
+    uint8_t lsb = I2C_read(ack);
+
+    value = ((uint16_t)msb << 8) | lsb;
+    return value;
+}
+
+/*
  * Send data buffer via I2C bus and stop
  */
 void I2C_writeBuffer(uint8_t *buf, uint16_t len)
@@ -255,4 +273,66 @@ void I2C_readBuffer(uint8_t *buf, uint16_t len)
     while (len--)
         *buf++ = I2C_read(len > 0);
     I2C_stop();
+}
+
+// ---------------- I2Cユーティリティ ----------------
+
+// 在否確認（ACKプローブ）。成功で1、失敗で0。
+// 7bitアドレスを渡す（例: 0x0A）
+// i2cdetect と同じ “SMBus Quick (write)” 方式の ACK プローブ
+// 引数: 7bit アドレス（例: 0x0A）
+// 戻り: 在席=1 / 不在=0
+int I2C_probe(uint8_t addr7)
+{
+    // 1) BUSY解除待ち
+    uint32_t to = I2C_TIMEOUT_MAX;
+    while ((I2C1->STAR2 & I2C_STAR2_BUSY) && --to)
+        ;
+    if (!to)
+    {
+        I2C_error(0);
+        return 0;
+    }
+
+    // 2) START
+    I2C1->CTLR1 |= I2C_CTLR1_START;
+    //    マスタモード突入 (SB/MSL/BUSY) を待つ
+    if (I2C_wait_evt(I2C_EVENT_MASTER_MODE_SELECT, 1))
+    {
+        I2C1->CTLR1 |= I2C_CTLR1_STOP;
+        return 0;
+    }
+
+    // 3) SLA+W 送出（ACK を見る）
+    I2C1->DATAR = (addr7 << 1); // write方向
+
+    //    ADDR(ACK) or AF(NACK) を待つ
+    int present = 0;
+    to = I2C_TIMEOUT_MAX;
+    while (--to)
+    {
+        uint16_t sr1 = I2C1->STAR1;
+        if (sr1 & I2C_STAR1_ADDR)
+        {                      // ACK=在席
+            (void)I2C1->STAR2; // ADDR クリア（SR1→SR2 読み）
+            present = 1;
+            break;
+        }
+        if (sr1 & I2C_STAR1_AF)
+        { // NACK=不在
+            present = 0;
+            break;
+        }
+    }
+
+    // 4) STOP（バス解放）
+    I2C1->CTLR1 |= I2C_CTLR1_STOP;
+
+    // 5) 後始末（NACK/Timeout 時は I2C を立て直す）
+    if (!present || !to)
+    {
+        // AF はソフトクリアも可能だが、確実さ重視で全体リカバリ
+        I2C_error(0);
+    }
+    return present;
 }
