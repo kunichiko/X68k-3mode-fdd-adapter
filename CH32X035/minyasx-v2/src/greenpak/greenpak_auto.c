@@ -3,6 +3,7 @@
 
 #include "greenpak_auto.h"
 #include "greenpak_program.h"
+#include "greenpak_control.h"
 
 #include "i2c/i2c_ch32x035.h"
 #include "oled/ssd1306_txt.h"
@@ -15,9 +16,6 @@
 #define GP_DEF_NVM 0x0A // はじめは全ICが 0x08-0x0B (NVM=0x0A) に居る想定（基板上で1個ずつ接続）
 #define GP_PAGE 16      // 1回の書込みチャンク（必要なら調整）
 #define CMP_CHUNK 1     // 比較時の読出しチャンク
-
-// 最終配置（NVMアドレスのみ並べる）
-static const uint8_t gp_target_nvm[4] = {0x12, 0x1A, 0x22, 0x2A};
 
 // 画像テーブル（サイズ0はスキップ）
 typedef struct
@@ -151,21 +149,25 @@ static int gp_compare_image(uint8_t addr7, uint16_t base, const uint8_t *img, ui
 
 static void show_not_found_and_exit(void)
 {
-    OLED_clear();
-    OLED_cursor(0, 0);
     OLED_print("GreenPAK not found");
     OLED_write('\n'); // :contentReference[oaicite:14]{index=14} :contentReference[oaicite:15]{index=15}
     // 必要なら、ここで他の処理へ遷移/return
 }
 
+void greenpak_force_program_verify(uint8_t addr, uint8_t unit)
+{
+    OLED_print("prog GP");
+    OLED_printD(unit);
+    OLED_print("  @");
+    OLED_printH(addr);
+    OLED_write('\n');
+    gp_program_with_erase(addr, gp_img[unit].base, gp_img[unit].image, gp_img[unit].size);
+    OLED_print("done");
+    return;
+}
+
 void greenpak_autoprogram_verify(void)
 {
-    /*  OLED_write('\n');
-        OLED_print("programming GP1 on GP2");
-        gp_program_with_erase(gp_target_nvm[1], gp_img[0].base, gp_img[0].image, gp_img[0].size);
-        OLED_print("done");
-        return;*/
-
     OLED_clear();
 
     // まず既定の最終配置（0x12, 0x1A, 0x22, 0x2A）と 0x0A（作業用）をスキャン
@@ -276,6 +278,8 @@ void greenpak_autoprogram_verify(void)
             OLED_write('\n');
             // 0x0A 側へ書き込む（書込み完了でICが自動的に再配置される前提）
             gp_program_with_erase(GP_DEF_NVM, gp_img[target].base, gp_img[target].image, gp_img[target].size);
+            OLED_print("done");
+            OLED_write('\n');
         }
         else
         {
