@@ -44,5 +44,11 @@ int main()
 
 	GPIOA->BSHR = 1 << 7; // Turn on PA7
 
+	// OLEDテスト
+	OLED_init();
+	OLED_clear();
+	OLED_print("Hello, OLED!");
+
+	// LED制御を開始する
 	WS2812_SPI();
 }
