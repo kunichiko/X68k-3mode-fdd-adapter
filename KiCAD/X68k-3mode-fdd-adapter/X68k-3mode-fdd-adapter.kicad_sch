@@ -4365,7 +4365,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Transistor_BJT:DTC143Z"
+		(symbol "Transistor_FET:BSS138"
 			(pin_names
 				(offset 0)
 				(hide yes)
@@ -4382,7 +4382,7 @@
 					(justify left)
 				)
 			)
-			(property "Value" "DTC143Z"
+			(property "Value" "BSS138"
 				(at 5.08 0 0)
 				(effects
 					(font
@@ -4391,8 +4391,19 @@
 					(justify left)
 				)
 			)
-			(property "Footprint" ""
-				(at 0 0 0)
+			(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+				(at 5.08 -1.905 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+						(italic yes)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.onsemi.com/pub/Collateral/BSS138-D.PDF"
+				(at 5.08 -3.81 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -4401,17 +4412,7 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Description" "Digital NPN Transistor, 4k7/47k, SOT-23"
+			(property "Description" "50V Vds, 0.22A Id, N-Channel MOSFET, SOT-23"
 				(at 0 0 0)
 				(effects
 					(font
@@ -4420,7 +4421,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "ROHM Digital NPN Transistor"
+			(property "ki_keywords" "N-Channel MOSFET"
 				(at 0 0 0)
 				(effects
 					(font
@@ -4429,7 +4430,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_fp_filters" "SOT?23* SC?59*"
+			(property "ki_fp_filters" "SOT?23*"
 				(at 0 0 0)
 				(effects
 					(font
@@ -4438,28 +4439,22 @@
 					(hide yes)
 				)
 			)
-			(symbol "DTC143Z_0_0"
-				(text "4k7"
-					(at -3.302 0.889 0)
-					(effects
-						(font
-							(size 0.508 0.508)
-						)
-					)
-				)
-				(text "47k"
-					(at -2.159 -1.524 900)
-					(effects
-						(font
-							(size 0.508 0.508)
-						)
-					)
-				)
-			)
-			(symbol "DTC143Z_0_1"
+			(symbol "BSS138_0_1"
 				(polyline
 					(pts
-						(xy -3.429 0) (xy -3.81 0)
+						(xy 0.254 1.905) (xy 0.254 -1.905)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.254 0) (xy -2.54 0)
 					)
 					(stroke
 						(width 0)
@@ -4471,7 +4466,7 @@
 				)
 				(polyline
 					(pts
-						(xy -1.27 3.175) (xy 0.635 3.175)
+						(xy 0.762 2.286) (xy 0.762 1.27)
 					)
 					(stroke
 						(width 0.254)
@@ -4479,48 +4474,59 @@
 					)
 					(fill
 						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 0.508) (xy 0.762 -0.508)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 -1.27) (xy 0.762 -2.286)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 -1.778) (xy 3.302 -1.778) (xy 3.302 1.778) (xy 0.762 1.778)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.016 0) (xy 2.032 0.381) (xy 2.032 -0.381) (xy 1.016 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
 					)
 				)
 				(circle
-					(center -1.27 0)
-					(radius 0.127)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.27 0) (xy -1.27 -0.381) (xy -0.762 -0.508) (xy -1.778 -0.762) (xy -0.762 -1.016) (xy -1.778 -1.27)
-						(xy -0.762 -1.524) (xy -1.778 -1.778) (xy -1.27 -1.905) (xy -1.27 -2.286) (xy 2.54 -2.286)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.27 -3.175) (xy 0.635 -3.175)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start -1.27 -3.175)
-					(mid -4.4312 0)
-					(end -1.27 3.175)
+					(center 1.651 0)
+					(radius 2.794)
 					(stroke
 						(width 0.254)
 						(type default)
@@ -4531,80 +4537,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0 0) (xy -1.905 0) (xy -2.032 0.508) (xy -2.286 -0.508) (xy -2.54 0.508) (xy -2.794 -0.508)
-						(xy -3.048 0.508) (xy -3.302 -0.508) (xy -3.429 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 -0.254) (xy 2.54 2.286)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.127 1.524) (xy 0.127 -1.651)
-					)
-					(stroke
-						(width 0.508)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(arc
-					(start 0.635 3.175)
-					(mid 3.7962 0)
-					(end 0.635 -3.175)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.889 -1.143) (xy 1.397 -0.635) (xy 1.905 -1.651) (xy 0.889 -1.143)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 2.286) (xy 2.54 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 -2.286) (xy 0 0.254) (xy 0 0.254)
+						(xy 2.54 2.54) (xy 2.54 1.778)
 					)
 					(stroke
 						(width 0)
@@ -4615,8 +4548,55 @@
 					)
 				)
 				(circle
-					(center 2.54 -2.286)
-					(radius 0.127)
+					(center 2.54 1.778)
+					(radius 0.254)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center 2.54 -1.778)
+					(radius 0.254)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 -2.54) (xy 2.54 0) (xy 0.762 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.921 0.381) (xy 3.683 0.381)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.302 0.381) (xy 2.921 -0.254) (xy 3.683 -0.254) (xy 3.302 0.381)
+					)
 					(stroke
 						(width 0)
 						(type default)
@@ -4626,11 +4606,11 @@
 					)
 				)
 			)
-			(symbol "DTC143Z_1_1"
+			(symbol "BSS138_1_1"
 				(pin input line
-					(at -6.35 0 0)
+					(at -5.08 0 0)
 					(length 2.54)
-					(name "B"
+					(name "G"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -4648,7 +4628,7 @@
 				(pin passive line
 					(at 2.54 5.08 270)
 					(length 2.54)
-					(name "C"
+					(name "D"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -4666,7 +4646,7 @@
 				(pin passive line
 					(at 2.54 -5.08 90)
 					(length 2.54)
-					(name "E"
+					(name "S"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -6534,6 +6514,15 @@
 					(hide yes)
 				)
 			)
+			(property "LCSC" "C3281959"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
 			(property "ki_keywords" "cpld programmable logic low-cost renesas silego"
 				(at 0 0 0)
 				(effects
@@ -7168,7 +7157,7 @@
 		(uuid "6b007126-ab73-4b11-b078-69a8b45df554")
 	)
 	(junction
-		(at 58.42 100.33)
+		(at 66.04 100.33)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "6b3315fd-6629-4d28-9015-6b1dd3a5e301")
@@ -7348,6 +7337,12 @@
 		(uuid "b7fba110-ec7e-4324-ab10-02ab65ba60b2")
 	)
 	(junction
+		(at 66.04 111.76)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "bc4bd159-dce5-4d13-b602-c5f728ebfc9d")
+	)
+	(junction
 		(at 358.14 214.63)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -7424,6 +7419,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "eb2d9aec-e372-487d-ba14-1bbd4e23afac")
+	)
+	(junction
+		(at 57.15 106.68)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "eb927f5f-c28e-43e4-8f7c-1105670a004b")
 	)
 	(junction
 		(at 59.69 208.28)
@@ -7604,6 +7605,16 @@
 			(type default)
 		)
 		(uuid "03091671-bedd-4233-b8a1-d24019aa9380")
+	)
+	(wire
+		(pts
+			(xy 57.15 106.68) (xy 58.42 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "04b00017-5b93-4552-9cc5-64ae04e32563")
 	)
 	(wire
 		(pts
@@ -8067,7 +8078,7 @@
 	)
 	(wire
 		(pts
-			(xy 58.42 111.76) (xy 58.42 113.03)
+			(xy 66.04 111.76) (xy 66.04 113.03)
 		)
 		(stroke
 			(width 0)
@@ -8077,7 +8088,7 @@
 	)
 	(wire
 		(pts
-			(xy 58.42 100.33) (xy 58.42 93.98)
+			(xy 66.04 100.33) (xy 66.04 93.98)
 		)
 		(stroke
 			(width 0)
@@ -8967,7 +8978,7 @@
 	)
 	(wire
 		(pts
-			(xy 58.42 100.33) (xy 71.12 100.33)
+			(xy 66.04 100.33) (xy 78.74 100.33)
 		)
 		(stroke
 			(width 0)
@@ -9657,7 +9668,7 @@
 	)
 	(wire
 		(pts
-			(xy 71.12 102.87) (xy 71.12 113.03)
+			(xy 78.74 102.87) (xy 78.74 113.03)
 		)
 		(stroke
 			(width 0)
@@ -9697,7 +9708,7 @@
 	)
 	(wire
 		(pts
-			(xy 58.42 93.98) (xy 77.47 93.98)
+			(xy 66.04 93.98) (xy 85.09 93.98)
 		)
 		(stroke
 			(width 0)
@@ -10357,6 +10368,16 @@
 	)
 	(wire
 		(pts
+			(xy 57.15 111.76) (xy 66.04 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bbb7416c-d74b-40e3-9082-0467ff5db85e")
+	)
+	(wire
+		(pts
 			(xy 96.52 52.07) (xy 96.52 41.91)
 		)
 		(stroke
@@ -10837,7 +10858,7 @@
 	)
 	(wire
 		(pts
-			(xy 58.42 100.33) (xy 58.42 101.6)
+			(xy 66.04 100.33) (xy 66.04 101.6)
 		)
 		(stroke
 			(width 0)
@@ -11227,7 +11248,7 @@
 	)
 	(wire
 		(pts
-			(xy 44.45 106.68) (xy 49.53 106.68)
+			(xy 44.45 106.68) (xy 57.15 106.68)
 		)
 		(stroke
 			(width 0)
@@ -11886,7 +11907,7 @@
 		(uuid "352a0fe9-1fdf-4717-82a2-01b316068273")
 	)
 	(label "X68k_PWR"
-		(at 77.47 93.98 180)
+		(at 85.09 93.98 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -14008,7 +14029,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 58.42 113.03 0)
+		(at 66.04 113.03 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -14017,7 +14038,7 @@
 		(fields_autoplaced yes)
 		(uuid "0b36d3a3-ac04-4e51-a569-5427cd2808f3")
 		(property "Reference" "#PWR0137"
-			(at 58.42 119.38 0)
+			(at 66.04 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14026,7 +14047,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 58.42 118.11 0)
+			(at 66.04 118.11 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14034,7 +14055,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 58.42 113.03 0)
+			(at 66.04 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14043,7 +14064,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 58.42 113.03 0)
+			(at 66.04 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14052,7 +14073,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 58.42 113.03 0)
+			(at 66.04 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14119,6 +14140,15 @@
 		)
 		(property "Description" "GreenPAK Programmable Mixed-Signal Matrix with In-System Programmability, TSSOP-20"
 			(at 124.46 240.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C3281959"
+			(at 124.46 246.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16804,7 +16834,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "100k"
 			(at 41.656 96.012 0)
 			(effects
 				(font
@@ -17440,6 +17470,15 @@
 		)
 		(property "Description" "GreenPAK Programmable Mixed-Signal Matrix with In-System Programmability, TSSOP-20"
 			(at 124.46 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C3281959"
+			(at 124.46 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18197,7 +18236,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 76.2 100.33 0)
+		(at 83.82 100.33 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -18206,7 +18245,7 @@
 		(fields_autoplaced yes)
 		(uuid "69b5458f-4269-4281-8ee6-2df2f86916d4")
 		(property "Reference" "J103"
-			(at 78.74 100.3299 0)
+			(at 86.36 100.3299 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18215,7 +18254,7 @@
 			)
 		)
 		(property "Value" "Conn_01x02"
-			(at 78.74 102.8699 0)
+			(at 86.36 102.8699 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18224,7 +18263,7 @@
 			)
 		)
 		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
-			(at 76.2 100.33 0)
+			(at 83.82 100.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18233,7 +18272,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 76.2 100.33 0)
+			(at 83.82 100.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18242,7 +18281,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 76.2 100.33 0)
+			(at 83.82 100.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19763,7 +19802,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 71.12 113.03 0)
+		(at 78.74 113.03 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -19772,7 +19811,7 @@
 		(fields_autoplaced yes)
 		(uuid "81fe7f4d-a2ea-47e1-a1f9-ad4f2218b2c0")
 		(property "Reference" "#PWR0138"
-			(at 71.12 119.38 0)
+			(at 78.74 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19781,7 +19820,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 71.12 118.11 0)
+			(at 78.74 118.11 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19789,7 +19828,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 71.12 113.03 0)
+			(at 78.74 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19798,7 +19837,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 71.12 113.03 0)
+			(at 78.74 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19807,7 +19846,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 71.12 113.03 0)
+			(at 78.74 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20421,6 +20460,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C3281959"
+			(at 124.46 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "19"
 			(uuid "effcc9cc-77ee-4de2-80bb-bfbf34977292")
 		)
@@ -20685,6 +20733,82 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "R133")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Transistor_FET:BSS138")
+		(at 63.5 106.68 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "94e76353-289e-4166-9202-575d4b767082")
+		(property "Reference" "Q103"
+			(at 69.85 105.4099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "BSS138"
+			(at 69.85 107.9499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+			(at 68.58 108.585 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.onsemi.com/pub/Collateral/BSS138-D.PDF"
+			(at 68.58 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "50V Vds, 0.22A Id, N-Channel MOSFET, SOT-23"
+			(at 63.5 106.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "c39e3473-922e-4a0e-9d4e-171925cc2eca")
+		)
+		(pin "3"
+			(uuid "496e3d62-2d65-47a5-adea-6fab260b5d05")
+		)
+		(pin "1"
+			(uuid "32b3570c-9f82-41a4-b18d-063e22e95ff1")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "Q103")
 					(unit 1)
 				)
 			)
@@ -21099,90 +21223,6 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "#PWR0157")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Transistor_BJT:DTC143Z")
-		(at 55.88 106.68 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "9e82ca2b-19e3-4428-bded-6a2dc9428afb")
-		(property "Reference" "Q101"
-			(at 60.96 105.4099 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "DTC143Z"
-			(at 60.96 107.9499 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-523"
-			(at 55.88 106.68 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 55.88 106.68 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Description" "Digital NPN Transistor, 4k7/47k, SOT-23"
-			(at 55.88 106.68 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C5273798"
-			(at 55.88 106.68 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "e1fafd8d-0a71-4da9-982e-9f456195faf3")
-		)
-		(pin "1"
-			(uuid "4e50b15f-5fd3-4eed-95b3-965a504c8a8d")
-		)
-		(pin "3"
-			(uuid "4af33868-eb0c-4923-acfe-d77a5bdc0847")
-		)
-		(instances
-			(project ""
-				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "Q101")
 					(unit 1)
 				)
 			)
@@ -22050,6 +22090,75 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "TP109")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 57.15 109.22 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "b6f4abf8-b8c9-411a-8dca-5f620f180f74")
+		(property "Reference" "R139"
+			(at 54.864 108.458 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100k"
+			(at 59.944 107.696 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 57.15 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 57.15 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 57.15 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "21b88487-5c21-46bc-8a48-e46d16e1382f")
+		)
+		(pin "2"
+			(uuid "cdbb1f3f-07bf-40aa-9167-d517a7487682")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "R139")
 					(unit 1)
 				)
 			)
@@ -25768,7 +25877,7 @@
 				)
 			)
 		)
-		(property "Value" "1k"
+		(property "Value" "10k"
 			(at 41.402 113.538 0)
 			(effects
 				(font
