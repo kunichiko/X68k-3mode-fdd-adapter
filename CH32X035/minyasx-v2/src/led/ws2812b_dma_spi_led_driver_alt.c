@@ -27,18 +27,7 @@
    Then, whenyou want to update the LEDs, call:
     WS2812BDMAStart( int num_leds );
 */
-
-#ifndef _WS2812_LED_DRIVER_ALT_H
-#define _WS2812_LED_DRIVER_ALT_H
-
-#include <stdint.h>
-
-// Use DMA and SPI to stream out WS2812B LED Data via the MOSI pin.
-void WS2812BDMAInit();
-void WS2812BDMAStart(int leds);
-
-// Callbacks that you must implement.
-uint32_t WS2812BLEDCallback(int ledno);
+#include "ws2812b_dma_spi_led_driver_alt.h"
 
 #ifdef WS2812DMA_IMPLEMENTATION_ALT
 
@@ -61,7 +50,7 @@ uint32_t WS2812BLEDCallback(int ledno);
 static uint16_t WS2812dmabuff[DMA_BUFFER_LEN];
 static volatile int WS2812LEDs;
 static volatile int WS2812LEDPlace;
-static volatile int WS2812BLEDInUse = 0;
+volatile int WS2812BLEDInUse = 0;
 
 #ifdef CH5xx
 #ifdef CH570_CH572
@@ -357,7 +346,5 @@ void WS2812BDMAInit()
 #endif
 #endif
 }
-
-#endif
 
 #endif
