@@ -1,0 +1,9 @@
+#ifndef GREENPAK_CONTROL_H
+#define GREENPAK_CONTROL_H
+
+#include "i2c/i2c_ch32x035.h"
+#include "oled/ssd1306_txt.h"
+
+void greenpak_dump_oled();
+
+#endif // GREENPAK_CONTROL_H
