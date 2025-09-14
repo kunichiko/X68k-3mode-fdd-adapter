@@ -61,10 +61,17 @@ void greenpak_dump_oled(void)
 {
     OLED_clear(); // 画面クリア  :contentReference[oaicite:9]{index=9}
 
-    greenpak_dump_oled_with_addr(gp_target_default); // 作業用
+    if (I2C_probe(gp_target_default))
+    {
+        greenpak_dump_oled_with_addr(gp_target_default); // 作業用
+    }
     for (int i = 0; i < 4; i++)
     {
         uint8_t addr = gp_target_nvm[i];
+        if (!I2C_probe(addr))
+        {
+            continue; // 居なければスキップ
+        }
         greenpak_dump_oled_with_addr(addr);
     }
 }
