@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "ch32fun.h": "c",
+        "ws2812b_dma_spi_led_driver.h": "c",
+        "color_utilities.h": "c"
+    }
+}
