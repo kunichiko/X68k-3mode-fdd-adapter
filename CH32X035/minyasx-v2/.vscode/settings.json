@@ -7,6 +7,8 @@
         "ws2812b_simple.h": "c",
         "funconfig.h": "c",
         "greenpak2.h": "c",
-        "greenpak_auto.h": "c"
+        "greenpak_auto.h": "c",
+        "usbpd.h": "c",
+        "ssd1306_txt.h": "c"
     }
 }
