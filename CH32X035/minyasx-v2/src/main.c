@@ -18,6 +18,7 @@
 #include <string.h>
 
 #include "funconfig.h"
+#include "power_control.h"
 
 #include "oled/oled_control.h"
 #include "led/led_control.h"
@@ -30,6 +31,7 @@ void ina3221_poll(uint64_t systick);
 int main()
 {
 	SystemInit();
+	Delay_Ms(1000); // Wait for power to stabilize
 
 	// 使用するペリフェラルを有効にする
 	// IOPDEN = Port D clock enable
@@ -44,11 +46,44 @@ int main()
 	AFIO->PCFR1 |= AFIO_PCFR1_SPI1_REMAP_1 | AFIO_PCFR1_SPI1_REMAP_0; // SPI1 remap を 3 (0b11) にセット
 
 	// GPIOA
-	// PA7 = Buzzer
+	// PA7 : Buzzer
+	// PA8 : LED_BLINK (入力: Low=点灯, Pull-Up)
+	// PA16: X68_PWR (入力: Low=電源ON要求, Pull-Up)
+	// PA17: +12V_EXT_DET (Low=外部+12V電源接続, Pull-Up)
+	// PA18: +5V_EN (Low=Enable, High=Disable)
+	// PA19: +12V_EN (Low=Enable, High=Disable)
+	// PA20: +12V_EXT_EN (Low=Enable, High=Disable))
+
+	// PA7
 	GPIOA->CFGLR &= ~(0xf << (4 * 7));
 	GPIOA->CFGLR |= (GPIO_Speed_10MHz | GPIO_CNF_OUT_PP) << (4 * 7);
-
-	GPIOA->BSHR = 1 << 7; // Turn on PA7
+	GPIOA->BCR = (1 << 7); // Low出力にする
+	// PA8: LED_BLINK input
+	GPIOA->CFGHR &= ~(0xf << (4 * (8 - 8)));
+	GPIOA->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (8 - 8));
+	GPIOA->BSHR = (1 << 8); // Pull-Up
+	// PA16: X68_PWR input
+	GPIOA->CFGXR &= ~(0xf << (4 * (16 - 16)));
+	GPIOA->CFGXR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (16 - 16));
+	GPIOA->BSXR = (1 << (16 - 16)); // Pull-Up
+	// PA17: +12V_EXT_DET input
+	GPIOA->CFGXR &= ~(0xf << (4 * (17 - 16)));
+	GPIOA->CFGXR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (17 - 16));
+	GPIOA->BSXR = (1 << (17 - 16)); // Pull-Up
+	// PA18: +5V_EN output
+	GPIOA->CFGXR &= ~(0xf << (4 * (18 - 16)));
+	GPIOA->CFGXR |= (GPIO_Speed_10MHz | GPIO_CNF_OUT_PP) << (4 * (18 - 16));
+	GPIOA->BSXR = (1 << (18 - 16)); // Disable (+5V_EN=High)
+	// GPIOA->BCR = (1 << (18)); // Enable (+5V_EN=Low)
+	// PA19: +12V_EN output
+	GPIOA->CFGXR &= ~(0xf << (4 * (19 - 16)));
+	GPIOA->CFGXR |= (GPIO_Speed_10MHz | GPIO_CNF_OUT_PP) << (4 * (19 - 16));
+	GPIOA->BSXR = (1 << (19 - 16)); // Disable (+12V_EN=High)
+	// GPIOA->BCR = (1 << (19)); // Enable (+12V_EN=Low)
+	//  PA20: +12V_EXT_EN output
+	GPIOA->CFGXR &= ~(0xf << (4 * (20 - 16)));
+	GPIOA->CFGXR |= (GPIO_Speed_10MHz | GPIO_CNF_OUT_PP) << (4 * (20 - 16));
+	GPIOA->BSXR = (1 << (20 - 16)); // Disable (+12V_EXT_EN=High)
 
 	// OLEDテスト
 	OLED_init();
@@ -56,7 +91,10 @@ int main()
 	OLED_flip(0, 0);
 	OLED_print("Hello, OLED!");
 
-	Delay_Ms(3000);
+	Delay_Ms(2000);
+
+	// 電源制御を初期化する
+	power_control_init();
 
 	// INA3221
 	ina3221_init();
@@ -69,11 +107,15 @@ int main()
 	Delay_Ms(1000);
 
 	// GreenPAKのコンフィグを読み出してOLEDに表示
-	greenpak_dump_oled();
+	// greenpak_dump_oled();
 
 	// LED制御を開始する
-	WS2812_SPI_init();
+	// WS2812_SPI_init();
 
+	Delay_Ms(5000);
+
+	// メインループ
+	OLED_clear();
 	while (1)
 	{
 		uint64_t systick = SysTick->CNT;
@@ -95,7 +137,7 @@ void ina3221_poll(uint64_t systick_ms)
 
 	ina3221_read_all_channels(&ch1_current, &ch1_voltage, &ch2_current, &ch2_voltage, &ch3_current, &ch3_voltage);
 
-	OLED_clear();
+	OLED_cursor(0, 0);
 	OLED_write('\n');
 	OLED_printf("VBUS:%2d.%02dV %4dmA", ch1_voltage / 1000, (ch1_voltage % 1000) / 10, ch1_current);
 	OLED_write('\n');
