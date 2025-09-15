@@ -29,7 +29,7 @@
 
 #include "power_control.h"
 
-#include "usbpd/usbpd.h"
+#include "usbpd/usbpd_sink.h"
 #include "oled/ssd1306_txt.h"
 
 void power_control_init(void)
@@ -65,11 +65,7 @@ void power_control_init(void)
         // ● 2.USB-PDのネゴシエーション
         // 外部電源がない場合は、PD電源から +12V, 1.6A以上の供給が可能かどうかを調べます。
 
-        // Change to eUSBPD_VCC_3V3 if you are powering your board from a 3.3V source
-        // USBPD_VCC_e vcc = eUSBPD_VCC_3V3;
-        USBPD_VCC_e vcc = eUSBPD_VCC_5V0;
-        USBPD_Result_e result = USBPD_Init(vcc);
-        if (eUSBPD_OK != result)
+        if (!PD_connect())
         {
             OLED_print("USBPD_Init error");
             OLED_write('\n');
@@ -78,81 +74,15 @@ void power_control_init(void)
         OLED_print("USBPD_Init OK");
         OLED_write('\n');
 
-        USBPD_Reset();
+        for (int i = 1; i <= PD_getPDONum(); i++)
+        {
+            if (i <= PD_getFixedNum())
+                OLED_printf(" (%d)%6dmV %5dmA ", i, PD_getPDOVoltage(i), PD_getPDOMaxCurrent(i));
+            else
+                OLED_printf(" [%d]%6dmV-%5dmV ", i, PD_getPDOMinVoltage(i), PD_getPDOMaxVoltage(i));
+        }
 
-        uint32_t start = SysTick->CNT;
-        uint32_t lastLog = 0;
-        while (eUSBPD_BUSY == (result = USBPD_SinkNegotiate()))
-        {
-            // ネゴシエーション中
-            if (SysTick->CNT > start + (F_CPU * 10))
-            {
-                // 10秒以上かかったらタイムアウト
-                OLED_print("USBPD_SinkNegotiate timeout");
-                OLED_write('\n');
-                break;
-            }
-        }
-        //
-        if (eUSBPD_OK != result)
-        {
-            OLED_printf("USB PD negotiation failed:\n");
-            Delay_Ms(1000);
-            OLED_printf("%s, state: %s", USBPD_ResultToStr(result),
-                        USBPD_StateToStr(USBPD_GetState()));
-            OLED_write('\n');
-        }
-        else
-        {
-            int ver = USBPD_GetVersion();
-            OLED_printf("USB PD V%d.0 negotiation done", ver);
-            // OLED_printf("USB PD V%d.0 negotiation done", USBPD_GetVersion());
-            OLED_write('\n');
-            Delay_Ms(1000);
-            // 利用できる電圧一覧を取得
-            USBPD_SPR_CapabilitiesMessage_t *capabilities;
-            const size_t count = USBPD_GetCapabilities(&capabilities);
-
-            OLED_print("USB PD capabilities:\n");
-            Delay_Ms(1000);
-            for (size_t i = 0; i < count; i++)
-            {
-                Delay_Ms(1000);
-                const USBPD_SourcePDO_t *pdo = &capabilities->Source[i];
-                switch (pdo->Header.PDOType)
-                {
-                case eUSBPD_PDO_FIXED:
-                    OLED_printf("%d: " FIXED_SUPPLY_FMT, i, FIXED_SUPPLY_FMT_ARGS(pdo));
-                    break;
-                case eUSBPD_PDO_BATTERY:
-                    OLED_printf("%d: " BATTERY_SUPPLY_FMT, i, BATTERY_SUPPLY_FMT_ARGS(pdo));
-                    break;
-                case eUSBPD_PDO_VARIABLE:
-                    OLED_printf("%d: " VARIABLE_SUPPLY_FMT, i, VARIABLE_SUPPLY_FMT_ARGS(pdo));
-                    break;
-                case eUSBPD_PDO_AUGMENTED:
-                    switch (pdo->Header.AugmentedType)
-                    {
-                    case eUSBPD_APDO_SPR_PPS:
-                        OLED_printf("%d: " SPR_PPS_FMT, i, SPR_PPS_FMT_ARGS(pdo));
-                        break;
-                    case eUSBPD_APDO_SPR_AVS:
-                        OLED_printf("%d: " SPR_AVS_FMT, i, SPR_AVS_FMT_ARGS(pdo));
-                        break;
-                    case eUSBPD_APDO_EPR_AVS:
-                        OLED_printf("%d: " EPR_AVS_FMT, i, EPR_AVS_FMT_ARGS(pdo));
-                        break;
-                    default:
-                        OLED_printf("  Unknown Augmented PDO type: %d", pdo->Header.AugmentedType);
-                        break;
-                    }
-                    break;
-                default:
-                    OLED_printf("  Unknown PDO type: %d", pdo->Header.PDOType);
-                    break;
-                }
-            }
-        }
+        Delay_Ms(3000);
     }
 }
 
