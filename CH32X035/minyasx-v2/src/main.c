@@ -73,17 +73,18 @@ int main()
 	// PA18: +5V_EN output
 	GPIOA->CFGXR &= ~(0xf << (4 * (18 - 16)));
 	GPIOA->CFGXR |= (GPIO_Speed_10MHz | GPIO_CNF_OUT_PP) << (4 * (18 - 16));
-	GPIOA->BSXR = (1 << (18 - 16)); // Disable (+5V_EN=High)
-	// GPIOA->BCR = (1 << (18)); // Enable (+5V_EN=Low)
+	// GPIOA->BSXR = (1 << (18 - 16)); // Enable (+5V_EN=High)
+	GPIOA->BCR = (1 << (18)); // Disable (+5V_EN=Low)
 	// PA19: +12V_EN output
 	GPIOA->CFGXR &= ~(0xf << (4 * (19 - 16)));
 	GPIOA->CFGXR |= (GPIO_Speed_10MHz | GPIO_CNF_OUT_PP) << (4 * (19 - 16));
-	GPIOA->BSXR = (1 << (19 - 16)); // Disable (+12V_EN=High)
-	// GPIOA->BCR = (1 << (19)); // Enable (+12V_EN=Low)
+	// GPIOA->BSXR = (1 << (19 - 16)); // Enable (+12V_EN=High)
+	GPIOA->BCR = (1 << (19)); // Disable (+12V_EN=Low)
 	//  PA20: +12V_EXT_EN output
 	GPIOA->CFGXR &= ~(0xf << (4 * (20 - 16)));
 	GPIOA->CFGXR |= (GPIO_Speed_10MHz | GPIO_CNF_OUT_PP) << (4 * (20 - 16));
-	GPIOA->BSXR = (1 << (20 - 16)); // Disable (+12V_EXT_EN=High)
+	// GPIOA->BSXR = (1 << (20 - 16)); // Enable (+12V_EXT_EN=High)
+	GPIOA->BCR = (1 << (20)); // Disable (+12V_EXT_EN=Low)
 
 	// OLEDテスト
 	OLED_init();

@@ -42,12 +42,12 @@ void power_control_init(void)
     // ● 0.+12V電源ライン、+5V電源ラインのDisable
     // GPIOのマッピングは以下の通り
     // PA17: +12V_EXT_DET (Low=外部+12V電源接続, Pull-Up)
-    // PA18: +5V_EN (Low=Enable, High=Disable)
-    // PA19: +12V_EN (Low=Enable, High=Disable)
-    // PA20: +12V_EXT_EN (Low=Enable, High=Disable))
-    GPIOA->BSXR = (1 << (18 - 16)); // Disable (+5V_EN=High)
-    GPIOA->BSXR = (1 << (19 - 16)); // Disable (+12V_EN=High)
-    GPIOA->BSXR = (1 << (20 - 16)); // Disable (+12V_EXT_EN=High)
+    // PA18: +5V_EN (Low=Disable, High=Enable)
+    // PA19: +12V_EN (Low=Disable, High=Enable)
+    // PA20: +12V_EXT_EN (Low=Disable, High=Enable))
+    GPIOA->BCR = (1 << (18)); // Disable (+5V_EN=Low)
+    GPIOA->BCR = (1 << (19)); // Disable (+12V_EN=Low)
+    GPIOA->BCR = (1 << (20)); // Disable (+12V_EXT_EN=Low)
 
     // ● 1.外部+12V電源の検出
     // 外部+12V電源が接続されていれば、+12V_EXT_DETがLowになります。
@@ -55,7 +55,7 @@ void power_control_init(void)
     if ((GPIOA->INDR & (1 << 17)) == 0)
     {
         // 外部+12V電源が接続されている
-        GPIOA->BCR = (1 << 20); // Enable (+12V_EXT_EN=Low)
+        GPIOA->BSXR = (1 << (20 - 16)); // Enable (+12V_EXT_EN=High)
         OLED_print("+12V_EXT_DET active");
         OLED_write('\n');
     }
@@ -69,19 +69,51 @@ void power_control_init(void)
         {
             OLED_print("USBPD_Init error");
             OLED_write('\n');
+            Delay_Ms(3000);
             return;
         }
         OLED_print("USBPD_Init OK");
         OLED_write('\n');
 
+        int pd_12v_pdo = -1;
         for (int i = 1; i <= PD_getPDONum(); i++)
         {
             if (i <= PD_getFixedNum())
+            {
                 OLED_printf(" (%d)%6dmV %5dmA ", i, PD_getPDOVoltage(i), PD_getPDOMaxCurrent(i));
+                //         if (PD_getPDOVoltage(i) == 9000 && PD_getPDOMaxCurrent(i) >= 1600)
+                if (PD_getPDOVoltage(i) == 9000 && PD_getPDOMaxCurrent(i) >= 1600) // テストように9000mVにしている
+                {
+                    pd_12v_pdo = i;
+                }
+            }
             else
+            {
                 OLED_printf(" [%d]%6dmV-%5dmV ", i, PD_getPDOMinVoltage(i), PD_getPDOMaxVoltage(i));
+            }
         }
 
+        if (pd_12v_pdo >= 0)
+        {
+            OLED_print(" -> request 12V");
+            OLED_write('\n');
+            if (PD_setPDO(pd_12v_pdo, 1200))
+            {
+                OLED_print(" -> 12V OK");
+                OLED_write('\n');
+            }
+            else
+            {
+                OLED_print(" -> 12V NG");
+                OLED_write('\n');
+                pd_12v_pdo = -1;
+            }
+        }
+        else
+        {
+            OLED_print(" -> no 12V PDO");
+            OLED_write('\n');
+        }
         Delay_Ms(3000);
     }
 }
