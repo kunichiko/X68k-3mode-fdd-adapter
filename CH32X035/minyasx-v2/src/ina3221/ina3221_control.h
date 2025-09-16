@@ -1,8 +1,8 @@
 #ifndef INA3221_CONTROL_H
 #define INA3221_CONTROL_H
 
-#include <stdlib.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 void ina3221_init(void);
 
@@ -16,8 +16,8 @@ void ina3221_init(void);
  *       ch3_voltage: チャネル3の電圧値を格納するポインタ
  * 電圧はmV単位、電流はmA単位で返されます。
  */
-void ina3221_read_all_channels(uint16_t *ch1_current, uint16_t *ch1_voltage, //
-                               uint16_t *ch2_current, uint16_t *ch2_voltage, //
+void ina3221_read_all_channels(uint16_t *ch1_current, uint16_t *ch1_voltage,  //
+                               uint16_t *ch2_current, uint16_t *ch2_voltage,  //
                                uint16_t *ch3_current, uint16_t *ch3_voltage);
 
-#endif // INA3221_CONTROL_H
+#endif  // INA3221_CONTROL_H

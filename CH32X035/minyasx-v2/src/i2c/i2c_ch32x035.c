@@ -9,21 +9,12 @@
 /*
  * error descriptions
  */
-char *i2c_errstr[] =
-    {
-        "not busy",
-        "master mode",
-        "transmit mode",
-        "tx empty",
-        "transmit complete",
-        "receive mode",
-        "byte received"};
+char *i2c_errstr[] = {"not busy", "master mode", "transmit mode", "tx empty", "transmit complete", "receive mode", "byte received"};
 
 /*
  * error handler
  */
-uint8_t I2C_error(uint8_t err)
-{
+uint8_t I2C_error(uint8_t err) {
     // Note: printf may not be available in all environments
     // printf("I2C_error - timeout waiting for %s\n\r", i2c_errstr[err]);
 
@@ -35,8 +26,7 @@ uint8_t I2C_error(uint8_t err)
 /*
  * check for 32-bit event codes
  */
-uint8_t I2C_chk_evt(uint32_t event_mask)
-{
+uint8_t I2C_chk_evt(uint32_t event_mask) {
     /* read order matters here! STAR1 before STAR2!! */
     uint32_t status = I2C1->STAR1 | (I2C1->STAR2 << 16);
     return (status & event_mask) == event_mask;
@@ -45,13 +35,10 @@ uint8_t I2C_chk_evt(uint32_t event_mask)
 /*
  * wait for I2C event with timeout
  */
-uint8_t I2C_wait_evt(uint32_t event, uint8_t err_code)
-{
+uint8_t I2C_wait_evt(uint32_t event, uint8_t err_code) {
     uint32_t timeout = I2C_TIMEOUT_MAX;
-    while (!I2C_chk_evt(event) && timeout--)
-        ;
-    if (timeout == 0)
-    {
+    while (!I2C_chk_evt(event) && timeout--);
+    if (timeout == 0) {
         return I2C_error(err_code);
     }
     return 0;
@@ -60,8 +47,7 @@ uint8_t I2C_wait_evt(uint32_t event, uint8_t err_code)
 /*
  * init I2C hardware
  */
-void I2C_init(void)
-{
+void I2C_init(void) {
     uint16_t tempreg;
 
     // Enable I2C1 and GPIOC clocks
@@ -97,8 +83,7 @@ void I2C_init(void)
     tempreg = (I2C_PRERATE / (3 * I2C_CLKRATE)) & I2C_CKCFGR_CCR;
     tempreg |= I2C_CKCFGR_FS;
 #endif
-    if (tempreg == 0)
-        tempreg = 1; // Minimum value
+    if (tempreg == 0) tempreg = 1;  // Minimum value
     I2C1->CKCFGR = tempreg;
 
     // Enable I2C
@@ -111,16 +96,13 @@ void I2C_init(void)
 /*
  * I2C start transmission
  */
-void I2C_start(uint8_t addr)
-{
+void I2C_start(uint8_t addr) {
     uint32_t timeout;
 
     // wait for not busy
     timeout = I2C_TIMEOUT_MAX;
-    while ((I2C1->STAR2 & I2C_STAR2_BUSY) && timeout--)
-        ;
-    if (timeout == 0)
-    {
+    while ((I2C1->STAR2 & I2C_STAR2_BUSY) && timeout--);
+    if (timeout == 0) {
         I2C_error(0);
         return;
     }
@@ -129,20 +111,16 @@ void I2C_start(uint8_t addr)
     I2C1->CTLR1 |= I2C_CTLR1_START;
 
     // wait for master mode select
-    if (I2C_wait_evt(I2C_EVENT_MASTER_MODE_SELECT, 1) != 0)
-        return;
+    if (I2C_wait_evt(I2C_EVENT_MASTER_MODE_SELECT, 1) != 0) return;
 
     // send 7-bit address
     I2C1->DATAR = addr;
 
     // wait for transmit/receive condition
-    if (addr & 0x01)
-    {
+    if (addr & 0x01) {
         // Read mode
         I2C_wait_evt(I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED, 5);
-    }
-    else
-    {
+    } else {
         // Write mode
         I2C_wait_evt(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED, 2);
     }
@@ -151,26 +129,21 @@ void I2C_start(uint8_t addr)
 /*
  * I2C restart transmission
  */
-void I2C_restart(uint8_t addr)
-{
+void I2C_restart(uint8_t addr) {
     // Set START condition (restart)
     I2C1->CTLR1 |= I2C_CTLR1_START;
 
     // wait for master mode select
-    if (I2C_wait_evt(I2C_EVENT_MASTER_MODE_SELECT, 1) != 0)
-        return;
+    if (I2C_wait_evt(I2C_EVENT_MASTER_MODE_SELECT, 1) != 0) return;
 
     // send 7-bit address
     I2C1->DATAR = addr;
 
     // wait for transmit/receive condition
-    if (addr & 0x01)
-    {
+    if (addr & 0x01) {
         // Read mode
         I2C_wait_evt(I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED, 5);
-    }
-    else
-    {
+    } else {
         // Write mode
         I2C_wait_evt(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED, 2);
     }
@@ -179,8 +152,7 @@ void I2C_restart(uint8_t addr)
 /*
  * I2C stop transmission
  */
-void I2C_stop(void)
-{
+void I2C_stop(void) {
     // set STOP condition
     I2C1->CTLR1 |= I2C_CTLR1_STOP;
 }
@@ -188,16 +160,13 @@ void I2C_stop(void)
 /*
  * I2C transmit one data byte to the slave
  */
-void I2C_write(uint8_t data)
-{
+void I2C_write(uint8_t data) {
     uint32_t timeout;
 
     // wait for TX Empty
     timeout = I2C_TIMEOUT_MAX;
-    while (!(I2C1->STAR1 & I2C_STAR1_TXE) && timeout--)
-        ;
-    if (timeout == 0)
-    {
+    while (!(I2C1->STAR1 & I2C_STAR1_TXE) && timeout--);
+    if (timeout == 0) {
         I2C_error(3);
         return;
     }
@@ -212,24 +181,19 @@ void I2C_write(uint8_t data)
 /*
  * I2C receive one data byte from the slave (ack=0 for last byte, ack>0 if more bytes to follow)
  */
-uint8_t I2C_read(uint8_t ack)
-{
+uint8_t I2C_read(uint8_t ack) {
     uint8_t data = 0;
 
-    if (ack)
-    {
+    if (ack) {
         // Enable ACK for next byte
         I2C1->CTLR1 |= I2C_CTLR1_ACK;
-    }
-    else
-    {
+    } else {
         // Disable ACK for last byte (NACK)
         I2C1->CTLR1 &= ~I2C_CTLR1_ACK;
     }
 
     // wait for byte received
-    if (I2C_wait_evt(I2C_EVENT_MASTER_BYTE_RECEIVED, 6) == 0)
-    {
+    if (I2C_wait_evt(I2C_EVENT_MASTER_BYTE_RECEIVED, 6) == 0) {
         // read received data
         data = I2C1->DATAR;
     }
@@ -241,8 +205,7 @@ uint8_t I2C_read(uint8_t ack)
  * I2C receive 16-bit word (ack=0 for last word, ack>0 if more to follow)
  * Reads two bytes MSB first.
  */
-uint16_t I2C_readW(uint8_t ack)
-{
+uint16_t I2C_readW(uint8_t ack) {
     uint16_t value = 0;
 
     // 1st byte (MSB), must ACK because we expect another byte
@@ -258,20 +221,16 @@ uint16_t I2C_readW(uint8_t ack)
 /*
  * Send data buffer via I2C bus and stop
  */
-void I2C_writeBuffer(uint8_t *buf, uint16_t len)
-{
-    while (len--)
-        I2C_write(*buf++);
+void I2C_writeBuffer(uint8_t *buf, uint16_t len) {
+    while (len--) I2C_write(*buf++);
     I2C_stop();
 }
 
 /*
  * Read data via I2C bus to buffer and stop
  */
-void I2C_readBuffer(uint8_t *buf, uint16_t len)
-{
-    while (len--)
-        *buf++ = I2C_read(len > 0);
+void I2C_readBuffer(uint8_t *buf, uint16_t len) {
+    while (len--) *buf++ = I2C_read(len > 0);
     I2C_stop();
 }
 
@@ -282,14 +241,11 @@ void I2C_readBuffer(uint8_t *buf, uint16_t len)
 // i2cdetect と同じ “SMBus Quick (write)” 方式の ACK プローブ
 // 引数: 7bit アドレス（例: 0x0A）
 // 戻り: 在席=1 / 不在=0
-int I2C_probe(uint8_t addr7)
-{
+int I2C_probe(uint8_t addr7) {
     // 1) BUSY解除待ち
     uint32_t to = I2C_TIMEOUT_MAX;
-    while ((I2C1->STAR2 & I2C_STAR2_BUSY) && --to)
-        ;
-    if (!to)
-    {
+    while ((I2C1->STAR2 & I2C_STAR2_BUSY) && --to);
+    if (!to) {
         I2C_error(0);
         return 0;
     }
@@ -297,29 +253,25 @@ int I2C_probe(uint8_t addr7)
     // 2) START
     I2C1->CTLR1 |= I2C_CTLR1_START;
     //    マスタモード突入 (SB/MSL/BUSY) を待つ
-    if (I2C_wait_evt(I2C_EVENT_MASTER_MODE_SELECT, 1))
-    {
+    if (I2C_wait_evt(I2C_EVENT_MASTER_MODE_SELECT, 1)) {
         I2C1->CTLR1 |= I2C_CTLR1_STOP;
         return 0;
     }
 
     // 3) SLA+W 送出（ACK を見る）
-    I2C1->DATAR = (addr7 << 1); // write方向
+    I2C1->DATAR = (addr7 << 1);  // write方向
 
     //    ADDR(ACK) or AF(NACK) を待つ
     int present = 0;
     to = I2C_TIMEOUT_MAX;
-    while (--to)
-    {
+    while (--to) {
         uint16_t sr1 = I2C1->STAR1;
-        if (sr1 & I2C_STAR1_ADDR)
-        {                      // ACK=在席
-            (void)I2C1->STAR2; // ADDR クリア（SR1→SR2 読み）
+        if (sr1 & I2C_STAR1_ADDR) {  // ACK=在席
+            (void)I2C1->STAR2;       // ADDR クリア（SR1→SR2 読み）
             present = 1;
             break;
         }
-        if (sr1 & I2C_STAR1_AF)
-        { // NACK=不在
+        if (sr1 & I2C_STAR1_AF) {  // NACK=不在
             present = 0;
             break;
         }
@@ -329,8 +281,7 @@ int I2C_probe(uint8_t addr7)
     I2C1->CTLR1 |= I2C_CTLR1_STOP;
 
     // 5) 後始末（NACK/Timeout 時は I2C を立て直す）
-    if (!present || !to)
-    {
+    if (!present || !to) {
         // AF はソフトクリアも可能だが、確実さ重視で全体リカバリ
         I2C_error(0);
     }

@@ -13,137 +13,132 @@
 //
 // 詳しい動作は README.md を参照してください。
 
-#include "ch32fun.h"
 #include <stdio.h>
 #include <string.h>
 
+#include "ch32fun.h"
 #include "funconfig.h"
-#include "power_control.h"
-
-#include "oled/oled_control.h"
-#include "led/led_control.h"
 #include "greenpak/greenpak_auto.h"
 #include "greenpak/greenpak_control.h"
 #include "ina3221/ina3221_control.h"
+#include "led/led_control.h"
+#include "oled/oled_control.h"
+#include "power_control.h"
 
 void ina3221_poll(uint64_t systick);
 
-int main()
-{
-	SystemInit();
-	Delay_Ms(1000); // Wait for power to stabilize
+int main() {
+    SystemInit();
+    Delay_Ms(1000);  // Wait for power to stabilize
 
-	// 使用するペリフェラルを有効にする
-	// IOPDEN = Port D clock enable
-	// IOPCEN = Port C clock enable
-	// IOPAEN = Port A clock enable
-	// TIM1 = Timer 1 module clock enable
-	// AFIO = Alternate Function I/O module clock enable
-	RCC->APB2PCENR = RCC_IOPDEN | RCC_IOPCEN | RCC_IOPAEN | RCC_TIM1EN | RCC_SPI1EN | RCC_AFIOEN;
+    // 使用するペリフェラルを有効にする
+    // IOPDEN = Port D clock enable
+    // IOPCEN = Port C clock enable
+    // IOPAEN = Port A clock enable
+    // TIM1 = Timer 1 module clock enable
+    // AFIO = Alternate Function I/O module clock enable
+    RCC->APB2PCENR = RCC_IOPDEN | RCC_IOPCEN | RCC_IOPAEN | RCC_TIM1EN | RCC_SPI1EN | RCC_AFIOEN;
 
-	// SPIをデフォルトのPA6,7(MISO,MOSI)から、PC6,7(MISO_3,MOSI_3)に変更するために、Remap Register 1 でリマップする
-	AFIO->PCFR1 &= ~(AFIO_PCFR1_SPI1_REMAP);						  // SPI1 remap をクリア
-	AFIO->PCFR1 |= AFIO_PCFR1_SPI1_REMAP_1 | AFIO_PCFR1_SPI1_REMAP_0; // SPI1 remap を 3 (0b11) にセット
+    // SPIをデフォルトのPA6,7(MISO,MOSI)から、PC6,7(MISO_3,MOSI_3)に変更するために、Remap Register 1 でリマップする
+    AFIO->PCFR1 &= ~(AFIO_PCFR1_SPI1_REMAP);                           // SPI1 remap をクリア
+    AFIO->PCFR1 |= AFIO_PCFR1_SPI1_REMAP_1 | AFIO_PCFR1_SPI1_REMAP_0;  // SPI1 remap を 3 (0b11) にセット
 
-	// GPIOA
-	// PA7 : Buzzer
-	// PA8 : LED_BLINK (入力: Low=点灯, Pull-Up)
-	// PA16: X68_PWR (入力: Low=電源ON要求, Pull-Up)
-	// PA17: +12V_EXT_DET (Low=外部+12V電源接続, Pull-Up)
-	// PA18: +5V_EN (Low=Enable, High=Disable)
-	// PA19: +12V_EN (Low=Enable, High=Disable)
-	// PA20: +12V_EXT_EN (Low=Enable, High=Disable))
+    // GPIOA
+    // PA7 : Buzzer
+    // PA8 : LED_BLINK (入力: Low=点灯, Pull-Up)
+    // PA16: X68_PWR (入力: Low=電源ON要求, Pull-Up)
+    // PA17: +12V_EXT_DET (Low=外部+12V電源接続, Pull-Up)
+    // PA18: +5V_EN (Low=Enable, High=Disable)
+    // PA19: +12V_EN (Low=Enable, High=Disable)
+    // PA20: +12V_EXT_EN (Low=Enable, High=Disable))
 
-	// PA7
-	GPIOA->CFGLR &= ~(0xf << (4 * 7));
-	GPIOA->CFGLR |= (GPIO_Speed_10MHz | GPIO_CNF_OUT_PP) << (4 * 7);
-	GPIOA->BCR = (1 << 7); // Low出力にする
-	// PA8: LED_BLINK input
-	GPIOA->CFGHR &= ~(0xf << (4 * (8 - 8)));
-	GPIOA->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (8 - 8));
-	GPIOA->BSHR = (1 << 8); // Pull-Up
-	// PA16: X68_PWR input
-	GPIOA->CFGXR &= ~(0xf << (4 * (16 - 16)));
-	GPIOA->CFGXR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (16 - 16));
-	GPIOA->BSXR = (1 << (16 - 16)); // Pull-Up
-	// PA17: +12V_EXT_DET input
-	GPIOA->CFGXR &= ~(0xf << (4 * (17 - 16)));
-	GPIOA->CFGXR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (17 - 16));
-	GPIOA->BSXR = (1 << (17 - 16)); // Pull-Up
-	// PA18: +5V_EN output
-	GPIOA->CFGXR &= ~(0xf << (4 * (18 - 16)));
-	GPIOA->CFGXR |= (GPIO_Speed_10MHz | GPIO_CNF_OUT_PP) << (4 * (18 - 16));
-	// GPIOA->BSXR = (1 << (18 - 16)); // Enable (+5V_EN=High)
-	GPIOA->BCR = (1 << (18)); // Disable (+5V_EN=Low)
-	// PA19: +12V_EN output
-	GPIOA->CFGXR &= ~(0xf << (4 * (19 - 16)));
-	GPIOA->CFGXR |= (GPIO_Speed_10MHz | GPIO_CNF_OUT_PP) << (4 * (19 - 16));
-	// GPIOA->BSXR = (1 << (19 - 16)); // Enable (+12V_EN=High)
-	GPIOA->BCR = (1 << (19)); // Disable (+12V_EN=Low)
-	//  PA20: +12V_EXT_EN output
-	GPIOA->CFGXR &= ~(0xf << (4 * (20 - 16)));
-	GPIOA->CFGXR |= (GPIO_Speed_10MHz | GPIO_CNF_OUT_PP) << (4 * (20 - 16));
-	// GPIOA->BSXR = (1 << (20 - 16)); // Enable (+12V_EXT_EN=High)
-	GPIOA->BCR = (1 << (20)); // Disable (+12V_EXT_EN=Low)
+    // PA7
+    GPIOA->CFGLR &= ~(0xf << (4 * 7));
+    GPIOA->CFGLR |= (GPIO_Speed_10MHz | GPIO_CNF_OUT_PP) << (4 * 7);
+    GPIOA->BCR = (1 << 7);  // Low出力にする
+    // PA8: LED_BLINK input
+    GPIOA->CFGHR &= ~(0xf << (4 * (8 - 8)));
+    GPIOA->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (8 - 8));
+    GPIOA->BSHR = (1 << 8);  // Pull-Up
+    // PA16: X68_PWR input
+    GPIOA->CFGXR &= ~(0xf << (4 * (16 - 16)));
+    GPIOA->CFGXR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (16 - 16));
+    GPIOA->BSXR = (1 << (16 - 16));  // Pull-Up
+    // PA17: +12V_EXT_DET input
+    GPIOA->CFGXR &= ~(0xf << (4 * (17 - 16)));
+    GPIOA->CFGXR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (17 - 16));
+    GPIOA->BSXR = (1 << (17 - 16));  // Pull-Up
+    // PA18: +5V_EN output
+    GPIOA->CFGXR &= ~(0xf << (4 * (18 - 16)));
+    GPIOA->CFGXR |= (GPIO_Speed_10MHz | GPIO_CNF_OUT_PP) << (4 * (18 - 16));
+    GPIOA->BCR = (1 << (18));  // Disable (+5V_EN=Low)
+    // GPIOA->BSXR = (1 << (18 - 16)); // Enable (+5V_EN=High)
+    // PA19: +12V_EN output
+    GPIOA->CFGXR &= ~(0xf << (4 * (19 - 16)));
+    GPIOA->CFGXR |= (GPIO_Speed_10MHz | GPIO_CNF_OUT_PP) << (4 * (19 - 16));
+    GPIOA->BCR = (1 << (19));  // Disable (+12V_EN=Low)
+    // GPIOA->BSXR = (1 << (19 - 16)); // Enable (+12V_EN=High)
+    //  PA20: +12V_EXT_EN output
+    GPIOA->CFGXR &= ~(0xf << (4 * (20 - 16)));
+    GPIOA->CFGXR |= (GPIO_Speed_10MHz | GPIO_CNF_OUT_PP) << (4 * (20 - 16));
+    GPIOA->BCR = (1 << (20));  // Disable (+12V_EXT_EN=Low)
+    // GPIOA->BSXR = (1 << (20 - 16)); // Enable (+12V_EXT_EN=High)
 
-	// OLEDテスト
-	OLED_init();
-	OLED_clear();
-	OLED_flip(0, 0);
-	OLED_print("Hello, OLED!");
+    // OLEDテスト
+    OLED_init();
+    OLED_clear();
+    OLED_flip(0, 0);
+    OLED_print("Hello, OLED!");
 
-	Delay_Ms(2000);
+    Delay_Ms(2000);
 
-	// 電源制御を初期化する
-	power_control_init();
+    // 電源制御を初期化する
+    power_control_init();
 
-	// INA3221
-	ina3221_init();
+    // INA3221
+    ina3221_init();
 
-	// greenpak_force_program_verify(0x02, 2); // GreenPAK3を強制プログラム
+    // greenpak_force_program_verify(0x02, 2); // GreenPAK3を強制プログラム
 
-	// GreenPAKの自動プログラムと検証
-	greenpak_autoprogram_verify();
+    // GreenPAKの自動プログラムと検証
+    greenpak_autoprogram_verify();
 
-	Delay_Ms(1000);
+    Delay_Ms(1000);
 
-	// GreenPAKのコンフィグを読み出してOLEDに表示
-	// greenpak_dump_oled();
+    // GreenPAKのコンフィグを読み出してOLEDに表示
+    // greenpak_dump_oled();
 
-	// LED制御を開始する
-	// WS2812_SPI_init();
+    // LED制御を開始する
+    // WS2812_SPI_init();
 
-	Delay_Ms(5000);
+    Delay_Ms(5000);
 
-	// メインループ
-	OLED_clear();
-	while (1)
-	{
-		uint64_t systick = SysTick->CNT;
-		uint32_t ms = systick / (F_CPU / 1000);
-		WS2812_SPI_poll();
-		ina3221_poll(ms);
-	}
+    // メインループ
+    OLED_clear();
+    while (1) {
+        uint64_t systick = SysTick->CNT;
+        uint32_t ms = systick / (F_CPU / 1000);
+        WS2812_SPI_poll();
+        ina3221_poll(ms);
+    }
 }
 
-void ina3221_poll(uint64_t systick_ms)
-{
-	static uint64_t last_tick = 0;
-	if (systick_ms - last_tick < 1000)
-	{
-		return;
-	}
-	last_tick = systick_ms;
-	uint16_t ch1_current, ch1_voltage, ch2_current, ch2_voltage, ch3_current, ch3_voltage;
+void ina3221_poll(uint64_t systick_ms) {
+    static uint64_t last_tick = 0;
+    if (systick_ms - last_tick < 1000) {
+        return;
+    }
+    last_tick = systick_ms;
+    uint16_t ch1_current, ch1_voltage, ch2_current, ch2_voltage, ch3_current, ch3_voltage;
 
-	ina3221_read_all_channels(&ch1_current, &ch1_voltage, &ch2_current, &ch2_voltage, &ch3_current, &ch3_voltage);
+    ina3221_read_all_channels(&ch1_current, &ch1_voltage, &ch2_current, &ch2_voltage, &ch3_current, &ch3_voltage);
 
-	OLED_cursor(0, 0);
-	OLED_write('\n');
-	OLED_printf("VBUS:%2d.%02dV %4dmA", ch1_voltage / 1000, (ch1_voltage % 1000) / 10, ch1_current);
-	OLED_write('\n');
-	OLED_printf("+12V:%2d.%02dV %4dmA", ch2_voltage / 1000, (ch2_voltage % 1000) / 10, ch2_current);
-	OLED_write('\n');
-	OLED_printf("+5V :%2d.%02dV %4dmA", ch3_voltage / 1000, (ch3_voltage % 1000) / 10, ch3_current);
-	OLED_write('\n');
+    OLED_cursor(0, 0);
+    OLED_write('\n');
+    OLED_printf("VBUS:%2d.%02dV %4dmA", ch1_voltage / 1000, (ch1_voltage % 1000) / 10, ch1_current);
+    OLED_write('\n');
+    OLED_printf("+12V:%2d.%02dV %4dmA", ch2_voltage / 1000, (ch2_voltage % 1000) / 10, ch2_current);
+    OLED_write('\n');
+    OLED_printf("+5V :%2d.%02dV %4dmA", ch3_voltage / 1000, (ch3_voltage % 1000) / 10, ch3_current);
+    OLED_write('\n');
 }

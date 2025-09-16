@@ -1,4 +1,5 @@
 {
+    "C_Cpp.clang_format_style": "{BasedOnStyle: Google, IndentWidth: 4, ColumnLimit: 140, IndentCaseLabels: false, AllowShortFunctionsOnASingleLine: None, AlignAfterOpenBracket: Align, AlignArrayOfStructures: Right}",
     "files.associations": {
         "ch32fun.h": "c",
         "ws2812b_dma_spi_led_driver.h": "c",

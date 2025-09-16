@@ -6,4 +6,4 @@
 void power_control_init(void);
 void power_control_poll(uint32_t systick_ms);
 
-#endif // POWER_CONTROL_H
+#endif  // POWER_CONTROL_H

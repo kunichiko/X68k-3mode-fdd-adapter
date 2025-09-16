@@ -22,13 +22,13 @@ extern "C" {
 
 #include <stdint.h>
 
-void printD(void (*putchar) (char c), uint32_t value);
-void printB(void (*putchar) (char c), uint8_t value);
-void printH(void (*putchar) (char c), uint16_t value);
-void printW(void (*putchar) (char c), uint32_t value);
-void printS(void (*putchar) (char c), const char* str);
-void println(void (*putchar) (char c), const char* str);
-void printF(void (*putchar) (char c), const char *format, ...);
+void printD(void (*putchar)(char c), uint32_t value);
+void printB(void (*putchar)(char c), uint8_t value);
+void printH(void (*putchar)(char c), uint16_t value);
+void printW(void (*putchar)(char c), uint32_t value);
+void printS(void (*putchar)(char c), const char* str);
+void println(void (*putchar)(char c), const char* str);
+void printF(void (*putchar)(char c), const char* format, ...);
 
 #ifdef __cplusplus
 };

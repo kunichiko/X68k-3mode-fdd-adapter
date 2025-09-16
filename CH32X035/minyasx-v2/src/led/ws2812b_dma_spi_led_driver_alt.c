@@ -61,46 +61,19 @@ volatile int WS2812BLEDInUse = 0;
 #endif
 // This is the code that updates a portion of the WS2812dmabuff with new data.
 // This effectively creates the bitstream that outputs to the LEDs.
-static void WS2812FillBuffSec(uint16_t *ptr, int numhalfwords, int tce)
-{
+static void WS2812FillBuffSec(uint16_t *ptr, int numhalfwords, int tce) {
 #ifdef CH5xx
     // Reversing bit order because CH5xx SPI FIFO is only half of what CH32 have
     const static uint16_t bitquartets[16] = {
-        0b0001000100010001,
-        0b0111000100010001,
-        0b0001011100010001,
-        0b0111011100010001,
-        0b0001000101110001,
-        0b0111000101110001,
-        0b0001011101110001,
-        0b0111011101110001,
-        0b0001000100010111,
-        0b0111000100010111,
-        0b0001011100010111,
-        0b0111011100010111,
-        0b0001000101110111,
-        0b0111000101110111,
-        0b0001011101110111,
-        0b0111011101110111,
+        0b0001000100010001, 0b0111000100010001, 0b0001011100010001, 0b0111011100010001, 0b0001000101110001, 0b0111000101110001,
+        0b0001011101110001, 0b0111011101110001, 0b0001000100010111, 0b0111000100010111, 0b0001011100010111, 0b0111011100010111,
+        0b0001000101110111, 0b0111000101110111, 0b0001011101110111, 0b0111011101110111,
     };
 #else
     const static uint16_t bitquartets[16] = {
-        0b1000100010001000,
-        0b1000100010001110,
-        0b1000100011101000,
-        0b1000100011101110,
-        0b1000111010001000,
-        0b1000111010001110,
-        0b1000111011101000,
-        0b1000111011101110,
-        0b1110100010001000,
-        0b1110100010001110,
-        0b1110100011101000,
-        0b1110100011101110,
-        0b1110111010001000,
-        0b1110111010001110,
-        0b1110111011101000,
-        0b1110111011101110,
+        0b1000100010001000, 0b1000100010001110, 0b1000100011101000, 0b1000100011101110, 0b1000111010001000, 0b1000111010001110,
+        0b1000111011101000, 0b1000111011101110, 0b1110100010001000, 0b1110100010001110, 0b1110100011101000, 0b1110100011101110,
+        0b1110111010001000, 0b1110111010001110, 0b1110111011101000, 0b1110111011101110,
     };
 #endif
 
@@ -110,8 +83,7 @@ static void WS2812FillBuffSec(uint16_t *ptr, int numhalfwords, int tce)
     int place = WS2812LEDPlace;
 
 #ifdef WSRAW
-    while (place < 0 && ptr != end)
-    {
+    while (place < 0 && ptr != end) {
         uint32_t *lptr = (uint32_t *)ptr;
         lptr[0] = 0;
         lptr[1] = 0;
@@ -122,8 +94,7 @@ static void WS2812FillBuffSec(uint16_t *ptr, int numhalfwords, int tce)
     }
 
 #else
-    while (place < 0 && ptr != end)
-    {
+    while (place < 0 && ptr != end) {
         (*ptr++) = 0;
         (*ptr++) = 0;
         (*ptr++) = 0;
@@ -134,22 +105,17 @@ static void WS2812FillBuffSec(uint16_t *ptr, int numhalfwords, int tce)
     }
 #endif
 
-    while (ptr != end)
-    {
-        if (place >= ledcount)
-        {
+    while (ptr != end) {
+        if (place >= ledcount) {
             // Optionally, leave line high.
-            while (ptr != end)
-                (*ptr++) = 0; // 0xffff;
+            while (ptr != end) (*ptr++) = 0;  // 0xffff;
 
             // Only safe to do this when we're on the second leg.
-            if (tce)
-            {
-                if (place == ledcount)
-                {
+            if (tce) {
+                if (place == ledcount) {
                     // Take the DMA out of circular mode and let it expire.
 #ifdef CH5xx
-                    R8_SPI0_INTER_EN &= ~RB_SPI_IE_DMA_END; // Disable DMA end interrupt
+                    R8_SPI0_INTER_EN &= ~RB_SPI_IE_DMA_END;  // Disable DMA end interrupt
 #else
                     DMA1_Channel3->CFGR &= ~DMA_Mode_Circular;
 #endif
@@ -211,25 +177,21 @@ static void WS2812FillBuffSec(uint16_t *ptr, int numhalfwords, int tce)
 
 #ifdef CH5xx
 void SPI0_IRQHandler(void) __attribute__((interrupt));
-void SPI0_IRQHandler(void)
-{
+void SPI0_IRQHandler(void) {
     uint8_t intf = R8_SPI0_INT_FLAG;
-    if ((intf & RB_SPI_IF_DMA_END))
-    {
+    if ((intf & RB_SPI_IF_DMA_END)) {
         WS2812FillBuffSec(WS2812dmabuff, DMA_BUFFER_LEN, 1);
         R16_SPI0_TOTAL_CNT = DMA_BUFFER_LEN * 2;
     }
 }
 #else
 void DMA1_Channel3_IRQHandler(void) __attribute__((interrupt));
-void DMA1_Channel3_IRQHandler(void)
-{
+void DMA1_Channel3_IRQHandler(void) {
     // GPIOD->BSHR = 1;	 // Turn on GPIOD0 for profiling
 
     // Backup flags.
     volatile int intfr = DMA1->INTFR;
-    do
-    {
+    do {
         // Clear all possible flags.
         DMA1->INTFCR = DMA1_IT_GL3;
 
@@ -237,13 +199,11 @@ void DMA1_Channel3_IRQHandler(void)
         // DMA1_IT_TC3 should be COMPLETE.  But for some reason, doing this causes
         // LED jitter.  I am henseforth flipping the order.
 
-        if (intfr & DMA1_IT_HT3)
-        {
+        if (intfr & DMA1_IT_HT3) {
             // Halfwaay (Fill in first part)
             WS2812FillBuffSec(WS2812dmabuff, DMA_BUFFER_LEN / 2, 1);
         }
-        if (intfr & DMA1_IT_TC3)
-        {
+        if (intfr & DMA1_IT_TC3) {
             // Complete (Fill in second part)
             WS2812FillBuffSec(WS2812dmabuff + DMA_BUFFER_LEN / 2, DMA_BUFFER_LEN / 2, 0);
         }
@@ -254,8 +214,7 @@ void DMA1_Channel3_IRQHandler(void)
 }
 #endif
 
-void WS2812BDMAStart(int leds)
-{
+void WS2812BDMAStart(int leds) {
     // Enter critical section.
     __disable_irq();
     WS2812BLEDInUse = 1;
@@ -281,17 +240,16 @@ void WS2812BDMAStart(int leds)
     R8_SPI0_CTRL_CFG |= RB_SPI_DMA_ENABLE;
 #else
     WS2812FillBuffSec(WS2812dmabuff, DMA_BUFFER_LEN, 0);
-    DMA1_Channel3->CNTR = DMA_BUFFER_LEN; // Number of unique uint16_t entries.
+    DMA1_Channel3->CNTR = DMA_BUFFER_LEN;  // Number of unique uint16_t entries.
     DMA1_Channel3->CFGR |= DMA_Mode_Circular;
 #endif
 }
 
-void WS2812BDMAInit()
-{
+void WS2812BDMAInit() {
     // Enable DMA + Peripherals
 #ifdef CH5xx
     funPinMode(bMOSI, GPIO_CFGLR_OUT_2Mhz_PP);
-    R8_SPI0_CLOCK_DIV = FUNCONF_SYSTEM_CORE_CLOCK / 3000000; // div = Fsys/3MHz
+    R8_SPI0_CLOCK_DIV = FUNCONF_SYSTEM_CORE_CLOCK / 3000000;  // div = Fsys/3MHz
     R8_SPI0_CTRL_MOD = RB_SPI_ALL_CLEAR;
     R8_SPI0_CTRL_MOD = RB_SPI_MOSI_OE | RB_SPI_2WIRE_MOD;
     R16_SPI0_DMA_END = ((uint32_t)WS2812dmabuff + (DMA_BUFFER_LEN * 2));
@@ -310,39 +268,31 @@ void WS2812BDMAInit()
     GPIOC->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP_AF) << (4 * 7);
 
     // Configure SPI
-    SPI1->CTLR1 =
-        SPI_NSS_Soft | SPI_CPHA_1Edge | SPI_CPOL_Low | SPI_DataSize_16b |
-        SPI_Mode_Master | SPI_Direction_1Line_Tx |
-        3 << 3; // Divisior = 16 (48/16 = 3MHz)
+    SPI1->CTLR1 = SPI_NSS_Soft | SPI_CPHA_1Edge | SPI_CPOL_Low | SPI_DataSize_16b | SPI_Mode_Master | SPI_Direction_1Line_Tx |
+                  3 << 3;  // Divisior = 16 (48/16 = 3MHz)
 
-    SPI1->CTLR2 = SPI_CTLR2_TXDMAEN; // Enable Tx buffer DMA
-    SPI1->HSCR = 0;                  // CH32X035では、0にしないと分周比が正しく 48/16 にならない
+    SPI1->CTLR2 = SPI_CTLR2_TXDMAEN;  // Enable Tx buffer DMA
+    SPI1->HSCR = 0;                   // CH32X035では、0にしないと分周比が正しく 48/16 にならない
 
-    SPI1->CTLR1 |= CTLR1_SPE_Set; // Enable SPI
+    SPI1->CTLR1 |= CTLR1_SPE_Set;  // Enable SPI
 
-    SPI1->DATAR = 0; // Set SPI line Low.
+    SPI1->DATAR = 0;  // Set SPI line Low.
 
     // DMA1_Channel3 is for SPI1TX
     DMA1_Channel3->PADDR = (uint32_t)&SPI1->DATAR;
     DMA1_Channel3->MADDR = (uint32_t)WS2812dmabuff;
-    DMA1_Channel3->CNTR = 0; // sizeof( bufferset )/2; // Number of unique copies.  (Don't start, yet!)
-    DMA1_Channel3->CFGR =
-        DMA_M2M_Disable |
-        DMA_Priority_VeryHigh |
-        DMA_MemoryDataSize_HalfWord |
-        DMA_PeripheralDataSize_HalfWord |
-        DMA_MemoryInc_Enable |
-        DMA_Mode_Normal | // OR DMA_Mode_Circular or DMA_Mode_Normal
-        DMA_DIR_PeripheralDST |
-        DMA_IT_TC | DMA_IT_HT; // Transmission Complete + Half Empty Interrupts.
+    DMA1_Channel3->CNTR = 0;  // sizeof( bufferset )/2; // Number of unique copies.  (Don't start, yet!)
+    DMA1_Channel3->CFGR = DMA_M2M_Disable | DMA_Priority_VeryHigh | DMA_MemoryDataSize_HalfWord | DMA_PeripheralDataSize_HalfWord |
+                          DMA_MemoryInc_Enable | DMA_Mode_Normal |        // OR DMA_Mode_Circular or DMA_Mode_Normal
+                          DMA_DIR_PeripheralDST | DMA_IT_TC | DMA_IT_HT;  // Transmission Complete + Half Empty Interrupts.
 
     //	NVIC_SetPriority( DMA1_Channel3_IRQn, 0<<4 ); //We don't need to tweak priority.
     NVIC_EnableIRQ(DMA1_Channel3_IRQn);
     DMA1_Channel3->CFGR |= DMA_CFGR1_EN;
 
 #ifdef WS2812B_ALLOW_INTERRUPT_NESTING
-    __set_INTSYSCR(__get_INTSYSCR() | 2); // Enable interrupt nesting.
-    PFIC->IPRIOR[24] = 0b10000000;        // Turn on preemption for DMA1Ch3
+    __set_INTSYSCR(__get_INTSYSCR() | 2);  // Enable interrupt nesting.
+    PFIC->IPRIOR[24] = 0b10000000;         // Turn on preemption for DMA1Ch3
 #endif
 #endif
 }
