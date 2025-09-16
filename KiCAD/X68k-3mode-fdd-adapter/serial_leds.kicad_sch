@@ -541,6 +541,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 144.78 102.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "4"
 			(uuid "9cc7ca9b-ac53-415a-a283-6733391ceefd")
 		)
@@ -613,6 +622,15 @@
 			)
 		)
 		(property "LCSC" "C2922787"
+			(at 83.82 102.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 83.82 102.87 0)
 			(effects
 				(font
@@ -759,6 +777,15 @@
 			)
 		)
 		(property "LCSC" "C2922787"
+			(at 171.45 102.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 171.45 102.87 0)
 			(effects
 				(font
@@ -1302,6 +1329,15 @@
 		)
 		(property "LCSC" "C2922787"
 			(at 105.41 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 110.49 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)

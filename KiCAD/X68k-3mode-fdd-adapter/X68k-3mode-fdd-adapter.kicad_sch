@@ -7469,10 +7469,6 @@
 		(uuid "fdd4fa59-9329-48ee-950b-30e2c638e2af")
 	)
 	(no_connect
-		(at 256.54 226.06)
-		(uuid "09522e2f-ca4b-4ee8-9f85-a96c832ec295")
-	)
-	(no_connect
 		(at 134.62 187.96)
 		(uuid "1401ee25-73aa-432e-a5af-9b0aa229effd")
 	)
@@ -7483,10 +7479,6 @@
 	(no_connect
 		(at 378.46 204.47)
 		(uuid "324e6572-c59b-48d4-a2fd-2e8070b40a9a")
-	)
-	(no_connect
-		(at 256.54 237.49)
-		(uuid "4876a862-2f95-4077-969b-e85ce44e87c9")
 	)
 	(no_connect
 		(at 378.46 132.08)
@@ -9768,6 +9760,16 @@
 	)
 	(wire
 		(pts
+			(xy 256.54 237.49) (xy 278.13 237.49)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9549a077-0c03-43c1-b27e-d63e32fe710e")
+	)
+	(wire
+		(pts
 			(xy 256.54 243.84) (xy 270.51 243.84)
 		)
 		(stroke
@@ -10795,6 +10797,16 @@
 			(type default)
 		)
 		(uuid "d5b57d99-bb36-4ada-8f3a-b78661e53de0")
+	)
+	(wire
+		(pts
+			(xy 256.54 226.06) (xy 278.13 226.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d60ead9e-7797-4302-9e17-8448baa3aadc")
 	)
 	(wire
 		(pts
@@ -13520,6 +13532,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 44.45 238.76 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "e0529860-8994-43bf-8cb8-e866d8f34e34")
 		)
@@ -13582,6 +13603,15 @@
 		)
 		(property "Description" "Resistor, small US symbol"
 			(at 44.45 243.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 44.45 243.84 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13867,6 +13897,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 398.78 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "b2125a48-fde6-466f-887b-9fba28736a58")
 		)
@@ -13943,6 +13982,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 389.89 30.48 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "1c9ad058-8a04-48ec-b1f8-a026b786c2a2")
 		)
@@ -14005,6 +14053,15 @@
 		)
 		(property "Description" "Push button switch, generic, two pins"
 			(at 287.02 229.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 287.02 229.87 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14148,6 +14205,15 @@
 			)
 		)
 		(property "LCSC" "C3281959"
+			(at 124.46 246.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 124.46 246.38 0)
 			(effects
 				(font
@@ -14338,6 +14404,15 @@
 		)
 		(property "Description" "Resistor, small US symbol"
 			(at 44.45 205.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 44.45 205.74 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14622,6 +14697,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 285.75 20.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "755083f9-7c20-49c3-9aea-9f9a1aa95416")
 		)
@@ -14765,6 +14849,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 316.23 20.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "0bcbb0fc-17f7-4160-aa39-c7e863cb2908")
 		)
@@ -14837,6 +14930,82 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "#PWR0151")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 278.13 237.49 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "19c28f04-372c-4681-bf32-1dc4005f139a")
+		(property "Reference" "TP112"
+			(at 280.67 232.156 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 276.86 236.728 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
+			(at 273.05 237.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 273.05 237.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 278.13 237.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 278.13 237.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c905a8c1-9488-4653-911e-2d1dd20b9082")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "TP112")
 					(unit 1)
 				)
 			)
@@ -15093,6 +15262,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 236.22 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "70cf99a3-5dd2-4fa2-92fd-c5e2364fce5b")
 		)
@@ -15303,6 +15481,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 346.71 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "b2c202fe-e712-4f31-92cf-8c912cb242e5")
 		)
@@ -15436,6 +15623,15 @@
 		)
 		(property "Description" "Resistor, small US symbol"
 			(at 44.45 215.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 44.45 215.9 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15636,6 +15832,15 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 389.89 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 389.89 39.37 0)
 			(effects
 				(font
@@ -15986,6 +16191,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 295.91 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "49362141-6d64-45e5-ae5b-9f40bf3eab5f")
 		)
@@ -16062,6 +16276,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 359.41 30.48 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "bf2d152a-a5f1-4a03-af26-11ee61246101")
 		)
@@ -16124,6 +16347,15 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 287.02 251.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 287.02 251.46 0)
 			(effects
 				(font
@@ -16204,6 +16436,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 44.45 226.06 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "2c5233a4-56f5-411e-a41e-e8cf2d0c3955")
 		)
@@ -16275,6 +16516,15 @@
 			)
 		)
 		(property "LCSC" "C181255"
+			(at 171.45 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 171.45 39.37 0)
 			(effects
 				(font
@@ -16462,6 +16712,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 138.43 203.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "3bc32f79-f260-45e4-8c69-1e8db5dc9a34")
 		)
@@ -16597,6 +16856,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 97.79 252.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "297cbfa8-b1b6-45ab-a199-933bca214f61")
 		)
@@ -16657,6 +16925,15 @@
 		)
 		(property "Description" "48MHz RISC-V MCU with USB PD phy (Sink, Source, DRP), USB 2.0 Full speed phy (Host, Device), 20KB RAM, 62KB Flash, WQFN-28"
 			(at 234.95 274.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 241.3 222.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16762,9 +17039,11 @@
 		)
 		(pin "18"
 			(uuid "0a76e0c9-e0ce-4d1c-bfe0-b07c64bde9af")
+			(alternate "MISO_3")
 		)
 		(pin "19"
 			(uuid "3901f9cd-81af-47de-8fc7-f444a110b287")
+			(alternate "MOSI_3")
 		)
 		(pin "32"
 			(uuid "1129ba94-31e3-4840-badc-244a9781776c")
@@ -16861,6 +17140,15 @@
 			)
 		)
 		(property "Description" ""
+			(at 44.45 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 44.45 100.33 0)
 			(effects
 				(font
@@ -17004,6 +17292,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 193.04 218.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "c8ec81fd-d8da-409d-9d80-f3614f0bb7f0")
 		)
@@ -17066,6 +17363,15 @@
 			)
 		)
 		(property "Description" "test point"
+			(at 393.7 196.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 393.7 196.85 0)
 			(effects
 				(font
@@ -17206,6 +17512,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 148.59 224.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "5c51a0fe-30ec-49e4-bfae-bb8a731cc957")
 		)
@@ -17268,6 +17583,15 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 233.68 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 233.68 113.03 0)
 			(effects
 				(font
@@ -17486,6 +17810,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 124.46 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "19"
 			(uuid "841bcddf-69a2-4091-80c5-0b606a82534e")
 		)
@@ -17602,6 +17935,15 @@
 		)
 		(property "Description" "Resistor, small US symbol"
 			(at 44.45 241.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 44.45 241.3 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17874,6 +18216,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 44.45 228.6 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "4ece9433-3111-4f61-ae5a-0df50e2081b1")
 		)
@@ -17936,6 +18287,15 @@
 		)
 		(property "Description" "Resistor, small US symbol"
 			(at 44.45 223.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 44.45 223.52 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18070,6 +18430,15 @@
 		)
 		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
 			(at 372.11 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 372.11 110.49 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18219,6 +18588,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 200.66 218.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "44cf3685-07a2-4906-9214-123118f08a91")
 		)
@@ -18289,6 +18667,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 83.82 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "6d313bf3-5576-41bf-b73a-6cacb4d51247")
 		)
@@ -18351,6 +18738,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 148.59 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 148.59 167.64 0)
 			(effects
 				(font
@@ -18439,6 +18835,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 306.07 20.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "345f7a37-1c65-43c6-be68-c51aff6b8861")
 		)
@@ -18496,6 +18901,15 @@
 			)
 		)
 		(property "Description" "Jumper, 2-pole, small symbol, bridged"
+			(at 187.96 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 187.96 44.45 0)
 			(effects
 				(font
@@ -18566,6 +18980,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 160.02 224.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 160.02 224.79 0)
 			(effects
 				(font
@@ -18907,6 +19330,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 153.67 195.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "93dd99ed-4531-4b24-a774-0727c5ccba88")
 		)
@@ -18966,6 +19398,15 @@
 		)
 		(property "Description" "Resistor, small US symbol"
 			(at 44.45 210.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 44.45 210.82 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19107,6 +19548,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 384.81 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "4d328b7c-8062-4b6c-b9af-0ff66e9f95b1")
 		)
@@ -19167,6 +19617,15 @@
 		)
 		(property "Description" ""
 			(at 125.73 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 125.73 72.39 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19254,6 +19713,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 295.91 20.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "55ab27cf-f28b-485d-b2e7-837f3fea94e6")
 		)
@@ -19312,6 +19780,15 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 243.84 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 243.84 64.77 0)
 			(effects
 				(font
@@ -19785,6 +20262,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 148.59 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "6028376d-c15c-44e1-8032-e4602cb4d335")
 		)
@@ -20052,6 +20538,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 153.67 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "f4bc1cb2-cce0-429e-9c79-edf747b21b70")
 		)
@@ -20121,6 +20616,15 @@
 			)
 		)
 		(property "LCSC" "C962334"
+			(at 316.23 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 316.23 40.64 0)
 			(effects
 				(font
@@ -20259,6 +20763,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 138.43 260.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "2a47bc7e-ffdd-4fc7-a7ea-048b0c9a1cd0")
 		)
@@ -20269,6 +20782,82 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "JP103")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 278.13 226.06 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "8a24016d-3735-4329-a914-d5c1b68c21ea")
+		(property "Reference" "TP113"
+			(at 280.67 220.726 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 276.86 225.298 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
+			(at 273.05 226.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 273.05 226.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 278.13 226.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 278.13 226.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "6df0a75c-3cca-434f-b290-93eea862f6da")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "TP113")
 					(unit 1)
 				)
 			)
@@ -20461,6 +21050,15 @@
 			)
 		)
 		(property "LCSC" "C3281959"
+			(at 124.46 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 124.46 132.08 0)
 			(effects
 				(font
@@ -20723,6 +21321,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 359.41 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "9aafae55-6121-40ff-8bf5-ab5f54f80a97")
 		)
@@ -20788,6 +21395,15 @@
 			)
 		)
 		(property "Description" "50V Vds, 0.22A Id, N-Channel MOSFET, SOT-23"
+			(at 63.5 106.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 63.5 106.68 0)
 			(effects
 				(font
@@ -20934,6 +21550,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 44.45 208.28 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "e09d47f5-cb90-42b3-8acc-bc5a47d732f3")
 		)
@@ -21013,6 +21638,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 374.65 30.48 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "e1d58271-cbb3-4663-b15a-c90f1f411974")
 		)
@@ -21073,6 +21707,15 @@
 			)
 		)
 		(property "Description" "Jumper, 2-pole, small symbol, open"
+			(at 369.57 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 369.57 48.26 0)
 			(effects
 				(font
@@ -21282,6 +21925,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 33.02 106.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "20865d23-1695-46c5-9df7-77c8eb6baccb")
 		)
@@ -21342,6 +21994,15 @@
 			)
 		)
 		(property "Description" "Jumper, 2-pole, small symbol, open"
+			(at 354.33 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 354.33 48.26 0)
 			(effects
 				(font
@@ -21550,6 +22211,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 153.67 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "7acb9ae2-a00b-4955-8a6e-2fcd0383d1a1")
 		)
@@ -21609,6 +22279,15 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 287.02 220.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 287.02 220.98 0)
 			(effects
 				(font
@@ -21686,6 +22365,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 247.65 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "82d2a836-2e45-4b24-a280-8edce0af1ae6")
 		)
@@ -21755,6 +22443,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 95.25 255.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "62769a16-062f-458c-a5bd-7e3afb830a11")
 		)
@@ -21813,6 +22510,15 @@
 			)
 		)
 		(property "Description" "test point"
+			(at 92.71 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 92.71 135.89 0)
 			(effects
 				(font
@@ -22083,6 +22789,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 100.33 198.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "2cabd59e-6244-4714-840f-15097802b2af")
 		)
@@ -22142,6 +22857,15 @@
 		)
 		(property "Description" "Resistor, small US symbol"
 			(at 57.15 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 57.15 109.22 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22218,6 +22942,15 @@
 			)
 		)
 		(property "LCSC" "C725929"
+			(at 49.53 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 49.53 157.48 0)
 			(effects
 				(font
@@ -22392,6 +23125,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 393.7 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "0647c86f-7a67-4afa-baa9-bc98b97d6566")
 		)
@@ -22458,6 +23200,15 @@
 			)
 		)
 		(property "LCSC" "C319050"
+			(at 259.08 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 259.08 55.88 0)
 			(effects
 				(font
@@ -22553,6 +23304,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 374.65 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "e7b229a5-3bdf-43ba-9b98-0e2e9eab40a5")
 		)
@@ -22622,6 +23382,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 264.16 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "e1450de0-7ef6-46b6-b7fc-c5944d511df7")
 		)
@@ -22682,6 +23451,15 @@
 			)
 		)
 		(property "Description" "Generic connector, double row, 02x17, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 370.84 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 370.84 209.55 0)
 			(effects
 				(font
@@ -22866,6 +23644,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 240.03 95.25 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "dbc9bd00-7b98-4af9-a83b-dc51220006e1")
 		)
@@ -22935,6 +23722,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 87.63 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "a0e9db4b-0ba3-4b58-a0a7-175c9b64fbf2")
 		)
@@ -22994,6 +23790,15 @@
 		)
 		(property "Description" "Resistor, small US symbol"
 			(at 44.45 198.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 44.45 198.12 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -23074,6 +23879,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 241.3 107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "1c691497-460f-46d5-9972-bfbd925b322b")
 		)
@@ -23146,6 +23960,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 90.17 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "f7fff856-8c68-4473-8420-0e321bfb175b")
 		)
@@ -23203,6 +24026,15 @@
 			)
 		)
 		(property "Description" "Generic connector, double row, 02x06, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 370.84 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 370.84 87.63 0)
 			(effects
 				(font
@@ -23303,6 +24135,15 @@
 		)
 		(property "Description" "Resistor, small US symbol"
 			(at 44.45 203.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 44.45 203.2 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -23446,6 +24287,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 44.45 220.98 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "909f9e0c-a640-4d1e-8481-815acb95ed2c")
 		)
@@ -23574,6 +24424,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 160.02 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 160.02 110.49 0)
 			(effects
 				(font
@@ -23717,6 +24576,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 389.89 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "1a023b85-1902-464f-a061-11c097db8232")
 		)
@@ -23779,6 +24647,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 160.02 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 160.02 167.64 0)
 			(effects
 				(font
@@ -24053,6 +24930,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 194.31 257.81 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "d2a602b3-59ee-40d4-b4c2-34cffc2cbd1c")
 		)
@@ -24114,6 +25000,15 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 240.03 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 240.03 64.77 0)
 			(effects
 				(font
@@ -24248,6 +25143,15 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 359.41 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 359.41 39.37 0)
 			(effects
 				(font
@@ -24403,6 +25307,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 285.75 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "180c4876-f421-46f4-9e75-d7bd04697697")
 		)
@@ -24462,6 +25375,15 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 194.31 248.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 194.31 248.92 0)
 			(effects
 				(font
@@ -24943,6 +25865,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 306.07 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "1e97fa6e-bd1a-4c3c-8c31-b6f5c130ce90")
 		)
@@ -25002,6 +25933,15 @@
 		)
 		(property "Description" "Resistor, small US symbol"
 			(at 44.45 200.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 44.45 200.66 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -25143,6 +26083,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 252.73 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "7242ff79-2277-4f2f-b070-5b09cb8915f8")
 		)
@@ -25204,6 +26153,15 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 374.65 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 374.65 48.26 0)
 			(effects
 				(font
@@ -25274,6 +26232,15 @@
 		)
 		(property "Description" "Resistor, small US symbol"
 			(at 44.45 233.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 44.45 233.68 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -25415,6 +26382,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 44.45 236.22 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "22974229-0cbf-40ce-82d7-a220ca383541")
 		)
@@ -25542,6 +26518,15 @@
 			)
 		)
 		(property "Description" "Generic connector, double row, 02x17, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 370.84 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 370.84 147.32 0)
 			(effects
 				(font
@@ -25706,6 +26691,15 @@
 		)
 		(property "Description" ""
 			(at 125.73 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 125.73 57.15 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -25912,6 +26906,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 44.45 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "8515ce0b-f408-41b4-a628-861fb499523c")
 		)
@@ -25981,6 +26984,15 @@
 			)
 		)
 		(property "LCSC" "C1980"
+			(at 191.77 60.96 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 191.77 60.96 90)
 			(effects
 				(font
@@ -26079,6 +27091,15 @@
 			)
 		)
 		(property "LCSC" "C962334"
+			(at 398.78 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 398.78 81.28 0)
 			(effects
 				(font
@@ -26418,6 +27439,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 44.45 213.36 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "7088becf-80fa-49b7-b9ce-8a9f8a56ad8d")
 		)
@@ -26480,6 +27510,15 @@
 		)
 		(property "Description" "Resistor, small US symbol"
 			(at 44.45 218.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 44.45 218.44 90)
 			(effects
 				(font
 					(size 1.27 1.27)

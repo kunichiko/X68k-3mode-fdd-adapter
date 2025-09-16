@@ -692,6 +692,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 127 97.79 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "77f7afdb-db67-4145-b96d-ec5c06d15123")
 		)
@@ -883,6 +892,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCIC" ""
+			(at 132.08 100.33 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "f077212c-90e2-40b6-90da-dd1eec16f6e3")
 		)
@@ -976,6 +994,15 @@
 			)
 		)
 		(property "Description" "50V Vds, 0.22A Id, N-Channel MOSFET, SOT-23"
+			(at 138.43 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
 			(at 138.43 97.79 0)
 			(effects
 				(font
