@@ -92,11 +92,11 @@ int main() {
 
     Delay_Ms(2000);
 
+    // INA3221を最初に初期化して電圧電流を測定できるようにする
+    ina3221_init();
+
     // 電源制御を初期化する
     power_control_init();
-
-    // INA3221
-    ina3221_init();
 
     // greenpak_force_program_verify(0x02, 2); // GreenPAK3を強制プログラム
 
