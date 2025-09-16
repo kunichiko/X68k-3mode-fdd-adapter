@@ -3,4 +3,4 @@
 
 #include "oled/ssd1306_txt.h"
 
-#endif // OLED_CONTROL_H
+#endif  // OLED_CONTROL_H

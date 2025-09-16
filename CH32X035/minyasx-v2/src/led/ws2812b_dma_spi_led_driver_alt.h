@@ -1,10 +1,10 @@
 #ifndef _WS2812_LED_DRIVER_ALT_H
 #define _WS2812_LED_DRIVER_ALT_H
 
-#include "funconfig.h"
+#include <stdint.h>
 
 #include "ch32fun.h"
-#include <stdint.h>
+#include "funconfig.h"
 
 // Use DMA and SPI to stream out WS2812B LED Data via the MOSI pin.
 void WS2812BDMAInit();

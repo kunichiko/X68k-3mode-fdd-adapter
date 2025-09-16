@@ -29,11 +29,10 @@
 
 #include "power_control.h"
 
-#include "usbpd/usbpd_sink.h"
 #include "oled/ssd1306_txt.h"
+#include "usbpd/usbpd_sink.h"
 
-void power_control_init(void)
-{
+void power_control_init(void) {
     OLED_clear();
 
     // INA3221の初期化
@@ -45,28 +44,26 @@ void power_control_init(void)
     // PA18: +5V_EN (Low=Disable, High=Enable)
     // PA19: +12V_EN (Low=Disable, High=Enable)
     // PA20: +12V_EXT_EN (Low=Disable, High=Enable))
-    GPIOA->BCR = (1 << (18)); // Disable (+5V_EN=Low)
-    GPIOA->BCR = (1 << (19)); // Disable (+12V_EN=Low)
-    GPIOA->BCR = (1 << (20)); // Disable (+12V_EXT_EN=Low)
+    GPIOA->BCR = (1 << (18));  // Disable (+5V_EN=Low)
+    GPIOA->BCR = (1 << (19));  // Disable (+12V_EN=Low)
+    GPIOA->BCR = (1 << (20));  // Disable (+12V_EXT_EN=Low)
+
+    bool fet_12v_enabled = false;
 
     // ● 1.外部+12V電源の検出
     // 外部+12V電源が接続されていれば、+12V_EXT_DETがLowになります。
     // この場合は、+12V_EXT ラインをEnableします。
-    if ((GPIOA->INDR & (1 << 17)) == 0)
-    {
+    if ((GPIOA->INDR & (1 << 17)) == 0) {
         // 外部+12V電源が接続されている
-        GPIOA->BSXR = (1 << (20 - 16)); // Enable (+12V_EXT_EN=High)
+        GPIOA->BSXR = (1 << (20 - 16));  // Enable (+12V_EXT_EN=High)
         OLED_print("+12V_EXT_DET active");
         OLED_write('\n');
-    }
-    else
-    {
+    } else {
         // 外部+12V電源が接続されていない
         // ● 2.USB-PDのネゴシエーション
         // 外部電源がない場合は、PD電源から +12V, 1.6A以上の供給が可能かどうかを調べます。
 
-        if (!PD_connect())
-        {
+        if (!PD_connect()) {
             OLED_print("USBPD_Init error");
             OLED_write('\n');
             Delay_Ms(3000);
@@ -76,41 +73,34 @@ void power_control_init(void)
         OLED_write('\n');
 
         int pd_12v_pdo = -1;
-        for (int i = 1; i <= PD_getPDONum(); i++)
-        {
-            if (i <= PD_getFixedNum())
-            {
+        for (int i = 1; i <= PD_getPDONum(); i++) {
+            if (i <= PD_getFixedNum()) {
                 OLED_printf(" (%d)%6dmV %5dmA ", i, PD_getPDOVoltage(i), PD_getPDOMaxCurrent(i));
                 //         if (PD_getPDOVoltage(i) == 9000 && PD_getPDOMaxCurrent(i) >= 1600)
-                if (PD_getPDOVoltage(i) == 9000 && PD_getPDOMaxCurrent(i) >= 1600) // テストように9000mVにしている
+                if (PD_getPDOVoltage(i) == 12000 && PD_getPDOMaxCurrent(i) >= 1600)  // テストように9000mVにしている
                 {
                     pd_12v_pdo = i;
                 }
-            }
-            else
-            {
+            } else {
                 OLED_printf(" [%d]%6dmV-%5dmV ", i, PD_getPDOMinVoltage(i), PD_getPDOMaxVoltage(i));
             }
         }
 
-        if (pd_12v_pdo >= 0)
-        {
+        if (pd_12v_pdo >= 0) {
             OLED_print(" -> request 12V");
             OLED_write('\n');
-            if (PD_setPDO(pd_12v_pdo, 1200))
-            {
+            if (PD_setPDO(pd_12v_pdo, 12000)) {
                 OLED_print(" -> 12V OK");
                 OLED_write('\n');
-            }
-            else
-            {
+                // +12Vに切り替わったことを確認できたら、+12VラインをEnableします。
+                GPIOA->BSXR = (1 << (19 - 16));  // Enable (+12V_EN=High)
+                fet_12v_enabled = true;
+            } else {
                 OLED_print(" -> 12V NG");
                 OLED_write('\n');
                 pd_12v_pdo = -1;
             }
-        }
-        else
-        {
+        } else {
             OLED_print(" -> no 12V PDO");
             OLED_write('\n');
         }
@@ -118,7 +108,6 @@ void power_control_init(void)
     }
 }
 
-void power_control_poll(uint32_t systick_ms)
-{
+void power_control_poll(uint32_t systick_ms) {
     // 定期的な処理をここに追加
 }

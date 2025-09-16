@@ -1,25 +1,23 @@
+#include "greenpak_auto.h"
+
 #include <stdint.h>
 #include <string.h>
-
-#include "greenpak_auto.h"
-#include "greenpak_program.h"
-#include "greenpak_control.h"
-
-#include "i2c/i2c_ch32x035.h"
-#include "oled/ssd1306_txt.h"
 
 #include "greenpak/greenpak1.h"
 #include "greenpak/greenpak2.h"
 #include "greenpak/greenpak3.h"
 #include "greenpak/greenpak4.h"
+#include "greenpak_control.h"
+#include "greenpak_program.h"
+#include "i2c/i2c_ch32x035.h"
+#include "oled/ssd1306_txt.h"
 
-#define GP_DEF_NVM 0x0A // はじめは全ICが 0x08-0x0B (NVM=0x0A) に居る想定（基板上で1個ずつ接続）
-#define GP_PAGE 16      // 1回の書込みチャンク（必要なら調整）
-#define CMP_CHUNK 1     // 比較時の読出しチャンク
+#define GP_DEF_NVM 0x0A  // はじめは全ICが 0x08-0x0B (NVM=0x0A) に居る想定（基板上で1個ずつ接続）
+#define GP_PAGE 16       // 1回の書込みチャンク（必要なら調整）
+#define CMP_CHUNK 1      // 比較時の読出しチャンク
 
 // 画像テーブル（サイズ0はスキップ）
-typedef struct
-{
+typedef struct {
     uint16_t base;
     uint16_t size;
     const uint8_t *image;
@@ -33,67 +31,56 @@ static const gp_img_t gp_img[4] = {
 };
 
 // 連続書込み（ページ分割, STOPはwriteBufferが発行）
-void gp_write_seq(uint8_t addr7, uint16_t start, const uint8_t *data, uint16_t len)
-{
+void gp_write_seq(uint8_t addr7, uint16_t start, const uint8_t *data, uint16_t len) {
     uint16_t off = 0;
-    while (off < len)
-    {
+    while (off < len) {
         uint16_t n = len - off;
-        if (n > GP_PAGE)
-            n = GP_PAGE;
+        if (n > GP_PAGE) n = GP_PAGE;
 
-        I2C_start((addr7 << 1) | 0);               // START + SLA+W（8bitアドレス）:contentReference[oaicite:9]{index=9}
-        I2C_write((uint8_t)(start + off));         // 内部アドレス（多くのGreenPAKはオートインクリメント）:contentReference[oaicite:10]{index=10}
-        I2C_writeBuffer((uint8_t *)&data[off], n); // データ送出→STOPまで:contentReference[oaicite:11]{index=11}
+        I2C_start((addr7 << 1) | 0);        // START + SLA+W（8bitアドレス）:contentReference[oaicite:9]{index=9}
+        I2C_write((uint8_t)(start + off));  // 内部アドレス（多くのGreenPAKはオートインクリメント）:contentReference[oaicite:10]{index=10}
+        I2C_writeBuffer((uint8_t *)&data[off], n);  // データ送出→STOPまで:contentReference[oaicite:11]{index=11}
 
         off += n;
     }
 }
 
 // 連続読出し（STOPはreadBufferが発行）
-static void gp_read_seq(uint8_t addr7, uint16_t start, uint8_t *dst, uint16_t len)
-{
-    I2C_start((addr7 << 1) | 0); // 書きモードで内部アドレスをセット
+static void gp_read_seq(uint8_t addr7, uint16_t start, uint8_t *dst, uint16_t len) {
+    I2C_start((addr7 << 1) | 0);  // 書きモードで内部アドレスをセット
     I2C_write((uint8_t)start);
-    I2C_restart((addr7 << 1) | 1); // 再スタートして読出しへ切替:contentReference[oaicite:12]{index=12}
-    I2C_readBuffer(dst, len);      // 連続受信→最後にSTOP:contentReference[oaicite:13]{index=13}
+    I2C_restart((addr7 << 1) | 1);  // 再スタートして読出しへ切替:contentReference[oaicite:12]{index=12}
+    I2C_readBuffer(dst, len);       // 連続受信→最後にSTOP:contentReference[oaicite:13]{index=13}
 }
 
-static int gp_compare_image(uint8_t addr7, uint16_t base, const uint8_t *img, uint16_t size)
-{
-    if (size == 0)
-        return 1; // 空なら一致扱い
+static int gp_compare_image(uint8_t addr7, uint16_t base, const uint8_t *img, uint16_t size) {
+    if (size == 0) return 1;  // 空なら一致扱い
     uint8_t buf[CMP_CHUNK];
     uint16_t done = 0;
-    while (done < size)
-    {
+    while (done < size) {
         uint16_t n = size - done;
-        if (n > CMP_CHUNK)
-            n = CMP_CHUNK;
+        if (n > CMP_CHUNK) n = CMP_CHUNK;
         gp_read_seq(addr7, base + done, buf, n);
-        if (memcmp(buf, &img[done], n) != 0)
-        {
+        if (memcmp(buf, &img[done], n) != 0) {
             OLED_print("mismatch at ");
             OLED_printD(base + done);
             OLED_write('\n');
-            return 0; // 不一致
+            return 0;  // 不一致
         }
         done += n;
     }
-    return 1; // 完全一致
+    return 1;  // 完全一致
 }
 
 // ---------------- 自動処理本体 ----------------
 
-static void show_not_found_and_exit(void)
-{
+static void show_not_found_and_exit(void) {
     OLED_print("GreenPAK not found");
-    OLED_write('\n'); // :contentReference[oaicite:14]{index=14} :contentReference[oaicite:15]{index=15}
+    OLED_write('\n');  // :contentReference[oaicite:14]{index=14} :contentReference[oaicite:15]{index=15}
     // 必要なら、ここで他の処理へ遷移/return
 }
 
-void greenpak_force_program_verify(uint8_t addr, uint8_t unit)
-{
+void greenpak_force_program_verify(uint8_t addr, uint8_t unit) {
     OLED_print("prog GP");
     OLED_printD(unit);
     OLED_print("  @");
@@ -104,8 +91,7 @@ void greenpak_force_program_verify(uint8_t addr, uint8_t unit)
     return;
 }
 
-void greenpak_autoprogram_verify(void)
-{
+void greenpak_autoprogram_verify(void) {
     OLED_clear();
 
     // まず既定の最終配置（0x12, 0x1A, 0x22, 0x2A）と 0x0A（作業用）をスキャン
@@ -117,8 +103,7 @@ void greenpak_autoprogram_verify(void)
     };
     int def_present = I2C_probe(GP_DEF_NVM);
 
-    if (!present[0] && !present[1] && !present[2] && !present[3] && !def_present)
-    {
+    if (!present[0] && !present[1] && !present[2] && !present[3] && !def_present) {
         // どこにも居ない → 表示して終了
         show_not_found_and_exit();
         return;
@@ -126,48 +111,37 @@ void greenpak_autoprogram_verify(void)
 
     OLED_cursor(0, 0);
     OLED_print("GP found ");
-    if (present[0])
-    {
+    if (present[0]) {
         OLED_print("1 ");
     }
-    if (present[1])
-    {
+    if (present[1]) {
         OLED_print("2 ");
     }
-    if (present[2])
-    {
+    if (present[2]) {
         OLED_print("3 ");
     }
-    if (present[3])
-    {
+    if (present[3]) {
         OLED_print("4 ");
     }
-    if (def_present)
-    {
+    if (def_present) {
         OLED_print("def ");
     }
     OLED_write('\n');
 
     // すべて見えている場合でも「差分があれば上書き」する
-    for (;;)
-    {
+    for (;;) {
         // 全員が最終番地に居るか？
         int all_seen = present[0] && present[1] && present[2] && present[3];
 
         // 居るものは verify→差分があれば上書き（最終番地側へ書く）
-        for (int i = 0; i < 4; i++)
-        {
-            if (present[i] && gp_img[i].size > 0)
-            {
+        for (int i = 0; i < 4; i++) {
+            if (present[i] && gp_img[i].size > 0) {
                 int same = gp_compare_image(gp_target_nvm[i], gp_img[i].base, gp_img[i].image, gp_img[i].size - 0x10);
-                if (same)
-                {
+                if (same) {
                     OLED_print("firm is ok:");
                     OLED_printD(i + 1);
                     OLED_write('\n');
-                }
-                else
-                {
+                } else {
                     OLED_print("reprogramming:");
                     OLED_printD(i + 1);
                     OLED_write('\n');
@@ -178,8 +152,7 @@ void greenpak_autoprogram_verify(void)
             }
         }
 
-        if (all_seen)
-        {
+        if (all_seen) {
             // 全員在席＋必要なら上書き済み → 完了
             return;
         }
@@ -187,30 +160,25 @@ void greenpak_autoprogram_verify(void)
         // まだ見えていない最初のICを 0x0A（作業用）経由でプログラム
         // （基板のショートジャンパで、そのICだけがバスに接続されている前提）
         int target = -1;
-        for (int i = 0; i < 4; i++)
-        {
-            if (!present[i])
-            {
+        for (int i = 0; i < 4; i++) {
+            if (!present[i]) {
                 target = i;
                 break;
             }
         }
 
-        if (target < 0)
-        {
+        if (target < 0) {
             // 論理上起きないはずだが保険
             return;
         }
 
-        if (!I2C_probe(GP_DEF_NVM))
-        {
+        if (!I2C_probe(GP_DEF_NVM)) {
             // 作業用 0x0A 自体が見えない → 表示して終了
             show_not_found_and_exit();
             return;
         }
 
-        if (gp_img[target].size > 0)
-        {
+        if (gp_img[target].size > 0) {
             OLED_print("programming GP");
             OLED_printD(target + 1);
             OLED_write('\n');
@@ -218,9 +186,7 @@ void greenpak_autoprogram_verify(void)
             gp_program_with_erase(GP_DEF_NVM, gp_img[target].base, gp_img[target].image, gp_img[target].size);
             OLED_print("done");
             OLED_write('\n');
-        }
-        else
-        {
+        } else {
             OLED_print("data empty: Skip GP");
             OLED_printD(target + 1);
             OLED_write('\n');
