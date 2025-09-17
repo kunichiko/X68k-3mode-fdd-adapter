@@ -33,12 +33,20 @@ uint16_t read_word_smbus(uint8_t dev7, uint8_t reg) {
 uint16_t conv_current(uint16_t raw) {
     // 電流のレジスタ値は50uA単位
     // 下位3bitは無視する必要がある
+    // 最上位ビットが符号ビットで、負の値になることがあるが、その場合は0とする
+    if (raw & 0x8000) {
+        return 0;
+    }
     return (raw & 0xFFF8) * 50 / 1000;  // mA単位に変換
 }
 
 uint16_t conv_voltage(uint16_t raw) {
     // 電圧のレジスタ値は1mV単位
     // 下位3bitは無視する必要がある
+    // 最上位ビットが符号ビットで、負の値になることがあるが、その場合は0とする
+    if (raw & 0x8000) {
+        return 0;
+    }
     return (raw & 0xFFF8) * 1;  // mV単位に変換
 }
 
@@ -57,4 +65,24 @@ void ina3221_read_all_channels(uint16_t *ch1_current, uint16_t *ch1_voltage,  //
     if (ch2_voltage) *ch2_voltage = conv_voltage(reg[3]);
     if (ch3_current) *ch3_current = conv_current(reg[4]);
     if (ch3_voltage) *ch3_voltage = conv_voltage(reg[5]);
+}
+
+void ina3221_poll(uint64_t systick_ms) {
+    static uint64_t last_tick = 0;
+    if (systick_ms - last_tick < 1000) {
+        return;
+    }
+    last_tick = systick_ms;
+
+    uint16_t ch1_current, ch1_voltage, ch2_current, ch2_voltage, ch3_current, ch3_voltage;
+    ina3221_read_all_channels(&ch1_current, &ch1_voltage, &ch2_current, &ch2_voltage, &ch3_current, &ch3_voltage);
+
+    OLED_cursor(0, 0);
+    OLED_write('\n');
+    OLED_printf("VBUS:%2d.%02dV %4dmA", ch1_voltage / 1000, (ch1_voltage % 1000) / 10, ch1_current);
+    OLED_write('\n');
+    OLED_printf("+12V:%2d.%02dV %4dmA", ch2_voltage / 1000, (ch2_voltage % 1000) / 10, ch2_current);
+    OLED_write('\n');
+    OLED_printf("+5V :%2d.%02dV %4dmA", ch3_voltage / 1000, (ch3_voltage % 1000) / 10, ch3_current);
+    OLED_write('\n');
 }
