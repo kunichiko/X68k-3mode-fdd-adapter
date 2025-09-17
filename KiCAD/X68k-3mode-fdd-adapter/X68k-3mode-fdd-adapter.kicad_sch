@@ -7740,16 +7740,6 @@
 	)
 	(wire
 		(pts
-			(xy 393.7 137.16) (xy 393.7 134.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0f796273-d6a4-47ce-be8f-befb7a0004cd")
-	)
-	(wire
-		(pts
 			(xy 358.14 227.33) (xy 358.14 229.87)
 		)
 		(stroke
@@ -10290,16 +10280,6 @@
 	)
 	(wire
 		(pts
-			(xy 378.46 137.16) (xy 393.7 137.16)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b43798e6-cfcd-4610-be04-d0d2f91af499")
-	)
-	(wire
-		(pts
 			(xy 46.99 215.9) (xy 59.69 215.9)
 		)
 		(stroke
@@ -12287,6 +12267,16 @@
 			(justify left bottom)
 		)
 		(uuid "6473644b-0533-4285-b7f1-68af15792f59")
+	)
+	(label "DRIVE_SELECT_DOSV_1_B"
+		(at 378.46 137.16 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "647d6bbb-dddc-4319-a416-b63152cdeb2e")
 	)
 	(label "BUZZER"
 		(at 226.06 214.63 180)
@@ -17086,6 +17076,7 @@
 		)
 		(pin "16"
 			(uuid "7caad24a-c048-4d7c-9f40-116a3988d07b")
+			(alternate "TIM3CH1")
 		)
 		(instances
 			(project ""
@@ -23065,82 +23056,6 @@
 			(project ""
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "J107")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 393.7 134.62 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "be84c287-d50e-4233-9b58-fdf28c9c71e9")
-		(property "Reference" "TP102"
-			(at 396.24 130.0479 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 396.24 132.5879 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 398.78 134.62 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 398.78 134.62 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 393.7 134.62 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
-			(at 393.7 134.62 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "0647c86f-7a67-4afa-baa9-bc98b97d6566")
-		)
-		(instances
-			(project ""
-				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "TP102")
 					(unit 1)
 				)
 			)
