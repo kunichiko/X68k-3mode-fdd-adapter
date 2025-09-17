@@ -6,6 +6,8 @@
 
 void ina3221_init(void);
 
+void ina3221_poll(uint64_t systick_ms);
+
 /**
  * @brief INA3221の全チャネルの電流と電圧を読み取る
  *       ch1_current: チャネル1の電流値を格納するポインタ
