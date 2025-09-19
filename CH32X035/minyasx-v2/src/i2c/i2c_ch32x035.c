@@ -242,6 +242,7 @@ void I2C_readBuffer(uint8_t *buf, uint16_t len) {
 // 引数: 7bit アドレス（例: 0x0A）
 // 戻り: 在席=1 / 不在=0
 int I2C_probe(uint8_t addr7) {
+    Delay_Ms(100);
     // 1) BUSY解除待ち
     uint32_t to = I2C_TIMEOUT_MAX;
     while ((I2C1->STAR2 & I2C_STAR2_BUSY) && --to);

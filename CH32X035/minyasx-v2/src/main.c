@@ -169,18 +169,19 @@ int main() {
     // INA3221を最初に初期化して電圧電流を測定できるようにする
     ina3221_init();
 
-    // 電源制御を初期化する
-    power_control_init();
+    //
+    // greenpak_force_program_verify(0x02, 2);  // GreenPAK3を強制プログラム
 
-    // greenpak_force_program_verify(0x02, 2); // GreenPAK3を強制プログラム
+    // GreenPAKのコンフィグを読み出してOLEDに表示
+    // greenpak_dump_oled();
 
     // GreenPAKの自動プログラムと検証
     // greenpak_autoprogram_verify();
 
-    // Delay_Ms(1000);
+    // 電源制御を初期化する
+    power_control_init();
 
-    // GreenPAKのコンフィグを読み出してOLEDに表示
-    // greenpak_dump_oled();
+    // Delay_Ms(1000);
 
     // LED制御を開始する
     WS2812_SPI_init();

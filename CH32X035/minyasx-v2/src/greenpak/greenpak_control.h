@@ -7,6 +7,8 @@
 void greenpak_dump_oled();
 
 // 最終配置（NVMアドレスのみ並べる）
-extern const uint8_t gp_target_nvm[4];
+extern const uint8_t gp_target_addr_cleared;
+extern const uint8_t gp_target_addr_default;
+extern const uint8_t gp_target_addr[4];
 
 #endif  // GREENPAK_CONTROL_H
