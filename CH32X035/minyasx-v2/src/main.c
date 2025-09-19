@@ -54,15 +54,52 @@ int main() {
     RCC->APB1PRSTR &= ~RCC_APB1Periph_TIM3;
 
     // GPIOA
+    // PA0 : DRIVE_SELECT_A (入力: Low=active, High=inactive, Pull-Up)
+    // PA1 : DRIVE_SELECT_B (入力: Low=active, High=inactive, Pull-Up)
+    // PA2 : OPTION_SELECT_A (入力: Low=active, High=inactive, Pull-Up)
+    // PA3 : OPTION_SELECT_B (入力: Low=active, High=inactive, Pull-Up)
+    // PA4 : EJECT (入力: Low=イジェクト, Pull-Up)
+    // PA5 : EJECT_MASK (入力: Low=イジェクト禁止, Pull-Up)
     // PA6 : INDEX_DOSV (入力: INDEX信号, Pull-Up)
     // PA7 : Buzzer
     // PA8 : LED_BLINK (入力: Low=点灯, Pull-Up)
+    // PA9 : DISK_TYPE_SELECT (入力: Pull-Up, 未使用)
+    // PA10: I2C_SCL (I2Cクロック)
+    // PA11: I2C_SDA (I2Cデータ)
+    // PA12: MOTOR_ON (入力: Low=ON, High=OFF, Pull-Up)
+    // PA13: DIRECTION (入力: Low=正転, High=逆転, Pull-Up) ?
+    // PA14: STEP (入力: Low→Highで1ステップ, Pull-Up) ?
+    // PA15: SIDE_SELECT (入力: Low=SIDE0, High=SIDE1, Pull-Up) ?
     // PA16: X68_PWR (入力: Low=電源ON要求, Pull-Up)
     // PA17: +12V_EXT_DET (Low=外部+12V電源接続, Pull-Up)
     // PA18: +5V_EN (Low=Enable, High=Disable)
     // PA19: +12V_EN (Low=Enable, High=Disable)
     // PA20: +12V_EXT_EN (Low=Enable, High=Disable))
 
+    // PA0: DRIVE_SELECT_A input
+    GPIOA->CFGLR &= ~(0xf << (4 * 0));
+    GPIOA->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * 0);
+    GPIOA->BSHR = (1 << 0);  // Pull-Up
+    // PA1: DRIVE_SELECT_B input
+    GPIOA->CFGLR &= ~(0xf << (4 * 1));
+    GPIOA->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * 1);
+    GPIOA->BSHR = (1 << 1);  // Pull-Up
+    // PA2: OPTION_SELECT_A input
+    GPIOA->CFGLR &= ~(0xf << (4 * 2));
+    GPIOA->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * 2);
+    GPIOA->BSHR = (1 << 2);  // Pull-Up
+    // PA3: OPTION_SELECT_B input
+    GPIOA->CFGLR &= ~(0xf << (4 * 3));
+    GPIOA->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * 3);
+    GPIOA->BSHR = (1 << 3);  // Pull-Up
+    // PA4: EJECT input
+    GPIOA->CFGLR &= ~(0xf << (4 * 4));
+    GPIOA->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * 4);
+    GPIOA->BSHR = (1 << 4);  // Pull-Up
+    // PA5: EJECT_MASK input
+    GPIOA->CFGLR &= ~(0xf << (4 * 5));
+    GPIOA->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * 5);
+    GPIOA->BSHR = (1 << 5);  // Pull-Up
     // PA6: INDEX_DOSV input
     GPIOA->CFGLR &= ~(0xf << (4 * 6));
     GPIOA->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * 6);
@@ -75,6 +112,28 @@ int main() {
     GPIOA->CFGHR &= ~(0xf << (4 * (8 - 8)));
     GPIOA->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (8 - 8));
     GPIOA->BSHR = (1 << 8);  // Pull-Up
+    // PA9: DISK_TYPE_SELECT input
+    GPIOA->CFGHR &= ~(0xf << (4 * (9 - 8)));
+    GPIOA->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (9 - 8));
+    GPIOA->BSHR = (1 << 9);  // Pull-Up
+    // PA10: I2C_SCL
+    // PA11: I2C_SDA
+    // PA12: MOTOR_ON input
+    GPIOA->CFGHR &= ~(0xf << (4 * (12 - 8)));
+    GPIOA->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (12 - 8));
+    GPIOA->BSHR = (1 << 12);  // Pull-Up
+    // PA13: DIRECTION input
+    GPIOA->CFGHR &= ~(0xf << (4 * (13 - 8)));
+    GPIOA->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (13 - 8));
+    GPIOA->BSHR = (1 << 13);  // Pull-Up
+    // PA14: STEP input
+    GPIOA->CFGHR &= ~(0xf << (4 * (14 - 8)));
+    GPIOA->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (14 - 8));
+    GPIOA->BSHR = (1 << 14);  // Pull-Up
+    // PA15: SIDE_SELECT input
+    GPIOA->CFGHR &= ~(0xf << (4 * (15 - 8)));
+    GPIOA->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (15 - 8));
+    GPIOA->BSHR = (1 << 15);  // Pull-Up
     // PA16: X68_PWR input
     GPIOA->CFGXR &= ~(0xf << (4 * (16 - 16)));
     GPIOA->CFGXR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (16 - 16));
@@ -100,7 +159,7 @@ int main() {
     // GPIOA->BSXR = (1 << (20 - 16)); // Enable (+12V_EXT_EN=High)
 
     // GPIOB
-    // PB0 : MODE_SELECT_DOSV (出力: Low=2モード, High=3モード) tbd
+    // PB0 : MODE_SELECT_DOSV (出力: Low=360RPM, High=300RPM, 逆のものもあるらしい)
     // PB1 : INUSE_DOSV (出力: Low=未使用, High=使用中) tbd
     // PB2 : DRIVE_SEL_DOSV_A (出力: Low=inactive, High=active)
     // PB3 : DRIVE_SEL_DOSV_B (出力: Low=inactive, High=active)
@@ -111,6 +170,9 @@ int main() {
     // PB8 : DISK_CHANGE_DOSV (入力: Low=ディスクチェンジ, Pull-Up)
     // PB9 : READ_DATA_DOSV (入力: フロッピーディスクの読み出しデータ: Pull-Up)
     // PB10: TRACK0_DOSV (入力: Low=トラック0, Pull-Up)
+    //
+    // PA22: DIPSW_DS0 (入力: Pull-Up)
+    // PA23: DIPSW_DS1 (入力: Pull-Up)
 
     // PB0: MODE_SELECT_DOSV output
     GPIOB->CFGLR &= ~(0xf << (4 * 0));
@@ -158,6 +220,15 @@ int main() {
     GPIOB->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (10 - 8));
     GPIOB->BSHR = (1 << 10);  // Pull-Up
 
+    // PA22: DIPSW_DS0 input
+    GPIOA->CFGXR &= ~(0xf << (4 * (22 - 16)));
+    GPIOA->CFGXR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (22 - 16));
+    GPIOA->BSXR = (1 << (22 - 16));  // Pull-Up
+    // PA23: DIPSW_DS1 input
+    GPIOA->CFGXR &= ~(0xf << (4 * (23 - 16)));
+    GPIOA->CFGXR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (23 - 16));
+    GPIOA->BSXR = (1 << (23 - 16));  // Pull-Up
+
     // OLEDテスト
     OLED_init();
     OLED_clear();
@@ -191,6 +262,13 @@ int main() {
     //
     pcfdd_init();
 
+    // DIP SWの状態を GreenPAKにセットする
+    uint8_t ds0 = (GPIOA->INDR >> 22) & 1;
+    uint8_t ds1 = (GPIOA->INDR >> 23) & 1;
+    greenpak_set_dipsw(ds0, ds1);
+    OLED_printf("DS0=%d DS1=%d\n", (int)ds0, (int)ds1);
+    Delay_Ms(2000);
+
     // メインループ
     OLED_clear();
     while (1) {
@@ -199,5 +277,26 @@ int main() {
         WS2812_SPI_poll();
         ina3221_poll(ms);
         pcfdd_poll(ms);
+
+        // PA0: DRIVE_SELECT_A, PA1: DRIVE_SELECT_B を監視して、
+        // アサートされたら信号の状態を読み出す。
+        uint32_t porta = GPIOA->INDR;
+        if ((porta & 0x03) != 0x03) {
+            // どちらかがLowになった
+            OLED_clear();
+            OLED_printf("DS change detected: %02X\n", porta & 0x03);
+            while ((porta & 0x03) != 0x03) {
+                // どちらかがLowになっている間ループ
+                uint8_t dsa = (porta >> 0) & 1;
+                uint8_t dsb = (porta >> 1) & 1;
+                uint8_t opa = (porta >> 2) & 1;
+                uint8_t opb = (porta >> 3) & 1;
+                OLED_cursor(0, 1);
+                OLED_printf("DSA=%d DSB=%d\n", dsa, dsb);
+                OLED_printf("OPA=%d OPB=%d\n", opa, opb);
+                porta = GPIOA->INDR;
+            }
+            OLED_clear();
+        }
     }
 }

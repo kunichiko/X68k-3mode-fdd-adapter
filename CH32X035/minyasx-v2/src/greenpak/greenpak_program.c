@@ -2,21 +2,14 @@
 
 #include <stdint.h>
 
+#include "greenpak/greenpak_control.h"
 #include "i2c/i2c_ch32x035.h"
 
 #define GP_REG_RST_LATCH 0xC8                   // Reset and Latch Register (RLR)
 #define GP_REG_ER_SR 0xE3                       // Erase Status/Control Register (ERSR)
 #define GP_ERSE(page) (0x80 | ((page) & 0x0F))  // bit7=ERSE, 下位4bit=ページ
 #define GP_PAGE_SIZE 16
-#define GP_ERASE_T_MS 500  // ts版に合わせて 1s（安全側）。短縮可。:contentReference[oaicite:3]{index=3}
-
-static void gp_reg_set(uint8_t addr7, uint8_t reg, uint8_t val) {
-    uint8_t reg_addr7 = (uint8_t)((addr7 & 0xfc));
-    I2C_start((reg_addr7 << 1) | 0);  // SLA+W  :contentReference[oaicite:1]{index=1}
-    I2C_write(reg);                   // レジスタ番号
-    I2C_write(val);                   // 書き込みデータ
-    I2C_stop();                       // STOP   :contentReference[oaicite:2]{index=2}
-}
+#define GP_ERASE_T_MS 500  // ts版に合わせて 1s（安全側）。短縮可。
 
 static void gp_erase_page(uint8_t addr7, uint8_t page) {
     gp_reg_set(addr7, GP_REG_ER_SR, GP_ERSE(page));
