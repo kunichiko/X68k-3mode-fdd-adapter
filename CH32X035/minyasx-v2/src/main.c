@@ -25,6 +25,7 @@
 #include "oled/oled_control.h"
 #include "pcfdd/pcfdd_control.h"
 #include "power_control.h"
+#include "x68fdd/x68fdd_control.h"
 
 void ina3221_poll(uint64_t systick);
 
@@ -261,6 +262,7 @@ int main() {
 
     //
     pcfdd_init();
+    x68fdd_init();
 
     // DIP SWの状態を GreenPAKにセットする
     uint8_t ds0 = (GPIOA->INDR >> 22) & 1;
@@ -277,6 +279,7 @@ int main() {
         WS2812_SPI_poll();
         ina3221_poll(ms);
         pcfdd_poll(ms);
+        x68fdd_poll(ms);
 
         // PA0: DRIVE_SELECT_A, PA1: DRIVE_SELECT_B を監視して、
         // アサートされたら信号の状態を読み出す。
