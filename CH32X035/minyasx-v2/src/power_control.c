@@ -42,7 +42,7 @@ bool activate_pd_12v() {
     if (!PD_connect()) {
         OLED_print("USBPD_Init error");
         OLED_write('\n');
-        Delay_Ms(3000);
+        Delay_Ms(1000);
         return false;
     }
     OLED_print("USBPD_Init OK");
