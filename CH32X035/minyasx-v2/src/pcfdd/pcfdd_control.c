@@ -15,6 +15,9 @@
  */
 const uint16_t TIMER_TIMEOUT = 0x07ff;
 
+#define BPS_TIM_PRESCALER_SHIFT 1  // 実際に取り込む頻度を下げる頻度 (IC1PSCの値。0=1/1, 1=1/2, 2=1/4, 3=1/8)
+#define BPS_TIM_PRESCALER (1 << BPS_TIM_PRESCALER_SHIFT)
+
 #define READ_DATA_CAP_N 512  // READ_DATAのキャプチャバッファのサイズ
 volatile uint16_t cap_buf[READ_DATA_CAP_N];
 
@@ -70,6 +73,7 @@ void pcfdd_init(void) {
     // 入力キャプチャ: TI1, 分周なし, 軽いデジタルフィルタ
     TIM1->CHCTLR1 = TIM_CC1S_0;
     // TIM1->CHCTLR1 |= TIM_IC1F_0 | TIM_IC1F_1;  // IC1F = 0b0110 (8サンプルのデジタルフィルタをかける)
+    TIM1->CHCTLR1 |= (BPS_TIM_PRESCALER_SHIFT << 2);  // IC1PSC = BPS_TIM_PRESCALER_SHIFT (DMA転送のプリスケーラを設定して頻度を下げる)
 
     // CC1Eで、 CC1を有効にする
     // CC1P を1にすると、CC1は立ち下がりエッジを検出するようになる
@@ -116,6 +120,7 @@ void pcfdd_init(void) {
  * @brief キャプチャ割り込みで取得した回転数を保存する変数
  */
 volatile uint32_t revolution = 0;
+volatile uint32_t index_width = 0;  // INDEXの幅（msec単位）
 
 /*
   Timer3 Global Interrupt Handler
@@ -143,6 +148,7 @@ void TIM3_IRQHandler(void) {
         if (additional_count > 3906) {
             // debugprint(".");
             //  3906カウント(=128*3906=500msec) 以上値が変化していない場合はタイムアウトとみなす
+            index_width = 0;
             revolution = 0;
         } else {
             // debugprint("prev=%d, cur=%d, t=%ld\n", previousCapture, currentCapture, t);
@@ -167,7 +173,8 @@ void TIM3_IRQHandler(void) {
         uint32_t diff = ((currentCapture - previousCapture) & TIMER_TIMEOUT) + additional_count;
         uint32_t width = (diff * 128) & 0xffffff;
 
-        revolution = width;  // テスト
+        index_width = width / 1000;  // usec -> msec
+
         additional_count = 0;
         previousCapture = currentCapture;  // 現在のキャプチャ値を保存
     }
@@ -199,20 +206,20 @@ static volatile uint32_t cnt_7ish, cnt_8ish, cnt_10ish, cnt_13ish, cnt_16ish, cn
 static volatile uint32_t dma_int_count;
 
 // 窓しきい値（必要ならここだけ変えれば挙動を調整可能）
-#define WIN_7_MIN 6
-#define WIN_7_MAX 7
-#define WIN_8_MIN 8
-#define WIN_8_MAX 9
-#define WIN_10_MIN 9
-#define WIN_10_MAX 11
-#define WIN_13_MIN 13
-#define WIN_13_MAX 14
-#define WIN_16_MIN 15
-#define WIN_16_MAX 17
+#define WIN_7_MIN (6 * BPS_TIM_PRESCALER)
+#define WIN_8_MIN (8 * BPS_TIM_PRESCALER)
+#define WIN_10_MIN (10 * BPS_TIM_PRESCALER)
+#define WIN_13_MIN (13 * BPS_TIM_PRESCALER)
+#define WIN_16_MIN (16 * BPS_TIM_PRESCALER)
+#define WIN_7_MAX (WIN_8_MIN - 1)
+#define WIN_8_MAX (WIN_10_MIN - 1)
+#define WIN_10_MAX (WIN_13_MIN - 1)
+#define WIN_13_MAX (WIN_16_MIN - 1)
+#define WIN_16_MAX (17 * BPS_TIM_PRESCALER)
 
 // 粗ノイズ除去（0.5us未満や6us超は即捨て: 2tick=0.5us, 24tick=6us）
-#define DT_MIN_TICKS 2
-#define DT_MAX_TICKS 24
+#define DT_MIN_TICKS (2 * BPS_TIM_PRESCALER)
+#define DT_MAX_TICKS (24 * BPS_TIM_PRESCALER)
 
 uint16_t last_dt;
 
@@ -250,8 +257,13 @@ static inline void classify_dt(uint16_t dt) {
 }
 
 static void process_block(const volatile uint16_t* blk, size_t n) {
-    uint16_t p = prev_ccr;
-    for (size_t i = 0; i < n; i++) {
+    if ((dma_int_count & 0x1F) != 0) {
+        // 負荷軽減のため、32回に1回だけ処理する
+        return;
+    }
+
+    uint16_t p = blk[0];
+    for (size_t i = 1; i < n; i++) {
         uint16_t c = blk[i];
         uint16_t dt = (uint16_t)(c - p);
         p = c;
@@ -268,6 +280,7 @@ static void process_block(const volatile uint16_t* blk, size_t n) {
 void DMA1_Channel2_IRQHandler(void) __attribute__((interrupt));
 void DMA1_Channel2_IRQHandler(void) {
     dma_int_count++;
+
     // DMA1 Channel2の割り込み処理をここに追加
     uint32_t isr = DMA1->INTFR;  // Interrupt Flag Registerの値を取得
 
@@ -396,12 +409,23 @@ void pcfdd_poll(uint32_t systick_ms) {
     last_tick = systick_ms;
 
     OLED_cursor(0, 4);
-    OLED_printf("IDX:%3dms ", revolution / 1000);  // usec -> msec
+    if (index_width > 166 - 5 && index_width < 166 + 5) {
+        revolution = 360;
+        OLED_printf("REV:%3drpm (%3dms)", revolution, (int)index_width);
+    } else if (index_width > 200 - 5 && index_width < 200 + 5) {
+        revolution = 300;
+        OLED_printf("REV:%3drpm (IDX:%3dms)", revolution, (int)index_width);
+    } else {
+        revolution = 0;
+        OLED_printf("REV:---rpm", revolution, (int)index_width);
+    }
 
     OLED_cursor(0, 5);
-    // OLED_printf("7:%d 8:%d 10:%d 13:%d 16:%d dt:%d\n",                                                                            //
-    //             (int)cnt_7ish / 1000, (int)cnt_8ish / 1000, (int)cnt_10ish / 1000, (int)cnt_13ish / 1000, (int)cnt_16ish / 1000,  //
-    //             (int)last_dt);
+#ifdef DEBUG
+    OLED_printf("7:%d 8:%d 10:%d 13:%d 16:%d dt:%d\n",                                                                  //
+                (int)cnt_7ish / 10, (int)cnt_8ish / 10, (int)cnt_10ish / 10, (int)cnt_13ish / 10, (int)cnt_16ish / 10,  //
+                (int)last_dt);
+#endif
     bps_mode_t bps = decide_and_reset();
     switch (bps) {
     case BPS_250K:
