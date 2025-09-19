@@ -15,6 +15,9 @@
  */
 const uint16_t TIMER_TIMEOUT = 0x07ff;
 
+#define READ_DATA_CAP_N 512  // READ_DATAのキャプチャバッファのサイズ
+volatile uint16_t cap_buf[READ_DATA_CAP_N];
+
 void pcfdd_init(void) {
     // PCFDDコントローラの初期化コードをここに追加
 
@@ -55,6 +58,50 @@ void pcfdd_init(void) {
     TIM3->DMAINTENR = TIM_CC1IE | TIM_UIE;
 
     //
+    // READ_DATA の信号のエッジからbpsを測定するために、Timer1 Channel1を使う
+    //
+
+    TIM1->PSC = 12 - 1;    // 48MHz/(12) = 4MHz -> 0.25μs resolution
+    TIM1->ATRLR = 0xffff;  // 16bitカウンタなので最大値をセット
+    // Timer1 Channel 1を Capture/Compare の CC1に入力し、
+    // 立ち下がりエッジを検出する
+    // CC1の設定は TIM1->CHCTLR1 の下位8bitで設定できる
+    // CC1 Select (CC1S) を 01にし、Channel 1を入力元とする
+    // 入力キャプチャ: TI1, 分周なし, 軽いデジタルフィルタ
+    TIM1->CHCTLR1 = TIM_CC1S_0;
+    // TIM1->CHCTLR1 |= TIM_IC1F_0 | TIM_IC1F_1;  // IC1F = 0b0110 (8サンプルのデジタルフィルタをかける)
+
+    // CC1Eで、 CC1を有効にする
+    // CC1P を1にすると、CC1は立ち下がりエッジを検出するようになる
+    TIM1->CCER = TIM_CC1E | TIM_CC1P;
+
+    // CC1でDMA要求
+    TIM1->DMAINTENR |= TIM_CC1DE;  // CC1IE
+    // カウンタ有効化（= CR1.CEN）
+    TIM1->CTLR1 |= TIM_CEN;
+
+    // DMA1 Channel2を使って、Timer1 Channel1のキャプチャ値をバッファに保存する
+    // DMA1_Channel2->PADDR = (uint32_t)&TIM1->CHCTLR1;
+    DMA1_Channel2->PADDR = (uint32_t)&TIM1->CH1CVR;
+    DMA1_Channel2->MADDR = (uint32_t)cap_buf;
+    DMA1_Channel2->CNTR = READ_DATA_CAP_N;
+
+    DMA1_Channel2->CFGR = (DMA_CFGR2_MEM2MEM * 0) |                      // MEM2MEM=0
+                          (DMA_CFGR2_PL_1 * 0 | DMA_CFGR2_PL_0 * 0) |    // PL=low(必要ならup)
+                          (DMA_CFGR2_MSIZE_1 * 0 | DMA_CFGR2_MSIZE_0) |  // MSIZE=16bit (01)
+                          (DMA_CFGR2_PSIZE_1 * 0 | DMA_CFGR2_PSIZE_0) |  // PSIZE=16bit (01)
+                          (DMA_CFGR2_MINC) |                             // MINC=1
+                          (DMA_CFGR2_PINC * 0) |                         // PINC=0
+                          (DMA_CFGR2_CIRC) |                             // CIRC=1
+                          (DMA_CFGR2_DIR * 0) |                          // DIR=0 (P->M)
+                          (DMA_CFGR2_TEIE) |                             // TEIE=1
+                          (DMA_CFGR2_HTIE) |                             // HTIE=1
+                          (DMA_CFGR2_TCIE) |                             // TCIE=1
+                          (DMA_CFGR2_EN);                                // EN=1
+
+    NVIC_EnableIRQ(DMA1_Channel2_IRQn);
+
+    //
     //
     //
 
@@ -76,7 +123,6 @@ void TIM3_IRQHandler(void) {
     static uint16_t previousCapture = 0;  // 前回のキャプチャ値を保存する変数
     static uint32_t additional_count = 0;
     uint16_t currentCapture;
-    bool overflowed = 0;
 
     // アップデート割り込み
     // カウンタの値が一周するタイミングで呼ばれるので、このタイミングで
@@ -112,7 +158,6 @@ void TIM3_IRQHandler(void) {
         // overflow
         if (TIM3->INTFR & TIM_CC1OF) {
             TIM3->INTFR &= ~TIM_CC1OF;  // フラグをクリア
-            overflowed = 1;
         }
 
         // パルス間隔を保存
@@ -124,6 +169,217 @@ void TIM3_IRQHandler(void) {
         additional_count = 0;
         previousCapture = currentCapture;  // 現在のキャプチャ値を保存
     }
+}
+
+/**
+ * READ DATA の bps計測（片エッジ/整数）
+ * 前提:
+ *   - タイマtick = 0.25us (例: 48MHz/PSC=11 → 4MHz)
+ *   - 観測BPS = 記録BPS × (読出RPM / 記録RPM)
+ * 代表的な最短セル幅(≒最小パルス間隔)とtick値:
+ *   ~600 kbps → 1.667us ≈ 6.7tick  → "7ish"
+ *   ~500 kbps → 2.000us =  8tick   → "8ish"
+ *   ~416.7kbps→ 2.400us ≈ 9.6tick  → "10ish"
+ *   ~300 kbps → 3.333us ≈ 13.3tick → "13ish"
+ *   ~250 kbps → 4.000us =  16tick  → "16ish"
+ *
+ * 窓（ジッタ考慮の目安。環境で±1調整推奨）:
+ *   7ish : [6..7]        (≈1.5..1.75us)
+ *   8ish : [8..9]        (2.0..2.25us)
+ *   10ish: [9..11]       (2.25..2.75us)
+ *   13ish: [13..14]      (3.25..3.5us)
+ *   16ish: [15..17]      (3.75..4.25us)
+ * それ以外は cnt_other へ。
+ */
+
+static volatile uint16_t prev_ccr;
+static volatile uint32_t cnt_7ish, cnt_8ish, cnt_10ish, cnt_13ish, cnt_16ish, cnt_other;
+static volatile uint32_t dma_int_count;
+
+// 窓しきい値（必要ならここだけ変えれば挙動を調整可能）
+#define WIN_7_MIN 6
+#define WIN_7_MAX 7
+#define WIN_8_MIN 8
+#define WIN_8_MAX 9
+#define WIN_10_MIN 9
+#define WIN_10_MAX 11
+#define WIN_13_MIN 13
+#define WIN_13_MAX 14
+#define WIN_16_MIN 15
+#define WIN_16_MAX 17
+
+// 粗ノイズ除去（0.5us未満や6us超は即捨て: 2tick=0.5us, 24tick=6us）
+#define DT_MIN_TICKS 2
+#define DT_MAX_TICKS 24
+
+uint16_t last_dt;
+
+static inline void classify_dt(uint16_t dt) {
+    last_dt = dt;
+    // 粗ノイズ除去
+    if (dt < DT_MIN_TICKS || dt > DT_MAX_TICKS) {
+        cnt_other++;
+        return;
+    }
+
+    // 分岐コストを抑えるための“範囲内チェック”は (uint8_t)(dt - MIN) <= (MAX - MIN) も可
+    if ((uint8_t)(dt - WIN_7_MIN) <= (WIN_7_MAX - WIN_7_MIN)) {
+        cnt_7ish++;
+        return;
+    }  // ~1.67us (≈600k)
+    if ((uint8_t)(dt - WIN_8_MIN) <= (WIN_8_MAX - WIN_8_MIN)) {
+        cnt_8ish++;
+        return;
+    }  // ~2.00us (500k)
+    if ((uint8_t)(dt - WIN_10_MIN) <= (WIN_10_MAX - WIN_10_MIN)) {
+        cnt_10ish++;
+        return;
+    }  // ~2.40us (≈416.7k)
+    if ((uint8_t)(dt - WIN_13_MIN) <= (WIN_13_MAX - WIN_13_MIN)) {
+        cnt_13ish++;
+        return;
+    }  // ~3.33us (≈300k)
+    if ((uint8_t)(dt - WIN_16_MIN) <= (WIN_16_MAX - WIN_16_MIN)) {
+        cnt_16ish++;
+        return;
+    }  // ~4.00us (250k)
+
+    cnt_other++;  // 窓外
+}
+
+static void process_block(const volatile uint16_t* blk, size_t n) {
+    uint16_t p = prev_ccr;
+    for (size_t i = 0; i < n; i++) {
+        uint16_t c = blk[i];
+        uint16_t dt = (uint16_t)(c - p);
+        p = c;
+        // グリッチ粗除去（0.25〜5us以外はバッサリ）
+        //        if (dt < 2 || dt > 20) continue;  // 0.5us 未満 or 5us 超は無視
+        classify_dt(dt);
+    }
+    prev_ccr = p;
+}
+
+/*
+  DMA1 Channel2 Global Interrupt Handler
+ */
+void DMA1_Channel2_IRQHandler(void) __attribute__((interrupt));
+void DMA1_Channel2_IRQHandler(void) {
+    dma_int_count++;
+    // DMA1 Channel2の割り込み処理をここに追加
+    uint32_t isr = DMA1->INTFR;  // Interrupt Flag Registerの値を取得
+
+    if (isr & DMA_HTIF2) {          // Half Transfer Interrupt Flag
+        DMA1->INTFCR = DMA_CHTIF2;  // フラグをクリア
+        process_block(&cap_buf[0], READ_DATA_CAP_N / 2);
+    }
+    if (isr & DMA_TCIF2) {          // Transfer Complete Interrupt Flag
+        DMA1->INTFCR = DMA_CTCIF2;  // フラグをクリア
+        process_block(&cap_buf[READ_DATA_CAP_N / 2], READ_DATA_CAP_N / 2);
+    }
+    if (isr & DMA_TEIF2) {          // Transfer Error Interrupt Flag
+        DMA1->INTFCR = DMA_CTEIF2;  // フラグをクリア
+        // 必要なら再初期化
+    }
+
+    // まれにCC1OF対策でINTFR/CVRを読んでフラグ掃除
+    volatile uint32_t sr = TIM1->INTFR;
+    (void)sr;  // 未使用警告回避
+    volatile uint32_t junk = TIM1->CH1CVR;
+    (void)junk;  // 未使用警告回避
+}
+
+// 観測しうるBPSカテゴリ
+//  - 600k : (500k @300rpm) を 360rpmで読んだ等 → 最短 ~1.67us ≈ 7tick
+//  - 500k : 1.2M/1.44M 回転一致 → 最短 2.0us = 8tick
+//  - 416k : (500k @360rpm) を 300rpmで読んだ → 最短 ~2.4us ≈ 10tick
+//  - 300k : (250k @300rpm) を 360rpmで読んだ → 最短 ~3.33us ≈ 13tick
+//  - 250k : 2DD 回転一致 → 最短 4.0us = 16tick
+typedef enum {
+    BPS_UNKNOWN,
+    BPS_250K,
+    BPS_300K,
+    BPS_416K,
+    BPS_500K,
+    BPS_600K,
+} bps_mode_t;
+
+// しきい値（必要に応じて調整）
+#define VOTES_MIN 50          // 有効票の最小数（ギャップや無信号を弾く）
+#define TOP_THRESHOLD_PCT 20  // 最多ビンが全体の何%以上なら採用するか
+
+// 既存の分類カウンタ（classify_dt() で増やしているもの）
+extern volatile uint32_t cnt_7ish, cnt_8ish, cnt_10ish, cnt_13ish, cnt_16ish;
+extern volatile uint32_t cnt_other;
+
+// 必要なら数値にしたい時用（表示など）
+static inline uint32_t bps_mode_to_value(bps_mode_t m) {
+    switch (m) {
+    case BPS_600K:
+        return 600000;
+    case BPS_500K:
+        return 500000;
+    case BPS_416K:
+        return 416000;  // 416,667に丸めたければ 416667
+    case BPS_300K:
+        return 300000;
+    case BPS_250K:
+        return 250000;
+    default:
+        return 0;
+    }
+}
+
+static inline bps_mode_t bin_index_to_mode(int idx) {
+    // idx: 0=7ish, 1=8ish, 2=10ish, 3=13ish, 4=16ish
+    switch (idx) {
+    case 0:
+        return BPS_600K;
+    case 1:
+        return BPS_500K;
+    case 2:
+        return BPS_416K;
+    case 3:
+        return BPS_300K;
+    case 4:
+        return BPS_250K;
+    default:
+        return BPS_UNKNOWN;
+    }
+}
+
+// 1秒ごとなどに呼ぶ想定：最多ビンの多数決でBPSを返し、カウンタをゼロクリア
+bps_mode_t decide_and_reset(void) {
+    // スナップショット
+    uint32_t c7 = cnt_7ish;
+    uint32_t c8 = cnt_8ish;
+    uint32_t c10 = cnt_10ish;
+    uint32_t c13 = cnt_13ish;
+    uint32_t c16 = cnt_16ish;
+
+    // クリア（次の集計へ）
+    cnt_7ish = cnt_8ish = cnt_10ish = cnt_13ish = cnt_16ish = 0;
+    cnt_other = 0;
+
+    uint32_t votes = c7 + c8 + c10 + c13 + c16;
+    if (votes < VOTES_MIN) {
+        //     return BPS_UNKNOWN;
+    }
+
+    // 最多ビン（単純多数決）
+    uint32_t bins[5] = {c7, c8, c10, c13, c16};
+    int top_idx = 0;
+    for (int i = 1; i < 5; i++) {
+        if (bins[i] > bins[top_idx]) top_idx = i;
+    }
+    uint32_t top = bins[top_idx];
+
+    // 最低比率チェック（55%など）。環境により 50〜60% で調整。
+    if (top * 100U < votes * TOP_THRESHOLD_PCT) {
+        return BPS_UNKNOWN;  // 票が割れている/信号が不安定
+    }
+
+    return bin_index_to_mode(top_idx);
 }
 
 uint32_t last_index_ms = 0;
@@ -138,7 +394,33 @@ void pcfdd_poll(uint32_t systick_ms) {
     last_tick = systick_ms;
 
     OLED_cursor(0, 4);
-    OLED_printf("IDX %4dms ", revolution / 1000);  // usec -> msec
+    OLED_printf("IDX:%3dms ", revolution / 1000);  // usec -> msec
+
+    OLED_cursor(0, 5);
+    // OLED_printf("7:%d 8:%d 10:%d 13:%d 16:%d dt:%d\n",                                                                            //
+    //             (int)cnt_7ish / 1000, (int)cnt_8ish / 1000, (int)cnt_10ish / 1000, (int)cnt_13ish / 1000, (int)cnt_16ish / 1000,  //
+    //             (int)last_dt);
+    bps_mode_t bps = decide_and_reset();
+    switch (bps) {
+    case BPS_250K:
+        OLED_print("BPS:250K");
+        break;
+    case BPS_300K:
+        OLED_print("BPS:300K");
+        break;
+    case BPS_416K:
+        OLED_print("BPS:416K");
+        break;
+    case BPS_500K:
+        OLED_print("BPS:500K");
+        break;
+    case BPS_600K:
+        OLED_print("BPS:600K");
+        break;
+    default:
+        OLED_print("BPS:----");
+        break;
+    }
 
     // INDEX信号の読み取り
     /*    // PA6 : INDEX_DOSV (入力: INDEX信号, Pull-Up)

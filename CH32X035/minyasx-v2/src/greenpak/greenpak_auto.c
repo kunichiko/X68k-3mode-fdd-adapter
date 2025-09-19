@@ -12,9 +12,8 @@
 #include "i2c/i2c_ch32x035.h"
 #include "oled/ssd1306_txt.h"
 
-#define GP_DEF_NVM 0x0A  // はじめは全ICが 0x08-0x0B (NVM=0x0A) に居る想定（基板上で1個ずつ接続）
-#define GP_PAGE 16       // 1回の書込みチャンク（必要なら調整）
-#define CMP_CHUNK 1      // 比較時の読出しチャンク
+#define GP_PAGE 16   // 1回の書込みチャンク（必要なら調整）
+#define CMP_CHUNK 1  // 比較時の読出しチャンク
 
 // 画像テーブル（サイズ0はスキップ）
 typedef struct {
@@ -46,21 +45,23 @@ void gp_write_seq(uint8_t addr7, uint16_t start, const uint8_t *data, uint16_t l
 }
 
 // 連続読出し（STOPはreadBufferが発行）
-static void gp_read_seq(uint8_t addr7, uint16_t start, uint8_t *dst, uint16_t len) {
-    I2C_start((addr7 << 1) | 0);  // 書きモードで内部アドレスをセット
+static void gp_read_seq(uint8_t nvm_addr7, uint16_t start, uint8_t *dst, uint16_t len) {
+    I2C_start((nvm_addr7 << 1) | 0);  // 書きモードで内部アドレスをセット
     I2C_write((uint8_t)start);
-    I2C_restart((addr7 << 1) | 1);  // 再スタートして読出しへ切替:contentReference[oaicite:12]{index=12}
-    I2C_readBuffer(dst, len);       // 連続受信→最後にSTOP:contentReference[oaicite:13]{index=13}
+    I2C_restart((nvm_addr7 << 1) | 1);  // 再スタートして読出しへ切替:contentReference[oaicite:12]{index=12}
+    I2C_readBuffer(dst, len);           // 連続受信→最後にSTOP:contentReference[oaicite:13]{index=13}
 }
 
 static int gp_compare_image(uint8_t addr7, uint16_t base, const uint8_t *img, uint16_t size) {
     if (size == 0) return 1;  // 空なら一致扱い
+
+    uint8_t nvm_addr7 = (uint8_t)((addr7 & 0xfc) | 0x02);  // NVMアドレスに変換 (addrは0x08,0x10,0x18,0x20,0x28のいずれか)
     uint8_t buf[CMP_CHUNK];
     uint16_t done = 0;
     while (done < size) {
         uint16_t n = size - done;
         if (n > CMP_CHUNK) n = CMP_CHUNK;
-        gp_read_seq(addr7, base + done, buf, n);
+        gp_read_seq(nvm_addr7, base + done, buf, n);
         if (memcmp(buf, &img[done], n) != 0) {
             OLED_print("mismatch at ");
             OLED_printD(base + done);
@@ -82,8 +83,8 @@ static void show_not_found_and_exit(void) {
 
 void greenpak_force_program_verify(uint8_t addr, uint8_t unit) {
     OLED_print("prog GP");
-    OLED_printD(unit);
-    OLED_print("  @");
+    OLED_printD(unit + 1);
+    OLED_print("  @0x");
     OLED_printH(addr);
     OLED_write('\n');
     gp_program_with_erase(addr, gp_img[unit].base, gp_img[unit].image, gp_img[unit].size);
@@ -96,12 +97,13 @@ void greenpak_autoprogram_verify(void) {
 
     // まず既定の最終配置（0x12, 0x1A, 0x22, 0x2A）と 0x0A（作業用）をスキャン
     int present[4] = {
-        I2C_probe(gp_target_nvm[0]),
-        I2C_probe(gp_target_nvm[1]),
-        I2C_probe(gp_target_nvm[2]),
-        I2C_probe(gp_target_nvm[3]),
+        I2C_probe(gp_target_addr[0]),
+        I2C_probe(gp_target_addr[1]),
+        I2C_probe(gp_target_addr[2]),
+        I2C_probe(gp_target_addr[3]),
     };
-    int def_present = I2C_probe(GP_DEF_NVM);
+    int clr_present = I2C_probe(gp_target_addr_cleared);
+    int def_present = I2C_probe(gp_target_addr_default);
 
     if (!present[0] && !present[1] && !present[2] && !present[3] && !def_present) {
         // どこにも居ない → 表示して終了
@@ -126,6 +128,9 @@ void greenpak_autoprogram_verify(void) {
     if (def_present) {
         OLED_print("def ");
     }
+    if (clr_present) {
+        OLED_print("clr ");
+    }
     OLED_write('\n');
 
     // すべて見えている場合でも「差分があれば上書き」する
@@ -136,7 +141,7 @@ void greenpak_autoprogram_verify(void) {
         // 居るものは verify→差分があれば上書き（最終番地側へ書く）
         for (int i = 0; i < 4; i++) {
             if (present[i] && gp_img[i].size > 0) {
-                int same = gp_compare_image(gp_target_nvm[i], gp_img[i].base, gp_img[i].image, gp_img[i].size - 0x10);
+                int same = gp_compare_image(gp_target_addr[i], gp_img[i].base, gp_img[i].image, gp_img[i].size - 0x10);
                 if (same) {
                     OLED_print("firm is ok:");
                     OLED_printD(i + 1);
@@ -145,7 +150,7 @@ void greenpak_autoprogram_verify(void) {
                     OLED_print("reprogramming:");
                     OLED_printD(i + 1);
                     OLED_write('\n');
-                    gp_program_with_erase(gp_target_nvm[i], gp_img[i].base, gp_img[i].image, gp_img[i].size);
+                    gp_program_with_erase(gp_target_addr[i], gp_img[i].base, gp_img[i].image, gp_img[i].size);
                     OLED_print("done");
                     OLED_write('\n');
                 }
@@ -172,7 +177,7 @@ void greenpak_autoprogram_verify(void) {
             return;
         }
 
-        if (!I2C_probe(GP_DEF_NVM)) {
+        if (!I2C_probe(gp_target_addr_default)) {
             // 作業用 0x0A 自体が見えない → 表示して終了
             show_not_found_and_exit();
             return;
@@ -183,7 +188,7 @@ void greenpak_autoprogram_verify(void) {
             OLED_printD(target + 1);
             OLED_write('\n');
             // 0x0A 側へ書き込む（書込み完了でICが自動的に再配置される前提）
-            gp_program_with_erase(GP_DEF_NVM, gp_img[target].base, gp_img[target].image, gp_img[target].size);
+            gp_program_with_erase(gp_target_addr_default, gp_img[target].base, gp_img[target].image, gp_img[target].size);
             OLED_print("done");
             OLED_write('\n');
         } else {
@@ -193,7 +198,7 @@ void greenpak_autoprogram_verify(void) {
         }
 
         // 再スキャン（当該ICが最終番地に現れるはず）
-        present[target] = I2C_probe(gp_target_nvm[target]);
+        present[target] = I2C_probe(gp_target_addr[target]);
         // 次ループへ
     }
 }
