@@ -78,7 +78,6 @@ void ina3221_poll(uint64_t systick_ms) {
     ina3221_read_all_channels(&ch1_current, &ch1_voltage, &ch2_current, &ch2_voltage, &ch3_current, &ch3_voltage);
 
     OLED_cursor(0, 0);
-    OLED_write('\n');
     OLED_printf("VBUS:%2d.%02dV %4dmA", ch1_voltage / 1000, (ch1_voltage % 1000) / 10, ch1_current);
     OLED_write('\n');
     OLED_printf("+12V:%2d.%02dV %4dmA", ch2_voltage / 1000, (ch2_voltage % 1000) / 10, ch2_current);
