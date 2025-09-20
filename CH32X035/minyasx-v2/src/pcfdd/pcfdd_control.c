@@ -109,11 +109,67 @@ void pcfdd_init(void) {
     //
     //
 
-    GPIOB->BSHR = (1 << 4);  // Motor ON for test
-    // GPIOB->BSHR = (1 << 2);  // Drive Select A active for test
-    GPIOB->BSHR = (1 << 3);  // Drive Select B active for test
-    // PB0: MODE_SELECT_DOSV
+    // GPIOB->BSHR = (1 << 4);  // Motor ON for test
+    //  GPIOB->BSHR = (1 << 2);  // Drive Select A active for test
+    //  GPIOB->BSHR = (1 << 3);  // Drive Select B active for test
+    //  PB0: MODE_SELECT_DOSV
     GPIOB->BSHR = (1 << 0);  // 300RPM mode for test
+
+    //
+    // シーク
+    //
+    int seek_count = 0;
+    // シークA
+    GPIOB->BSHR = (1 << 2);  // Drive Select A active for test
+    GPIOB->BSHR = (1 << 5);  // DIRECTION_DOSV active (内周方向)
+    for (int i = 0; i < 50; i++) {
+        GPIOB->BSHR = (1 << 6);  // STEP_DOSV = 1
+        Delay_Ms(1);
+        GPIOB->BCR = (1 << 6);  // STEP_DOSV = 0
+        Delay_Ms(3);
+    }
+    GPIOB->BCR = (1 << 5);  // DIRECTION_DOSV inactive (正論理, 外周方向)
+    seek_count = 0;
+    while (seek_count < 200) {
+        seek_count++;
+        // TRACK0を見て、トラック0に到達したら抜ける
+        if ((GPIOB->INDR & (1 << 10)) == 0) {
+            // TRACK0_DOSV = 0 (Low) になった
+            break;
+        }
+        GPIOB->BSHR = (1 << 6);  // STEP_DOSV = 1
+        Delay_Ms(1);
+        GPIOB->BCR = (1 << 6);  // STEP_DOSV = 0
+        Delay_Ms(3);
+    }
+    GPIOB->BCR = (1 << 2);  // Drive Select A inactive for test
+
+    Delay_Ms(1);
+
+    // シークB
+    GPIOB->BSHR = (1 << 3);  // Drive Select B active for test
+    GPIOB->BSHR = (1 << 5);  // DIRECTION_DOSV active (内周方向)
+    for (int i = 0; i < 50; i++) {
+        GPIOB->BSHR = (1 << 6);  // STEP_DOSV = 1
+        Delay_Ms(1);
+        GPIOB->BCR = (1 << 6);  // STEP_DOSV = 0
+        Delay_Ms(3);
+    }
+    GPIOB->BCR = (1 << 5);  // DIRECTION_DOSV inactive (正論理, 外周方向)
+    seek_count = 0;
+    while (seek_count < 200) {
+        seek_count++;
+        // TRACK0を見て、トラック0に到達したら抜ける
+        if ((GPIOB->INDR & (1 << 10)) == 0) {
+            // TRACK0_DOSV = 0 (Low) になった
+            break;
+        }
+        GPIOB->BSHR = (1 << 6);  // STEP_DOSV = 1
+        Delay_Ms(1);
+        GPIOB->BCR = (1 << 6);  // STEP_DOSV = 0
+        Delay_Ms(3);
+    }
+    GPIOB->BCR = (1 << 3);  // Drive Select B inactive for test
 }
 
 /**
@@ -408,7 +464,7 @@ void pcfdd_poll(uint32_t systick_ms) {
     }
     last_tick = systick_ms;
 
-    OLED_cursor(0, 4);
+    OLED_cursor(0, 3);
     if (index_width > 166 - 5 && index_width < 166 + 5) {
         revolution = 360;
         OLED_printf("REV:%3drpm (%3dms)", revolution, (int)index_width);
