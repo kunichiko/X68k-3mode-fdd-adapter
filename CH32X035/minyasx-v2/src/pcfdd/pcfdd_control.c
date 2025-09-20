@@ -113,7 +113,7 @@ void pcfdd_init(void) {
     //  GPIOB->BSHR = (1 << 2);  // Drive Select A active for test
     //  GPIOB->BSHR = (1 << 3);  // Drive Select B active for test
     //  PB0: MODE_SELECT_DOSV
-    GPIOB->BSHR = (1 << 0);  // 300RPM mode for test
+    GPIOB->BSHR = (1 << 0);  // 360RPM mode for test
 
     //
     // シーク

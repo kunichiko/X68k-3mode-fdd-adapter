@@ -1,8 +1,19 @@
 #include "x68fdd/x68fdd_control.h"
 
+#include <stdbool.h>
+#include <stdint.h>
+
 #include "oled/ssd1306_txt.h"
 
 volatile uint32_t exti_int_counter = 0;
+
+volatile bool double_option_A = false;
+volatile bool double_option_B = false;
+
+// Number of ticks elapsed per millisecond (48,000 when using 48MHz Clock)
+#define SYSTICK_ONE_MILLISECOND ((uint32_t)FUNCONF_SYSTEM_CORE_CLOCK / 1000)
+// Number of ticks elapsed per microsecond (48 when using 48MHz Clock)
+#define SYSTICK_ONE_MICROSECOND ((uint32_t)FUNCONF_SYSTEM_CORE_CLOCK / 1000000)
 
 void x68fdd_init(void) {
     // X68000側からのアクセスに割り込みで応答するために、以下のGPIOの割り込みを設定する
@@ -54,6 +65,28 @@ void x68fdd_init(void) {
 
     NVIC_EnableIRQ(EXTI7_0_IRQn);   // EXTI 7-0割り込みを有効にする
     NVIC_EnableIRQ(EXTI15_8_IRQn);  // EXTI 15-8割り込みを有効にする
+
+    //
+    // GPIO割り込みだけでは対応できない処理のために、SysTick割り込みを100usec単位で発生させる
+    //
+    // Reset any pre-existing configuration
+    SysTick->CTLR = 0x0000;
+
+    // 100usec 単位で割り込みをかける、
+    SysTick->CMP = 100 * SYSTICK_ONE_MICROSECOND - 1;
+
+    // Reset the Count Register, and the global millis counter to 0
+    SysTick->CNT = 0x00000000;
+
+    // Set the SysTick Configuration
+    // NOTE: By not setting SYSTICK_CTLR_STRE, we maintain compatibility with
+    // busywait delay funtions used by ch32v003_fun.
+    SysTick->CTLR |= SYSTICK_CTLR_STE |   // Enable Counter
+                     SYSTICK_CTLR_STIE |  // Enable Interrupts
+                     SYSTICK_CTLR_STCLK;  // Set Clock Source to HCLK/1
+
+    // Enable the SysTick IRQ
+    NVIC_EnableIRQ(SysTicK_IRQn);
 }
 
 /*
@@ -73,6 +106,11 @@ void EXTI7_0_IRQHandler(void) {
             GPIOB->BCR = (1 << 2);  // DRIVE_SELECT_DOSV_A inactive (Low)
         } else {
             // DRIVE_SELECT_AがLowになった
+            if (double_option_A) {
+                GPIOB->BCR = (1 << 0);  // MODE_SELECT_DOSV = 300RPM mode
+            } else {
+                GPIOB->BSHR = (1 << 0);  // MODE_SELECT_DOSV = 360RPM mode
+            }
             GPIOB->BSHR = (1 << 2);  // DRIVE_SELECT_DOSV_A active (High)
         }
     }
@@ -84,6 +122,11 @@ void EXTI7_0_IRQHandler(void) {
             GPIOB->BCR = (1 << 3);  // DRIVE_SELECT_DOSV_B inactive (Low)
         } else {
             // DRIVE_SELECT_BがLowになった
+            if (double_option_B) {
+                GPIOB->BCR = (1 << 0);  // MODE_SELECT_DOSV = 300RPM mode
+            } else {
+                GPIOB->BSHR = (1 << 0);  // MODE_SELECT_DOSV = 360RPM mode
+            }
             GPIOB->BSHR = (1 << 3);  // DRIVE_SELECT_DOSV_B active (High)
         }
     }
@@ -152,17 +195,141 @@ void EXTI15_8_IRQHandler(void) {
     }
 }
 
-void x68fdd_poll(uint32_t systick_ms) {
-    // ポーリング処理をここに追加
-    static uint64_t last_tick = 0;
-    if (systick_ms - last_tick < 1000) {
-        return;
-    }
-    last_tick = systick_ms;
+volatile uint32_t systick_irq_counter = 0;
 
-    // OLEDに割り込み回数を表示する
-    OLED_cursor(0, 6);
-    OLED_printf("EXTI:%d", (int)exti_int_counter);
+volatile uint32_t double_option_A_time = 0;
+volatile uint32_t double_option_B_time = 0;
+
+/*
+ * SysTick ISR - must be lightweight to prevent the CPU from bogging down.
+ * Increments Compare Register and systick_millis when triggered (every 1ms)
+ * NOTE: the `__attribute__((interrupt))` attribute is very important
+ */
+void SysTick_Handler(void) __attribute__((interrupt));
+void SysTick_Handler(void) {
+    systick_irq_counter++;
+    // Increment the Compare Register for the next trigger
+    // If more than this number of ticks elapse before the trigger is reset,
+    // you may miss your next interrupt trigger
+    // (Make sure the IQR is lightweight and CMP value is reasonable)
+    SysTick->CMP += 1000 * SYSTICK_ONE_MICROSECOND;
+
+    // Clear the trigger state for the next IRQ
+    SysTick->SR = 0x00000000;
+
+    // 9SCDRVサポート
+    // OPTION SELECT 信号の同時アサートによる回転数変更に対応する
+    // ●戦略
+    // 9SCDRVは 300RPMにする際に OPTION SELECT A/Bを同時にアサートします
+    // しかし、グリッジが出ることがあるので、その変化に過敏に反応して MODE_SELECT_DOSVを切り替えると
+    // ドライブがついてこず、うまくうごきません。
+    // そこで、条件を以下のように少し厳しくします。
+    //  * まず、以下のそれぞれに対し「1msec以上維持した場合」という制限をかけ、その状態を double_option 変数に保存する
+    //    - OPTION同時未選択 → 同時選択への変化
+    //    - OPTION同時選択 → 同時未選択への変化
+    //  * DRIVE_SELECT がアサートされていない場合を初期状態(IDLE)とする
+    //  * DRIVE_SELECTがアサートされているあいだは、定期的に double_option の状態を監視し、その対に応じて MODE_SELECT_DOSVを切り替える
+    //  * その際、各ドライブの最後の回転数モードを記憶しておき、次回DRIVE＿SELECTがアサートされたときはそれに応じてMODE_SELECT_DOSVを設定する
+    uint32_t PA = GPIOA->INDR;
+    uint32_t PB = GPIOB->INDR;
+    bool ds_a = (PA & GPIO_Pin_0) == 0;         // Low active
+    bool ds_b = (PA & GPIO_Pin_1) == 0;         // Low active
+    bool opt_a = (PA & GPIO_Pin_2) == 0;        // Low active
+    bool opt_b = (PA & GPIO_Pin_3) == 0;        // Low active
+    bool opt_a_pair = opt_b;                    // OPTION_SELECT_A のペアは OPTION_SELECT_B
+    bool opt_b_pair = (PB & GPIO_Pin_11) == 0;  // OPTION_SELECT_B_PAIR
+
+    //
+    // OPTION_SELECT 同時アサートのローパスフィルタ
+    //
+    const uint32_t min_duration = SYSTICK_ONE_MICROSECOND * 300;  // 300usec
+
+    if (!double_option_A) {
+        if (opt_a && opt_a_pair) {
+            // OPTION SELECT Aとペアの両方がアサートされたので、計測
+            if (double_option_A_time == 0) {
+                // 最初のアサート
+                double_option_A_time = SysTick->CNTL;
+            } else if ((SysTick->CNTL - double_option_A_time) > min_duration) {
+                // 一定期間継続している
+                double_option_A = true;
+                double_option_A_time = 0;
+            } else {
+                // まだ一定期間に達していない
+            }
+        } else {
+            double_option_A_time = 0;
+        }
+    } else {
+        if (!(opt_a && opt_a_pair)) {
+            // OPTION SELECT Aのどちらかがディアサートされたので、計測
+            if (double_option_A_time == 0) {
+                // 最初のディアサート
+                double_option_A_time = SysTick->CNTL;
+            } else if ((SysTick->CNTL - double_option_A_time) > min_duration) {
+                // 一定期間継続している
+                double_option_A = false;
+                double_option_A_time = 0;
+            } else {
+                // まだ一定期間に達していない
+            }
+        } else {
+            double_option_A_time = 0;
+        }
+    }
+
+    if (!double_option_B) {
+        if (opt_b && opt_b_pair) {
+            // OPTION SELECT Bとペアの両方がアサートされたので、計測
+            if (double_option_B_time == 0) {
+                // 最初のアサート
+                double_option_B_time = SysTick->CNTL;
+            } else if ((SysTick->CNTL - double_option_B_time) > min_duration) {
+                // 一定期間継続している
+                double_option_B = true;
+                double_option_B_time = 0;
+            } else {
+                // まだ一定期間に達していない
+            }
+        } else {
+            double_option_B_time = 0;
+        }
+    } else {
+        if (!(opt_b && opt_b_pair)) {
+            // OPTION SELECT Bのどちらかがディアサートされたので、計測
+            if (double_option_B_time == 0) {
+                // 最初のディアサート
+                double_option_B_time = SysTick->CNTL;
+            } else if ((SysTick->CNTL - double_option_B_time) > min_duration) {
+                // 一定期間継続している
+                double_option_B = false;
+                double_option_B_time = 0;
+            } else {
+                // まだ一定期間に達していない
+            }
+        } else {
+            double_option_B_time = 0;
+        }
+    }
+
+    //
+    // DRIVE_SELECTの状態に応じてMODE_SELECT_DOSVを切り替える
+    //
+    if (ds_a) {
+        if (double_option_A) {
+            // DRIVE_SELECT_Aがアサートされていて、OPTION SELECT Aが同時アサートされている
+            GPIOB->BCR = (1 << 0);  // MODE_SELECT_DOSV = 300RPM mode
+        } else {
+            GPIOB->BSHR = (1 << 0);  // MODE_SELECT_DOSV = 360RPM mode
+        }
+    }
+    if (ds_b) {
+        if (double_option_B) {
+            GPIOB->BCR = (1 << 0);  // MODE_SELECT_DOSV = 300RPM mode
+        } else {
+            GPIOB->BSHR = (1 << 0);  // MODE_SELECT_DOSV = 360RPM mode
+        }
+    }
 
     // GP ENABLE
     GPIOC->BSHR = (1 << 19);  // GP_ENABLE (High=Enable)
@@ -179,4 +346,27 @@ void x68fdd_poll(uint32_t systick_ms) {
         GPIOB->BSHR = GPIO_Pin_12;  // READY_MCU_A_n (High=準備完了でない)
         GPIOB->BSHR = GPIO_Pin_13;  // READY_MCU_B_n (High=準備完了でない)
     }
+}
+
+void x68fdd_poll(uint32_t systick_ms) {
+    // ポーリング処理をここに追加
+    static uint32_t last_tick = 0;
+    if (systick_ms - last_tick < 1000) {
+        return;
+    }
+    last_tick = systick_ms;
+
+    // OLEDに割り込み回数を表示する
+    // OLED_cursor(0, 6);
+    // OLED_printf("EXTI:%d", (int)exti_int_counter);
+
+    // OPTION_SELECT_A/Bの状態をOLEDに表示する
+    OLED_cursor(0, 7);
+    uint8_t opt_a = (GPIOA->INDR & GPIO_Pin_2) ? 1 : 0;
+    uint8_t opt_b = (GPIOA->INDR & GPIO_Pin_3) ? 1 : 0;
+    uint8_t opt_a_pair = opt_b;  // OPTION_SELECT_A のペアは OPTION_SELECT_B
+    uint8_t opt_b_pair = (GPIOB->INDR & GPIO_Pin_11) ? 1 : 0;
+    uint8_t amode = double_option_A ? 'Q' : 'D';
+    uint8_t bmode = double_option_B ? 'Q' : 'D';
+    OLED_printf("OPT A:%d%d%c B:%d%d%c %d", opt_a, opt_a_pair, amode, opt_b, opt_b_pair, bmode, systick_irq_counter);
 }

@@ -7297,16 +7297,16 @@
 			(uuid "95fc0a7d-1e68-4121-a84b-cfe2f5a2a146")
 		)
 		(pin "2"
-			(uuid "5a31895f-15fb-4546-a8ce-f54d7dcbdb0b")
+			(uuid "5a31895f-15fb-4546-a8ce-f54d7dcbdb0c")
 		)
 		(pin "7"
-			(uuid "259c580f-42f9-4fe3-bf18-3f341b44bed9")
+			(uuid "259c580f-42f9-4fe3-bf18-3f341b44beda")
 		)
 		(pin "8"
-			(uuid "bfa2a005-7441-409a-87c7-7cffa09776ad")
+			(uuid "bfa2a005-7441-409a-87c7-7cffa09776ae")
 		)
 		(pin "1"
-			(uuid "6f40216d-c9db-4699-9005-7c9ed4c7bf52")
+			(uuid "6f40216d-c9db-4699-9005-7c9ed4c7bf53")
 		)
 		(instances
 			(project "X68k-3mode-fdd-adapter"
@@ -7623,16 +7623,16 @@
 			(uuid "db608339-ea2b-4d56-9a44-1980369b1a86")
 		)
 		(pin "2"
-			(uuid "5a31895f-15fb-4546-a8ce-f54d7dcbdb0c")
+			(uuid "5a31895f-15fb-4546-a8ce-f54d7dcbdb0d")
 		)
 		(pin "7"
-			(uuid "259c580f-42f9-4fe3-bf18-3f341b44beda")
+			(uuid "259c580f-42f9-4fe3-bf18-3f341b44bedb")
 		)
 		(pin "8"
-			(uuid "bfa2a005-7441-409a-87c7-7cffa09776ae")
+			(uuid "bfa2a005-7441-409a-87c7-7cffa09776af")
 		)
 		(pin "1"
-			(uuid "6f40216d-c9db-4699-9005-7c9ed4c7bf53")
+			(uuid "6f40216d-c9db-4699-9005-7c9ed4c7bf54")
 		)
 		(instances
 			(project "X68k-3mode-fdd-adapter"
@@ -8167,16 +8167,16 @@
 			(uuid "5461efe5-a9ac-40ad-945e-27e0c731691f")
 		)
 		(pin "4"
-			(uuid "574c4c28-bdd4-4141-ae63-22df805a803d")
+			(uuid "574c4c28-bdd4-4141-ae63-22df805a803e")
 		)
 		(pin "5"
-			(uuid "77d9d0a8-a2b6-4f5d-b56f-e6dbfb8844f5")
+			(uuid "77d9d0a8-a2b6-4f5d-b56f-e6dbfb8844f6")
 		)
 		(pin "6"
-			(uuid "8de39ee1-5606-47dd-95ce-c3238badceb7")
+			(uuid "8de39ee1-5606-47dd-95ce-c3238badceb8")
 		)
 		(pin "3"
-			(uuid "ff0c2ae1-5b2e-4ef7-9384-6df935cc9198")
+			(uuid "ff0c2ae1-5b2e-4ef7-9384-6df935cc9199")
 		)
 		(pin "2"
 			(uuid "fa830e81-845f-48cf-8cb5-7bcebdbb5510")

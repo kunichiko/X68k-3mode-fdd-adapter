@@ -171,6 +171,7 @@ int main() {
     // PB8 : DISK_CHANGE_DOSV (入力: Low=ディスクチェンジ, Pull-Up)
     // PB9 : READ_DATA_DOSV (入力: フロッピーディスクの読み出しデータ: Pull-Up)
     // PB10: TRACK0_DOSV (入力: Low=トラック0, Pull-Up)
+    // PB11: OPTION_SELECT_B_PAIR (入力: Low=active, High=inactive, Pull-Up)
     // PB12: READY_MCU_A (出力: Low=準備完了, High=準備完了でない)
     // PB13: READY_MCU_B (出力: Low=準備完了
     //
@@ -221,6 +222,10 @@ int main() {
     GPIOB->CFGHR &= ~(0xf << (4 * (10 - 8)));
     GPIOB->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (10 - 8));
     GPIOB->BSHR = (1 << 10);  // Pull-Up
+    // PB11: OPTION_SELECT_B_PAIR input
+    GPIOB->CFGHR &= ~(0xf << (4 * (11 - 8)));
+    GPIOB->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (11 - 8));
+    GPIOB->BSHR = (1 << 11);  // Pull-Up
     // PB12: READY_MCU_A output
     GPIOB->CFGHR &= ~(0xf << (4 * (12 - 8)));
     GPIOB->CFGHR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * (12 - 8));
@@ -250,8 +255,8 @@ int main() {
     //
     OLED_init();
     OLED_clear();
-    OLED_flip(0, 0);
-    OLED_print("Hello, OLED!");
+    OLED_flip(1, 1);
+    OLED_print("Minys-X V2");
 
     Delay_Ms(2000);
 
@@ -328,6 +333,7 @@ int main() {
             OLED_print("MOTOR OFF");
         }
 
+#if 0
         // PA0: DRIVE_SELECT_A, PA1: DRIVE_SELECT_B を監視して、
         // アサートされたら信号の状態を読み出す。
         uint32_t porta = GPIOA->INDR;
@@ -352,5 +358,6 @@ int main() {
             }
             OLED_clear();
         }
+#endif
     }
 }
