@@ -171,6 +171,8 @@ int main() {
     // PB8 : DISK_CHANGE_DOSV (入力: Low=ディスクチェンジ, Pull-Up)
     // PB9 : READ_DATA_DOSV (入力: フロッピーディスクの読み出しデータ: Pull-Up)
     // PB10: TRACK0_DOSV (入力: Low=トラック0, Pull-Up)
+    // PB12: READY_MCU_A (出力: Low=準備完了, High=準備完了でない)
+    // PB13: READY_MCU_B (出力: Low=準備完了
     //
     // PA22: DIPSW_DS0 (入力: Pull-Up)
     // PA23: DIPSW_DS1 (入力: Pull-Up)
@@ -194,8 +196,7 @@ int main() {
     // PB4: MOTOR_ON_DOSV output
     GPIOB->CFGLR &= ~(0xf << (4 * 4));
     GPIOB->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 4);
-    // GPIOB->BCR = (1 << 4);
-    GPIOB->BSHR = (1 << 4);  // Motor ON for test
+    GPIOB->BCR = (1 << 4);
     // PB5: DIRECTION_DOSV output
     GPIOB->CFGLR &= ~(0xf << (4 * 5));
     GPIOB->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 5);
@@ -220,6 +221,14 @@ int main() {
     GPIOB->CFGHR &= ~(0xf << (4 * (10 - 8)));
     GPIOB->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (10 - 8));
     GPIOB->BSHR = (1 << 10);  // Pull-Up
+    // PB12: READY_MCU_A output
+    GPIOB->CFGHR &= ~(0xf << (4 * (12 - 8)));
+    GPIOB->CFGHR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * (12 - 8));
+    GPIOB->BSHR = (1 << 12);
+    // PB13: READY_MCU_B output
+    GPIOB->CFGHR &= ~(0xf << (4 * (13 - 8)));
+    GPIOB->CFGHR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * (13 - 8));
+    GPIOB->BSHR = (1 << 13);
 
     // PA22: DIPSW_DS0 input
     GPIOA->CFGXR &= ~(0xf << (4 * (22 - 16)));
@@ -230,7 +239,15 @@ int main() {
     GPIOA->CFGXR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (23 - 16));
     GPIOA->BSXR = (1 << (23 - 16));  // Pull-Up
 
+    // GPIOC
+    // PC19 : GP_ENABLE (出力: High=Enable, Low=Disable) tbd
+    GPIOC->CFGHR &= ~(0xf << (4 * (19 - 16)));
+    GPIOC->CFGHR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * (19 - 16));
+    GPIOC->BCR = (1 << 19);  // Disable (Low)
+
+    //
     // OLEDテスト
+    //
     OLED_init();
     OLED_clear();
     OLED_flip(0, 0);
@@ -248,7 +265,7 @@ int main() {
     // greenpak_dump_oled();
 
     // GreenPAKの自動プログラムと検証
-    // greenpak_autoprogram_verify();
+    greenpak_autoprogram_verify();
 
     // 電源制御を初期化する
     power_control_init();
@@ -267,9 +284,20 @@ int main() {
     // DIP SWの状態を GreenPAKにセットする
     uint8_t ds0 = (GPIOA->INDR >> 22) & 1;
     uint8_t ds1 = (GPIOA->INDR >> 23) & 1;
-    greenpak_set_dipsw(ds0, ds1);
+    for (int i = 0; i < 4; i++) {
+        greenpak_set_virtualinput(i, (ds1 ? 0x40 : 0x00) | (ds0 ? 0x80 : 0x00));
+    }
     OLED_printf("DS0=%d DS1=%d\n", (int)ds0, (int)ds1);
     Delay_Ms(2000);
+    // 以下もセットする
+    // GP2のDISK_IN_A_n (OUT2=bit5)
+    // GP2のDISK_IN_B_n (OUT3=bit4)
+    // GP2のERR_DISK_A_n (OUT2=bit3)
+    // GP2のERR_DISK_B_n (OUT3=bit2)
+    uint8_t gp2_vin = greenpak_get_virtualinput(2 - 1);
+    gp2_vin = (gp2_vin & 0xc0) | 0x0c;  // 仮に両方ともディスクあり、エラーなしにする
+    // gp2_vin = (gp2_vin & 0xc0) | 0x00;  // TODO: DISK_INは正論理なのかも？
+    greenpak_set_virtualinput(2 - 1, gp2_vin);
 
     // メインループ
     OLED_clear();
@@ -280,6 +308,25 @@ int main() {
         ina3221_poll(ms);
         pcfdd_poll(ms);
         x68fdd_poll(ms);
+
+#if 0
+        // GP2のVirtual Input レジスタの値を直接読む
+        uint8_t gp1_vin2 = gp_reg_get(gp_target_addr[1 - 1], 0x7a);
+        uint8_t gp2_vin2 = gp_reg_get(gp_target_addr[2 - 1], 0x7a);
+        OLED_cursor(0, 6);
+        OLED_printf("GP1 VIN=%02x\n", gp1_vin2);
+        OLED_printf("GP2 VIN=%02x\n", gp2_vin2);
+#endif
+
+        // MOTOR_ONの監視
+        OLED_cursor(0, 6);
+        if ((GPIOA->INDR & (1 << 12)) == 0) {
+            // MOTOR_ON=Low (ON)
+            OLED_print("MOTOR ON ");
+        } else {
+            // MOTOR_ON=High (OFF)
+            OLED_print("MOTOR OFF");
+        }
 
         // PA0: DRIVE_SELECT_A, PA1: DRIVE_SELECT_B を監視して、
         // アサートされたら信号の状態を読み出す。
@@ -294,9 +341,13 @@ int main() {
                 uint8_t dsb = (porta >> 1) & 1;
                 uint8_t opa = (porta >> 2) & 1;
                 uint8_t opb = (porta >> 3) & 1;
+                // GP2のVirtual Input レジスタの値を直接読む
+                uint8_t gp2_vin = gp_reg_get(gp_target_addr[2 - 1], 0x7a);
+                // OLEDに表示
                 OLED_cursor(0, 1);
-                OLED_printf("DSA=%d DSB=%d\n", dsa, dsb);
-                OLED_printf("OPA=%d OPB=%d\n", opa, opb);
+                OLED_printf("A:DS=%d OP=%d \n", dsa, opa);
+                OLED_printf("B:DS=%d OP=%d \n", dsb, opb);
+                OLED_printf("GP2 VIN=%02x\n", gp2_vin);
                 porta = GPIOA->INDR;
             }
             OLED_clear();

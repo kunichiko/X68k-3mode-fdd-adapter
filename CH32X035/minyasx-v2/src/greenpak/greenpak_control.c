@@ -7,6 +7,18 @@
 const uint8_t gp_target_addr_cleared = 0x01;  // クリア済み
 const uint8_t gp_target_addr_default = 0x08;  // 作業用
 const uint8_t gp_target_addr[4] = {0x10, 0x18, 0x20, 0x28};
+static uint8_t gp_virtual_input_cache[4] = {0, 0, 0, 0};  // 仮想入力キャッシュ
+
+uint8_t gp_reg_get(uint8_t addr7, uint8_t reg) {
+    uint8_t reg_addr7 = (uint8_t)((addr7 & 0xfc) + 1);  // 0x00を使わないために+1する
+    uint8_t val;
+    I2C_start((reg_addr7 << 1) | 0);    // SLA+W  :contentReference[oaicite:3]{index=3}
+    I2C_write(reg);                     // レジスタ番号
+    I2C_restart((reg_addr7 << 1) | 1);  // SLA+R
+    val = I2C_read(0);                  // NACKで1バイト読む
+    I2C_stop();                         // STOP   :contentReference[oaicite:7]{index=7}
+    return val;
+}
 
 void gp_reg_set(uint8_t addr7, uint8_t reg, uint8_t val) {
     uint8_t reg_addr7 = (uint8_t)((addr7 & 0xfc) + 1);  // 0x00を使わないために+1する
@@ -109,13 +121,21 @@ void greenpak_dump_oled_with_addr(uint8_t addr) {
     Delay_Ms(1000);
 }
 
-void greenpak_set_dipsw(uint8_t ds0, uint8_t ds1) {
-    // GreenPAKのVirtual Input はレジスタ0x7aにある
-    // - DriverSelect0 = VirtualInput[0] = bit7
-    // - DriverSelect1 = VirtualInput[1] = bit6
-    // 番号とビットの並び順が逆なので注意!!!
-    // 4個全部に同じ値を書き込む
-    for (int i = 0; i < 4; i++) {
-        gp_reg_set(gp_target_addr[i], 0x7a, (ds1 ? 0x40 : 0x00) | (ds0 ? 0x80 : 0x00));
-    }
+uint8_t greenpak_get_virtualinput(int unit) {
+    if (unit < 0 || unit >= 4) return 0;  // 範囲外
+    return gp_virtual_input_cache[unit];
+}
+
+/**
+ GreenPAKのVirtual Input (レジスタ0x7aにある) に値をセットします
+ GP1-4全てに共通するのは以下のビットです
+  - DriverSelect0 = VirtualInput[0] = bit7
+  - DriverSelect1 = VirtualInput[1] = bit6
+  VirtualInput番号とビットの並び順が逆なので注意!!!
+ */
+void greenpak_set_virtualinput(int unit, uint8_t val) {
+    if (unit < 0 || unit >= 4) return;  // 範囲外
+
+    gp_virtual_input_cache[unit] = val;
+    gp_reg_set(gp_target_addr[unit], 0x7a, val);
 }

@@ -64,13 +64,28 @@ void EXTI7_0_IRQHandler(void) {
     exti_int_counter++;
 
     uint32_t intfr = EXTI->INTFR;  // 割り込みフラグを取得
+    uint32_t porta = GPIOA->INDR;
     if (intfr & EXTI_INTF_INTF0) {
         // PA0 (DRIVE_SELECT_A) の割り込み
         EXTI->INTFR = EXTI_INTF_INTF0;  // フラグをクリア
+        if (porta & (1 << 0)) {
+            // DRIVE_SELECT_AがHighになった
+            GPIOB->BCR = (1 << 2);  // DRIVE_SELECT_DOSV_A inactive (Low)
+        } else {
+            // DRIVE_SELECT_AがLowになった
+            GPIOB->BSHR = (1 << 2);  // DRIVE_SELECT_DOSV_A active (High)
+        }
     }
     if (intfr & EXTI_INTF_INTF1) {
         // PA1 (DRIVE_SELECT_B) の割り込み
         EXTI->INTFR = EXTI_INTF_INTF1;  // フラグをクリア
+        if (porta & (1 << 1)) {
+            // DRIVE_SELECT_BがHighになった
+            GPIOB->BCR = (1 << 3);  // DRIVE_SELECT_DOSV_B inactive (Low)
+        } else {
+            // DRIVE_SELECT_BがLowになった
+            GPIOB->BSHR = (1 << 3);  // DRIVE_SELECT_DOSV_B active (High)
+        }
     }
     if (intfr & EXTI_INTF_INTF2) {
         // PA2 (OPTION_SELECT_A) の割り込み
@@ -93,10 +108,10 @@ void EXTI15_8_IRQHandler(void) {
         EXTI->INTFR = EXTI_INTF_INTF12;  // フラグをクリア
         if (porta & (1 << 12)) {
             // MOTOR_ONがHighになった
-            GPIOB->BCR = (1 << 4);  // Motor ON
+            GPIOB->BCR = (1 << 4);  // Motor ON inactive
         } else {
             // MOTOR_ONがLowになった
-            GPIOB->BSHR = (1 << 4);  // Motor OFF
+            GPIOB->BSHR = (1 << 4);  // Motor ON active
         }
     }
     if (intfr & EXTI_INTF_INTF13) {
@@ -117,10 +132,10 @@ void EXTI15_8_IRQHandler(void) {
         EXTI->INTFR = EXTI_INTF_INTF14;  // フラグをクリア
         if (porta & (1 << 14)) {
             // STEPがHighになった
-            GPIOB->BCR = (1 << 6);  // Step High
+            GPIOB->BCR = (1 << 6);  // Step inactive
         } else {
             // STEPがLowになった
-            GPIOB->BSHR = (1 << 6);  // Step Low
+            GPIOB->BSHR = (1 << 6);  // Step active
         }
     }
     if (intfr & EXTI_INTF_INTF15) {
@@ -148,4 +163,20 @@ void x68fdd_poll(uint32_t systick_ms) {
     // OLEDに割り込み回数を表示する
     OLED_cursor(0, 6);
     OLED_printf("EXTI:%d", (int)exti_int_counter);
+
+    // GP ENABLE
+    GPIOC->BSHR = (1 << 19);  // GP_ENABLE (High=Enable)
+
+    // MOTOR ON信号(PA12)がアクティブならREADY信号をアクティブにする
+    // GreenPAKは各ドライブにDriveSelect信号がアサートされると、
+    // このREADY信号の値を返却します
+    if (!(GPIOA->INDR & GPIO_Pin_12)) {
+        // MOTOR ON信号がアクティブ
+        GPIOB->BCR = GPIO_Pin_12;  // READY_MCU_A_n (Low=準備完了)
+        GPIOB->BCR = GPIO_Pin_13;  // READY_MCU_B_n (Low=準備完了)
+    } else {
+        // MOTOR ON信号が非アクティブ
+        GPIOB->BSHR = GPIO_Pin_12;  // READY_MCU_A_n (High=準備完了でない)
+        GPIOB->BSHR = GPIO_Pin_13;  // READY_MCU_B_n (High=準備完了でない)
+    }
 }
