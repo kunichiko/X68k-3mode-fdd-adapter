@@ -47,7 +47,8 @@ void ui_page_menu_key_callback(ui_key_mask_t keys) {
             ui_change_page(UI_PAGE_ABOUT);
             break;
         case 2:
-            // USB-PD Status TODO
+            // USB-PD Status
+            ui_change_page(UI_PAGE_PDSTATUS);
             break;
         case 3:
             // Common Setting TODO

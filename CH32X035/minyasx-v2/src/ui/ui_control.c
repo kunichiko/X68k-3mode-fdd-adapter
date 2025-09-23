@@ -37,6 +37,10 @@ void ui_change_page(UI_PAGE_t page) {
     ui_refresh();
 }
 
+UI_PAGE_t ui_get_current_page(void) {
+    return current_page;
+}
+
 void ui_clear(UI_PAGE_t page) {
     if (page < 0 || page >= UI_MAX_WINDOWS) {
         return;  // 無効なページ番号
@@ -69,7 +73,7 @@ void ui_cursor(UI_PAGE_t page, uint8_t x, uint8_t y) {
     win->x = x;
     win->y = y;
     if (current_page == page) {
-        OLED_cursor(x, y);
+        OLED_cursor(x * 6, y);
     }
 }
 
@@ -139,7 +143,7 @@ ui_write_t ui_get_writer(UI_PAGE_t page) {
         return ui_write_1;
     case UI_PAGE_ABOUT:
         return ui_write_2;
-    case UI_PAGE_TOOLTIP:
+    case UI_PAGE_PDSTATUS:
         return ui_write_3;
     case UI_PAGE_CUSTOM:
         return ui_write_4;
@@ -172,6 +176,7 @@ void ui_init(minyasx_context_t *ctx) {
     ui_page_main_init(ctx, &ui_windows[UI_PAGE_MAIN]);
     ui_page_menu_init(ctx, &ui_windows[UI_PAGE_MENU]);
     ui_page_about_init(ctx, &ui_windows[UI_PAGE_ABOUT]);
+    ui_page_pdstatus_init(ctx, &ui_windows[UI_PAGE_PDSTATUS]);
 }
 
 void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
@@ -210,4 +215,9 @@ void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
     if (win->key_callback) {
         win->key_callback(keys);
     }
+    // 各ページのポーリング処理
+    ui_page_main_poll(ctx, systick_ms);
+    ui_page_menu_poll(ctx, systick_ms);
+    ui_page_about_poll(ctx, systick_ms);
+    ui_page_pdstatus_poll(ctx, systick_ms);
 }

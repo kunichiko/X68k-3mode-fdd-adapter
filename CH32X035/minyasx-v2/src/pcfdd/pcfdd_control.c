@@ -436,7 +436,7 @@ extern volatile uint32_t cnt_7ish, cnt_8ish, cnt_10ish, cnt_13ish, cnt_16ish;
 extern volatile uint32_t cnt_other;
 
 // 必要なら数値にしたい時用（表示など）
-static inline uint32_t fdd_bps_mode_to_value(fdd_bps_mode_t m) {
+inline uint32_t fdd_bps_mode_to_value(fdd_bps_mode_t m) {
     switch (m) {
     case BPS_600K:
         return 600000;

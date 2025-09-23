@@ -17,6 +17,6 @@ typedef enum {
 
 void pcfdd_set_current_ds(pcfdd_ds_t ds);
 
-uint32_t pcfdd_bps_value(fdd_bps_mode_t m);
+uint32_t fdd_bps_mode_to_value(fdd_bps_mode_t m);
 
 #endif

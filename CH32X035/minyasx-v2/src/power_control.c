@@ -38,7 +38,7 @@
  *     +12Vが有効化できたらtrueを返す
  *     +12Vが有効化できなかったらfalseを返す
  */
-bool activate_pd_12v() {
+bool activate_pd_12v(minyasx_context_t* ctx) {
     if (!PD_connect()) {
         ui_print(UI_PAGE_MAIN, "USBPD_Init error");
         ui_write(UI_PAGE_MAIN, '\n');
@@ -47,15 +47,21 @@ bool activate_pd_12v() {
     }
     ui_print(UI_PAGE_MAIN, "USBPD_Init OK");
     ui_write(UI_PAGE_MAIN, '\n');
+    ctx->usbpd.connected = true;
+    ctx->usbpd.pdonum = PD_getPDONum();
 
     int pd_12v_pdo = -1;
     for (int i = 1; i <= PD_getPDONum(); i++) {
         if (i <= PD_getFixedNum()) {
             ui_printf(UI_PAGE_MAIN, " (%d)%6dmV %5dmA ", i, PD_getPDOVoltage(i), PD_getPDOMaxCurrent(i));
-            //         if (PD_getPDOVoltage(i) == 9000 && PD_getPDOMaxCurrent(i) >= 1600)
-            if (PD_getPDOVoltage(i) == 12000 && PD_getPDOMaxCurrent(i) >= 1600)  // テストように9000mVにしている
-            {
+            if (PD_getPDOVoltage(i) == 12000 && PD_getPDOMaxCurrent(i) >= 1600) {
+                // 12V, 1.6A以上のPDOを発見
                 pd_12v_pdo = i;
+            }
+            // USB-PD情報をコンテキストに保存
+            if (i < 8) {
+                ctx->usbpd.pod[i - 1].voltage_mv = PD_getPDOVoltage(i);
+                ctx->usbpd.pod[i - 1].current_ma = PD_getPDOMaxCurrent(i);
             }
         } else {
             ui_printf(UI_PAGE_MAIN, " [%d]%6dmV-%5dmV ", i, PD_getPDOMinVoltage(i), PD_getPDOMaxVoltage(i));
@@ -83,8 +89,8 @@ bool activate_pd_12v() {
     return false;
 }
 
-void power_control_init(void) {
-    ui_clear(UI_PAGE_MAIN);
+void power_control_init(minyasx_context_t* ctx) {
+    ctx->usbpd.connected = false;
 
     // ● 0.+12V電源ライン、+5V電源ラインのDisable
     // GPIOのマッピングは以下の通り
@@ -108,7 +114,7 @@ void power_control_init(void) {
         // 外部+12V電源が接続されていない
         // ● 2.USB-PDのネゴシエーション
         // 外部電源がない場合は、PD電源から +12V, 1.6A以上の供給が可能かどうかを調べます。
-        bool pd_12v_enabled = activate_pd_12v();
+        bool pd_12v_enabled = activate_pd_12v(ctx);
         if (!pd_12v_enabled) {
             // +12Vが有効化できなかった場合は、VBUSが+5Vなので、+5VラインをEnableします。
             // 念の為、INA3221で VBUS(ch1)の電圧をチェックします。
