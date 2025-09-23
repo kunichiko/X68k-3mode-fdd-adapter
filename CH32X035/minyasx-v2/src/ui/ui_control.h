@@ -8,8 +8,6 @@
 #include "minyasx.h"
 #include "oled/ssd1306_txt.h"
 
-#define UI_MAX_WINDOWS 10
-
 typedef enum {
     UI_PAGE_MAIN = 0,            // Main page
     UI_PAGE_MENU = 1,            // Menu page
@@ -19,6 +17,8 @@ typedef enum {
     UI_PAGE_SETTING_FDDA = 5,    // FD Drive A settings page
     UI_PAGE_SETTING_FDDB = 6,    // FD Drive B settings page
     UI_PAGE_DEBUG = 7,           // Debug page
+    UI_PAGE_DEBUG_PCFDD = 8,     // PCFDD debug page
+    UI_PAGE_MAX,
 } UI_PAGE_t;
 
 typedef enum {
@@ -89,7 +89,9 @@ void ui_page_pdstatus_key_callback(ui_key_mask_t keys);
 
 // debug page
 void ui_page_debug_init(minyasx_context_t* ctx, ui_window_t* win);
+void ui_page_debug_init_pcfdd(minyasx_context_t* ctx, ui_window_t* win);
 void ui_page_debug_poll(minyasx_context_t* ctx, uint32_t systick_ms);
 void ui_page_debug_key_callback(ui_key_mask_t keys);
+void ui_page_debug_key_callback_pcfdd(ui_key_mask_t keys);
 
 #endif  // UI_CONTROL_H

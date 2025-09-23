@@ -2,7 +2,7 @@
 
 #include "greenpak/greenpak_control.h"
 
-static ui_window_t ui_windows[UI_MAX_WINDOWS];
+static ui_window_t ui_windows[UI_PAGE_MAX];
 
 static UI_PAGE_t current_page = UI_PAGE_MAIN;
 
@@ -25,7 +25,7 @@ void ui_refresh(void) {
 }
 
 void ui_change_page(UI_PAGE_t page) {
-    if (page < 0 || page >= UI_MAX_WINDOWS) {
+    if (page < 0 || page >= UI_PAGE_MAX) {
         return;  // 無効なページ番号
     }
     if (current_page == page) {
@@ -42,7 +42,7 @@ UI_PAGE_t ui_get_current_page(void) {
 }
 
 void ui_clear(UI_PAGE_t page) {
-    if (page < 0 || page >= UI_MAX_WINDOWS) {
+    if (page < 0 || page >= UI_PAGE_MAX) {
         return;  // 無効なページ番号
     }
     ui_window_t *win = &ui_windows[page];
@@ -62,7 +62,7 @@ void ui_clear(UI_PAGE_t page) {
 }
 
 void ui_cursor(UI_PAGE_t page, uint8_t x, uint8_t y) {
-    if (page < 0 || page >= UI_MAX_WINDOWS) {
+    if (page < 0 || page >= UI_PAGE_MAX) {
         return;  // 無効なページ番号
     }
     ui_window_t *win = &ui_windows[page];
@@ -138,6 +138,15 @@ void ui_write_6(char c) {
 void ui_write_7(char c) {
     ui_write(7, c);
 }
+void ui_write_8(char c) {
+    ui_write(8, c);
+}
+void ui_write_9(char c) {
+    ui_write(9, c);
+}
+void ui_write_10(char c) {
+    ui_write(10, c);
+}
 void ui_write_null(char c) {
     // 何もしない
     (void)c;
@@ -162,6 +171,12 @@ ui_write_t ui_get_writer(UI_PAGE_t page) {
         return ui_write_6;
     case UI_PAGE_DEBUG:
         return ui_write_7;
+    case UI_PAGE_DEBUG_PCFDD:
+        return ui_write_8;
+    case 9:
+        return ui_write_9;
+    case 10:
+        return ui_write_10;
     default:
         return ui_write_null;
     }
@@ -169,7 +184,7 @@ ui_write_t ui_get_writer(UI_PAGE_t page) {
 
 void ui_init(minyasx_context_t *ctx) {
     // 各ウィンドウの初期化
-    for (int i = 0; i < UI_MAX_WINDOWS; i++) {
+    for (int i = 0; i < UI_PAGE_MAX; i++) {
         ui_windows[i].page = (UI_PAGE_t)i;
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 21; x++) {
@@ -193,6 +208,7 @@ void ui_init(minyasx_context_t *ctx) {
     ui_page_about_init(ctx, &ui_windows[UI_PAGE_ABOUT]);
     ui_page_pdstatus_init(ctx, &ui_windows[UI_PAGE_PDSTATUS]);
     ui_page_debug_init(ctx, &ui_windows[UI_PAGE_DEBUG]);
+    ui_page_debug_init_pcfdd(ctx, &ui_windows[UI_PAGE_DEBUG_PCFDD]);
 }
 
 void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
