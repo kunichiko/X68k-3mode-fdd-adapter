@@ -63,9 +63,9 @@ static int gp_compare_image(uint8_t addr7, uint16_t base, const uint8_t *img, ui
         if (n > CMP_CHUNK) n = CMP_CHUNK;
         gp_read_seq(nvm_addr7, base + done, buf, n);
         if (memcmp(buf, &img[done], n) != 0) {
-            ui_print(UI_PAGE_MAIN, "mismatch at ");
-            ui_printD(UI_PAGE_MAIN, base + done);
-            ui_write(UI_PAGE_MAIN, '\n');
+            ui_print(UI_PAGE_DEBUG, "mismatch at ");
+            ui_printD(UI_PAGE_DEBUG, base + done);
+            ui_write(UI_PAGE_DEBUG, '\n');
             return 0;  // 不一致
         }
         done += n;
@@ -76,24 +76,24 @@ static int gp_compare_image(uint8_t addr7, uint16_t base, const uint8_t *img, ui
 // ---------------- 自動処理本体 ----------------
 
 static void show_not_found_and_exit(void) {
-    ui_print(UI_PAGE_MAIN, "GreenPAK not found");
-    ui_write(UI_PAGE_MAIN, '\n');  // :contentReference[oaicite:14]{index=14} :contentReference[oaicite:15]{index=15}
+    ui_print(UI_PAGE_DEBUG, "GreenPAK not found");
+    ui_write(UI_PAGE_DEBUG, '\n');  // :contentReference[oaicite:14]{index=14} :contentReference[oaicite:15]{index=15}
     // 必要なら、ここで他の処理へ遷移/return
 }
 
 void greenpak_force_program_verify(uint8_t addr, uint8_t unit) {
-    ui_print(UI_PAGE_MAIN, "prog GP");
-    ui_printD(UI_PAGE_MAIN, unit + 1);
-    ui_print(UI_PAGE_MAIN, "  @0x");
-    ui_printH(UI_PAGE_MAIN, addr);
-    ui_write(UI_PAGE_MAIN, '\n');
+    ui_print(UI_PAGE_DEBUG, "prog GP");
+    ui_printD(UI_PAGE_DEBUG, unit + 1);
+    ui_print(UI_PAGE_DEBUG, "  @0x");
+    ui_printH(UI_PAGE_DEBUG, addr);
+    ui_write(UI_PAGE_DEBUG, '\n');
     gp_program_with_erase(addr, gp_img[unit].base, gp_img[unit].image, gp_img[unit].size);
-    ui_print(UI_PAGE_MAIN, "done");
+    ui_print(UI_PAGE_DEBUG, "done");
     return;
 }
 
 void greenpak_autoprogram_verify(void) {
-    ui_clear(UI_PAGE_MAIN);
+    ui_clear(UI_PAGE_DEBUG);
 
     // まず既定の最終配置（0x12, 0x1A, 0x22, 0x2A）と 0x0A（作業用）をスキャン
     int present[4] = {
@@ -111,27 +111,27 @@ void greenpak_autoprogram_verify(void) {
         return;
     }
 
-    ui_cursor(UI_PAGE_MAIN, 0, 0);
-    ui_print(UI_PAGE_MAIN, "GP found ");
+    ui_cursor(UI_PAGE_DEBUG, 0, 0);
+    ui_print(UI_PAGE_DEBUG, "GP found ");
     if (present[0]) {
-        ui_print(UI_PAGE_MAIN, "1 ");
+        ui_print(UI_PAGE_DEBUG, "1 ");
     }
     if (present[1]) {
-        ui_print(UI_PAGE_MAIN, "2 ");
+        ui_print(UI_PAGE_DEBUG, "2 ");
     }
     if (present[2]) {
-        ui_print(UI_PAGE_MAIN, "3 ");
+        ui_print(UI_PAGE_DEBUG, "3 ");
     }
     if (present[3]) {
-        ui_print(UI_PAGE_MAIN, "4 ");
+        ui_print(UI_PAGE_DEBUG, "4 ");
     }
     if (def_present) {
-        ui_print(UI_PAGE_MAIN, "def ");
+        ui_print(UI_PAGE_DEBUG, "def ");
     }
     if (clr_present) {
-        ui_print(UI_PAGE_MAIN, "clr ");
+        ui_print(UI_PAGE_DEBUG, "clr ");
     }
-    ui_write(UI_PAGE_MAIN, '\n');
+    ui_write(UI_PAGE_DEBUG, '\n');
     Delay_Ms(3000);
 
     // すべて見えている場合でも「差分があれば上書き」する
@@ -144,16 +144,16 @@ void greenpak_autoprogram_verify(void) {
             if (present[i] && gp_img[i].size > 0) {
                 int same = gp_compare_image(gp_target_addr[i], gp_img[i].base, gp_img[i].image, gp_img[i].size - 0x10);
                 if (same) {
-                    ui_print(UI_PAGE_MAIN, "firm is ok:");
-                    ui_printD(UI_PAGE_MAIN, i + 1);
-                    ui_write(UI_PAGE_MAIN, '\n');
+                    ui_print(UI_PAGE_DEBUG, "firm is ok:");
+                    ui_printD(UI_PAGE_DEBUG, i + 1);
+                    ui_write(UI_PAGE_DEBUG, '\n');
                 } else {
-                    ui_print(UI_PAGE_MAIN, "reprogramming:");
-                    ui_printD(UI_PAGE_MAIN, i + 1);
-                    ui_write(UI_PAGE_MAIN, '\n');
+                    ui_print(UI_PAGE_DEBUG, "reprogramming:");
+                    ui_printD(UI_PAGE_DEBUG, i + 1);
+                    ui_write(UI_PAGE_DEBUG, '\n');
                     gp_program_with_erase(gp_target_addr[i], gp_img[i].base, gp_img[i].image, gp_img[i].size);
-                    ui_print(UI_PAGE_MAIN, "done");
-                    ui_write(UI_PAGE_MAIN, '\n');
+                    ui_print(UI_PAGE_DEBUG, "done");
+                    ui_write(UI_PAGE_DEBUG, '\n');
                 }
             }
         }
@@ -185,17 +185,17 @@ void greenpak_autoprogram_verify(void) {
         }
 
         if (gp_img[target].size > 0) {
-            ui_print(UI_PAGE_MAIN, "programming GP");
-            ui_printD(UI_PAGE_MAIN, target + 1);
-            ui_write(UI_PAGE_MAIN, '\n');
+            ui_print(UI_PAGE_DEBUG, "programming GP");
+            ui_printD(UI_PAGE_DEBUG, target + 1);
+            ui_write(UI_PAGE_DEBUG, '\n');
             // 0x0A 側へ書き込む（書込み完了でICが自動的に再配置される前提）
             gp_program_with_erase(gp_target_addr_default, gp_img[target].base, gp_img[target].image, gp_img[target].size);
-            ui_print(UI_PAGE_MAIN, "done");
-            ui_write(UI_PAGE_MAIN, '\n');
+            ui_print(UI_PAGE_DEBUG, "done");
+            ui_write(UI_PAGE_DEBUG, '\n');
         } else {
-            ui_print(UI_PAGE_MAIN, "data empty: Skip GP");
-            ui_printD(UI_PAGE_MAIN, target + 1);
-            ui_write(UI_PAGE_MAIN, '\n');
+            ui_print(UI_PAGE_DEBUG, "data empty: Skip GP");
+            ui_printD(UI_PAGE_DEBUG, target + 1);
+            ui_write(UI_PAGE_DEBUG, '\n');
         }
 
         // 再スキャン（当該ICが最終番地に現れるはず）
