@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GPDProject version="38" oldestCompatibleVersion="32" GPDVersion="6.49.001" lastChange="14 Sep 2025 20:53:30" projectChecksumState="1" projectChecksum="58593e22">
+<GPDProject version="38" oldestCompatibleVersion="32" GPDVersion="6.49.001" lastChange="23 Sep 2025 10:23:54" projectChecksumState="1" projectChecksum="b814e272">
     <generalProjectSettings/>
     <chip family="04" type="06" friendlyName="GreenPAK 6" partNumber="36" package="16">
-        <nvmData registerLenght="2048">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 FC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 61 61 0 61 61 61 7C 0 0 FC 30 30 0 61 61 D D D D 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 14 22 30 C 0 0 0 0 0 0 0 BB 8E 0 0 FE FD FB F7 FE FB 0 0 E0 0 0 0 0 0 80 20 0 1 0 0 0 2 1 0 0 2 0 1 0 0 2 1 0 0 2 0 1 0 FE 2 1 0 0 2 0 1 2 0 2 0 1 0 0 0 5 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 A5</nvmData>
+        <nvmData registerLenght="2048">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 51 51 0 51 51 51 30 0 0 30 30 30 0 30 30 30 30 51 51 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 14 22 30 C 0 0 0 0 0 0 0 BB 8E 0 0 FE FD FB F7 FE FB 0 0 E0 0 0 0 0 0 80 20 0 1 0 0 0 2 1 0 0 2 0 1 0 0 2 1 0 0 2 0 1 0 FE 2 1 0 0 2 0 1 2 0 2 0 1 0 0 0 5 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 A5</nvmData>
         <eepromData id="0">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</eepromData>
-        <checksum crc32="0x21D16F7F" version="7"/>
+        <checksum crc32="0x9711FA9C" version="7"/>
         <VDDItem id="0">
             <item id="0" caption="VDD (PIN 20)">
                 <graphics pos="(439.89,-321.19)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
@@ -13,37 +13,36 @@
         <IOPad id="1" useCaseMode="1">
             <item id="1" caption="PIN 19 (IO0)">
                 <graphics pos="(5.62,-193.81)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
-                <textLabel pos="(-4.17,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">ENABLE</textLabel>
+                <textLabel pos="(8.97,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">UP</textLabel>
             </item>
         </IOPad>
         <IOPad id="2" useCaseMode="1">
             <item id="2" caption="PIN 18 (IO1)">
                 <graphics pos="(5.62,-83.66)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
-                <textLabel pos="(-32.01,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">TRACK_00_DOSV_n</textLabel>
+                <textLabel pos="(-0.17,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">DOWN</textLabel>
             </item>
         </IOPad>
         <IOPad id="3" useCaseMode="1">
             <item id="3" caption="PIN 17 (IO2)">
-                <graphics pos="(5.62,22.35)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
-                <textLabel pos="(-48.42,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">WRITE_PROTECT_DOSV_n</textLabel>
+                <graphics pos="(5.62,23.70)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
+                <textLabel pos="(3.55,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">LEFT</textLabel>
             </item>
         </IOPad>
         <IOPad id="4" useCaseMode="1">
             <item id="4" caption="PIN 16 (IO3)">
-                <graphics pos="(5.62,125.26)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
-                <textLabel pos="(-21.70,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">INDEX_DOSV_n</textLabel>
+                <graphics pos="(4.27,125.26)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
+                <textLabel pos="(0.27,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">RIGHT</textLabel>
             </item>
         </IOPad>
         <IOPad id="5" useCaseMode="1">
             <item id="5" caption="PIN 15 (IO4)">
-                <graphics pos="(5.62,228.99)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
-                <textLabel pos="(-30.22,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">READ_DATA_DOSV</textLabel>
+                <graphics pos="(5.62,230.34)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
+                <textLabel pos="(-4.33,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">CENTER</textLabel>
             </item>
         </IOPad>
-        <IOPad id="6" useCaseMode="2">
+        <IOPad id="6" useCaseMode="0">
             <item id="6" caption="PIN 14 (IO5)">
                 <graphics pos="(5.62,353.92)" angle="180" flipping="2" hidden="0" tOrigin="(20.00,10.00)"/>
-                <textLabel pos="(78.06,47.00)" angle="-180.00" textColor="#ffff00ff" backgroundColor="#14141464">WRITE_GATE_DOSV_n</textLabel>
             </item>
         </IOPad>
         <IOPad id="7" useCaseMode="1">
@@ -58,10 +57,9 @@
                 <textLabel pos="(5.61,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">SDA</textLabel>
             </item>
         </IOPad>
-        <IOPad id="9" useCaseMode="2">
+        <IOPad id="9" useCaseMode="0">
             <item id="9" caption="PIN 11 (IO6)">
                 <graphics pos="(5.62,468.91)" angle="180" flipping="2" hidden="0" tOrigin="(20.00,10.00)"/>
-                <textLabel pos="(72.61,47.00)" angle="-180.00" textColor="#ffff00ff" backgroundColor="#14141464">WRITE_DATA_DOSV</textLabel>
             </item>
         </IOPad>
         <item id="10" caption="GND (PIN 10)">
@@ -69,12 +67,12 @@
         </item>
         <IOPad id="11" useCaseMode="0">
             <item id="11" caption="PIN 9 (IO7)">
-                <graphics pos="(-511.84,745.11)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
+                <graphics pos="(-511.84,746.46)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
             </item>
         </IOPad>
         <IOPad id="12" useCaseMode="0">
             <item id="12" caption="PIN 8 (IO8)">
-                <graphics pos="(-511.84,630.81)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
+                <graphics pos="(-511.84,632.16)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
             </item>
         </IOPad>
         <VDDItem id="13">
@@ -82,40 +80,36 @@
                 <graphics pos="(-499.31,-336.54)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
             </item>
         </VDDItem>
-        <IOPad id="14" useCaseMode="1">
+        <IOPad id="14" useCaseMode="0">
             <item id="14" caption="PIN 6 (IO9)">
                 <graphics pos="(-505.14,472.91)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
-                <textLabel pos="(-16.00,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">WRITE_DATA</textLabel>
             </item>
         </IOPad>
-        <IOPad id="15" useCaseMode="1">
+        <IOPad id="15" useCaseMode="0">
             <item id="15" caption="PIN 5 (IO10)">
                 <graphics pos="(-505.14,362.61)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
-                <textLabel pos="(-21.46,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">WRITE_GATE_n</textLabel>
             </item>
         </IOPad>
-        <IOPad id="16" useCaseMode="4">
+        <IOPad id="16" useCaseMode="0">
             <item id="16" caption="PIN 4 (IO11)">
                 <graphics pos="(-505.14,238.56)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
-                <textLabel pos="(-13.62,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">READ_DATA</textLabel>
             </item>
         </IOPad>
-        <IOPad id="17" useCaseMode="4">
+        <IOPad id="17" useCaseMode="0">
             <item id="17" caption="PIN 3 (IO12)">
                 <graphics pos="(-505.14,135.64)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
-                <textLabel pos="(-5.10,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">INDEX_n</textLabel>
             </item>
         </IOPad>
-        <IOPad id="18" useCaseMode="4">
+        <IOPad id="18" useCaseMode="1">
             <item id="18" caption="PIN 2 (IO13)">
                 <graphics pos="(-503.22,32.01)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
-                <textLabel pos="(-32.78,-26.04)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">WRITE_PROTECT_n</textLabel>
+                <textLabel pos="(-5.96,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">EJECT_B</textLabel>
             </item>
         </IOPad>
-        <IOPad id="19" useCaseMode="4">
+        <IOPad id="19" useCaseMode="1">
             <item id="19" caption="PIN 1 (IO14)">
                 <graphics pos="(-503.22,-73.80)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
-                <textLabel pos="(-15.42,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">TRACK_00_n</textLabel>
+                <textLabel pos="(-6.13,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">EJECT_A</textLabel>
             </item>
         </IOPad>
         <item id="20" caption="A CMP0H">
@@ -165,12 +159,12 @@
         </item>
         <LUT id="35" regularShape="0" mode="0">
             <item id="35" caption="2-bit LUT0/DFF/LATCH0">
-                <graphics pos="(-132.95,352.07)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
+                <graphics pos="(-132.95,353.42)" angle="90" flipping="0" hidden="1" tOrigin="(20.00,15.00)"/>
             </item>
         </LUT>
         <LUT id="36" regularShape="0" mode="0">
             <item id="36" caption="2-bit LUT1/DFF/LATCH1">
-                <graphics pos="(-134.61,462.20)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
+                <graphics pos="(-134.61,462.20)" angle="90" flipping="0" hidden="1" tOrigin="(20.00,15.00)"/>
             </item>
         </LUT>
         <LUT id="37" regularShape="0" mode="0">
@@ -357,9 +351,6 @@
         </wire>
         <wire output="148" input="112" autoRouting="1" pen="#ff8000ff;1.00;1;32;128" lineType="2" protected="1" CWLid="1" wireText="NET1" wireState="0">
             <points>(-134.00,951.00); (-109.00,951.00); (-109.00,929.00); (-97.00,929.00)</points>
-        </wire>
-        <wire output="0" input="509" autoRouting="1" pen="#ff8000ff;1.00;1;32;128" lineType="2" protected="1" CWLid="-1" wireText="VDD" wireState="1">
-            <points/>
         </wire>
     </chip>
     <emulatorConfiguration version="4" oldestCompatibleVersion="4">

@@ -3,12 +3,16 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "oled/ssd1306_txt.h"
+#include "pcfdd/pcfdd_control.h"
+#include "ui/ui_control.h"
 
 volatile uint32_t exti_int_counter = 0;
 
-volatile bool double_option_A = false;
-volatile bool double_option_B = false;
+const bool double_option_A_always = true;   // OPTION_SELECT_Aが両方アサートされるようにする
+const bool double_option_B_always = false;  // OPTION_SELECT_Bが両方アサートされるようにする
+
+volatile bool double_option_A = double_option_A_always;
+volatile bool double_option_B = double_option_B_always;
 
 // Number of ticks elapsed per millisecond (48,000 when using 48MHz Clock)
 #define SYSTICK_ONE_MILLISECOND ((uint32_t)FUNCONF_SYSTEM_CORE_CLOCK / 1000)
@@ -103,7 +107,8 @@ void EXTI7_0_IRQHandler(void) {
         EXTI->INTFR = EXTI_INTF_INTF0;  // フラグをクリア
         if (porta & (1 << 0)) {
             // DRIVE_SELECT_AがHighになった
-            GPIOB->BCR = (1 << 2);  // DRIVE_SELECT_DOSV_A inactive (Low)
+            GPIOB->BCR = (1 << 2);                // DRIVE_SELECT_DOSV_A inactive (Low)
+            pcfdd_set_current_ds(PCFDD_DS_NONE);  // 現在のドライブ選択をNoneにセット
         } else {
             // DRIVE_SELECT_AがLowになった
             if (double_option_A) {
@@ -111,7 +116,8 @@ void EXTI7_0_IRQHandler(void) {
             } else {
                 GPIOB->BSHR = (1 << 0);  // MODE_SELECT_DOSV = 360RPM mode
             }
-            GPIOB->BSHR = (1 << 2);  // DRIVE_SELECT_DOSV_A active (High)
+            GPIOB->BSHR = (1 << 2);           // DRIVE_SELECT_DOSV_A active (High)
+            pcfdd_set_current_ds(PCFDD_DS0);  // 現在のドライブ選択をAにセット
         }
     }
     if (intfr & EXTI_INTF_INTF1) {
@@ -119,7 +125,8 @@ void EXTI7_0_IRQHandler(void) {
         EXTI->INTFR = EXTI_INTF_INTF1;  // フラグをクリア
         if (porta & (1 << 1)) {
             // DRIVE_SELECT_BがHighになった
-            GPIOB->BCR = (1 << 3);  // DRIVE_SELECT_DOSV_B inactive (Low)
+            GPIOB->BCR = (1 << 3);                // DRIVE_SELECT_DOSV_B inactive (Low)
+            pcfdd_set_current_ds(PCFDD_DS_NONE);  // 現在のドライブ選択をNoneにセット
         } else {
             // DRIVE_SELECT_BがLowになった
             if (double_option_B) {
@@ -127,7 +134,8 @@ void EXTI7_0_IRQHandler(void) {
             } else {
                 GPIOB->BSHR = (1 << 0);  // MODE_SELECT_DOSV = 360RPM mode
             }
-            GPIOB->BSHR = (1 << 3);  // DRIVE_SELECT_DOSV_B active (High)
+            GPIOB->BSHR = (1 << 3);           // DRIVE_SELECT_DOSV_B active (High)
+            pcfdd_set_current_ds(PCFDD_DS1);  // 現在のドライブ選択をBにセット
         }
     }
     if (intfr & EXTI_INTF_INTF2) {
@@ -212,7 +220,7 @@ void SysTick_Handler(void) {
     // If more than this number of ticks elapse before the trigger is reset,
     // you may miss your next interrupt trigger
     // (Make sure the IQR is lightweight and CMP value is reasonable)
-    SysTick->CMP += 1000 * SYSTICK_ONE_MICROSECOND;
+    SysTick->CMP = SysTick->CNT + 100 * SYSTICK_ONE_MICROSECOND;
 
     // Clear the trigger state for the next IRQ
     SysTick->SR = 0x00000000;
@@ -242,18 +250,21 @@ void SysTick_Handler(void) {
     //
     // OPTION_SELECT 同時アサートのローパスフィルタ
     //
-    const uint32_t min_duration = SYSTICK_ONE_MICROSECOND * 300;  // 300usec
-
+    const uint32_t min_duration_assert = SYSTICK_ONE_MICROSECOND * 300;      // usec
+    const uint32_t min_duration_deassert = SYSTICK_ONE_MICROSECOND * 30000;  // 30msec
+    uint32_t motor_change_tickA = 0;
+    uint32_t motor_change_tickB = 0;
     if (!double_option_A) {
         if (opt_a && opt_a_pair) {
             // OPTION SELECT Aとペアの両方がアサートされたので、計測
             if (double_option_A_time == 0) {
                 // 最初のアサート
                 double_option_A_time = SysTick->CNTL;
-            } else if ((SysTick->CNTL - double_option_A_time) > min_duration) {
+            } else if ((SysTick->CNTL - double_option_A_time) > min_duration_assert) {
                 // 一定期間継続している
                 double_option_A = true;
                 double_option_A_time = 0;
+                motor_change_tickA = SysTick->CNTL;
             } else {
                 // まだ一定期間に達していない
             }
@@ -266,10 +277,11 @@ void SysTick_Handler(void) {
             if (double_option_A_time == 0) {
                 // 最初のディアサート
                 double_option_A_time = SysTick->CNTL;
-            } else if ((SysTick->CNTL - double_option_A_time) > min_duration) {
+            } else if ((SysTick->CNTL - double_option_A_time) > min_duration_deassert) {
                 // 一定期間継続している
-                double_option_A = false;
+                double_option_A = double_option_A_always || false;
                 double_option_A_time = 0;
+                motor_change_tickA = SysTick->CNTL;
             } else {
                 // まだ一定期間に達していない
             }
@@ -284,10 +296,11 @@ void SysTick_Handler(void) {
             if (double_option_B_time == 0) {
                 // 最初のアサート
                 double_option_B_time = SysTick->CNTL;
-            } else if ((SysTick->CNTL - double_option_B_time) > min_duration) {
+            } else if ((SysTick->CNTL - double_option_B_time) > min_duration_assert) {
                 // 一定期間継続している
                 double_option_B = true;
                 double_option_B_time = 0;
+                motor_change_tickB = SysTick->CNTL;
             } else {
                 // まだ一定期間に達していない
             }
@@ -300,10 +313,11 @@ void SysTick_Handler(void) {
             if (double_option_B_time == 0) {
                 // 最初のディアサート
                 double_option_B_time = SysTick->CNTL;
-            } else if ((SysTick->CNTL - double_option_B_time) > min_duration) {
+            } else if ((SysTick->CNTL - double_option_B_time) > min_duration_deassert) {
                 // 一定期間継続している
-                double_option_B = false;
+                double_option_B = double_option_B_always || false;
                 double_option_B_time = 0;
+                motor_change_tickB = SysTick->CNTL;
             } else {
                 // まだ一定期間に達していない
             }
@@ -339,12 +353,38 @@ void SysTick_Handler(void) {
     // このREADY信号の値を返却します
     if (!(GPIOA->INDR & GPIO_Pin_12)) {
         // MOTOR ON信号がアクティブ
+#if 0
+        if ((motor_change_tickA != 0) &&  //
+            (SysTick->CNTL - motor_change_tickA < 3 * SYSTICK_ONE_MILLISECOND)) {
+            // OPTION_SELECT_Aの変化によりMODE_SELECT_DOSVを変更した直後
+            // READY信号を非アクティブにしておく
+            GPIOB->BSHR = GPIO_Pin_12;  // READY_MCU_A_n (High=準備完了でない)
+        } else {
+            GPIOB->BCR = GPIO_Pin_12;  // READY_MCU_A_n (Low=準備完了)
+            motor_change_tickA = 0;
+        }
+        if ((motor_change_tickB != 0) &&  //
+            (SysTick->CNTL - motor_change_tickB < 3 * SYSTICK_ONE_MILLISECOND)) {
+            // OPTION_SELECT_Bの変化によりMODE_SELECT_DOSVを変更した直後
+            // READY信号を非アクティブにしておく
+            GPIOB->BSHR = GPIO_Pin_13;  // READY_MCU_B_n (High=準備完了でない)
+        } else {
+            GPIOB->BCR = GPIO_Pin_13;  // READY_MCU_B_n (Low=準備完了)
+            motor_change_tickB = 0;
+        }
+#elif 0
+        // 戦略2
+        // 各ドライブのMODE_SELECTによる回転数の設定状況を考慮し、
+#else
         GPIOB->BCR = GPIO_Pin_12;  // READY_MCU_A_n (Low=準備完了)
         GPIOB->BCR = GPIO_Pin_13;  // READY_MCU_B_n (Low=準備完了)
+#endif
     } else {
         // MOTOR ON信号が非アクティブ
         GPIOB->BSHR = GPIO_Pin_12;  // READY_MCU_A_n (High=準備完了でない)
         GPIOB->BSHR = GPIO_Pin_13;  // READY_MCU_B_n (High=準備完了でない)
+        motor_change_tickA = 0;
+        motor_change_tickB = 0;
     }
 }
 
@@ -357,16 +397,16 @@ void x68fdd_poll(uint32_t systick_ms) {
     last_tick = systick_ms;
 
     // OLEDに割り込み回数を表示する
-    // OLED_cursor(0, 6);
-    // OLED_printf("EXTI:%d", (int)exti_int_counter);
+    // ui_cursor(UI_PAGE_MAIN, 0, 6);
+    // ui_printf(UI_PAGE_MAIN, "EXTI:%d", (int)exti_int_counter);
 
     // OPTION_SELECT_A/Bの状態をOLEDに表示する
-    OLED_cursor(0, 7);
+    ui_cursor(UI_PAGE_MAIN, 0, 7);
     uint8_t opt_a = (GPIOA->INDR & GPIO_Pin_2) ? 1 : 0;
     uint8_t opt_b = (GPIOA->INDR & GPIO_Pin_3) ? 1 : 0;
     uint8_t opt_a_pair = opt_b;  // OPTION_SELECT_A のペアは OPTION_SELECT_B
     uint8_t opt_b_pair = (GPIOB->INDR & GPIO_Pin_11) ? 1 : 0;
     uint8_t amode = double_option_A ? 'Q' : 'D';
     uint8_t bmode = double_option_B ? 'Q' : 'D';
-    OLED_printf("OPT A:%d%d%c B:%d%d%c %d", opt_a, opt_a_pair, amode, opt_b, opt_b_pair, bmode, systick_irq_counter);
+    ui_printf(UI_PAGE_MAIN, "OP A%d%d%c B%d%d%c %d", opt_a, opt_a_pair, amode, opt_b, opt_b_pair, bmode, systick_irq_counter);
 }

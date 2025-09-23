@@ -10,7 +10,7 @@
 #include "greenpak_control.h"
 #include "greenpak_program.h"
 #include "i2c/i2c_ch32x035.h"
-#include "oled/ssd1306_txt.h"
+#include "ui/ui_control.h"
 
 #define GP_PAGE 16   // 1回の書込みチャンク（必要なら調整）
 #define CMP_CHUNK 1  // 比較時の読出しチャンク
@@ -63,9 +63,9 @@ static int gp_compare_image(uint8_t addr7, uint16_t base, const uint8_t *img, ui
         if (n > CMP_CHUNK) n = CMP_CHUNK;
         gp_read_seq(nvm_addr7, base + done, buf, n);
         if (memcmp(buf, &img[done], n) != 0) {
-            OLED_print("mismatch at ");
-            OLED_printD(base + done);
-            OLED_write('\n');
+            ui_print(UI_PAGE_MAIN, "mismatch at ");
+            ui_printD(UI_PAGE_MAIN, base + done);
+            ui_write(UI_PAGE_MAIN, '\n');
             return 0;  // 不一致
         }
         done += n;
@@ -76,24 +76,24 @@ static int gp_compare_image(uint8_t addr7, uint16_t base, const uint8_t *img, ui
 // ---------------- 自動処理本体 ----------------
 
 static void show_not_found_and_exit(void) {
-    OLED_print("GreenPAK not found");
-    OLED_write('\n');  // :contentReference[oaicite:14]{index=14} :contentReference[oaicite:15]{index=15}
+    ui_print(UI_PAGE_MAIN, "GreenPAK not found");
+    ui_write(UI_PAGE_MAIN, '\n');  // :contentReference[oaicite:14]{index=14} :contentReference[oaicite:15]{index=15}
     // 必要なら、ここで他の処理へ遷移/return
 }
 
 void greenpak_force_program_verify(uint8_t addr, uint8_t unit) {
-    OLED_print("prog GP");
-    OLED_printD(unit + 1);
-    OLED_print("  @0x");
-    OLED_printH(addr);
-    OLED_write('\n');
+    ui_print(UI_PAGE_MAIN, "prog GP");
+    ui_printD(UI_PAGE_MAIN, unit + 1);
+    ui_print(UI_PAGE_MAIN, "  @0x");
+    ui_printH(UI_PAGE_MAIN, addr);
+    ui_write(UI_PAGE_MAIN, '\n');
     gp_program_with_erase(addr, gp_img[unit].base, gp_img[unit].image, gp_img[unit].size);
-    OLED_print("done");
+    ui_print(UI_PAGE_MAIN, "done");
     return;
 }
 
 void greenpak_autoprogram_verify(void) {
-    OLED_clear();
+    ui_clear(UI_PAGE_MAIN);
 
     // まず既定の最終配置（0x12, 0x1A, 0x22, 0x2A）と 0x0A（作業用）をスキャン
     int present[4] = {
@@ -111,27 +111,28 @@ void greenpak_autoprogram_verify(void) {
         return;
     }
 
-    OLED_cursor(0, 0);
-    OLED_print("GP found ");
+    ui_cursor(UI_PAGE_MAIN, 0, 0);
+    ui_print(UI_PAGE_MAIN, "GP found ");
     if (present[0]) {
-        OLED_print("1 ");
+        ui_print(UI_PAGE_MAIN, "1 ");
     }
     if (present[1]) {
-        OLED_print("2 ");
+        ui_print(UI_PAGE_MAIN, "2 ");
     }
     if (present[2]) {
-        OLED_print("3 ");
+        ui_print(UI_PAGE_MAIN, "3 ");
     }
     if (present[3]) {
-        OLED_print("4 ");
+        ui_print(UI_PAGE_MAIN, "4 ");
     }
     if (def_present) {
-        OLED_print("def ");
+        ui_print(UI_PAGE_MAIN, "def ");
     }
     if (clr_present) {
-        OLED_print("clr ");
+        ui_print(UI_PAGE_MAIN, "clr ");
     }
-    OLED_write('\n');
+    ui_write(UI_PAGE_MAIN, '\n');
+    Delay_Ms(3000);
 
     // すべて見えている場合でも「差分があれば上書き」する
     for (;;) {
@@ -143,16 +144,16 @@ void greenpak_autoprogram_verify(void) {
             if (present[i] && gp_img[i].size > 0) {
                 int same = gp_compare_image(gp_target_addr[i], gp_img[i].base, gp_img[i].image, gp_img[i].size - 0x10);
                 if (same) {
-                    OLED_print("firm is ok:");
-                    OLED_printD(i + 1);
-                    OLED_write('\n');
+                    ui_print(UI_PAGE_MAIN, "firm is ok:");
+                    ui_printD(UI_PAGE_MAIN, i + 1);
+                    ui_write(UI_PAGE_MAIN, '\n');
                 } else {
-                    OLED_print("reprogramming:");
-                    OLED_printD(i + 1);
-                    OLED_write('\n');
+                    ui_print(UI_PAGE_MAIN, "reprogramming:");
+                    ui_printD(UI_PAGE_MAIN, i + 1);
+                    ui_write(UI_PAGE_MAIN, '\n');
                     gp_program_with_erase(gp_target_addr[i], gp_img[i].base, gp_img[i].image, gp_img[i].size);
-                    OLED_print("done");
-                    OLED_write('\n');
+                    ui_print(UI_PAGE_MAIN, "done");
+                    ui_write(UI_PAGE_MAIN, '\n');
                 }
             }
         }
@@ -184,17 +185,17 @@ void greenpak_autoprogram_verify(void) {
         }
 
         if (gp_img[target].size > 0) {
-            OLED_print("programming GP");
-            OLED_printD(target + 1);
-            OLED_write('\n');
+            ui_print(UI_PAGE_MAIN, "programming GP");
+            ui_printD(UI_PAGE_MAIN, target + 1);
+            ui_write(UI_PAGE_MAIN, '\n');
             // 0x0A 側へ書き込む（書込み完了でICが自動的に再配置される前提）
             gp_program_with_erase(gp_target_addr_default, gp_img[target].base, gp_img[target].image, gp_img[target].size);
-            OLED_print("done");
-            OLED_write('\n');
+            ui_print(UI_PAGE_MAIN, "done");
+            ui_write(UI_PAGE_MAIN, '\n');
         } else {
-            OLED_print("data empty: Skip GP");
-            OLED_printD(target + 1);
-            OLED_write('\n');
+            ui_print(UI_PAGE_MAIN, "data empty: Skip GP");
+            ui_printD(UI_PAGE_MAIN, target + 1);
+            ui_write(UI_PAGE_MAIN, '\n');
         }
 
         // 再スキャン（当該ICが最終番地に現れるはず）

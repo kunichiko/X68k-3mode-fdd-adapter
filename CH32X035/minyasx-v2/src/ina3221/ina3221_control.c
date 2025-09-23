@@ -1,7 +1,7 @@
 #include "ina3221_control.h"
 
 #include "i2c/i2c_ch32x035.h"
-#include "oled/ssd1306_txt.h"
+#include "ui/ui_control.h"
 
 void ina3221_init(void) {
     // INA3221の初期化コードをここに追加
@@ -77,11 +77,11 @@ void ina3221_poll(uint64_t systick_ms) {
     uint16_t ch1_current, ch1_voltage, ch2_current, ch2_voltage, ch3_current, ch3_voltage;
     ina3221_read_all_channels(&ch1_current, &ch1_voltage, &ch2_current, &ch2_voltage, &ch3_current, &ch3_voltage);
 
-    OLED_cursor(0, 0);
-    OLED_printf("VBUS:%2d.%02dV %4dmA", ch1_voltage / 1000, (ch1_voltage % 1000) / 10, ch1_current);
-    OLED_write('\n');
-    OLED_printf("+12V:%2d.%02dV %4dmA", ch2_voltage / 1000, (ch2_voltage % 1000) / 10, ch2_current);
-    OLED_write('\n');
-    OLED_printf("+5V :%2d.%02dV %4dmA", ch3_voltage / 1000, (ch3_voltage % 1000) / 10, ch3_current);
-    OLED_write('\n');
+    ui_cursor(UI_PAGE_MAIN, 0, 0);
+    ui_printf(UI_PAGE_MAIN, "VBUS:%2d.%02dV %4dmA", ch1_voltage / 1000, (ch1_voltage % 1000) / 10, ch1_current);
+    ui_write(UI_PAGE_MAIN, '\n');
+    ui_printf(UI_PAGE_MAIN, "+12V:%2d.%02dV %4dmA", ch2_voltage / 1000, (ch2_voltage % 1000) / 10, ch2_current);
+    ui_write(UI_PAGE_MAIN, '\n');
+    ui_printf(UI_PAGE_MAIN, "+5V :%2d.%02dV %4dmA", ch3_voltage / 1000, (ch3_voltage % 1000) / 10, ch3_current);
+    ui_write(UI_PAGE_MAIN, '\n');
 }
