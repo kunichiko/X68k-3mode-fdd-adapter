@@ -63,13 +63,13 @@ static void make_line(char *dst, uint8_t addr, uint8_t off, const uint8_t *p8) {
 static void oled_dump_page(const uint8_t *buf, uint8_t addr, uint8_t base_off /*0 or 0x40*/) {
     uint8_t nvm_addr7 = (addr & 0xfc) | 0x02;  // NVMアドレスに変換 (addrは0x08,0x10,0x18,0x20,0x28のいずれか)
 
-    ui_cursor(UI_PAGE_MAIN, 0, 0);  // (x=0,y=0)から書き始める  :contentReference[oaicite:4]{index=4}
-    char line[22];                  // 21文字 + 終端
+    ui_cursor(UI_PAGE_DEBUG, 0, 0);  // (x=0,y=0)から書き始める  :contentReference[oaicite:4]{index=4}
+    char line[22];                   // 21文字 + 終端
     for (int row = 0; row < 8; row++) {
         uint8_t off = base_off + (row * 8);
         make_line(line, nvm_addr7, off, &buf[off]);
-        ui_print(UI_PAGE_MAIN, line);  // 1行出力  :contentReference[oaicite:5]{index=5}
-        ui_write(UI_PAGE_MAIN, '\n');  // 改行       :contentReference[oaicite:6]{index=6}
+        ui_print(UI_PAGE_DEBUG, line);  // 1行出力  :contentReference[oaicite:5]{index=5}
+        ui_write(UI_PAGE_DEBUG, '\n');  // 改行       :contentReference[oaicite:6]{index=6}
     }
 }
 
@@ -77,7 +77,7 @@ void greenpak_dump_oled_with_addr(uint8_t addr);
 
 // 先頭256バイトを読み出してOLEDに自動ページング表示
 void greenpak_dump_oled(void) {
-    ui_clear(UI_PAGE_MAIN);  // 画面クリア  :contentReference[oaicite:9]{index=9}
+    ui_clear(UI_PAGE_DEBUG);  // 画面クリア  :contentReference[oaicite:9]{index=9}
 
     if (I2C_probe(gp_target_addr_cleared)) {
         greenpak_dump_oled_with_addr(gp_target_addr_cleared);  // 作業用
@@ -106,19 +106,19 @@ void greenpak_dump_oled_with_addr(uint8_t addr) {
     I2C_readBuffer(buf, 256);           // 読み終わると I2C_stop() が呼ばれる  :contentReference[oaicite:13]{index=13}
 
     // --- 4ページを交互に表示（64Bずつ） ---
-    ui_clear(UI_PAGE_MAIN);
+    ui_clear(UI_PAGE_DEBUG);
     oled_dump_page(buf, nvm_addr7, 0x00);  // 0x00..0x3F
     Delay_Ms(1000);
 
-    ui_clear(UI_PAGE_MAIN);
+    ui_clear(UI_PAGE_DEBUG);
     oled_dump_page(buf, nvm_addr7, 0x40);  // 0x40..0x7F
     Delay_Ms(1000);
 
-    ui_clear(UI_PAGE_MAIN);
+    ui_clear(UI_PAGE_DEBUG);
     oled_dump_page(buf, nvm_addr7, 0x80);  // 0x80..0xBF
     Delay_Ms(1000);
 
-    ui_clear(UI_PAGE_MAIN);
+    ui_clear(UI_PAGE_DEBUG);
     oled_dump_page(buf, nvm_addr7, 0xC0);  // 0xC0..0xFF
     Delay_Ms(1000);
 }

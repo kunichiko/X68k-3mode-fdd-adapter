@@ -397,16 +397,16 @@ void x68fdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     last_tick = systick_ms;
 
     // OLEDに割り込み回数を表示する
-    // ui_cursor(UI_PAGE_MAIN, 0, 6);
-    // ui_printf(UI_PAGE_MAIN, "EXTI:%d", (int)exti_int_counter);
+    // ui_cursor(UI_PAGE_DEBUG, 0, 6);
+    // ui_printf(UI_PAGE_DEBUG, "EXTI:%d", (int)exti_int_counter);
 
     // OPTION_SELECT_A/Bの状態をOLEDに表示する
-    ui_cursor(UI_PAGE_MAIN, 0, 7);
+    ui_cursor(UI_PAGE_DEBUG, 0, 7);
     uint8_t opt_a = (GPIOA->INDR & GPIO_Pin_2) ? 1 : 0;
     uint8_t opt_b = (GPIOA->INDR & GPIO_Pin_3) ? 1 : 0;
     uint8_t opt_a_pair = opt_b;  // OPTION_SELECT_A のペアは OPTION_SELECT_B
     uint8_t opt_b_pair = (GPIOB->INDR & GPIO_Pin_11) ? 1 : 0;
     uint8_t amode = double_option_A ? 'Q' : 'D';
     uint8_t bmode = double_option_B ? 'Q' : 'D';
-    ui_printf(UI_PAGE_MAIN, "OP A%d%d%c B%d%d%c %d", opt_a, opt_a_pair, amode, opt_b, opt_b_pair, bmode, systick_irq_counter);
+    ui_printf(UI_PAGE_DEBUG, "OP A%d%d%c B%d%d%c %d", opt_a, opt_a_pair, amode, opt_b, opt_b_pair, bmode, systick_irq_counter);
 }

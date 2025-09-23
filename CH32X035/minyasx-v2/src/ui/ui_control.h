@@ -11,11 +11,14 @@
 #define UI_MAX_WINDOWS 10
 
 typedef enum {
-    UI_PAGE_MAIN = 0,   // Main page
-    UI_PAGE_MENU = 1,   // Menu page
-    UI_PAGE_ABOUT = 2,  // About page
-    UI_PAGE_PDSTATUS = 3,
-    UI_PAGE_CUSTOM = 4
+    UI_PAGE_MAIN = 0,            // Main page
+    UI_PAGE_MENU = 1,            // Menu page
+    UI_PAGE_ABOUT = 2,           // About page
+    UI_PAGE_PDSTATUS = 3,        // PD status page
+    UI_PAGE_SETTING_COMMON = 4,  // Common settings page
+    UI_PAGE_SETTING_FDDA = 5,    // FD Drive A settings page
+    UI_PAGE_SETTING_FDDB = 6,    // FD Drive B settings page
+    UI_PAGE_DEBUG = 7,           // Debug page
 } UI_PAGE_t;
 
 typedef enum {
@@ -83,5 +86,10 @@ void ui_page_about_key_callback(ui_key_mask_t keys);
 void ui_page_pdstatus_init(minyasx_context_t* ctx, ui_window_t* win);
 void ui_page_pdstatus_poll(minyasx_context_t* ctx, uint32_t systick_ms);
 void ui_page_pdstatus_key_callback(ui_key_mask_t keys);
+
+// debug page
+void ui_page_debug_init(minyasx_context_t* ctx, ui_window_t* win);
+void ui_page_debug_poll(minyasx_context_t* ctx, uint32_t systick_ms);
+void ui_page_debug_key_callback(ui_key_mask_t keys);
 
 #endif  // UI_CONTROL_H

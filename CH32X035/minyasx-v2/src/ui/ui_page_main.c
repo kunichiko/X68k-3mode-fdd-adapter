@@ -5,23 +5,32 @@ void ui_page_main_init(minyasx_context_t* ctx, ui_window_t* win) {
     win->key_callback = ui_page_main_key_callback;
 }
 
+void ui_page_main_first(minyasx_context_t* ctx) {
+    ui_clear(UI_PAGE_MAIN);
+    ui_cursor(UI_PAGE_MAIN, 10, 0);
+    ui_print(UI_PAGE_MAIN, "-Minyas X-");
+}
+
 void ui_page_main_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     static uint64_t last_tick = 0;
+    if (last_tick == 0) {
+        // 最初の1回目
+        ui_page_main_first(ctx);
+    }
+
     if (systick_ms - last_tick < 500) {
         return;
     }
     last_tick = systick_ms;
 
-    ui_cursor(UI_PAGE_MAIN, 11 * 6, 0);
-    ui_print(UI_PAGE_MAIN, "-Minyas X-");
     // 電源情報の表示
     for (int i = 0; i < 3; i++) {
-        ui_cursor(UI_PAGE_MAIN, 11 * 6, 1 + i * 2);
+        ui_cursor(UI_PAGE_MAIN, 10, 1 + i * 2);
         ui_printf(UI_PAGE_MAIN, "%4s:%2d.%02dV",    //
                   ctx->power[i].label,              //
                   ctx->power[i].voltage_mv / 1000,  //
                   (ctx->power[i].voltage_mv % 1000) / 10);
-        ui_cursor(UI_PAGE_MAIN, 11 * 6, 2 + i * 2);
+        ui_cursor(UI_PAGE_MAIN, 10, 2 + i * 2);
         ui_printf(UI_PAGE_MAIN, "     %4dmA", ctx->power[i].current_ma);
     }
     // ドライブ情報の表示
@@ -41,5 +50,9 @@ void ui_page_main_key_callback(ui_key_mask_t keys) {
     if (keys & UI_KEY_ENTER) {
         // メニューページに遷移
         ui_change_page(UI_PAGE_MENU);
+    }
+    if (keys & UI_KEY_LEFT) {
+        // デバッグページに遷移
+        ui_change_page(UI_PAGE_DEBUG);
     }
 }

@@ -129,6 +129,15 @@ void ui_write_3(char c) {
 void ui_write_4(char c) {
     ui_write(4, c);
 }
+void ui_write_5(char c) {
+    ui_write(5, c);
+}
+void ui_write_6(char c) {
+    ui_write(6, c);
+}
+void ui_write_7(char c) {
+    ui_write(7, c);
+}
 void ui_write_null(char c) {
     // 何もしない
     (void)c;
@@ -145,8 +154,14 @@ ui_write_t ui_get_writer(UI_PAGE_t page) {
         return ui_write_2;
     case UI_PAGE_PDSTATUS:
         return ui_write_3;
-    case UI_PAGE_CUSTOM:
+    case UI_PAGE_SETTING_COMMON:
         return ui_write_4;
+    case UI_PAGE_SETTING_FDDA:
+        return ui_write_5;
+    case UI_PAGE_SETTING_FDDB:
+        return ui_write_6;
+    case UI_PAGE_DEBUG:
+        return ui_write_7;
     default:
         return ui_write_null;
     }
@@ -177,9 +192,17 @@ void ui_init(minyasx_context_t *ctx) {
     ui_page_menu_init(ctx, &ui_windows[UI_PAGE_MENU]);
     ui_page_about_init(ctx, &ui_windows[UI_PAGE_ABOUT]);
     ui_page_pdstatus_init(ctx, &ui_windows[UI_PAGE_PDSTATUS]);
+    ui_page_debug_init(ctx, &ui_windows[UI_PAGE_DEBUG]);
 }
 
 void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
+    // 各ページのポーリング処理
+    ui_page_main_poll(ctx, systick_ms);
+    ui_page_menu_poll(ctx, systick_ms);
+    ui_page_about_poll(ctx, systick_ms);
+    ui_page_pdstatus_poll(ctx, systick_ms);
+    ui_page_debug_poll(ctx, systick_ms);
+
     // ここでキー入力のポーリングを行い、必要に応じてコールバックを呼び出す
     // 例えば、キー状態を読み取る関数があると仮定
     ui_key_mask_t keys = UI_KEY_NONE;
@@ -215,9 +238,4 @@ void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
     if (win->key_callback) {
         win->key_callback(keys);
     }
-    // 各ページのポーリング処理
-    ui_page_main_poll(ctx, systick_ms);
-    ui_page_menu_poll(ctx, systick_ms);
-    ui_page_about_poll(ctx, systick_ms);
-    ui_page_pdstatus_poll(ctx, systick_ms);
 }

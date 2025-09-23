@@ -40,20 +40,20 @@
  */
 bool activate_pd_12v(minyasx_context_t* ctx) {
     if (!PD_connect()) {
-        ui_print(UI_PAGE_MAIN, "USBPD_Init error");
-        ui_write(UI_PAGE_MAIN, '\n');
+        ui_print(UI_PAGE_DEBUG, "USBPD_Init error");
+        ui_write(UI_PAGE_DEBUG, '\n');
         Delay_Ms(1000);
         return false;
     }
-    ui_print(UI_PAGE_MAIN, "USBPD_Init OK");
-    ui_write(UI_PAGE_MAIN, '\n');
+    ui_print(UI_PAGE_DEBUG, "USBPD_Init OK");
+    ui_write(UI_PAGE_DEBUG, '\n');
     ctx->usbpd.connected = true;
     ctx->usbpd.pdonum = PD_getPDONum();
 
     int pd_12v_pdo = -1;
     for (int i = 1; i <= PD_getPDONum(); i++) {
         if (i <= PD_getFixedNum()) {
-            ui_printf(UI_PAGE_MAIN, " (%d)%6dmV %5dmA ", i, PD_getPDOVoltage(i), PD_getPDOMaxCurrent(i));
+            ui_printf(UI_PAGE_DEBUG, " (%d)%6dmV %5dmA ", i, PD_getPDOVoltage(i), PD_getPDOMaxCurrent(i));
             if (PD_getPDOVoltage(i) == 12000 && PD_getPDOMaxCurrent(i) >= 1600) {
                 // 12V, 1.6A以上のPDOを発見
                 pd_12v_pdo = i;
@@ -64,27 +64,27 @@ bool activate_pd_12v(minyasx_context_t* ctx) {
                 ctx->usbpd.pod[i - 1].current_ma = PD_getPDOMaxCurrent(i);
             }
         } else {
-            ui_printf(UI_PAGE_MAIN, " [%d]%6dmV-%5dmV ", i, PD_getPDOMinVoltage(i), PD_getPDOMaxVoltage(i));
+            ui_printf(UI_PAGE_DEBUG, " [%d]%6dmV-%5dmV ", i, PD_getPDOMinVoltage(i), PD_getPDOMaxVoltage(i));
         }
     }
 
     if (pd_12v_pdo >= 0) {
-        ui_print(UI_PAGE_MAIN, " -> request 12V");
-        ui_write(UI_PAGE_MAIN, '\n');
+        ui_print(UI_PAGE_DEBUG, " -> request 12V");
+        ui_write(UI_PAGE_DEBUG, '\n');
         if (PD_setPDO(pd_12v_pdo, 12000)) {
-            ui_print(UI_PAGE_MAIN, " -> 12V OK");
-            ui_write(UI_PAGE_MAIN, '\n');
+            ui_print(UI_PAGE_DEBUG, " -> 12V OK");
+            ui_write(UI_PAGE_DEBUG, '\n');
             // +12Vに切り替わったことを確認できたら、+12VラインをEnableします。
             GPIOA->BSXR = (1 << (19 - 16));  // Enable (+12V_EN=High)
             return true;
         } else {
-            ui_print(UI_PAGE_MAIN, " -> 12V NG");
-            ui_write(UI_PAGE_MAIN, '\n');
+            ui_print(UI_PAGE_DEBUG, " -> 12V NG");
+            ui_write(UI_PAGE_DEBUG, '\n');
             pd_12v_pdo = -1;
         }
     } else {
-        ui_print(UI_PAGE_MAIN, " -> no 12V PDO");
-        ui_write(UI_PAGE_MAIN, '\n');
+        ui_print(UI_PAGE_DEBUG, " -> no 12V PDO");
+        ui_write(UI_PAGE_DEBUG, '\n');
     }
     return false;
 }
@@ -108,8 +108,8 @@ void power_control_init(minyasx_context_t* ctx) {
     if ((GPIOA->INDR & (1 << 17)) == 0) {
         // 外部+12V電源が接続されている
         GPIOA->BSXR = (1 << (20 - 16));  // Enable (+12V_EXT_EN=High)
-        ui_print(UI_PAGE_MAIN, "+12V_EXT_DET active");
-        ui_write(UI_PAGE_MAIN, '\n');
+        ui_print(UI_PAGE_DEBUG, "+12V_EXT_DET active");
+        ui_write(UI_PAGE_DEBUG, '\n');
     } else {
         // 外部+12V電源が接続されていない
         // ● 2.USB-PDのネゴシエーション
@@ -121,12 +121,12 @@ void power_control_init(minyasx_context_t* ctx) {
             uint16_t ch1_current, ch1_voltage, ch2_current, ch2_voltage, ch3_current, ch3_voltage;
             ina3221_read_all_channels(&ch1_current, &ch1_voltage, &ch2_current, &ch2_voltage, &ch3_current, &ch3_voltage);
             if (ch1_voltage >= 4750 && ch1_voltage <= 5500) {
-                ui_print(UI_PAGE_MAIN, "VBUS 5V OK");
-                ui_write(UI_PAGE_MAIN, '\n');
+                ui_print(UI_PAGE_DEBUG, "VBUS 5V OK");
+                ui_write(UI_PAGE_DEBUG, '\n');
                 GPIOA->BSXR = (1 << (18 - 16));  // Enable (+5V_EN=High)
             } else {
-                ui_printf(UI_PAGE_MAIN, "VBUS 5V NG %dmV", ch1_voltage);
-                ui_write(UI_PAGE_MAIN, '\n');
+                ui_printf(UI_PAGE_DEBUG, "VBUS 5V NG %dmV", ch1_voltage);
+                ui_write(UI_PAGE_DEBUG, '\n');
             }
         }
     }

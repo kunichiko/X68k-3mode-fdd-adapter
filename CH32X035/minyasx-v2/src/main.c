@@ -30,7 +30,6 @@
 
 int main() {
     SystemInit();
-    Delay_Ms(1000);  // Wait for power to stabilize
 
     RCC->CTLR |= RCC_HSION;  // HSI (48MHz) ON
 
@@ -261,6 +260,7 @@ int main() {
     ui_print(UI_PAGE_MAIN, "Minys-X V2");
 
     Delay_Ms(2000);
+    ui_change_page(UI_PAGE_DEBUG);
 
     // INA3221を最初に初期化して電圧電流を測定できるようにする
     ina3221_init();
@@ -312,7 +312,7 @@ int main() {
     greenpak_set_virtualinput(2 - 1, gp2_vin);
 
     // メインループ
-    ui_clear(UI_PAGE_MAIN);
+    ui_change_page(UI_PAGE_MAIN);
     while (1) {
         uint64_t systick = SysTick->CNT;
         uint32_t ms = systick / (F_CPU / 1000);
@@ -326,19 +326,19 @@ int main() {
         // GP2のVirtual Input レジスタの値を直接読む
         uint8_t gp1_vin2 = gp_reg_get(gp_target_addr[1 - 1], 0x7a);
         uint8_t gp2_vin2 = gp_reg_get(gp_target_addr[2 - 1], 0x7a);
-        ui_cursor(UI_PAGE_MAIN, 0, 6);
-        ui_printf(UI_PAGE_MAIN, "GP1 VIN=%02x\n", gp1_vin2);
-        ui_printf(UI_PAGE_MAIN, "GP2 VIN=%02x\n", gp2_vin2);
+        ui_cursor(UI_PAGE_DEBUG, 0, 6);
+        ui_printf(UI_PAGE_DEBUG, "GP1 VIN=%02x\n", gp1_vin2);
+        ui_printf(UI_PAGE_DEBUG, "GP2 VIN=%02x\n", gp2_vin2);
 #endif
 
         // MOTOR_ONの監視
-        ui_cursor(UI_PAGE_MAIN, 0, 6);
+        ui_cursor(UI_PAGE_DEBUG, 0, 6);
         if ((GPIOA->INDR & (1 << 12)) == 0) {
             // MOTOR_ON=Low (ON)
-            ui_print(UI_PAGE_MAIN, "MOTOR ON ");
+            ui_print(UI_PAGE_DEBUG, "MOTOR ON ");
         } else {
             // MOTOR_ON=High (OFF)
-            ui_print(UI_PAGE_MAIN, "MOTOR OFF");
+            ui_print(UI_PAGE_DEBUG, "MOTOR OFF");
         }
 
 #if 0
@@ -347,8 +347,8 @@ int main() {
         uint32_t porta = GPIOA->INDR;
         if ((porta & 0x03) != 0x03) {
             // どちらかがLowになった
-            ui_clear(UI_PAGE_MAIN, );
-            ui_printf(UI_PAGE_MAIN, "DS change detected: %02X\n", porta & 0x03);
+            ui_clear(UI_PAGE_DEBUG, );
+            ui_printf(UI_PAGE_DEBUG, "DS change detected: %02X\n", porta & 0x03);
             while ((porta & 0x03) != 0x03) {
                 // どちらかがLowになっている間ループ
                 uint8_t dsa = (porta >> 0) & 1;
@@ -358,13 +358,13 @@ int main() {
                 // GP2のVirtual Input レジスタの値を直接読む
                 uint8_t gp2_vin = gp_reg_get(gp_target_addr[2 - 1], 0x7a);
                 // OLEDに表示
-                ui_cursor(UI_PAGE_MAIN, 0, 1);
-                ui_printf(UI_PAGE_MAIN, "A:DS=%d OP=%d \n", dsa, opa);
-                ui_printf(UI_PAGE_MAIN, "B:DS=%d OP=%d \n", dsb, opb);
-                ui_printf(UI_PAGE_MAIN, "GP2 VIN=%02x\n", gp2_vin);
+                ui_cursor(UI_PAGE_DEBUG, 0, 1);
+                ui_printf(UI_PAGE_DEBUG, "A:DS=%d OP=%d \n", dsa, opa);
+                ui_printf(UI_PAGE_DEBUG, "B:DS=%d OP=%d \n", dsb, opb);
+                ui_printf(UI_PAGE_DEBUG, "GP2 VIN=%02x\n", gp2_vin);
                 porta = GPIOA->INDR;
             }
-            ui_clear(UI_PAGE_MAIN, );
+            ui_clear(UI_PAGE_DEBUG, );
         }
 #endif
     }

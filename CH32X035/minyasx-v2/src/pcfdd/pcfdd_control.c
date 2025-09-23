@@ -482,8 +482,8 @@ fdd_bps_mode_t pcfdd_bps_decide_and_reset(int drive) {
 
     uint32_t votes = c7 + c8 + c10 + c13 + c16;
     if (drive == 0) {
-        ui_cursor(UI_PAGE_MAIN, 0, 5 + drive);
-        ui_printf(UI_PAGE_MAIN, "%d:%d:%d:%d:%d[%d:%d]\n",  //
+        ui_cursor(UI_PAGE_DEBUG, 0, 5 + drive);
+        ui_printf(UI_PAGE_DEBUG, "%d:%d:%d:%d:%d[%d:%d]\n",  //
                   (int)c7 / 10, (int)c8 / 10, (int)c10 / 10, (int)c13 / 10, (int)c16 / 10, (int)S->cnt_other / 10, (int)votes / 10);
     }
     if (votes < VOTES_MIN) return BPS_UNKNOWN;
@@ -530,25 +530,31 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
         return;
     }
     last_tick = systick_ms;
-
-    ui_cursor(UI_PAGE_MAIN, 0, 3);
+#if 0
+    ui_cursor(UI_PAGE_DEBUG, 0, 3);
     for (int i = 0; i < 2; i++) {
         if (index_width[i] > 166 - 5 && index_width[i] < 166 + 5) {
-            ui_printf(UI_PAGE_MAIN, "REV:360  ");
+            ui_printf(UI_PAGE_DEBUG, "REV:360  ");
         } else if (index_width[i] > 200 - 5 && index_width[i] < 200 + 5) {
-            ui_printf(UI_PAGE_MAIN, "REV:300  ");
+            ui_printf(UI_PAGE_DEBUG, "REV:300  ");
         } else {
-            ui_printf(UI_PAGE_MAIN, "REV:---- ");
+            ui_printf(UI_PAGE_DEBUG, "REV:---- ");
         }
     }
+#endif
 
 #ifdef DEBUG
-    ui_printf(UI_PAGE_MAIN, "7:%d 8:%d 10:%d 13:%d 16:%d dt:%d\n",                                                    //
+    ui_printf(UI_PAGE_DEBUG, "7:%d 8:%d 10:%d 13:%d 16:%d dt:%d\n",                                                   //
               (int)cnt_7ish / 10, (int)cnt_8ish / 10, (int)cnt_10ish / 10, (int)cnt_13ish / 10, (int)cnt_16ish / 10,  //
               (int)last_dt);
 #endif
     fdd_bps_mode_t bps0 = pcfdd_bps_decide_and_reset(0); /* DS0のbpsを取得 */
     fdd_bps_mode_t bps1 = pcfdd_bps_decide_and_reset(1); /* DS1のbpsを取得 */
-    ui_cursor(UI_PAGE_MAIN, 0, 4);
-    ui_printf(UI_PAGE_MAIN, "BPS:%3dk BPS:%3dk", fdd_bps_mode_to_value(bps0) / 1000, fdd_bps_mode_to_value(bps1) / 1000);
+    ctx->drive[0].bps_current = bps0;
+    ctx->drive[1].bps_current = bps1;
+
+#if 0
+    ui_cursor(UI_PAGE_DEBUG, 0, 4);
+    ui_printf(UI_PAGE_DEBUG, "BPS:%3dk BPS:%3dk", fdd_bps_mode_to_value(bps0) / 1000, fdd_bps_mode_to_value(bps1) / 1000);
+#endif
 }

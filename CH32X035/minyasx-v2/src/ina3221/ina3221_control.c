@@ -76,12 +76,19 @@ void ina3221_poll(minyasx_context_t *ctx, uint64_t systick_ms) {
 
     uint16_t ch1_current, ch1_voltage, ch2_current, ch2_voltage, ch3_current, ch3_voltage;
     ina3221_read_all_channels(&ch1_current, &ch1_voltage, &ch2_current, &ch2_voltage, &ch3_current, &ch3_voltage);
-
-    ui_cursor(UI_PAGE_MAIN, 0, 0);
-    ui_printf(UI_PAGE_MAIN, "VBUS:%2d.%02dV %4dmA", ch1_voltage / 1000, (ch1_voltage % 1000) / 10, ch1_current);
-    ui_write(UI_PAGE_MAIN, '\n');
-    ui_printf(UI_PAGE_MAIN, "+12V:%2d.%02dV %4dmA", ch2_voltage / 1000, (ch2_voltage % 1000) / 10, ch2_current);
-    ui_write(UI_PAGE_MAIN, '\n');
-    ui_printf(UI_PAGE_MAIN, "+5V :%2d.%02dV %4dmA", ch3_voltage / 1000, (ch3_voltage % 1000) / 10, ch3_current);
-    ui_write(UI_PAGE_MAIN, '\n');
+    ctx->power[0].voltage_mv = ch1_voltage;
+    ctx->power[0].current_ma = ch1_current;
+    ctx->power[1].voltage_mv = ch2_voltage;
+    ctx->power[1].current_ma = ch2_current;
+    ctx->power[2].voltage_mv = ch3_voltage;
+    ctx->power[2].current_ma = ch3_current;
+#if 0
+    ui_cursor(UI_PAGE_DEBUG, 0, 0);
+    ui_printf(UI_PAGE_DEBUG, "VBUS:%2d.%02dV %4dmA", ch1_voltage / 1000, (ch1_voltage % 1000) / 10, ch1_current);
+    ui_write(UI_PAGE_DEBUG, '\n');
+    ui_printf(UI_PAGE_DEBUG, "+12V:%2d.%02dV %4dmA", ch2_voltage / 1000, (ch2_voltage % 1000) / 10, ch2_current);
+    ui_write(UI_PAGE_DEBUG, '\n');
+    ui_printf(UI_PAGE_DEBUG, "+5V :%2d.%02dV %4dmA", ch3_voltage / 1000, (ch3_voltage % 1000) / 10, ch3_current);
+    ui_write(UI_PAGE_DEBUG, '\n');
+#endif
 }
