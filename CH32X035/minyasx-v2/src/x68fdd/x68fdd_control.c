@@ -388,7 +388,7 @@ void SysTick_Handler(void) {
     }
 }
 
-void x68fdd_poll(uint32_t systick_ms) {
+void x68fdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     // ポーリング処理をここに追加
     static uint32_t last_tick = 0;
     if (systick_ms - last_tick < 1000) {

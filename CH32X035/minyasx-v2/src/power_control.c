@@ -128,6 +128,6 @@ void power_control_init(void) {
     Delay_Ms(3000);
 }
 
-void power_control_poll(uint32_t systick_ms) {
+void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     // 定期的な処理をここに追加
 }

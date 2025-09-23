@@ -135,9 +135,9 @@ ui_write_t ui_get_writer(UI_PAGE_t page) {
     switch (page) {
     case UI_PAGE_MAIN:
         return ui_write_0;
-    case UI_PAGE_POPUP:
+    case UI_PAGE_MENU:
         return ui_write_1;
-    case UI_PAGE_DIALOG:
+    case UI_PAGE_ABOUT:
         return ui_write_2;
     case UI_PAGE_TOOLTIP:
         return ui_write_3;
@@ -148,7 +148,7 @@ ui_write_t ui_get_writer(UI_PAGE_t page) {
     }
 }
 
-void ui_init(void) {
+void ui_init(minyasx_context_t *ctx) {
     // 各ウィンドウの初期化
     for (int i = 0; i < UI_MAX_WINDOWS; i++) {
         ui_windows[i].page = (UI_PAGE_t)i;
@@ -167,12 +167,18 @@ void ui_init(void) {
     OLED_flip(1, 1);  // 必要に応じて画面を反転
     OLED_clear();     // 画面をクリア
     current_page = UI_PAGE_MAIN;
+
+    // 各ページの初期化
+    ui_page_main_init(ctx, &ui_windows[UI_PAGE_MAIN]);
+    ui_page_menu_init(ctx, &ui_windows[UI_PAGE_MENU]);
+    ui_page_about_init(ctx, &ui_windows[UI_PAGE_ABOUT]);
 }
 
-void ui_poll(uint32_t systick_ms) {
+void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
     // ここでキー入力のポーリングを行い、必要に応じてコールバックを呼び出す
     // 例えば、キー状態を読み取る関数があると仮定
     ui_key_mask_t keys = UI_KEY_NONE;
+    static ui_key_mask_t last_keys = UI_KEY_NONE;
 
     // キー入力はGP4のIO端子をI2Cで読める
     // GPのIO端子の入力状態はレジスタ0x74,0x75で読める
@@ -195,21 +201,11 @@ void ui_poll(uint32_t systick_ms) {
     if ((gp4_io8_15 & (1 << 4)) == 0) keys |= UI_KEY_EJECT_B;
     if ((gp4_io8_15 & (1 << 5)) == 0) keys |= UI_KEY_EJECT_A;
 
-    // test
-    if (keys & UI_KEY_ENTER) {
-        ui_change_page(1);
-    } else if (keys & UI_KEY_UP) {
-        ui_change_page(2);
-    } else if (keys & UI_KEY_DOWN) {
-        ui_change_page(3);
-    } else if (keys & UI_KEY_LEFT) {
-        ui_change_page(4);
-    } else if (keys & UI_KEY_RIGHT) {
-        ui_change_page(5);
-    } else {
-        ui_change_page(0);
+    if (keys == last_keys) {
+        // キー状態が変化していない
+        return;
     }
-
+    last_keys = keys;
     ui_window_t *win = &ui_windows[current_page];
     if (win->key_callback) {
         win->key_callback(keys);

@@ -67,7 +67,7 @@ void ina3221_read_all_channels(uint16_t *ch1_current, uint16_t *ch1_voltage,  //
     if (ch3_voltage) *ch3_voltage = conv_voltage(reg[5]);
 }
 
-void ina3221_poll(uint64_t systick_ms) {
+void ina3221_poll(minyasx_context_t *ctx, uint64_t systick_ms) {
     static uint64_t last_tick = 0;
     if (systick_ms - last_tick < 1000) {
         return;
