@@ -1,3 +1,4 @@
+#include "pcfdd/pcfdd_control.h"
 #include "ui/ui_control.h"
 
 void ui_page_main_init(minyasx_context_t* ctx, ui_window_t* win) {

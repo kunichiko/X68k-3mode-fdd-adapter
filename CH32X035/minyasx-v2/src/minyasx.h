@@ -45,9 +45,22 @@ typedef struct power_status {
     uint16_t current_ma;  // 電流 (mA)
 } power_status_t;
 
+typedef struct usbpd_pod {
+    uint32_t voltage_mv;  // 電圧 (mV)
+    uint32_t current_ma;  // 電流 (mA)
+} usbpd_pod_t;
+
+typedef struct usbpd_status {
+    bool connected;      // PD接続されているか
+    int pdonum;          // PDOの数
+    usbpd_pod_t pod[8];  // PDO情報
+} usbpd_status_t;
+
 typedef struct minyasx_context {
     // 電源情報
     power_status_t power[3];
+    // USB-PD情報
+    usbpd_status_t usbpd;
     // ドライブ情報
     drive_status_t drive[2];  // ドライブA/B
 } minyasx_context_t;

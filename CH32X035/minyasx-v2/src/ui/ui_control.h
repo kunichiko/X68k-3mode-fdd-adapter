@@ -14,7 +14,7 @@ typedef enum {
     UI_PAGE_MAIN = 0,   // Main page
     UI_PAGE_MENU = 1,   // Menu page
     UI_PAGE_ABOUT = 2,  // About page
-    UI_PAGE_TOOLTIP = 3,
+    UI_PAGE_PDSTATUS = 3,
     UI_PAGE_CUSTOM = 4
 } UI_PAGE_t;
 
@@ -43,6 +43,7 @@ typedef struct {
 } ui_window_t;
 
 void ui_change_page(UI_PAGE_t page);
+UI_PAGE_t ui_get_current_page(void);
 typedef void (*ui_write_t)(char c);  // Write a character or handle control characters
 
 ui_write_t ui_get_writer(UI_PAGE_t page);
@@ -78,5 +79,9 @@ void ui_page_menu_key_callback(ui_key_mask_t keys);
 void ui_page_about_init(minyasx_context_t* ctx, ui_window_t* win);
 void ui_page_about_poll(minyasx_context_t* ctx, uint32_t systick_ms);
 void ui_page_about_key_callback(ui_key_mask_t keys);
+// pdstatus page
+void ui_page_pdstatus_init(minyasx_context_t* ctx, ui_window_t* win);
+void ui_page_pdstatus_poll(minyasx_context_t* ctx, uint32_t systick_ms);
+void ui_page_pdstatus_key_callback(ui_key_mask_t keys);
 
 #endif  // UI_CONTROL_H

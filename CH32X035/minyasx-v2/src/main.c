@@ -275,7 +275,7 @@ int main() {
     greenpak_autoprogram_verify();
 
     // 電源制御を初期化する
-    power_control_init();
+    power_control_init(ctx);
 
     // Delay_Ms(1000);
 
