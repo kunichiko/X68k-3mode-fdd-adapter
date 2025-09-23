@@ -5,11 +5,18 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include "minyasx.h"
 #include "oled/ssd1306_txt.h"
 
 #define UI_MAX_WINDOWS 10
 
-typedef enum { UI_PAGE_MAIN = 0, UI_PAGE_POPUP = 1, UI_PAGE_DIALOG = 2, UI_PAGE_TOOLTIP = 3, UI_PAGE_CUSTOM = 4 } UI_PAGE_t;
+typedef enum {
+    UI_PAGE_MAIN = 0,   // Main page
+    UI_PAGE_MENU = 1,   // Menu page
+    UI_PAGE_ABOUT = 2,  // About page
+    UI_PAGE_TOOLTIP = 3,
+    UI_PAGE_CUSTOM = 4
+} UI_PAGE_t;
 
 typedef enum {
     UI_KEY_NONE = 0,          // 何も押されていない
@@ -42,7 +49,7 @@ ui_write_t ui_get_writer(UI_PAGE_t page);
 
 void ui_clear(UI_PAGE_t page);
 void ui_cursor(UI_PAGE_t page, uint8_t x, uint8_t y);
-void ui_print(UI_PAGE_t page, char *str);
+void ui_print(UI_PAGE_t page, char* str);
 void ui_write(UI_PAGE_t page, char c);
 
 #include "print.h"
@@ -55,8 +62,21 @@ void ui_write(UI_PAGE_t page, char c);
 #define ui_newline() ui_get_writer(p)('\n')          // send newline
 #define ui_printf(p, f, ...) printF(ui_get_writer(p), f, ##__VA_ARGS__)
 
-void ui_init(void);
+void ui_init(minyasx_context_t* ctx);
 
-void ui_poll(uint32_t systick_ms);
+void ui_poll(minyasx_context_t* ctx, uint32_t systick_ms);
+
+// main page
+void ui_page_main_init(minyasx_context_t* ctx, ui_window_t* win);
+void ui_page_main_poll(minyasx_context_t* ctx, uint32_t systick_ms);
+void ui_page_main_key_callback(ui_key_mask_t keys);
+// menu page
+void ui_page_menu_init(minyasx_context_t* ctx, ui_window_t* win);
+void ui_page_menu_poll(minyasx_context_t* ctx, uint32_t systick_ms);
+void ui_page_menu_key_callback(ui_key_mask_t keys);
+// about page
+void ui_page_about_init(minyasx_context_t* ctx, ui_window_t* win);
+void ui_page_about_poll(minyasx_context_t* ctx, uint32_t systick_ms);
+void ui_page_about_key_callback(ui_key_mask_t keys);
 
 #endif  // UI_CONTROL_H

@@ -64,7 +64,7 @@ void WS2812_SPI_init() {
     for (k = 0; k < NR_LEDS; k++) phases[k] = k << 8;
 }
 
-void WS2812_SPI_poll() {
+void WS2812_SPI_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     GPIOA->BSHR = 1 << 7;  // Turn on PA7
     // Wait for LEDs to totally finish.
     Delay_Ms(12);

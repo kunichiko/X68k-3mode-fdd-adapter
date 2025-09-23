@@ -28,8 +28,6 @@
 #include "ui/ui_control.h"
 #include "x68fdd/x68fdd_control.h"
 
-void ina3221_poll(uint64_t systick);
-
 int main() {
     SystemInit();
     Delay_Ms(1000);  // Wait for power to stabilize
@@ -252,14 +250,12 @@ int main() {
     GPIOC->BCR = (1 << 19);  // Disable (Low)
 
     //
-    // OLEDテスト
+    // コンテキストの初期化
     //
-    ui_init();  // UIシステムを初期化する
-    ui_print(1, "Page 1");
-    ui_print(2, "Page 2");
-    ui_print(3, "Page 3");
-    ui_print(4, "Page 4");
-    ui_print(5, "Page 5");
+    minyasx_context_t* ctx = minyasx_init();
+
+    // UIシステムを初期化する
+    ui_init(ctx);
     ui_change_page(UI_PAGE_MAIN);
     ui_cursor(UI_PAGE_MAIN, 0, 0);
     ui_print(UI_PAGE_MAIN, "Minys-X V2");
@@ -298,8 +294,13 @@ int main() {
     for (int i = 0; i < 4; i++) {
         greenpak_set_virtualinput(i, (ds1 ? 0x40 : 0x00) | (ds0 ? 0x80 : 0x00));
     }
-    ui_printf(UI_PAGE_MAIN, "DS0=%d DS1=%d\n", (int)ds0, (int)ds1);
-    Delay_Ms(2000);
+    uint8_t idA = (ds1 << 1) | ds0;
+    ctx->drive[0].drive_id = idA;
+    if (idA == 0 || idA == 2) {
+        // ドライブAが0か2にセットされた時のみドライブBが利用可能
+        ctx->drive[1].drive_id = idA + 1;
+    }
+
     // 以下もセットする
     // GP2のDISK_IN_A_n (OUT2=bit5)
     // GP2のDISK_IN_B_n (OUT3=bit4)
@@ -315,11 +316,11 @@ int main() {
     while (1) {
         uint64_t systick = SysTick->CNT;
         uint32_t ms = systick / (F_CPU / 1000);
-        WS2812_SPI_poll();
-        ina3221_poll(ms);
-        pcfdd_poll(ms);
-        x68fdd_poll(ms);
-        ui_poll(ms);
+        WS2812_SPI_poll(ctx, ms);
+        ina3221_poll(ctx, ms);
+        pcfdd_poll(ctx, ms);
+        x68fdd_poll(ctx, ms);
+        ui_poll(ctx, ms);
 
 #if 0
         // GP2のVirtual Input レジスタの値を直接読む

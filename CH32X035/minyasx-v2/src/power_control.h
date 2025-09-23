@@ -4,6 +4,6 @@
 #include "ina3221/ina3221_control.h"
 
 void power_control_init(void);
-void power_control_poll(uint32_t systick_ms);
+void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms);
 
 #endif  // POWER_CONTROL_H

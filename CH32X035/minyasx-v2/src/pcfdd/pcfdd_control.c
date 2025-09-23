@@ -306,7 +306,7 @@ uint16_t last_dt;
 #define DT_MAX_TICKS S_HI(24)
 
 /* --- 既存API互換: bps列挙→数値 --- */
-uint32_t pcfdd_bps_value(bps_mode_t m) {
+uint32_t pcfdd_bps_value(fdd_bps_mode_t m) {
     switch (m) {
     case BPS_600K:
         return 600000;
@@ -436,7 +436,7 @@ extern volatile uint32_t cnt_7ish, cnt_8ish, cnt_10ish, cnt_13ish, cnt_16ish;
 extern volatile uint32_t cnt_other;
 
 // 必要なら数値にしたい時用（表示など）
-static inline uint32_t bps_mode_to_value(bps_mode_t m) {
+static inline uint32_t fdd_bps_mode_to_value(fdd_bps_mode_t m) {
     switch (m) {
     case BPS_600K:
         return 600000;
@@ -453,7 +453,7 @@ static inline uint32_t bps_mode_to_value(bps_mode_t m) {
     }
 }
 
-static inline bps_mode_t bin_index_to_mode(int idx) {
+static inline fdd_bps_mode_t bin_index_to_mode(int idx) {
     switch (idx) {
     case 0:
         return BPS_600K;  // 7ish
@@ -473,7 +473,7 @@ static inline bps_mode_t bin_index_to_mode(int idx) {
 #define VOTES_MIN 50         /* 有効票の最小数（ギャップや無信号を弾く） */
 #define TOP_THRESHOLD_PCT 20 /* 最多ビンの下限比率 */
 
-bps_mode_t pcfdd_bps_decide_and_reset(int drive) {
+fdd_bps_mode_t pcfdd_bps_decide_and_reset(int drive) {
     if (drive < 0 || drive > 1) return BPS_UNKNOWN;
     rd_stats_t* S = (rd_stats_t*)&g_stats[drive];
 
@@ -523,7 +523,7 @@ void pcfdd_set_current_ds(pcfdd_ds_t ds) {
 uint32_t last_index_ms = 0;
 bool last_index_state = false;
 
-void pcfdd_poll(uint32_t systick_ms) {
+void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     // PCFDDコントローラのポーリングコードをここに追加
     static uint64_t last_tick = 0;
     if (systick_ms - last_tick < 1000) {
@@ -547,8 +547,8 @@ void pcfdd_poll(uint32_t systick_ms) {
               (int)cnt_7ish / 10, (int)cnt_8ish / 10, (int)cnt_10ish / 10, (int)cnt_13ish / 10, (int)cnt_16ish / 10,  //
               (int)last_dt);
 #endif
-    bps_mode_t bps0 = pcfdd_bps_decide_and_reset(0); /* DS0のbpsを取得 */
-    bps_mode_t bps1 = pcfdd_bps_decide_and_reset(1); /* DS1のbpsを取得 */
+    fdd_bps_mode_t bps0 = pcfdd_bps_decide_and_reset(0); /* DS0のbpsを取得 */
+    fdd_bps_mode_t bps1 = pcfdd_bps_decide_and_reset(1); /* DS1のbpsを取得 */
     ui_cursor(UI_PAGE_MAIN, 0, 4);
-    ui_printf(UI_PAGE_MAIN, "BPS:%3dk BPS:%3dk", pcfdd_bps_value(bps0) / 1000, pcfdd_bps_value(bps1) / 1000);
+    ui_printf(UI_PAGE_MAIN, "BPS:%3dk BPS:%3dk", fdd_bps_mode_to_value(bps0) / 1000, fdd_bps_mode_to_value(bps1) / 1000);
 }
