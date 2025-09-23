@@ -312,6 +312,7 @@ int main() {
     greenpak_set_virtualinput(2 - 1, gp2_vin);
 
     // メインループ
+    ui_clear(UI_PAGE_DEBUG);
     ui_change_page(UI_PAGE_MAIN);
     while (1) {
         uint64_t systick = SysTick->CNT;
