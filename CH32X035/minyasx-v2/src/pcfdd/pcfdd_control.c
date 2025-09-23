@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 #include "ch32fun.h"
-#include "oled/ssd1306_txt.h"
+#include "ui/ui_control.h"
 
 /**
  * @brief タイマーをタイムアウトさせるカウンタ値 -1
@@ -15,11 +15,18 @@
  */
 const uint16_t TIMER_TIMEOUT = 0x07ff;
 
-#define BPS_TIM_PRESCALER_SHIFT 1  // 実際に取り込む頻度を下げる頻度 (IC1PSCの値。0=1/1, 1=1/2, 2=1/4, 3=1/8)
-#define BPS_TIM_PRESCALER (1 << BPS_TIM_PRESCALER_SHIFT)
+#define BPS_TIM_PRESCALER_SHIFT 1                         // 実際に取り込む頻度を下げる頻度 (IC1PSCの値。0=1/1, 1=1/2, 2=1/4, 3=1/8)
+#define BPS_TIM_PRESCALER (1 << BPS_TIM_PRESCALER_SHIFT)  // 48MHz/(BPS_TIM_PRESCALER) = 4MHz(既定) → 0.25us resolution
 
-#define READ_DATA_CAP_N 512  // READ_DATAのキャプチャバッファのサイズ
-volatile uint16_t cap_buf[READ_DATA_CAP_N];
+#define SCALE (1u << BPS_TIM_PRESCALER_SHIFT)
+#define S_LO(x) ((x) * SCALE)
+#define S_HI(x) ((x) * SCALE + (SCALE - 1))  // 上側を「その刻みの最終tick」まで広げる
+
+/* --- ドライブ別 DMA バッファ（CCR=CH1CVRは32bit。まずは32bit受け推奨） --- */
+#define READ_DATA_CAP_N 1024
+static volatile uint32_t cap_buf_ds0[READ_DATA_CAP_N];
+static volatile uint32_t cap_buf_ds1[READ_DATA_CAP_N];
+static volatile uint32_t* cap_buf_active = cap_buf_ds0; /* 切替用 */
 
 void pcfdd_init(void) {
     // PCFDDコントローラの初期化コードをここに追加
@@ -66,43 +73,44 @@ void pcfdd_init(void) {
 
     TIM1->PSC = 12 - 1;    // 48MHz/(12) = 4MHz -> 0.25μs resolution
     TIM1->ATRLR = 0xffff;  // 16bitカウンタなので最大値をセット
-    // Timer1 Channel 1を Capture/Compare の CC1に入力し、
-    // 立ち下がりエッジを検出する
-    // CC1の設定は TIM1->CHCTLR1 の下位8bitで設定できる
+    // Timer1 Channel 1を Capture/Compare の CC1に入力
     // CC1 Select (CC1S) を 01にし、Channel 1を入力元とする
     // 入力キャプチャ: TI1, 分周なし, 軽いデジタルフィルタ
     TIM1->CHCTLR1 = TIM_CC1S_0;
-    // TIM1->CHCTLR1 |= TIM_IC1F_0 | TIM_IC1F_1;  // IC1F = 0b0110 (8サンプルのデジタルフィルタをかける)
     TIM1->CHCTLR1 |= (BPS_TIM_PRESCALER_SHIFT << 2);  // IC1PSC = BPS_TIM_PRESCALER_SHIFT (DMA転送のプリスケーラを設定して頻度を下げる)
+    // TIM1->CHCTLR1 |= TIM_IC1F_0 | TIM_IC1F_1;  // 必要ならデジタルフィルタ
 
-    // CC1Eで、 CC1を有効にする
+    // CC1Eで、 CC1を有効にする（※起動はDS選択時に行う）
     // CC1P を1にすると、CC1は立ち下がりエッジを検出するようになる
-    TIM1->CCER = TIM_CC1E | TIM_CC1P;
+    TIM1->CCER = /*TIM_CC1E |*/ TIM_CC1P;
 
-    // CC1でDMA要求
-    TIM1->DMAINTENR |= TIM_CC1DE;  // CC1IE
-    // カウンタ有効化（= CR1.CEN）
-    TIM1->CTLR1 |= TIM_CEN;
+    /* CC DMA は CCイベントで出す（重要。UEVではなくCCで発火） */
+    TIM1->CTLR2 &= ~TIM_CCDS;
 
-    // DMA1 Channel2を使って、Timer1 Channel1のキャプチャ値をバッファに保存する
-    // DMA1_Channel2->PADDR = (uint32_t)&TIM1->CHCTLR1;
-    DMA1_Channel2->PADDR = (uint32_t)&TIM1->CH1CVR;
-    DMA1_Channel2->MADDR = (uint32_t)cap_buf;
+    /* DMA1 Channel2を使って、Timer1 Channel1のキャプチャ値をバッファに保存する。
+       CCR1は CH1CVR(32bit) にラッチされるので、PSIZE/MSIZE=32bit で受ける */
+    DMA1_Channel2->PADDR = (uint32_t)&TIM1->CH1CVR;  // ★ CH1CVR を読む（従来 CHCTLR1 だったのを修正）
+    DMA1_Channel2->MADDR = (uint32_t)cap_buf_active;
     DMA1_Channel2->CNTR = READ_DATA_CAP_N;
 
-    DMA1_Channel2->CFGR = (DMA_CFGR2_MEM2MEM * 0) |                      // MEM2MEM=0
-                          (DMA_CFGR2_PL_1 * 0 | DMA_CFGR2_PL_0 * 0) |    // PL=low(必要ならup)
-                          (DMA_CFGR2_MSIZE_1 * 0 | DMA_CFGR2_MSIZE_0) |  // MSIZE=16bit (01)
-                          (DMA_CFGR2_PSIZE_1 * 0 | DMA_CFGR2_PSIZE_0) |  // PSIZE=16bit (01)
-                          (DMA_CFGR2_MINC) |                             // MINC=1
-                          (DMA_CFGR2_PINC * 0) |                         // PINC=0
-                          (DMA_CFGR2_CIRC) |                             // CIRC=1
-                          (DMA_CFGR2_DIR * 0) |                          // DIR=0 (P->M)
-                          (DMA_CFGR2_TEIE) |                             // TEIE=1
-                          (DMA_CFGR2_HTIE) |                             // HTIE=1
-                          (DMA_CFGR2_TCIE) |                             // TCIE=1
-                          (DMA_CFGR2_EN);                                // EN=1
+    DMA1_Channel2->CFGR = (0 * DMA_CFGR2_DIR) /* DIR=0: P->M */
+                          | DMA_CFGR2_CIRC    /* CIRC=1       */
+                          | DMA_CFGR2_MINC    /* MINC=1       */
+                          | DMA_CFGR2_PSIZE_1 /* PSIZE=10b: 32-bit */
+                          | DMA_CFGR2_MSIZE_1 /* MSIZE=10b: 32-bit */
+                          | DMA_CFGR2_HTIE    /* Half */
+                          | DMA_CFGR2_TCIE    /* Full */
+        /* | DMA_CFGR2_PL_1 */;               /* 必要に応じて優先度を上げる */
 
+    // まだ開始しない（DSが来たら開始）:
+    TIM1->DMAINTENR &= ~TIM_CC1DE;        // CC1 DMA要求停止
+    DMA1_Channel2->CFGR &= ~DMA_CFGR2_EN; /* DMA停止 */
+    TIM1->CCER &= ~TIM_CC1E;              // 入力キャプチャ停止
+
+    // カウンタ自体は回しておく（どちらでも良い）
+    TIM1->CTLR1 |= TIM_CEN;
+
+    // DMA割り込み有効
     NVIC_EnableIRQ(DMA1_Channel2_IRQn);
 
     //
@@ -175,8 +183,7 @@ void pcfdd_init(void) {
 /**
  * @brief キャプチャ割り込みで取得した回転数を保存する変数
  */
-volatile uint32_t revolution = 0;
-volatile uint32_t index_width = 0;  // INDEXの幅（msec単位）
+volatile uint32_t index_width[2] = {0, 0};  // INDEXの幅（msec単位）
 
 /*
   Timer3 Global Interrupt Handler
@@ -185,7 +192,11 @@ void TIM3_IRQHandler(void) __attribute__((interrupt));
 void TIM3_IRQHandler(void) {
     static uint16_t previousCapture = 0;  // 前回のキャプチャ値を保存する変数
     static uint32_t additional_count = 0;
+    static uint32_t captured_width = 0;
     uint16_t currentCapture;
+
+    bool ds_a = (GPIOB->INDR & (1 << 2)) ? true : false;
+    bool ds_b = (GPIOB->INDR & (1 << 3)) ? true : false;
 
     // アップデート割り込み
     // カウンタの値が一周するタイミングで呼ばれるので、このタイミングで
@@ -204,8 +215,7 @@ void TIM3_IRQHandler(void) {
         if (additional_count > 3906) {
             // debugprint(".");
             //  3906カウント(=128*3906=500msec) 以上値が変化していない場合はタイムアウトとみなす
-            index_width = 0;
-            revolution = 0;
+            captured_width = 0;
         } else {
             // debugprint("prev=%d, cur=%d, t=%ld\n", previousCapture, currentCapture, t);
         }
@@ -229,7 +239,13 @@ void TIM3_IRQHandler(void) {
         uint32_t diff = ((currentCapture - previousCapture) & TIMER_TIMEOUT) + additional_count;
         uint32_t width = (diff * 128) & 0xffffff;
 
-        index_width = width / 1000;  // usec -> msec
+        captured_width = width / 1000;  // usec -> msec
+        if (ds_a) {
+            index_width[0] = captured_width;
+        }
+        if (ds_b) {
+            index_width[1] = captured_width;
+        }
 
         additional_count = 0;
         previousCapture = currentCapture;  // 現在のキャプチャ値を保存
@@ -257,77 +273,136 @@ void TIM3_IRQHandler(void) {
  * それ以外は cnt_other へ。
  */
 
-static volatile uint16_t prev_ccr;
-static volatile uint32_t cnt_7ish, cnt_8ish, cnt_10ish, cnt_13ish, cnt_16ish, cnt_other;
+/* --- ドライブ別統計 --- */
+typedef struct {
+    volatile uint16_t prev_ccr;
+    volatile uint8_t prev_valid;
+    volatile uint32_t cnt_7ish, cnt_8ish, cnt_10ish, cnt_13ish, cnt_16ish, cnt_other;
+} rd_stats_t;
+
+static volatile rd_stats_t g_stats[2] = {0};
+
+/* アクティブドライブ: 0=DS0, 1=DS1, 0xFF=なし（停止中） */
+static volatile uint8_t g_active = 0xFF;
+
+/* last_dt など既存デバッグ変数は存続 */
 static volatile uint32_t dma_int_count;
-
-// 窓しきい値（必要ならここだけ変えれば挙動を調整可能）
-#define WIN_7_MIN (6 * BPS_TIM_PRESCALER)
-#define WIN_8_MIN (8 * BPS_TIM_PRESCALER)
-#define WIN_10_MIN (10 * BPS_TIM_PRESCALER)
-#define WIN_13_MIN (13 * BPS_TIM_PRESCALER)
-#define WIN_16_MIN (16 * BPS_TIM_PRESCALER)
-#define WIN_7_MAX (WIN_8_MIN - 1)
-#define WIN_8_MAX (WIN_10_MIN - 1)
-#define WIN_10_MAX (WIN_13_MIN - 1)
-#define WIN_13_MAX (WIN_16_MIN - 1)
-#define WIN_16_MAX (17 * BPS_TIM_PRESCALER)
-
-// 粗ノイズ除去（0.5us未満や6us超は即捨て: 2tick=0.5us, 24tick=6us）
-#define DT_MIN_TICKS (2 * BPS_TIM_PRESCALER)
-#define DT_MAX_TICKS (24 * BPS_TIM_PRESCALER)
-
 uint16_t last_dt;
+
+/* --- しきい値（スケーリング S() 適用）--- */
+#define WIN_7_MIN S_LO(6) /* ~1.5..1.75us  ≈600k */
+#define WIN_7_MAX S_HI(7)
+#define WIN_8_MIN S_LO(8) /* 2.0..2.25us   500k  */
+#define WIN_8_MAX S_HI(9)
+#define WIN_10_MIN S_LO(9) /* 2.25..2.75us ≈416.7k */
+#define WIN_10_MAX S_HI(11)
+#define WIN_13_MIN S_LO(13) /* 3.25..3.5us  ≈300k */
+#define WIN_13_MAX S_HI(14)
+#define WIN_16_MIN S_LO(15) /* 3.75..4.25us  250k  */
+#define WIN_16_MAX S_HI(17)
+
+/* 粗ノイズ除去もしきい値を同様に（下限はS_LO、上限はS_HI） */
+#define DT_MIN_TICKS S_LO(2)
+#define DT_MAX_TICKS S_HI(24)
+
+/* --- 既存API互換: bps列挙→数値 --- */
+uint32_t pcfdd_bps_value(bps_mode_t m) {
+    switch (m) {
+    case BPS_600K:
+        return 600000;
+    case BPS_500K:
+        return 500000;
+    case BPS_416K:
+        return 416000; /* 必要なら 416667 */
+    case BPS_300K:
+        return 300000;
+    case BPS_250K:
+        return 250000;
+    default:
+        return 0;
+    }
+}
+
+static void capture_pause(void) {
+    TIM1->CCER &= ~TIM_CC1E;               // CCR更新止める
+    TIM1->DMAINTENR &= ~TIM_CC1DE;         // DMA要求止める
+    DMA1_Channel2->CFGR &= ~DMA_CFGR2_EN;  // DMA停止
+    DMA1->INTFCR = DMA_CHTIF2 | DMA_CTCIF2 | DMA_CTEIF2;
+    (void)TIM1->INTFR;
+    (void)TIM1->CH1CVR;  // SR→CCR 読み捨てでフラグ掃除
+    g_active = 0xFF;
+}
+
+static void capture_start_for_drive(uint8_t d) {
+    cap_buf_active = (d == 0) ? cap_buf_ds0 : cap_buf_ds1;
+
+    /* バッファ再装填 */
+    DMA1_Channel2->MADDR = (uint32_t)cap_buf_active;
+    DMA1_Channel2->CNTR = READ_DATA_CAP_N;
+    DMA1->INTFCR = DMA_CHTIF2 | DMA_CTCIF2 | DMA_CTEIF2;
+    DMA1_Channel2->CFGR |= DMA_CFGR2_EN;
+
+    /* 再開直後の巨大dtを捨てる */
+    g_stats[d].prev_ccr = (uint16_t)(TIM1->CH1CVR & 0xFFFF);
+    g_stats[d].prev_valid = 0;
+
+    TIM1->DMAINTENR |= TIM_CC1DE;  // CC1 DMA要求開始
+    TIM1->CCER |= TIM_CC1E;        // 入力キャプチャ開始
+
+    g_active = d;
+}
 
 static inline void classify_dt(uint16_t dt) {
     last_dt = dt;
     // 粗ノイズ除去
     if (dt < DT_MIN_TICKS || dt > DT_MAX_TICKS) {
-        cnt_other++;
+        if (g_active <= 1) g_stats[g_active].cnt_other++;
         return;
     }
 
-    // 分岐コストを抑えるための“範囲内チェック”は (uint8_t)(dt - MIN) <= (MAX - MIN) も可
+    /* 分岐コストを抑えるための“範囲内チェック”は (uint8_t)(dt - MIN) <= (MAX - MIN) も可 */
     if ((uint8_t)(dt - WIN_7_MIN) <= (WIN_7_MAX - WIN_7_MIN)) {
-        cnt_7ish++;
-        return;
-    }  // ~1.67us (≈600k)
+        if (g_active <= 1) g_stats[g_active].cnt_7ish++;
+        return;  // ~1.67us (≈600k)
+    }
     if ((uint8_t)(dt - WIN_8_MIN) <= (WIN_8_MAX - WIN_8_MIN)) {
-        cnt_8ish++;
-        return;
-    }  // ~2.00us (500k)
+        if (g_active <= 1) g_stats[g_active].cnt_8ish++;
+        return;  // ~2.00us (500k)
+    }
     if ((uint8_t)(dt - WIN_10_MIN) <= (WIN_10_MAX - WIN_10_MIN)) {
-        cnt_10ish++;
-        return;
-    }  // ~2.40us (≈416.7k)
+        if (g_active <= 1) g_stats[g_active].cnt_10ish++;
+        return;  // ~2.40us (≈416.7k)
+    }
     if ((uint8_t)(dt - WIN_13_MIN) <= (WIN_13_MAX - WIN_13_MIN)) {
-        cnt_13ish++;
-        return;
-    }  // ~3.33us (≈300k)
+        if (g_active <= 1) g_stats[g_active].cnt_13ish++;
+        return;  // ~3.33us (≈300k)
+    }
     if ((uint8_t)(dt - WIN_16_MIN) <= (WIN_16_MAX - WIN_16_MIN)) {
-        cnt_16ish++;
-        return;
-    }  // ~4.00us (250k)
+        if (g_active <= 1) g_stats[g_active].cnt_16ish++;
+        return;  // ~4.00us (250k)
+    }
 
-    cnt_other++;  // 窓外
+    if (g_active <= 1) g_stats[g_active].cnt_other++;  // 窓外
 }
 
-static void process_block(const volatile uint16_t* blk, size_t n) {
-    if ((dma_int_count & 0x1F) != 0) {
-        // 負荷軽減のため、32回に1回だけ処理する
-        return;
-    }
+/* 32bit受け（CH1CVR）の下位16bitを差分化 */
+static void process_block32(const volatile uint32_t* blk, size_t n) {
+    if (g_active > 1) return;
 
-    uint16_t p = blk[0];
-    for (size_t i = 1; i < n; i++) {
-        uint16_t c = blk[i];
+    uint16_t p = g_stats[g_active].prev_ccr;
+    for (size_t i = 0; i < n; i++) {
+        uint16_t c = (uint16_t)(blk[i] & 0xFFFF);
+        if (!g_stats[g_active].prev_valid) {
+            g_stats[g_active].prev_ccr = c;
+            g_stats[g_active].prev_valid = 1;
+            p = c;
+            continue;
+        }
         uint16_t dt = (uint16_t)(c - p);
         p = c;
-        // グリッチ粗除去（0.25〜5us以外はバッサリ）
-        //        if (dt < 2 || dt > 20) continue;  // 0.5us 未満 or 5us 超は無視
         classify_dt(dt);
     }
-    prev_ccr = p;
+    g_stats[g_active].prev_ccr = p;
 }
 
 /*
@@ -336,48 +411,25 @@ static void process_block(const volatile uint16_t* blk, size_t n) {
 void DMA1_Channel2_IRQHandler(void) __attribute__((interrupt));
 void DMA1_Channel2_IRQHandler(void) {
     dma_int_count++;
+    uint32_t isr = DMA1->INTFR;
 
-    // DMA1 Channel2の割り込み処理をここに追加
-    uint32_t isr = DMA1->INTFR;  // Interrupt Flag Registerの値を取得
-
-    if (isr & DMA_HTIF2) {          // Half Transfer Interrupt Flag
-        DMA1->INTFCR = DMA_CHTIF2;  // フラグをクリア
-        process_block(&cap_buf[0], READ_DATA_CAP_N / 2);
+    if (isr & DMA_HTIF2) {
+        DMA1->INTFCR = DMA_CHTIF2;
+        process_block32(&cap_buf_active[0], READ_DATA_CAP_N / 2);
     }
-    if (isr & DMA_TCIF2) {          // Transfer Complete Interrupt Flag
-        DMA1->INTFCR = DMA_CTCIF2;  // フラグをクリア
-        process_block(&cap_buf[READ_DATA_CAP_N / 2], READ_DATA_CAP_N / 2);
+    if (isr & DMA_TCIF2) {
+        DMA1->INTFCR = DMA_CTCIF2;
+        process_block32(&cap_buf_active[READ_DATA_CAP_N / 2], READ_DATA_CAP_N / 2);
     }
-    if (isr & DMA_TEIF2) {          // Transfer Error Interrupt Flag
-        DMA1->INTFCR = DMA_CTEIF2;  // フラグをクリア
+    if (isr & DMA_TEIF2) {
+        DMA1->INTFCR = DMA_CTEIF2;
         // 必要なら再初期化
     }
 
     // まれにCC1OF対策でINTFR/CVRを読んでフラグ掃除
-    volatile uint32_t sr = TIM1->INTFR;
-    (void)sr;  // 未使用警告回避
-    volatile uint32_t junk = TIM1->CH1CVR;
-    (void)junk;  // 未使用警告回避
+    (void)TIM1->INTFR;
+    (void)TIM1->CH1CVR;
 }
-
-// 観測しうるBPSカテゴリ
-//  - 600k : (500k @300rpm) を 360rpmで読んだ等 → 最短 ~1.67us ≈ 7tick
-//  - 500k : 1.2M/1.44M 回転一致 → 最短 2.0us = 8tick
-//  - 416k : (500k @360rpm) を 300rpmで読んだ → 最短 ~2.4us ≈ 10tick
-//  - 300k : (250k @300rpm) を 360rpmで読んだ → 最短 ~3.33us ≈ 13tick
-//  - 250k : 2DD 回転一致 → 最短 4.0us = 16tick
-typedef enum {
-    BPS_UNKNOWN,
-    BPS_250K,
-    BPS_300K,
-    BPS_416K,
-    BPS_500K,
-    BPS_600K,
-} bps_mode_t;
-
-// しきい値（必要に応じて調整）
-#define VOTES_MIN 50          // 有効票の最小数（ギャップや無信号を弾く）
-#define TOP_THRESHOLD_PCT 20  // 最多ビンが全体の何%以上なら採用するか
 
 // 既存の分類カウンタ（classify_dt() で増やしているもの）
 extern volatile uint32_t cnt_7ish, cnt_8ish, cnt_10ish, cnt_13ish, cnt_16ish;
@@ -402,56 +454,71 @@ static inline uint32_t bps_mode_to_value(bps_mode_t m) {
 }
 
 static inline bps_mode_t bin_index_to_mode(int idx) {
-    // idx: 0=7ish, 1=8ish, 2=10ish, 3=13ish, 4=16ish
     switch (idx) {
     case 0:
-        return BPS_600K;
+        return BPS_600K;  // 7ish
     case 1:
-        return BPS_500K;
+        return BPS_500K;  // 8ish
     case 2:
-        return BPS_416K;
+        return BPS_416K;  // 10ish
     case 3:
-        return BPS_300K;
+        return BPS_300K;  // 13ish
     case 4:
-        return BPS_250K;
+        return BPS_250K;  // 16ish
     default:
         return BPS_UNKNOWN;
     }
 }
 
-// 1秒ごとなどに呼ぶ想定：最多ビンの多数決でBPSを返し、カウンタをゼロクリア
-bps_mode_t decide_and_reset(void) {
-    // スナップショット
-    uint32_t c7 = cnt_7ish;
-    uint32_t c8 = cnt_8ish;
-    uint32_t c10 = cnt_10ish;
-    uint32_t c13 = cnt_13ish;
-    uint32_t c16 = cnt_16ish;
+#define VOTES_MIN 50         /* 有効票の最小数（ギャップや無信号を弾く） */
+#define TOP_THRESHOLD_PCT 20 /* 最多ビンの下限比率 */
 
-    // クリア（次の集計へ）
-    cnt_7ish = cnt_8ish = cnt_10ish = cnt_13ish = cnt_16ish = 0;
-    cnt_other = 0;
+bps_mode_t pcfdd_bps_decide_and_reset(int drive) {
+    if (drive < 0 || drive > 1) return BPS_UNKNOWN;
+    rd_stats_t* S = (rd_stats_t*)&g_stats[drive];
+
+    uint32_t c7 = S->cnt_7ish, c8 = S->cnt_8ish, c10 = S->cnt_10ish, c13 = S->cnt_13ish, c16 = S->cnt_16ish;
+    S->cnt_7ish = S->cnt_8ish = S->cnt_10ish = S->cnt_13ish = S->cnt_16ish = S->cnt_other = 0;
 
     uint32_t votes = c7 + c8 + c10 + c13 + c16;
-    if (votes < VOTES_MIN) {
-        //     return BPS_UNKNOWN;
+    if (drive == 0) {
+        ui_cursor(UI_PAGE_MAIN, 0, 5 + drive);
+        ui_printf(UI_PAGE_MAIN, "%d:%d:%d:%d:%d[%d:%d]\n",  //
+                  (int)c7 / 10, (int)c8 / 10, (int)c10 / 10, (int)c13 / 10, (int)c16 / 10, (int)S->cnt_other / 10, (int)votes / 10);
     }
+    if (votes < VOTES_MIN) return BPS_UNKNOWN;
 
-    // 最多ビン（単純多数決）
     uint32_t bins[5] = {c7, c8, c10, c13, c16};
-    int top_idx = 0;
-    for (int i = 1; i < 5; i++) {
-        if (bins[i] > bins[top_idx]) top_idx = i;
-    }
-    uint32_t top = bins[top_idx];
+    int top = 0;
+    for (int i = 1; i < 5; i++)
+        if (bins[i] > bins[top]) top = i;
 
-    // 最低比率チェック（55%など）。環境により 50〜60% で調整。
-    if (top * 100U < votes * TOP_THRESHOLD_PCT) {
-        return BPS_UNKNOWN;  // 票が割れている/信号が不安定
-    }
-
-    return bin_index_to_mode(top_idx);
+    if (bins[top] * 100U < votes * TOP_THRESHOLD_PCT) return BPS_UNKNOWN;
+    return bin_index_to_mode(top);
 }
+
+//
+//
+
+static volatile pcfdd_ds_t g_current_ds = PCFDD_DS_NONE;
+
+/* 別モジュールから現在のDRIVE_SELECT状態を通知する */
+void pcfdd_set_current_ds(pcfdd_ds_t ds) {
+    if (ds == g_current_ds) return;
+
+    /* 一旦止めてから必要なら再開。DS0/DS1→0/1 にマップ */
+    capture_pause();
+    if (ds == PCFDD_DS0)
+        capture_start_for_drive(0);
+    else if (ds == PCFDD_DS1)
+        capture_start_for_drive(1);
+
+    g_current_ds = ds;
+}
+
+//
+//
+//
 
 uint32_t last_index_ms = 0;
 bool last_index_state = false;
@@ -464,68 +531,24 @@ void pcfdd_poll(uint32_t systick_ms) {
     }
     last_tick = systick_ms;
 
-    OLED_cursor(0, 3);
-    if (index_width > 166 - 5 && index_width < 166 + 5) {
-        revolution = 360;
-        OLED_printf("REV:%3drpm (%3dms)", revolution, (int)index_width);
-    } else if (index_width > 200 - 5 && index_width < 200 + 5) {
-        revolution = 300;
-        OLED_printf("REV:%3drpm (IDX:%3dms)", revolution, (int)index_width);
-    } else {
-        revolution = 0;
-        OLED_printf("REV:---rpm", revolution, (int)index_width);
-    }
-
-    OLED_cursor(0, 5);
-#ifdef DEBUG
-    OLED_printf("7:%d 8:%d 10:%d 13:%d 16:%d dt:%d\n",                                                                  //
-                (int)cnt_7ish / 10, (int)cnt_8ish / 10, (int)cnt_10ish / 10, (int)cnt_13ish / 10, (int)cnt_16ish / 10,  //
-                (int)last_dt);
-#endif
-    bps_mode_t bps = decide_and_reset();
-    switch (bps) {
-    case BPS_250K:
-        OLED_print("BPS:250K");
-        break;
-    case BPS_300K:
-        OLED_print("BPS:300K");
-        break;
-    case BPS_416K:
-        OLED_print("BPS:416K");
-        break;
-    case BPS_500K:
-        OLED_print("BPS:500K");
-        break;
-    case BPS_600K:
-        OLED_print("BPS:600K");
-        break;
-    default:
-        OLED_print("BPS:----");
-        break;
-    }
-
-    // INDEX信号の読み取り
-    /*    // PA6 : INDEX_DOSV (入力: INDEX信号, Pull-Up)
-        if ((GPIOA->INDR & (1 << 6)) == 0) {
-            // INDEX信号がLow(検出)のときの処理
-            if (last_index_state == false) {
-                // INDEX信号の立ち下がりを検出
-                if (last_index_ms != 0) {
-                    uint32_t period = systick_ms - last_index_ms;
-                    // period msごとにINDEX信号が来ている
-                    // 例: 200ms -> 5Hz, 100ms -> 10Hz, 50ms -> 20Hz
-                    // ここで、periodに基づいて何かの処理を行うことができます。
-                    OLED_cursor(0, 4);
-                    OLED_printf("IDX %4dms ", period);
-                }
-                last_index_ms = systick_ms;
-            }
-            last_index_state = true;
+    ui_cursor(UI_PAGE_MAIN, 0, 3);
+    for (int i = 0; i < 2; i++) {
+        if (index_width[i] > 166 - 5 && index_width[i] < 166 + 5) {
+            ui_printf(UI_PAGE_MAIN, "REV:360  ");
+        } else if (index_width[i] > 200 - 5 && index_width[i] < 200 + 5) {
+            ui_printf(UI_PAGE_MAIN, "REV:300  ");
         } else {
-            last_index_state = false;
+            ui_printf(UI_PAGE_MAIN, "REV:---- ");
         }
-        if (last_index_ms == 0) {
-            OLED_cursor(0, 4);
-            OLED_print("IDX ----ms ");
-        }*/
+    }
+
+#ifdef DEBUG
+    ui_printf(UI_PAGE_MAIN, "7:%d 8:%d 10:%d 13:%d 16:%d dt:%d\n",                                                    //
+              (int)cnt_7ish / 10, (int)cnt_8ish / 10, (int)cnt_10ish / 10, (int)cnt_13ish / 10, (int)cnt_16ish / 10,  //
+              (int)last_dt);
+#endif
+    bps_mode_t bps0 = pcfdd_bps_decide_and_reset(0); /* DS0のbpsを取得 */
+    bps_mode_t bps1 = pcfdd_bps_decide_and_reset(1); /* DS1のbpsを取得 */
+    ui_cursor(UI_PAGE_MAIN, 0, 4);
+    ui_printf(UI_PAGE_MAIN, "BPS:%3dk BPS:%3dk", pcfdd_bps_value(bps0) / 1000, pcfdd_bps_value(bps1) / 1000);
 }

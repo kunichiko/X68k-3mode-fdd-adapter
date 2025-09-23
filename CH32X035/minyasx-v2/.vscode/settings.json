@@ -10,6 +10,7 @@
         "greenpak2.h": "c",
         "greenpak_auto.h": "c",
         "usbpd.h": "c",
-        "ssd1306_txt.h": "c"
+        "ssd1306_txt.h": "c",
+        "print.h": "c"
     }
 }

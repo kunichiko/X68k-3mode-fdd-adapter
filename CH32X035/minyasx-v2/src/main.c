@@ -25,6 +25,7 @@
 #include "oled/oled_control.h"
 #include "pcfdd/pcfdd_control.h"
 #include "power_control.h"
+#include "ui/ui_control.h"
 #include "x68fdd/x68fdd_control.h"
 
 void ina3221_poll(uint64_t systick);
@@ -253,10 +254,15 @@ int main() {
     //
     // OLEDテスト
     //
-    OLED_init();
-    OLED_clear();
-    OLED_flip(1, 1);
-    OLED_print("Minys-X V2");
+    ui_init();  // UIシステムを初期化する
+    ui_print(1, "Page 1");
+    ui_print(2, "Page 2");
+    ui_print(3, "Page 3");
+    ui_print(4, "Page 4");
+    ui_print(5, "Page 5");
+    ui_change_page(UI_PAGE_MAIN);
+    ui_cursor(UI_PAGE_MAIN, 0, 0);
+    ui_print(UI_PAGE_MAIN, "Minys-X V2");
 
     Delay_Ms(2000);
 
@@ -292,7 +298,7 @@ int main() {
     for (int i = 0; i < 4; i++) {
         greenpak_set_virtualinput(i, (ds1 ? 0x40 : 0x00) | (ds0 ? 0x80 : 0x00));
     }
-    OLED_printf("DS0=%d DS1=%d\n", (int)ds0, (int)ds1);
+    ui_printf(UI_PAGE_MAIN, "DS0=%d DS1=%d\n", (int)ds0, (int)ds1);
     Delay_Ms(2000);
     // 以下もセットする
     // GP2のDISK_IN_A_n (OUT2=bit5)
@@ -305,7 +311,7 @@ int main() {
     greenpak_set_virtualinput(2 - 1, gp2_vin);
 
     // メインループ
-    OLED_clear();
+    ui_clear(UI_PAGE_MAIN);
     while (1) {
         uint64_t systick = SysTick->CNT;
         uint32_t ms = systick / (F_CPU / 1000);
@@ -313,24 +319,25 @@ int main() {
         ina3221_poll(ms);
         pcfdd_poll(ms);
         x68fdd_poll(ms);
+        ui_poll(ms);
 
 #if 0
         // GP2のVirtual Input レジスタの値を直接読む
         uint8_t gp1_vin2 = gp_reg_get(gp_target_addr[1 - 1], 0x7a);
         uint8_t gp2_vin2 = gp_reg_get(gp_target_addr[2 - 1], 0x7a);
-        OLED_cursor(0, 6);
-        OLED_printf("GP1 VIN=%02x\n", gp1_vin2);
-        OLED_printf("GP2 VIN=%02x\n", gp2_vin2);
+        ui_cursor(UI_PAGE_MAIN, 0, 6);
+        ui_printf(UI_PAGE_MAIN, "GP1 VIN=%02x\n", gp1_vin2);
+        ui_printf(UI_PAGE_MAIN, "GP2 VIN=%02x\n", gp2_vin2);
 #endif
 
         // MOTOR_ONの監視
-        OLED_cursor(0, 6);
+        ui_cursor(UI_PAGE_MAIN, 0, 6);
         if ((GPIOA->INDR & (1 << 12)) == 0) {
             // MOTOR_ON=Low (ON)
-            OLED_print("MOTOR ON ");
+            ui_print(UI_PAGE_MAIN, "MOTOR ON ");
         } else {
             // MOTOR_ON=High (OFF)
-            OLED_print("MOTOR OFF");
+            ui_print(UI_PAGE_MAIN, "MOTOR OFF");
         }
 
 #if 0
@@ -339,8 +346,8 @@ int main() {
         uint32_t porta = GPIOA->INDR;
         if ((porta & 0x03) != 0x03) {
             // どちらかがLowになった
-            OLED_clear();
-            OLED_printf("DS change detected: %02X\n", porta & 0x03);
+            ui_clear(UI_PAGE_MAIN, );
+            ui_printf(UI_PAGE_MAIN, "DS change detected: %02X\n", porta & 0x03);
             while ((porta & 0x03) != 0x03) {
                 // どちらかがLowになっている間ループ
                 uint8_t dsa = (porta >> 0) & 1;
@@ -350,13 +357,13 @@ int main() {
                 // GP2のVirtual Input レジスタの値を直接読む
                 uint8_t gp2_vin = gp_reg_get(gp_target_addr[2 - 1], 0x7a);
                 // OLEDに表示
-                OLED_cursor(0, 1);
-                OLED_printf("A:DS=%d OP=%d \n", dsa, opa);
-                OLED_printf("B:DS=%d OP=%d \n", dsb, opb);
-                OLED_printf("GP2 VIN=%02x\n", gp2_vin);
+                ui_cursor(UI_PAGE_MAIN, 0, 1);
+                ui_printf(UI_PAGE_MAIN, "A:DS=%d OP=%d \n", dsa, opa);
+                ui_printf(UI_PAGE_MAIN, "B:DS=%d OP=%d \n", dsb, opb);
+                ui_printf(UI_PAGE_MAIN, "GP2 VIN=%02x\n", gp2_vin);
                 porta = GPIOA->INDR;
             }
-            OLED_clear();
+            ui_clear(UI_PAGE_MAIN, );
         }
 #endif
     }
