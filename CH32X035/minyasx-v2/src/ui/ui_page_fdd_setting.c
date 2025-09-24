@@ -20,6 +20,30 @@ ui_select_t rpm_select = {
     .current_index = 0,
     .selection_made = true,  // ここをfalseにすると選択モードに入る
 };
+// MODE SEL選択用UI
+static const char* mode_sel_options[] = {"NORM", "INV", NULL};
+ui_select_t mode_sel_select = {
+    .page = UI_PAGE_SETTING_FDDA,  // 初期値、FDD A設定ページ
+    .x = 13,
+    .y = 2,
+    .width = 4,
+    .options = mode_sel_options,
+    .option_count = 2,
+    .current_index = 0,
+    .selection_made = true,  // ここをfalseにすると選択モードに入る
+};
+// IN-USE pin選択用UI
+static const char* in_use_options[] = {"NONE", "LED", NULL};
+ui_select_t in_use_select = {
+    .page = UI_PAGE_SETTING_FDDA,  // 初期値、FDD A設定ページ
+    .x = 13,
+    .y = 3,
+    .width = 4,
+    .options = in_use_options,
+    .option_count = 2,
+    .current_index = 0,
+    .selection_made = true,  // ここをfalseにすると選択モードに入る
+};
 
 void ui_page_setting_fdd_init(ui_page_context_t* win, int drive);
 
@@ -146,7 +170,29 @@ void ui_page_setting_fdd_keyin(ui_page_context_t* pctx, ui_key_mask_t keys, int 
         }
         return;  // Enterが押された状態なので一旦 return
     }
-    //
+    // MODE SEL選択モードかどうか
+    if (!mode_sel_select.selection_made) {
+        // 選択モード
+        ui_select_keyin(&mode_sel_select, keys);
+        if (mode_sel_select.selection_made) {
+            // 選択確定
+            ctx->drive[drive].mode_select_inverted = (mode_sel_select.current_index == 1);
+            pcfdd_update_setting(ctx, drive);  // 設定変更を反映
+        }
+        return;  // Enterが押された状態なので一旦 return
+    }
+    // IN-USE pin選択モードかどうか
+    if (!in_use_select.selection_made) {
+        // 選択モード
+        ui_select_keyin(&in_use_select, keys);
+        if (in_use_select.selection_made) {
+            // 選択確定
+            ctx->drive[drive].in_use_mode = in_use_select.current_index;
+            pcfdd_update_setting(ctx, drive);  // 設定変更を反映
+        }
+        return;  // Enterが押された状態なので一旦 return
+    }
+    // 通常モード
     if (keys & UI_KEY_UP) {
         set_position(position - 1, drive);
     }
@@ -161,10 +207,24 @@ void ui_page_setting_fdd_keyin(ui_page_context_t* pctx, ui_key_mask_t keys, int 
             rpm_select.selection_made = false;  // 選択モードに入る
             return;
         }
-        case 7:                      // RETURN
-            set_position(1, drive);  // 戻しておく
+        case 2: {  // MODE SEL
+            mode_sel_select.page = (drive == 0) ? UI_PAGE_SETTING_FDDA : UI_PAGE_SETTING_FDDB;
+            mode_sel_select.current_index = ctx->drive[drive].mode_select_inverted ? 1 : 0;
+            mode_sel_select.selection_made = false;  // 選択モードに入る
+            return;
+        }
+        case 3: {  // IN-USE pin
+            in_use_select.page = (drive == 0) ? UI_PAGE_SETTING_FDDA : UI_PAGE_SETTING_FDDB;
+            in_use_select.current_index = ctx->drive[drive].in_use_mode;
+            in_use_select.selection_made = false;  // 選択モードに入る
+            return;
+        }
+        case 7: {  // RETURN
+            // 戻しておく
+            set_position(1, drive);
             ui_change_page(UI_PAGE_MENU);
             break;
+        }
         }
     }
 }
