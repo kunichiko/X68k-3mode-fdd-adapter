@@ -256,10 +256,8 @@ int main() {
     // UIシステムを初期化する
     ui_init(ctx);
     ui_change_page(UI_PAGE_MAIN);
-    ui_cursor(UI_PAGE_MAIN, 0, 0);
-    ui_print(UI_PAGE_MAIN, "Minys-X V2");
 
-    Delay_Ms(2000);
+    Delay_Ms(1000);
     ui_change_page(UI_PAGE_DEBUG);
 
     // INA3221を最初に初期化して電圧電流を測定できるようにする

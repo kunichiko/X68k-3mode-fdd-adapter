@@ -24,13 +24,13 @@ void ui_page_debug_poll(ui_page_context_t* ctx, uint32_t systick_ms) {
 }
 
 void ui_page_debug_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
-    if (keys & UI_KEY_ENTER) {
-        // メインページに戻る
-        ui_change_page(UI_PAGE_MAIN);
-    }
     if (keys & UI_KEY_LEFT) {
         // PCFDDデバッグページに遷移
         ui_change_page(UI_PAGE_DEBUG_PCFDD);
+    }
+    if ((keys & UI_KEY_RIGHT) || (keys & UI_KEY_ENTER)) {
+        // メインページに戻る
+        ui_change_page(UI_PAGE_MAIN);
     }
 }
 

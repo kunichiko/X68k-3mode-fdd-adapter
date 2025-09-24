@@ -9,15 +9,16 @@
 #include "oled/ssd1306_txt.h"
 
 typedef enum {
-    UI_PAGE_MAIN = 0,            // Main page
-    UI_PAGE_MENU = 1,            // Menu page
-    UI_PAGE_ABOUT = 2,           // About page
-    UI_PAGE_PDSTATUS = 3,        // PD status page
-    UI_PAGE_SETTING_COMMON = 4,  // Common settings page
-    UI_PAGE_SETTING_FDDA = 5,    // FD Drive A settings page
-    UI_PAGE_SETTING_FDDB = 6,    // FD Drive B settings page
-    UI_PAGE_DEBUG = 7,           // Debug page
-    UI_PAGE_DEBUG_PCFDD = 8,     // PCFDD debug page
+    UI_PAGE_BOOT = 0,            // Boot page
+    UI_PAGE_MAIN = 1,            // Main page
+    UI_PAGE_MENU = 2,            // Menu page
+    UI_PAGE_ABOUT = 3,           // About page
+    UI_PAGE_PDSTATUS = 4,        // PD status page
+    UI_PAGE_SETTING_COMMON = 5,  // Common settings page
+    UI_PAGE_SETTING_FDDA = 6,    // FD Drive A settings page
+    UI_PAGE_SETTING_FDDB = 7,    // FD Drive B settings page
+    UI_PAGE_DEBUG = 8,           // Debug page
+    UI_PAGE_DEBUG_PCFDD = 9,     // PCFDD debug page
     UI_PAGE_MAX,
 } ui_page_type_t;
 
@@ -60,6 +61,7 @@ void ui_page_main_init(ui_page_context_t* win);
 void ui_page_menu_init(ui_page_context_t* win);
 void ui_page_about_init(ui_page_context_t* win);
 void ui_page_pdstatus_init(ui_page_context_t* win);
+void ui_page_setting_common_init(ui_page_context_t* win);
 void ui_page_setting_fdda_init(ui_page_context_t* win);
 void ui_page_setting_fddb_init(ui_page_context_t* win);
 void ui_page_debug_init(ui_page_context_t* win);

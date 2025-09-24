@@ -28,6 +28,18 @@ static volatile uint32_t cap_buf_ds0[READ_DATA_CAP_N];
 static volatile uint32_t cap_buf_ds1[READ_DATA_CAP_N];
 static volatile uint32_t* cap_buf_active = cap_buf_ds0; /* 切替用 */
 
+void set_mode_select(drive_status_t* drive, fdd_rpm_mode_t rpm) {
+    uint32_t flag = (1 << 0);  // MODE_SELECT_DOSV のビット位置
+    bool inverted = drive->mode_select_inverted;
+    drive->rpm_setting = rpm;
+    // MODE_SELECT_DOSV の設定
+    if (((rpm == FDD_RPM_300) && !inverted) || ((rpm == FDD_RPM_360) && inverted)) {
+        GPIOB->BCR = flag;  // MODE_SELECT_DOSV = 300RPM mode
+    } else {
+        GPIOB->BSHR = flag;  // MODE_SELECT_DOSV = 360RPM mode
+    }
+}
+
 void pcfdd_init(minyasx_context_t* ctx) {
     // PCFDDコントローラの初期化コードをここに追加
     for (int i = 0; i < 2; i++) {
@@ -35,7 +47,7 @@ void pcfdd_init(minyasx_context_t* ctx) {
         ctx->drive[i].media_inserted = false;
         ctx->drive[i].ready = false;
         ctx->drive[i].rpm_control = FDD_RPM_CONTROL_9SCDRV;
-        ctx->drive[i].rpm_setting = FDD_RPM_300;
+        ctx->drive[i].rpm_setting = FDD_RPM_360;
         ctx->drive[i].rpm_measured = FDD_RPM_UNKNOWN;
         ctx->drive[i].bps_measured = BPS_UNKNOWN;
     }
@@ -122,16 +134,6 @@ void pcfdd_init(minyasx_context_t* ctx) {
     NVIC_EnableIRQ(DMA1_Channel2_IRQn);
 
     //
-    //
-    //
-
-    // GPIOB->BSHR = (1 << 4);  // Motor ON for test
-    //  GPIOB->BSHR = (1 << 2);  // Drive Select A active for test
-    //  GPIOB->BSHR = (1 << 3);  // Drive Select B active for test
-    //  PB0: MODE_SELECT_DOSV
-    GPIOB->BSHR = (1 << 0);  // 360RPM mode for test
-
-    //
     // シーク
     //
     int seek_count = 0;
@@ -186,6 +188,10 @@ void pcfdd_init(minyasx_context_t* ctx) {
         Delay_Ms(3);
     }
     GPIOB->BCR = (1 << 3);  // Drive Select B inactive for test
+
+    //
+    set_mode_select(&ctx->drive[0], ctx->drive[0].rpm_setting);
+    set_mode_select(&ctx->drive[1], ctx->drive[1].rpm_setting);
 }
 
 /**
@@ -557,4 +563,31 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     ui_cursor(UI_PAGE_DEBUG_PCFDD, 0, 4);
     ui_printf(UI_PAGE_DEBUG_PCFDD, "BPS:%3dk BPS:%3dk", fdd_bps_mode_to_value(bps0) / 1000, fdd_bps_mode_to_value(bps1) / 1000);
 #endif
+}
+
+void pcfdd_update_setting(minyasx_context_t* ctx, int drive) {
+    if (drive < 0 || drive > 1) return;
+    // PCFDDコントローラの設定更新コードをここに追加
+    // RPM設定が変わった場合に、MODE_SELECT_DOSVを切り替える
+    switch (ctx->drive[drive].rpm_control) {
+    case FDD_RPM_CONTROL_360:
+        // 360RPMモード
+        GPIOB->BSHR = (1 << 0);  // MODE_SELECT_DOSV = 1
+        ctx->drive[drive].rpm_setting = FDD_RPM_360;
+        ctx->drive[drive].rpm_measured = FDD_RPM_UNKNOWN;
+        ctx->drive[drive].bps_measured = BPS_UNKNOWN;
+        break;
+    case FDD_RPM_CONTROL_300:
+        // 300RPMモード
+        GPIOB->BCR = (1 << 0);  // MODE_SELECT_DOSV = 0
+        ctx->drive[drive].rpm_setting = FDD_RPM_300;
+        ctx->drive[drive].rpm_measured = FDD_RPM_UNKNOWN;
+        ctx->drive[drive].bps_measured = BPS_UNKNOWN;
+        break;
+    case FDD_RPM_CONTROL_9SCDRV:
+        // 9SCDRV互換モード
+        break;
+    default:
+        break;
+    }
 }

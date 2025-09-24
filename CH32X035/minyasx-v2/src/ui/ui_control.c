@@ -9,17 +9,12 @@ static ui_page_type_t current_page = UI_PAGE_MAIN;
 void ui_refresh(void) {
     // 現在のページに対応するバッファを取得
     ui_page_context_t *win = &ui_pages[current_page];
-    // OLEDをクリアしてバッファの内容を描画
-    OLED_clear();
+    // OLEDをバッファの内容で更新
     for (int y = 0; y < 8; y++) {
         OLED_cursor(0, y);
         for (int x = 0; x < 21; x++) {
             char c = win->buf[y][x];
-            if (c != 0) {
-                OLED_write(c);
-            } else {
-                break;  // NULL文字で終了
-            }
+            OLED_write(c);
         }
     }
 }
@@ -53,7 +48,7 @@ void ui_clear(ui_page_type_t page) {
     // バッファをクリア
     for (int y = 0; y < 8; y++) {
         for (int x = 0; x < 21; x++) {
-            win->buf[y][x] = 0;
+            win->buf[y][x] = ' ';  // スペースでクリア
         }
     }
     win->x = 0;
@@ -156,34 +151,18 @@ void ui_write_null(char c) {
     (void)c;
 }
 
+ui_write_t writers[UI_PAGE_MAX] = {
+    ui_write_0, ui_write_1, ui_write_2,  ui_write_3,  //
+    ui_write_4, ui_write_5, ui_write_6,  ui_write_7,  //
+    ui_write_8, ui_write_9, ui_write_10,
+};
+
 ui_write_t ui_get_writer(ui_page_type_t page) {
     // 現在のページに対応するライター関数を返す
-    switch (page) {
-    case UI_PAGE_MAIN:
-        return ui_write_0;
-    case UI_PAGE_MENU:
-        return ui_write_1;
-    case UI_PAGE_ABOUT:
-        return ui_write_2;
-    case UI_PAGE_PDSTATUS:
-        return ui_write_3;
-    case UI_PAGE_SETTING_COMMON:
-        return ui_write_4;
-    case UI_PAGE_SETTING_FDDA:
-        return ui_write_5;
-    case UI_PAGE_SETTING_FDDB:
-        return ui_write_6;
-    case UI_PAGE_DEBUG:
-        return ui_write_7;
-    case UI_PAGE_DEBUG_PCFDD:
-        return ui_write_8;
-    case 9:
-        return ui_write_9;
-    case 10:
-        return ui_write_10;
-    default:
+    if (page < 0 || page >= UI_PAGE_MAX) {
         return ui_write_null;
     }
+    return writers[page];
 }
 
 void ui_init(minyasx_context_t *ctx) {
@@ -193,7 +172,7 @@ void ui_init(minyasx_context_t *ctx) {
         ui_pages[i].page = (ui_page_type_t)i;
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 21; x++) {
-                ui_pages[i].buf[y][x] = 0;  // バッファをクリア
+                ui_pages[i].buf[y][x] = ' ';  // バッファをクリア
             }
         }
         ui_pages[i].x = 0;
@@ -214,6 +193,7 @@ void ui_init(minyasx_context_t *ctx) {
     ui_page_menu_init(&ui_pages[UI_PAGE_MENU]);
     ui_page_about_init(&ui_pages[UI_PAGE_ABOUT]);
     ui_page_pdstatus_init(&ui_pages[UI_PAGE_PDSTATUS]);
+    ui_page_setting_common_init(&ui_pages[UI_PAGE_SETTING_COMMON]);
     ui_page_setting_fdda_init(&ui_pages[UI_PAGE_SETTING_FDDA]);
     ui_page_setting_fddb_init(&ui_pages[UI_PAGE_SETTING_FDDB]);
     ui_page_debug_init(&ui_pages[UI_PAGE_DEBUG]);
