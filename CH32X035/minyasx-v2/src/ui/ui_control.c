@@ -2,13 +2,13 @@
 
 #include "greenpak/greenpak_control.h"
 
-static ui_window_t ui_windows[UI_PAGE_MAX];
+static ui_page_context_t ui_pages[UI_PAGE_MAX];
 
-static UI_PAGE_t current_page = UI_PAGE_MAIN;
+static ui_page_type_t current_page = UI_PAGE_MAIN;
 
 void ui_refresh(void) {
     // 現在のページに対応するバッファを取得
-    ui_window_t *win = &ui_windows[current_page];
+    ui_page_context_t *win = &ui_pages[current_page];
     // OLEDをクリアしてバッファの内容を描画
     OLED_clear();
     for (int y = 0; y < 8; y++) {
@@ -24,7 +24,7 @@ void ui_refresh(void) {
     }
 }
 
-void ui_change_page(UI_PAGE_t page) {
+void ui_change_page(ui_page_type_t page) {
     if (page < 0 || page >= UI_PAGE_MAX) {
         return;  // 無効なページ番号
     }
@@ -35,17 +35,21 @@ void ui_change_page(UI_PAGE_t page) {
     current_page = page;
     // 画面を更新
     ui_refresh();
+    // ページのenterコールバックを呼び出す
+    if (ui_pages[page].enter) {
+        ui_pages[page].enter(&ui_pages[page]);
+    }
 }
 
-UI_PAGE_t ui_get_current_page(void) {
+ui_page_type_t ui_get_current_page(void) {
     return current_page;
 }
 
-void ui_clear(UI_PAGE_t page) {
+void ui_clear(ui_page_type_t page) {
     if (page < 0 || page >= UI_PAGE_MAX) {
         return;  // 無効なページ番号
     }
-    ui_window_t *win = &ui_windows[page];
+    ui_page_context_t *win = &ui_pages[page];
     // バッファをクリア
     for (int y = 0; y < 8; y++) {
         for (int x = 0; x < 21; x++) {
@@ -61,11 +65,11 @@ void ui_clear(UI_PAGE_t page) {
     }
 }
 
-void ui_cursor(UI_PAGE_t page, uint8_t x, uint8_t y) {
+void ui_cursor(ui_page_type_t page, uint8_t x, uint8_t y) {
     if (page < 0 || page >= UI_PAGE_MAX) {
         return;  // 無効なページ番号
     }
-    ui_window_t *win = &ui_windows[page];
+    ui_page_context_t *win = &ui_pages[page];
     if (x < 0) x = 0;
     if (x >= 21) x = 20;
     if (y < 0) y = 0;
@@ -77,13 +81,13 @@ void ui_cursor(UI_PAGE_t page, uint8_t x, uint8_t y) {
     }
 }
 
-void ui_print(UI_PAGE_t page, char *str) {
+void ui_print(ui_page_type_t page, char *str) {
     while (*str) ui_write(page, *str++);
 }
 
-void ui_write(UI_PAGE_t page, char c) {
+void ui_write(ui_page_type_t page, char c) {
     // 現在のページに対応するバッファを取得
-    ui_window_t *win = &ui_windows[page];
+    ui_page_context_t *win = &ui_pages[page];
     // バッファに文字を書き込む
     if (c == '\n') {
         win->x = 0;
@@ -152,7 +156,7 @@ void ui_write_null(char c) {
     (void)c;
 }
 
-ui_write_t ui_get_writer(UI_PAGE_t page) {
+ui_write_t ui_get_writer(ui_page_type_t page) {
     // 現在のページに対応するライター関数を返す
     switch (page) {
     case UI_PAGE_MAIN:
@@ -185,15 +189,18 @@ ui_write_t ui_get_writer(UI_PAGE_t page) {
 void ui_init(minyasx_context_t *ctx) {
     // 各ウィンドウの初期化
     for (int i = 0; i < UI_PAGE_MAX; i++) {
-        ui_windows[i].page = (UI_PAGE_t)i;
+        ui_pages[i].ctx = ctx;
+        ui_pages[i].page = (ui_page_type_t)i;
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 21; x++) {
-                ui_windows[i].buf[y][x] = 0;  // バッファをクリア
+                ui_pages[i].buf[y][x] = 0;  // バッファをクリア
             }
         }
-        ui_windows[i].x = 0;
-        ui_windows[i].y = 0;
-        ui_windows[i].key_callback = NULL;
+        ui_pages[i].x = 0;
+        ui_pages[i].y = 0;
+        ui_pages[i].enter = NULL;
+        ui_pages[i].poll = NULL;
+        ui_pages[i].keyin = NULL;
     }
     // OLEDの初期化
     OLED_init();
@@ -203,21 +210,24 @@ void ui_init(minyasx_context_t *ctx) {
     current_page = UI_PAGE_MAIN;
 
     // 各ページの初期化
-    ui_page_main_init(ctx, &ui_windows[UI_PAGE_MAIN]);
-    ui_page_menu_init(ctx, &ui_windows[UI_PAGE_MENU]);
-    ui_page_about_init(ctx, &ui_windows[UI_PAGE_ABOUT]);
-    ui_page_pdstatus_init(ctx, &ui_windows[UI_PAGE_PDSTATUS]);
-    ui_page_debug_init(ctx, &ui_windows[UI_PAGE_DEBUG]);
-    ui_page_debug_init_pcfdd(ctx, &ui_windows[UI_PAGE_DEBUG_PCFDD]);
+    ui_page_main_init(&ui_pages[UI_PAGE_MAIN]);
+    ui_page_menu_init(&ui_pages[UI_PAGE_MENU]);
+    ui_page_about_init(&ui_pages[UI_PAGE_ABOUT]);
+    ui_page_pdstatus_init(&ui_pages[UI_PAGE_PDSTATUS]);
+    ui_page_setting_fdda_init(&ui_pages[UI_PAGE_SETTING_FDDA]);
+    ui_page_setting_fddb_init(&ui_pages[UI_PAGE_SETTING_FDDB]);
+    ui_page_debug_init(&ui_pages[UI_PAGE_DEBUG]);
+    ui_page_debug_init_pcfdd(&ui_pages[UI_PAGE_DEBUG_PCFDD]);
 }
 
 void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
     // 各ページのポーリング処理
-    ui_page_main_poll(ctx, systick_ms);
-    ui_page_menu_poll(ctx, systick_ms);
-    ui_page_about_poll(ctx, systick_ms);
-    ui_page_pdstatus_poll(ctx, systick_ms);
-    ui_page_debug_poll(ctx, systick_ms);
+    for (int i = 0; i < UI_PAGE_MAX; i++) {
+        ui_page_context_t *win = &ui_pages[i];
+        if (win->poll) {
+            win->poll(win, systick_ms);
+        }
+    }
 
     // ここでキー入力のポーリングを行い、必要に応じてコールバックを呼び出す
     // 例えば、キー状態を読み取る関数があると仮定
@@ -250,8 +260,58 @@ void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
         return;
     }
     last_keys = keys;
-    ui_window_t *win = &ui_windows[current_page];
-    if (win->key_callback) {
-        win->key_callback(keys);
+    ui_page_context_t *page = &ui_pages[current_page];
+    if (page->keyin) {
+        page->keyin(&ui_pages[current_page], keys);
     }
+}
+
+void ui_select_print(ui_select_t *select, bool inverted) {
+    // 選択肢の表示
+    if (select->options && select->current_index < select->option_count) {
+        uint8_t str[select->width + 1];
+        str[select->width] = 0;  // NULL終端
+        bool end = false;
+        for (int i = 0; i < select->width; i++) {
+            if (!end && select->options[select->current_index][i] != 0) {
+                str[i] = select->options[select->current_index][i] | (inverted ? 0x80 : 0);
+            } else {
+                end = true;
+                str[i] = ' ' | (inverted ? 0x80 : 0);  // 空白で初期化
+            }
+        }
+        ui_cursor(select->page, select->x, select->y);
+        ui_print(select->page, (char *)str);
+    }
+}
+
+void ui_select_init(ui_select_t *select) {
+    // 現在の選択肢を表示
+    ui_select_print(select, true);
+}
+
+/**
+ * 上下キーで選択肢を移動し、Enterキーで決定する
+ * 選択が確定したら select->selection_made を true にする
+ * keys: 押されたキーのビットマスク
+ */
+void ui_select_keyin(ui_select_t *select, ui_key_mask_t keys) {
+    if (keys & UI_KEY_UP) {
+        // 上キーが押された場合
+        if (select->current_index > 0) {
+            select->current_index--;
+        }
+    } else if (keys & UI_KEY_DOWN) {
+        // 下キーが押された場合
+        if (select->current_index < select->option_count - 1) {
+            select->current_index++;
+        }
+    } else if (keys & UI_KEY_ENTER) {
+        // Enterキーが押された場合
+        select->selection_made = true;
+        ui_select_print(select, false);  // 選択確定なので反転解除
+        return;
+    }
+    // 選択肢の表示を更新
+    ui_select_print(select, true);
 }

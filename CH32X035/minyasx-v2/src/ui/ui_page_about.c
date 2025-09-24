@@ -1,35 +1,43 @@
 #include "ui_control.h"
 
-void ui_page_about_init(minyasx_context_t* ctx, ui_window_t* win) {
-    win->key_callback = ui_page_about_key_callback;
+// About page
+static void ui_page_about_enter(ui_page_context_t* pctx);
+void ui_page_about_poll(ui_page_context_t* pctx, uint32_t systick_ms);
+void ui_page_about_keyin(ui_page_context_t* pctx, ui_key_mask_t keys);
 
-    ui_cursor(UI_PAGE_ABOUT, 0, 0);
-    ui_print(UI_PAGE_ABOUT, "[About]\n");
-    ui_print(UI_PAGE_ABOUT, " Minyas X @kunichiko\n");
-    ui_print(UI_PAGE_ABOUT, " PCB Version 2.0.2\n");
-    ui_print(UI_PAGE_ABOUT, " Firm Version 2.0.0\n");
-    ui_print(UI_PAGE_ABOUT, " FDD A:\n");
-    ui_print(UI_PAGE_ABOUT, " FDD B:\n");
-    ui_cursor(UI_PAGE_ABOUT, 0, 7);
-    ui_print(UI_PAGE_ABOUT, ">RETURN");
+void ui_page_about_init(ui_page_context_t* win) {
+    win->enter = ui_page_about_enter;
+    win->poll = NULL;
+    win->keyin = ui_page_about_keyin;
+
+    ui_page_type_t page = win->page;
+
+    ui_cursor(page, 0, 0);
+    ui_print(page, "[About]\n");
+    ui_print(page, " Minyas X @kunichiko\n");
+    ui_print(page, " PCB Version 2.0.2\n");
+    ui_print(page, " Firm Version 2.0.0\n");
+    ui_print(page, " FDD A:\n");
+    ui_print(page, " FDD B:\n");
+    ui_cursor(page, 0, 7);
+    ui_print(page, ">RETURN");
 }
 
-void ui_page_about_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
-    if (ui_get_current_page() != UI_PAGE_ABOUT) {
-        return;
-    }
+void ui_page_about_enter(ui_page_context_t* pctx) {
+    ui_page_type_t page = pctx->page;
+    minyasx_context_t* ctx = pctx->ctx;
     // Aboutページのポーリング処理
     for (int i = 0; i < 2; i++) {
-        ui_cursor(UI_PAGE_ABOUT, 7, 4 + i);
+        ui_cursor(page, 7, 4 + i);
         if (ctx->drive[0].connected) {
-            ui_printf(UI_PAGE_ABOUT, " ID%d", ctx->drive[0].drive_id);
+            ui_printf(page, " ID%d", ctx->drive[0].drive_id);
         } else {
-            ui_print(UI_PAGE_ABOUT, " N/A");
+            ui_print(page, " N/A");
         }
     }
 }
 
-void ui_page_about_key_callback(ui_key_mask_t keys) {
+void ui_page_about_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
     if (keys & UI_KEY_ENTER) {
         // メニューページに戻る
         ui_change_page(UI_PAGE_MENU);

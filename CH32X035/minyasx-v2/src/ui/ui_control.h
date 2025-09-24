@@ -19,7 +19,7 @@ typedef enum {
     UI_PAGE_DEBUG = 7,           // Debug page
     UI_PAGE_DEBUG_PCFDD = 8,     // PCFDD debug page
     UI_PAGE_MAX,
-} UI_PAGE_t;
+} ui_page_type_t;
 
 typedef enum {
     UI_KEY_NONE = 0,          // 何も押されていない
@@ -35,26 +35,44 @@ typedef enum {
 typedef uint32_t ui_key_mask_t;  // 同時押し表現用
 
 // コールバック関数の型（キーが押されたら呼ばれる）
-typedef void (*ui_key_callback_t)(ui_key_mask_t keys);
+// ui_page_context_tのプロトタイプ宣言
+struct ui_page_context_t;  // 構造体の前方宣言
 
-typedef struct {
-    UI_PAGE_t page;
+typedef void (*ui_page_enter_t)(struct ui_page_context_t* pctx);
+typedef void (*ui_page_poll_t)(struct ui_page_context_t* pctx, uint32_t systick_ms);
+typedef void (*ui_page_keyin_t)(struct ui_page_context_t* pctx, ui_key_mask_t keys);
+
+typedef struct ui_page_context_t {
+    minyasx_context_t* ctx;
+    ui_page_type_t page;
     uint8_t buf[8][21];  // 128x64dot with 6x8font = 21x8char
     uint8_t x;
     uint8_t y;
-    ui_key_callback_t key_callback;
-} ui_window_t;
+    ui_page_enter_t enter;
+    ui_page_poll_t poll;
+    ui_page_keyin_t keyin;
+} ui_page_context_t;
 
-void ui_change_page(UI_PAGE_t page);
-UI_PAGE_t ui_get_current_page(void);
+void ui_change_page(ui_page_type_t page);
+ui_page_type_t ui_get_current_page(void);
+
+void ui_page_main_init(ui_page_context_t* win);
+void ui_page_menu_init(ui_page_context_t* win);
+void ui_page_about_init(ui_page_context_t* win);
+void ui_page_pdstatus_init(ui_page_context_t* win);
+void ui_page_setting_fdda_init(ui_page_context_t* win);
+void ui_page_setting_fddb_init(ui_page_context_t* win);
+void ui_page_debug_init(ui_page_context_t* win);
+void ui_page_debug_init_pcfdd(ui_page_context_t* win);
+
 typedef void (*ui_write_t)(char c);  // Write a character or handle control characters
 
-ui_write_t ui_get_writer(UI_PAGE_t page);
+ui_write_t ui_get_writer(ui_page_type_t page);
 
-void ui_clear(UI_PAGE_t page);
-void ui_cursor(UI_PAGE_t page, uint8_t x, uint8_t y);
-void ui_print(UI_PAGE_t page, char* str);
-void ui_write(UI_PAGE_t page, char c);
+void ui_clear(ui_page_type_t page);
+void ui_cursor(ui_page_type_t page, uint8_t x, uint8_t y);
+void ui_print(ui_page_type_t page, char* str);
+void ui_write(ui_page_type_t page, char c);
 
 #include "print.h"
 #define ui_printD(p, n) printD(ui_get_writer(p), n)  // print decimal as string
@@ -70,28 +88,23 @@ void ui_init(minyasx_context_t* ctx);
 
 void ui_poll(minyasx_context_t* ctx, uint32_t systick_ms);
 
-// main page
-void ui_page_main_init(minyasx_context_t* ctx, ui_window_t* win);
-void ui_page_main_poll(minyasx_context_t* ctx, uint32_t systick_ms);
-void ui_page_main_key_callback(ui_key_mask_t keys);
-// menu page
-void ui_page_menu_init(minyasx_context_t* ctx, ui_window_t* win);
-void ui_page_menu_poll(minyasx_context_t* ctx, uint32_t systick_ms);
-void ui_page_menu_key_callback(ui_key_mask_t keys);
-// about page
-void ui_page_about_init(minyasx_context_t* ctx, ui_window_t* win);
-void ui_page_about_poll(minyasx_context_t* ctx, uint32_t systick_ms);
-void ui_page_about_key_callback(ui_key_mask_t keys);
-// pdstatus page
-void ui_page_pdstatus_init(minyasx_context_t* ctx, ui_window_t* win);
-void ui_page_pdstatus_poll(minyasx_context_t* ctx, uint32_t systick_ms);
-void ui_page_pdstatus_key_callback(ui_key_mask_t keys);
-
-// debug page
-void ui_page_debug_init(minyasx_context_t* ctx, ui_window_t* win);
-void ui_page_debug_init_pcfdd(minyasx_context_t* ctx, ui_window_t* win);
-void ui_page_debug_poll(minyasx_context_t* ctx, uint32_t systick_ms);
-void ui_page_debug_key_callback(ui_key_mask_t keys);
-void ui_page_debug_key_callback_pcfdd(ui_key_mask_t keys);
+// 複数の選択肢を上下キーで選択し、Enterキーで決定するUIを表示する
+// 選択肢はNULL終端の文字列配列で与える
+// 戻り値は選択されたインデックス（0から始まる）
+// キーのコールバックを受け渡す必要があるので、以下の関数に分解する
+// - ui_select_init() : 選択肢の表示と初期化
+// - ui_select_keyin() : キー入力のコールバック
+typedef struct {
+    ui_page_type_t page;   // 選択肢を表示するページ
+    int x;                 // 選択肢の表示位置X
+    int y;                 // 選択肢の表示位置Y
+    int width;             // 選択肢の表示幅（最大文字数）
+    const char** options;  // 選択肢の文字列配列（NULL終端）
+    size_t option_count;   // 選択肢の数
+    size_t current_index;  // 現在選択されているインデックス
+    bool selection_made;   // 選択が確定したか
+} ui_select_t;
+void ui_select_init(ui_select_t* select);
+void ui_select_keyin(ui_select_t* select, ui_key_mask_t keys);
 
 #endif  // UI_CONTROL_H

@@ -19,7 +19,7 @@ volatile bool double_option_B = double_option_B_always;
 // Number of ticks elapsed per microsecond (48 when using 48MHz Clock)
 #define SYSTICK_ONE_MICROSECOND ((uint32_t)FUNCONF_SYSTEM_CORE_CLOCK / 1000000)
 
-void x68fdd_init(void) {
+void x68fdd_init(minyasx_context_t* ctx) {
     // X68000側からのアクセスに割り込みで応答するために、以下のGPIOの割り込みを設定する
     //
     // PA0 : DRIVE_SELECT_A
