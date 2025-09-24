@@ -53,14 +53,15 @@ static void ui_page_menu_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
             ui_change_page(UI_PAGE_PDSTATUS);
             break;
         case 3:
-            // Common Setting TODO
+            // Common Setting
+            ui_change_page(UI_PAGE_SETTING_COMMON);
             break;
         case 4:
-            // FDD A Setting TODO
+            // FDD A Setting
             ui_change_page(UI_PAGE_SETTING_FDDA);
             break;
         case 5:
-            // FDD B Setting TODO
+            // FDD B Setting
             ui_change_page(UI_PAGE_SETTING_FDDB);
             break;
         case 7:

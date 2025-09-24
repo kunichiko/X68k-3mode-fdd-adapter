@@ -17,6 +17,13 @@ typedef enum {
 
 void pcfdd_set_current_ds(pcfdd_ds_t ds);
 
+void set_mode_select(drive_status_t* drive, fdd_rpm_mode_t rpm);
+
 uint32_t fdd_bps_mode_to_value(fdd_bps_mode_t m);
+
+/**
+ * 設定が変更されたら呼び出す関数
+ */
+void pcfdd_update_setting(minyasx_context_t* ctx, int drive);
 
 #endif

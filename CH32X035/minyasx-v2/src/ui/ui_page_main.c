@@ -10,12 +10,12 @@ void ui_page_main_init(ui_page_context_t* pctx) {
     pctx->enter = ui_page_main_enter;
     pctx->poll = ui_page_main_poll;
     pctx->keyin = ui_page_main_keyin;
-}
-
-void ui_page_main_enter(ui_page_context_t* pctx) {
     ui_clear(UI_PAGE_MAIN);
     ui_cursor(UI_PAGE_MAIN, 10, 0);
     ui_print(UI_PAGE_MAIN, "-Minyas X-");
+}
+
+void ui_page_main_enter(ui_page_context_t* pctx) {
 }
 
 void ui_page_main_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
@@ -44,10 +44,21 @@ void ui_page_main_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
         ui_printf(page, "%c[%s]", (i == 0 ? 'A' : 'B'), "ready");
         ui_cursor(page, 0, 1 + i * 4);
         ui_printf(page, " S:%3drpm", ctx->drive[i].rpm_setting == FDD_RPM_300 ? 300 : 360);
+        //
         ui_cursor(page, 0, 2 + i * 4);
-        ui_printf(page, " M:%3drpm", ctx->drive[i].rpm_measured == FDD_RPM_300 ? 300 : 360);
+        if (ctx->drive[i].rpm_measured == FDD_RPM_UNKNOWN) {
+            ui_print(page, " M:---rpm");
+        } else {
+            ui_printf(page, " M:%3drpm", ctx->drive[i].rpm_measured == FDD_RPM_300 ? 300 : 360);
+        }
+        //
         ui_cursor(page, 0, 3 + i * 4);
-        ui_printf(page, " M:%3dbps", fdd_bps_mode_to_value(ctx->drive[i].bps_measured) / 1000);
+        if (ctx->drive[i].bps_measured == BPS_UNKNOWN) {
+            ui_print(page, " M:---k");
+        } else {
+            int bps = fdd_bps_mode_to_value(ctx->drive[i].bps_measured) / 1000;
+            ui_printf(page, " M:%3dk", bps);
+        }
     }
 }
 

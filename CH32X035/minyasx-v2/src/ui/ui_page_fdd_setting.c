@@ -142,6 +142,7 @@ void ui_page_setting_fdd_keyin(ui_page_context_t* pctx, ui_key_mask_t keys, int 
         if (rpm_select.selection_made) {
             // 選択確定
             ctx->drive[drive].rpm_control = rpm_select.current_index;
+            pcfdd_update_setting(ctx, drive);  // 設定変更を反映
         }
         return;  // Enterが押された状態なので一旦 return
     }

@@ -13,6 +13,7 @@
         "ssd1306_txt.h": "c",
         "print.h": "c",
         "greenpak_control.h": "c",
-        "pcfdd_control.h": "c"
+        "pcfdd_control.h": "c",
+        "ui_control.h": "c"
     }
 }

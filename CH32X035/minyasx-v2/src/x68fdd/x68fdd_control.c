@@ -19,7 +19,11 @@ volatile bool double_option_B = double_option_B_always;
 // Number of ticks elapsed per microsecond (48 when using 48MHz Clock)
 #define SYSTICK_ONE_MICROSECOND ((uint32_t)FUNCONF_SYSTEM_CORE_CLOCK / 1000000)
 
+// 割り込みルーチンからコンテキストを参照できるようにする
+static minyasx_context_t* g_ctx = NULL;
+
 void x68fdd_init(minyasx_context_t* ctx) {
+    g_ctx = ctx;
     // X68000側からのアクセスに割り込みで応答するために、以下のGPIOの割り込みを設定する
     //
     // PA0 : DRIVE_SELECT_A
@@ -112,10 +116,11 @@ void EXTI7_0_IRQHandler(void) {
         } else {
             // DRIVE_SELECT_AがLowになった
             if (double_option_A) {
-                GPIOB->BCR = (1 << 0);  // MODE_SELECT_DOSV = 300RPM mode
+                set_mode_select(&g_ctx->drive[0], FDD_RPM_300);
             } else {
-                GPIOB->BSHR = (1 << 0);  // MODE_SELECT_DOSV = 360RPM mode
+                set_mode_select(&g_ctx->drive[0], FDD_RPM_360);
             }
+            GPIOB->BCR = (1 << 3);            // DRIVE_SELECT_DOSV_B inactive (Low) to avoid both selected
             GPIOB->BSHR = (1 << 2);           // DRIVE_SELECT_DOSV_A active (High)
             pcfdd_set_current_ds(PCFDD_DS0);  // 現在のドライブ選択をAにセット
         }
@@ -130,10 +135,11 @@ void EXTI7_0_IRQHandler(void) {
         } else {
             // DRIVE_SELECT_BがLowになった
             if (double_option_B) {
-                GPIOB->BCR = (1 << 0);  // MODE_SELECT_DOSV = 300RPM mode
+                set_mode_select(&g_ctx->drive[1], FDD_RPM_300);
             } else {
-                GPIOB->BSHR = (1 << 0);  // MODE_SELECT_DOSV = 360RPM mode
+                set_mode_select(&g_ctx->drive[1], FDD_RPM_360);
             }
+            GPIOB->BCR = (1 << 2);            // DRIVE_SELECT_DOSV_A inactive (Low) to avoid both selected
             GPIOB->BSHR = (1 << 3);           // DRIVE_SELECT_DOSV_B active (High)
             pcfdd_set_current_ds(PCFDD_DS1);  // 現在のドライブ選択をBにセット
         }
@@ -332,16 +338,16 @@ void SysTick_Handler(void) {
     if (ds_a) {
         if (double_option_A) {
             // DRIVE_SELECT_Aがアサートされていて、OPTION SELECT Aが同時アサートされている
-            GPIOB->BCR = (1 << 0);  // MODE_SELECT_DOSV = 300RPM mode
+            set_mode_select(&g_ctx->drive[0], FDD_RPM_300);
         } else {
-            GPIOB->BSHR = (1 << 0);  // MODE_SELECT_DOSV = 360RPM mode
+            set_mode_select(&g_ctx->drive[0], FDD_RPM_360);
         }
     }
     if (ds_b) {
         if (double_option_B) {
-            GPIOB->BCR = (1 << 0);  // MODE_SELECT_DOSV = 300RPM mode
+            set_mode_select(&g_ctx->drive[1], FDD_RPM_300);
         } else {
-            GPIOB->BSHR = (1 << 0);  // MODE_SELECT_DOSV = 360RPM mode
+            set_mode_select(&g_ctx->drive[1], FDD_RPM_360);
         }
     }
 
