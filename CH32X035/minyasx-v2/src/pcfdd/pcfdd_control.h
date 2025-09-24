@@ -5,7 +5,7 @@
 
 #include "minyasx.h"
 
-void pcfdd_init(void);
+void pcfdd_init(minyasx_context_t* ctx);
 void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms);
 
 /* 別モジュールから現在のDRIVE_SELECT状態を通知する */

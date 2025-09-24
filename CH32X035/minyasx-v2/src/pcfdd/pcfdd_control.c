@@ -28,9 +28,17 @@ static volatile uint32_t cap_buf_ds0[READ_DATA_CAP_N];
 static volatile uint32_t cap_buf_ds1[READ_DATA_CAP_N];
 static volatile uint32_t* cap_buf_active = cap_buf_ds0; /* 切替用 */
 
-void pcfdd_init(void) {
+void pcfdd_init(minyasx_context_t* ctx) {
     // PCFDDコントローラの初期化コードをここに追加
-
+    for (int i = 0; i < 2; i++) {
+        ctx->drive[i].connected = false;
+        ctx->drive[i].media_inserted = false;
+        ctx->drive[i].ready = false;
+        ctx->drive[i].rpm_control = FDD_RPM_CONTROL_9SCDRV;
+        ctx->drive[i].rpm_setting = FDD_RPM_300;
+        ctx->drive[i].rpm_measured = FDD_RPM_UNKNOWN;
+        ctx->drive[i].bps_measured = BPS_UNKNOWN;
+    }
     //
     // FDのINDEX信号の立ち上がり/立ち下がりエッジを検出するために、Timer3 Channel1を使う
     //
@@ -542,8 +550,8 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
 
     fdd_bps_mode_t bps0 = pcfdd_bps_decide_and_reset(0); /* DS0のbpsを取得 */
     fdd_bps_mode_t bps1 = pcfdd_bps_decide_and_reset(1); /* DS1のbpsを取得 */
-    ctx->drive[0].bps_current = bps0;
-    ctx->drive[1].bps_current = bps1;
+    ctx->drive[0].bps_measured = bps0;
+    ctx->drive[1].bps_measured = bps1;
 
 #if 0
     ui_cursor(UI_PAGE_DEBUG_PCFDD, 0, 4);

@@ -285,8 +285,8 @@ int main() {
     Delay_Ms(1000);
 
     //
-    pcfdd_init();
-    x68fdd_init();
+    pcfdd_init(ctx);
+    x68fdd_init(ctx);
 
     // DIP SWの状態を GreenPAKにセットする
     uint8_t ds0 = (GPIOA->INDR >> 22) & 1;

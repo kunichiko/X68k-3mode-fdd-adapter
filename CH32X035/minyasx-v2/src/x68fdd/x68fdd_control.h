@@ -6,7 +6,7 @@
 #include "ch32fun.h"
 #include "minyasx.h"
 
-void x68fdd_init(void);
+void x68fdd_init(minyasx_context_t* ctx);
 void x68fdd_poll(minyasx_context_t* ctx, uint32_t systick_ms);
 
 #endif  // X68FDD_CONTROL_H

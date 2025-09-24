@@ -258,6 +258,7 @@ void OLED_textsize(uint8_t size) {
 #endif  // OLED_BIGCHARS > 0
 
 // OLED plot a single character
+// bit7 = invert character
 void OLED_plotChar(char c) {
     uint16_t ptr = c - 32;  // character pointer
     ptr += ptr << 2;        // -> ptr = (ch - 32) * 5;
@@ -316,6 +317,9 @@ void OLED_plotChar(char c) {
 
 // OLED write a character or handle control characters
 void OLED_write(char c) {
+    if (c & 0x80) {
+        OLED_textinvert(1);
+    }
     c &= 0x7f;                      // ignore top bit
     if (c >= 32) OLED_plotChar(c);  // normal character
 #if OLED_BIGCHARS > 0
@@ -327,6 +331,9 @@ void OLED_write(char c) {
 #endif
     else if (c == '\r')
         OLED_cursor(0, OLED_y);  // carriage return
+
+    // 戻す
+    OLED_textinvert(0);
 }
 
 // OLED print a string

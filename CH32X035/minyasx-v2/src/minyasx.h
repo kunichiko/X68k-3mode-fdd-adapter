@@ -7,6 +7,19 @@
 #include "ch32fun.h"
 
 typedef enum {
+    FDD_RPM_CONTROL_NONE = 0,
+    FDD_RPM_CONTROL_300 = 1,
+    FDD_RPM_CONTROL_360 = 2,
+    FDD_RPM_CONTROL_9SCDRV = 3,  // 9SCDRVによるOptionSelect同時アサート方式による制御
+    FDD_RPM_CONTROL_BPS = 4,     // BPSによる自動判定方式による制御
+} fdd_rpm_control_t;
+
+typedef enum {
+    FDD_IN_USE_NONE = 0,
+    FDD_IN_USE_LED = 1,
+} fdd_in_use_mode_t;
+
+typedef enum {
     FDD_RPM_UNKNOWN,
     FDD_RPM_300,
     FDD_RPM_360,
@@ -29,14 +42,16 @@ typedef enum {
 } fdd_bps_mode_t;
 
 typedef struct drive_status {
-    bool connected;              // ドライブが接続されているか
-    uint8_t drive_id;            // ドライブID (0-3)
-    bool media_inserted;         // メディアが挿入されているか
-    bool ready;                  // ドライブが準備完了か
-    fdd_rpm_mode_t rpm_setting;  // 設定された回転数
-    fdd_rpm_mode_t rpm_current;  // 現在の回転数
-    fdd_bps_mode_t bps_setting;  // 設定されたBPS
-    fdd_bps_mode_t bps_current;  // 現在のBPS
+    bool connected;                 // ドライブが接続されているか
+    uint8_t drive_id;               // ドライブID (0-3)
+    bool media_inserted;            // メディアが挿入されているか
+    bool ready;                     // ドライブが準備完了か
+    bool mode_select_inverted;      // MODE SELECT信号の極性反転
+    fdd_in_use_mode_t in_use_mode;  // IN-USE信号の動作モード
+    fdd_rpm_control_t rpm_control;  // 回転数制御方式
+    fdd_rpm_mode_t rpm_setting;     // 設定された回転数
+    fdd_rpm_mode_t rpm_measured;    // 測定された回転数
+    fdd_bps_mode_t bps_measured;    // 測定されたBPS
 } drive_status_t;
 
 typedef struct power_status {
