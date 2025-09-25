@@ -41,7 +41,8 @@ void ui_page_main_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
     // ドライブ情報の表示
     for (int i = 0; i < 2; i++) {
         ui_cursor(page, 0, 0 + i * 4);
-        ui_printf(page, "%c[%s]", (i == 0 ? 'A' : 'B'), "ready");
+        bool ready = ctx->drive[i].connected && ctx->drive[i].media_inserted;
+        ui_printf(page, "%c[%s]", (i == 0 ? 'A' : 'B'), ready ? "ready" : "eject");
         ui_cursor(page, 0, 1 + i * 4);
         ui_printf(page, " S:%3drpm", ctx->drive[i].rpm_setting == FDD_RPM_300 ? 300 : 360);
         //
@@ -70,5 +71,15 @@ void ui_page_main_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
     if (keys & UI_KEY_LEFT) {
         // デバッグページに遷移
         ui_change_page(UI_PAGE_DEBUG);
+    }
+    if (keys & UI_KEY_EJECT_A) {
+        // ドライブAのイジェクトボタン
+        bool media_inserted = pctx->ctx->drive[0].media_inserted;
+        pcfdd_set_media_inserted(pctx->ctx, 0, !media_inserted);
+    }
+    if (keys & UI_KEY_EJECT_B) {
+        // ドライブBのイジェクトボタン
+        bool media_inserted = pctx->ctx->drive[1].media_inserted;
+        pcfdd_set_media_inserted(pctx->ctx, 1, !media_inserted);
     }
 }
