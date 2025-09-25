@@ -1,6 +1,9 @@
 #ifndef GREENPAK_CONTROL_H
 #define GREENPAK_CONTROL_H
 
+#include <stdbool.h>
+#include <stdint.h>
+
 #include "i2c/i2c_ch32x035.h"
 #include "oled/ssd1306_txt.h"
 
@@ -13,6 +16,8 @@ void greenpak_dump_oled();
 uint8_t greenpak_get_virtualinput(int unit);
 
 void greenpak_set_virtualinput(int unit, uint8_t val);
+
+bool greenpak_get_matrixinput(int unit, uint8_t inputno);
 
 // 最終配置（NVMアドレスのみ並べる）
 extern const uint8_t gp_target_addr_cleared;

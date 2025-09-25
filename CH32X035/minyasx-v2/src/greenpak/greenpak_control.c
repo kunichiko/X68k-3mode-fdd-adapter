@@ -141,3 +141,13 @@ void greenpak_set_virtualinput(int unit, uint8_t val) {
     gp_virtual_input_cache[unit] = val;
     gp_reg_set(gp_target_addr[unit], 0x7a, val);
 }
+
+bool greenpak_get_matrixinput(int unit, uint8_t inputno) {
+    if (unit < 0 || unit >= 4) return false;        // 範囲外
+    if (inputno < 0 || inputno > 63) return false;  // 範囲外
+
+    // Matrix Input レジスタは 0x74..0x7B にあり、8個ずつ8バイトに分かれている
+    uint8_t reg = 0x74 + inputno / 8;
+    uint8_t val = gp_reg_get(gp_target_addr[unit], reg);
+    return (val >> (inputno & 0x07)) & 0x01;
+}
