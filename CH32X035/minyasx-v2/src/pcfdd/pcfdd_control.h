@@ -26,4 +26,10 @@ uint32_t fdd_bps_mode_to_value(fdd_bps_mode_t m);
  */
 void pcfdd_update_setting(minyasx_context_t* ctx, int drive);
 
+/**
+ * ドライブのメディア挿入状態を設定する
+ * media_inserted=trueで挿入、falseでイジェクト
+ */
+void pcfdd_set_media_inserted(minyasx_context_t* ctx, int drive, bool media_inserted);  // drive: 0=FDD_A or 1=FDD_B
+
 #endif

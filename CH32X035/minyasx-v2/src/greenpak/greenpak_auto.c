@@ -132,7 +132,7 @@ void greenpak_autoprogram_verify(void) {
         ui_print(UI_PAGE_DEBUG, "clr ");
     }
     ui_write(UI_PAGE_DEBUG, '\n');
-    Delay_Ms(3000);
+    Delay_Ms(1500);
 
     // すべて見えている場合でも「差分があれば上書き」する
     for (;;) {

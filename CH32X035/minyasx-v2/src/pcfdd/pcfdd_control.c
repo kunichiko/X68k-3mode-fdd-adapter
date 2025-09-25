@@ -43,7 +43,7 @@ void set_mode_select(drive_status_t* drive, fdd_rpm_mode_t rpm) {
 void pcfdd_init(minyasx_context_t* ctx) {
     // PCFDDコントローラの初期化コードをここに追加
     for (int i = 0; i < 2; i++) {
-        ctx->drive[i].connected = false;
+        ctx->drive[i].connected = true;  // TODO
         ctx->drive[i].media_inserted = false;
         ctx->drive[i].ready = false;
         ctx->drive[i].rpm_control = FDD_RPM_CONTROL_9SCDRV;
@@ -589,5 +589,23 @@ void pcfdd_update_setting(minyasx_context_t* ctx, int drive) {
         break;
     default:
         break;
+    }
+}
+
+void pcfdd_set_media_inserted(minyasx_context_t* ctx, int drive, bool media_inserted) {
+    if (drive < 0 || drive > 1) return;
+    if (media_inserted) {
+        // 論理インサートを実施
+        // TODO: 実際にFDメディアが入っているかを確認した上で設定する
+        ctx->drive[drive].media_inserted = true;
+        ctx->drive[drive].ready = true;
+        ctx->drive[drive].rpm_measured = FDD_RPM_UNKNOWN;
+        ctx->drive[drive].bps_measured = BPS_UNKNOWN;
+    } else {
+        // 論理イジェクトを実施
+        ctx->drive[drive].media_inserted = false;
+        ctx->drive[drive].ready = false;
+        ctx->drive[drive].rpm_measured = FDD_RPM_UNKNOWN;
+        ctx->drive[drive].bps_measured = BPS_UNKNOWN;
     }
 }
