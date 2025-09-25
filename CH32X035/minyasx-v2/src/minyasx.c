@@ -1,5 +1,7 @@
 #include "minyasx.h"
 
+#include "sound/play_control.h"
+
 minyasx_context_t* minyasx_init(void) {
     static minyasx_context_t ctx;
 

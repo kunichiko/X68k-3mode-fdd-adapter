@@ -5,6 +5,8 @@
 #include <stdint.h>
 
 #include "ch32fun.h"
+#include "sound/beep_context.h"
+#include "sound/play_context.h"
 
 typedef enum {
     FDD_RPM_CONTROL_NONE = 0,
@@ -78,6 +80,9 @@ typedef struct minyasx_context {
     usbpd_status_t usbpd;
     // ドライブ情報
     drive_status_t drive[2];  // ドライブA/B
+    // Playコンテキスト
+    play_context_t play;
+
 } minyasx_context_t;
 
 minyasx_context_t* minyasx_init(void);

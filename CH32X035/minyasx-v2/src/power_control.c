@@ -29,6 +29,7 @@
 
 #include "power_control.h"
 
+#include "greenpak/greenpak_control.h"
 #include "ina3221/ina3221_control.h"
 #include "ui/ui_control.h"
 #include "usbpd/usbpd_sink.h"
@@ -134,6 +135,71 @@ void power_control_init(minyasx_context_t* ctx) {
     Delay_Ms(3000);
 }
 
+static bool is_x68k_pwr_on = false;
+static uint32_t last_indexlow_ms = 0;
+
 void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
-    // 定期的な処理をここに追加
+    static last_systick_ms = 0;
+    if (systick_ms - last_systick_ms < 500) {
+        return;
+    }
+    last_systick_ms = systick_ms;
+
+    // X68Kの電源が入っているかどうかをチェックする
+    // ● OFF状態から、ONになったことの検出方法
+    // INDEX信号がX68000側でプルアップされることを利用し、
+    // GreenPAKの INDEX_OUTの端子の状態をチェックすることで電源ONになったと判定する。
+    // INDEX_OUT端子の入力は、GreenPAK2の Matrix Input 11 (IO12 Digital Input) に接続されている。
+    // ● ON状態から、OFFになったことの検出方法
+    // たまたまINDEX信号がLowになっただけの可能性もあるので、以下の方法を用いる。
+    // * まず、I2C経由で、GreenPAKのVirtual Input Registerをセットして内部のD-FFをクリアしておく
+    // * 其の直後にINDEX_OUT信号の入力を検査して、HighならON状態が継続していると判断し判定終了
+    // * Lowだった場合は、、500msec後にD-FFの出力を読み、クリアされたままならOFF状態になったと判断する
+    // * D-FF (7) の出力は Matrix Input 46に接続されている
+
+    if (last_indexlow_ms != 0) {
+        if (systick_ms < last_indexlow_ms + 500) {
+            return;  // 500msec待つ
+        }
+        // 500msec経過したので、D-FFの状態をチェックする
+        bool dffq = greenpak_get_matrixinput(1, 46) ? 0x01 : 0x00;
+        if (dffq) {
+            // D-FFがセットされたままなのでON状態が継続していると判断する
+            last_indexlow_ms = 0;
+            return;
+        }
+        // D-FFがクリアされたままなのでOFF状態になったと判断する
+        is_x68k_pwr_on = false;
+        ui_print(UI_PAGE_DEBUG, "X68K PWR OFF\n");
+        last_indexlow_ms = 0;
+        return;
+    } else if (is_x68k_pwr_on) {
+        // ON状態の時は、OFF状態になったかどうかをチェックする
+        // まずは、D-FFをクリアするために Bit0(Input7) を 0→1→0 にする
+        uint8_t vin = greenpak_get_virtualinput(1);
+        uint8_t vin0 = vin & ~(1 << 0);
+        uint8_t vin1 = vin0 | (1 << 0);
+        greenpak_set_virtualinput(1, vin0);
+        greenpak_set_virtualinput(1, vin1);
+        greenpak_set_virtualinput(1, vin0);
+        // Matrix Input 11 (IO12 Digital Input) をチェックする
+        bool index_state = greenpak_get_matrixinput(1, 11);
+        if (index_state) {
+            // HighなのでON状態が継続していると判断し判定終了
+            last_indexlow_ms = 0;
+            return;
+        }
+        last_indexlow_ms = systick_ms;
+    }
+    if (!is_x68k_pwr_on) {
+        // OFF状態の時は、ON状態になったかどうかをチェックする
+        bool index_state = greenpak_get_matrixinput(1, 11);
+        if (index_state) {
+            // HighなのでON状態になったと判断する
+            is_x68k_pwr_on = true;
+            ui_print(UI_PAGE_DEBUG, "X68K PWR ON\n");
+            last_indexlow_ms = 0;
+            return;
+        }
+    }
 }

@@ -40,6 +40,29 @@ void set_mode_select(drive_status_t* drive, fdd_rpm_mode_t rpm) {
     }
 }
 
+// ---- 設定に応じて調整する定数 ----
+#define TIMEOUT_US (500000u)  // 500ms
+#define UIF_TICK_US (1000u)   // UIF 1ms
+
+// ---- 測定結果：msec 単位（従来踏襲）----
+volatile uint32_t index_width[2] = {0, 0};  // [A,B]
+
+// ---- SysTick ベース内部状態 ----
+static volatile uint32_t s_last_edge_cycles = 0;  // 前回エッジ SysTick(48MHz)
+static volatile uint8_t s_have_prev_edge = 0;     // 初回保護
+
+typedef enum { DRIVE_NONE = -1, DRIVE_A = 0, DRIVE_B = 1 } drive_t;
+static volatile drive_t s_current_drive = DRIVE_NONE;
+
+static inline drive_t current_drive_from_gpio(void) {
+    const bool ds_a = (GPIOB->INDR & (1 << 2)) != 0;
+    const bool ds_b = (GPIOB->INDR & (1 << 3)) != 0;
+    if (ds_a && !ds_b) return DRIVE_A;
+    if (!ds_a && ds_b) return DRIVE_B;
+    // 想定外（両方0 or 両方1）は、前回を維持せず NONE とする
+    return DRIVE_NONE;
+}
+
 void pcfdd_init(minyasx_context_t* ctx) {
     // PCFDDコントローラの初期化コードをここに追加
     for (int i = 0; i < 2; i++) {
@@ -53,17 +76,15 @@ void pcfdd_init(minyasx_context_t* ctx) {
     }
     //
     // FDのINDEX信号の立ち上がり/立ち下がりエッジを検出するために、Timer3 Channel1を使う
+    // Timer3は Channel2で BeepのPWM出力でも使っていて、動的にタイムアウト値(ARR)が変更されてしまうので、
+    // Indexパルス幅の検出は、SysTick->CNTの値を直接読むことで実現している
     //
 
-    // リロードレジスタに最大値をセット(この値に達すると0に戻る)
-    // TIMER_TIMEOUT * 128usec 周期ででタイムアウトするようにして、
-    // 値の変化がない場合でも割り込み処理が動くようにしている
-    TIM3->ATRLR = TIMER_TIMEOUT;
     // プリスケーラを設定
-    // 48MHzのクロックを 48*128 で割ることで128µsの分解能にする (16bitカウンタで 8.38secまで数えられる)
-    // 計測時に128倍の値を返すことで辻褄を合わせている
-    TIM3->PSC = (48 * 128) - 1;  // 48MHz/(48*128) = 1/48μs * 48*128 -> 128µs resolution
-
+    // 48MHzのクロックを 48 で割ることで1µsの分解能にする
+    TIM3->PSC = 48 - 1;  // 48MHz/48 = 1/48μs * 48 -> 1µs resolution
+    // リロードレジスタはBeepのPWM出力で使うので、ここでは設定しない
+    // TIM3->ATRLR = 0;
     TIM3->SWEVGR |= TIM_UG;
 
     // Timer3 Channel 1を Capture/Compare の CC1に入力し、
@@ -194,75 +215,64 @@ void pcfdd_init(minyasx_context_t* ctx) {
     set_mode_select(&ctx->drive[1], ctx->drive[1].rpm_setting);
 }
 
-/**
- * @brief キャプチャ割り込みで取得した回転数を保存する変数
- */
-volatile uint32_t index_width[2] = {0, 0};  // INDEXの幅（msec単位）
-
 /*
-  Timer3 Global Interrupt Handler
+  Timer3 IRQ: CC1IF -> エッジ検出（SysTick で幅計算）
+              UIF   -> タイムアウト監視（現在の対象ドライブに対して）
  */
 void TIM3_IRQHandler(void) __attribute__((interrupt));
 void TIM3_IRQHandler(void) {
-    static uint16_t previousCapture = 0;  // 前回のキャプチャ値を保存する変数
-    static uint32_t additional_count = 0;
-    static uint32_t captured_width = 0;
-    uint16_t currentCapture;
-
-    bool ds_a = (GPIOB->INDR & (1 << 2)) ? true : false;
-    bool ds_b = (GPIOB->INDR & (1 << 3)) ? true : false;
-
-    // アップデート割り込み
-    // カウンタの値が一周するタイミングで呼ばれるので、このタイミングで
-    // 長期間値の変化が起きていないかどうかを検出します
+    drive_t drv = current_drive_from_gpio();
+    // ---- UIF: タイムアウト監視（現在の対象ドライブに限定）----
     if (TIM3->INTFR & TIM_UIF) {
-        TIM3->INTFR &= ~TIM_UIF;     // フラグをクリア
-        currentCapture = TIM3->CNT;  // 通常は0のはず
-        if (additional_count == 0) {
-            // 初回は最後のキャプチャ値との差がタイムアウト値となる
-            additional_count = (currentCapture - previousCapture) & TIMER_TIMEOUT;
-        } else {
-            // 2回目以降は1周の時間をたす
-            additional_count += TIMER_TIMEOUT + 1;
+        TIM3->INTFR &= ~TIM_UIF;
+
+        if (drv != DRIVE_NONE && s_current_drive == drv && s_have_prev_edge) {
+            uint32_t now_cycles = SysTick->CNT;
+            uint32_t delta_us = (now_cycles - s_last_edge_cycles) / 48u;
+            if (delta_us > TIMEOUT_US) {
+                index_width[drv] = 0;  // 500ms 以上エッジ無し → タイムアウト
+                // 基準は保持（次のエッジで復帰）
+            }
         }
-        previousCapture = TIM3->CNT;
-        if (additional_count > 3906) {
-            // debugprint(".");
-            //  3906カウント(=128*3906=500msec) 以上値が変化していない場合はタイムアウトとみなす
-            captured_width = 0;
-        } else {
-            // debugprint("prev=%d, cur=%d, t=%ld\n", previousCapture, currentCapture, t);
-        }
-        // previousCapture = TIM2->CNT;
         return;
     }
 
-    //  capture
+    // ---- CC1IF: エッジ到来 ----
     if (TIM3->INTFR & TIM_CC1IF) {
-        // get capture
-        currentCapture = TIM3->CH1CVR;
-        TIM3->INTFR &= ~TIM_CC1IF;  // フラグをクリア
-        // debugprint("CC1: %ld\n", currentCapture);
-        // overflow
+        (void)TIM3->CH1CVR;  // 読み出し（値は使わない）
+        TIM3->INTFR &= ~TIM_CC1IF;
         if (TIM3->INTFR & TIM_CC1OF) {
-            TIM3->INTFR &= ~TIM_CC1OF;  // フラグをクリア
+            TIM3->INTFR &= ~TIM_CC1OF;
         }
 
-        // パルス間隔を保存
-        // 128μ秒単位でカウントしているので、128倍する
-        uint32_t diff = ((currentCapture - previousCapture) & TIMER_TIMEOUT) + additional_count;
-        uint32_t width = (diff * 128) & 0xffffff;
-
-        captured_width = width / 1000;  // usec -> msec
-        if (ds_a) {
-            index_width[0] = captured_width;
-        }
-        if (ds_b) {
-            index_width[1] = captured_width;
+        // どちらのドライブのエッジか判定
+        // 対象が切り替わったら“やり直し”
+        if (drv != s_current_drive) {
+            s_current_drive = drv;
+            s_have_prev_edge = 0;
+            s_last_edge_cycles = 0;
         }
 
-        additional_count = 0;
-        previousCapture = currentCapture;  // 現在のキャプチャ値を保存
+        // NONE（不明）なら今回のエッジは無視
+        if (drv == DRIVE_NONE) return;
+
+        uint32_t now_cycles = SysTick->CNT;
+
+        if (!s_have_prev_edge) {
+            // 基準確立のみ
+            s_last_edge_cycles = now_cycles;
+            s_have_prev_edge = 1;
+            return;
+        }
+
+        // 幅（µs）= 48MHz 差分 / 48 （四捨五入のために +24）
+        uint32_t width_us = (now_cycles - s_last_edge_cycles + 24u) / 48u;
+        uint32_t width_ms = width_us / 1000u;
+
+        index_width[drv] = width_ms;
+
+        // 基準更新
+        s_last_edge_cycles = now_cycles;
     }
 }
 
@@ -546,10 +556,13 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     ui_cursor(UI_PAGE_DEBUG_PCFDD, 0, 0);
     for (int i = 0; i < 2; i++) {
         if (index_width[i] > 166 - 5 && index_width[i] < 166 + 5) {
+            ctx->drive[i].rpm_measured = FDD_RPM_360;
             ui_printf(UI_PAGE_DEBUG_PCFDD, "REV:360  ");
         } else if (index_width[i] > 200 - 5 && index_width[i] < 200 + 5) {
+            ctx->drive[i].rpm_measured = FDD_RPM_300;
             ui_printf(UI_PAGE_DEBUG_PCFDD, "REV:300  ");
         } else {
+            ctx->drive[i].rpm_measured = FDD_RPM_UNKNOWN;
             ui_printf(UI_PAGE_DEBUG_PCFDD, "REV:---- ");
         }
     }

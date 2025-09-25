@@ -25,6 +25,7 @@
 #include "oled/oled_control.h"
 #include "pcfdd/pcfdd_control.h"
 #include "power_control.h"
+#include "sound/play_control.h"
 #include "ui/ui_control.h"
 #include "x68fdd/x68fdd_control.h"
 
@@ -60,7 +61,7 @@ int main() {
     // PA4 : EJECT (入力: Low=イジェクト, Pull-Up)
     // PA5 : EJECT_MASK (入力: Low=イジェクト禁止, Pull-Up)
     // PA6 : INDEX_DOSV (入力: INDEX信号, Pull-Up)
-    // PA7 : Buzzer
+    // PA7 : Buzzer (出力: PWM)
     // PA8 : LED_BLINK (入力: Low=点灯, Pull-Up)
     // PA9 : DISK_TYPE_SELECT (入力: Pull-Up, 未使用)
     // PA10: I2C_SCL (I2Cクロック)
@@ -103,11 +104,14 @@ int main() {
     GPIOA->CFGLR &= ~(0xf << (4 * 6));
     GPIOA->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * 6);
     GPIOA->BSHR = (1 << 6);  // Pull-Up
-    // PA7
+    // PA7 : Buzzer output. TIM3_CH2 (PWM出力)
     GPIOA->CFGLR &= ~(0xf << (4 * 7));
-    GPIOA->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 7);
+    GPIOA->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP_AF) << (4 * 7);
+    // GPIOA->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 7);
+    //  GPIOA->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * 7);
     GPIOA->BCR = (1 << 7);  // Low出力にする
-    // PA8: LED_BLINK input
+    // GPIOA->BSHR = (1 << 7);  // High出力にする (Buzzer OFF)
+    //  PA8: LED_BLINK input
     GPIOA->CFGHR &= ~(0xf << (4 * (8 - 8)));
     GPIOA->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (8 - 8));
     GPIOA->BSHR = (1 << 8);  // Pull-Up
@@ -309,9 +313,17 @@ int main() {
     // gp2_vin = (gp2_vin & 0xc0) | 0x00;  // TODO: DISK_INは正論理なのかも？
     greenpak_set_virtualinput(2 - 1, gp2_vin);
 
+    // 音再生コンテキストの初期化
+    // タイマーの初期化の関係があるので pcfdd_init() の後に呼ぶ
+    play_init(&ctx);
+
     // メインループ
     ui_clear(UI_PAGE_DEBUG);
     ui_change_page(UI_PAGE_MAIN);
+
+    // 音再生テスト
+    play_start_melody(ctx, &melody_power_on);
+
     while (1) {
         uint64_t systick = SysTick->CNT;
         uint32_t ms = systick / (F_CPU / 1000);
@@ -320,6 +332,8 @@ int main() {
         pcfdd_poll(ctx, ms);
         x68fdd_poll(ctx, ms);
         ui_poll(ctx, ms);
+        play_poll(ctx, ms);
+        power_control_poll(ctx, ms);
 
 #if 0
         // GP2のVirtual Input レジスタの値を直接読む
