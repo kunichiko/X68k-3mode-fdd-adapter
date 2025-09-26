@@ -263,10 +263,6 @@ void SysTick_Handler(void) {
     //
     const uint32_t min_duration_assert = SYSTICK_ONE_MICROSECOND * 300;      // usec
     const uint32_t min_duration_deassert = SYSTICK_ONE_MICROSECOND * 30000;  // 30msec
-    uint32_t motor_change_tickA = 0;
-    uint32_t motor_change_tickB = 0;
-    (void)motor_change_tickA;
-    (void)motor_change_tickB;
     if (!double_option_A) {
         if (opt_a && opt_a_pair) {
             // OPTION SELECT Aとペアの両方がアサートされたので、計測
@@ -277,7 +273,6 @@ void SysTick_Handler(void) {
                 // 一定期間継続している
                 double_option_A = true;
                 double_option_A_time = 0;
-                motor_change_tickA = SysTick->CNTL;
             } else {
                 // まだ一定期間に達していない
             }
@@ -294,7 +289,6 @@ void SysTick_Handler(void) {
                 // 一定期間継続している
                 double_option_A = double_option_A_always || false;
                 double_option_A_time = 0;
-                motor_change_tickA = SysTick->CNTL;
             } else {
                 // まだ一定期間に達していない
             }
@@ -313,7 +307,6 @@ void SysTick_Handler(void) {
                 // 一定期間継続している
                 double_option_B = true;
                 double_option_B_time = 0;
-                motor_change_tickB = SysTick->CNTL;
             } else {
                 // まだ一定期間に達していない
             }
@@ -330,7 +323,6 @@ void SysTick_Handler(void) {
                 // 一定期間継続している
                 double_option_B = double_option_B_always || false;
                 double_option_B_time = 0;
-                motor_change_tickB = SysTick->CNTL;
             } else {
                 // まだ一定期間に達していない
             }
@@ -361,40 +353,13 @@ void SysTick_Handler(void) {
     // MOTOR ON信号(PA12)がアクティブならREADY信号をアクティブにする
     // GreenPAKは各ドライブにDriveSelect信号がアサートされると、
     // このREADY信号の値を返却します
-    if (!(GPIOA->INDR & GPIO_Pin_12)) {
-        // MOTOR ON信号がアクティブ
-#if 0
-        if ((motor_change_tickA != 0) &&  //
-            (SysTick->CNTL - motor_change_tickA < 3 * SYSTICK_ONE_MILLISECOND)) {
-            // OPTION_SELECT_Aの変化によりMODE_SELECT_DOSVを変更した直後
-            // READY信号を非アクティブにしておく
-            GPIOB->BSHR = GPIO_Pin_12;  // READY_MCU_A_n (High=準備完了でない)
+    for (int i = 0; i < 2; i++) {
+        drive_status_t* drv = &g_ctx->drive[i];
+        if (!(GPIOA->INDR & GPIO_Pin_12) && drv->ready && drv->connected) {
+            GPIOB->BCR = (i == 0) ? GPIO_Pin_12 : GPIO_Pin_13;  // READY_MCU_A_n / READY_MCU_B_n (Low=準備完了)
         } else {
-            GPIOB->BCR = GPIO_Pin_12;  // READY_MCU_A_n (Low=準備完了)
-            motor_change_tickA = 0;
+            GPIOB->BSHR = (i == 0) ? GPIO_Pin_12 : GPIO_Pin_13;  // READY_MCU_A_n / READY_MCU_B_n (High=準備完了でない)
         }
-        if ((motor_change_tickB != 0) &&  //
-            (SysTick->CNTL - motor_change_tickB < 3 * SYSTICK_ONE_MILLISECOND)) {
-            // OPTION_SELECT_Bの変化によりMODE_SELECT_DOSVを変更した直後
-            // READY信号を非アクティブにしておく
-            GPIOB->BSHR = GPIO_Pin_13;  // READY_MCU_B_n (High=準備完了でない)
-        } else {
-            GPIOB->BCR = GPIO_Pin_13;  // READY_MCU_B_n (Low=準備完了)
-            motor_change_tickB = 0;
-        }
-#elif 0
-        // 戦略2
-        // 各ドライブのMODE_SELECTによる回転数の設定状況を考慮し、
-#else
-        GPIOB->BCR = GPIO_Pin_12;  // READY_MCU_A_n (Low=準備完了)
-        GPIOB->BCR = GPIO_Pin_13;  // READY_MCU_B_n (Low=準備完了)
-#endif
-    } else {
-        // MOTOR ON信号が非アクティブ
-        GPIOB->BSHR = GPIO_Pin_12;  // READY_MCU_A_n (High=準備完了でない)
-        GPIOB->BSHR = GPIO_Pin_13;  // READY_MCU_B_n (High=準備完了でない)
-        motor_change_tickA = 0;
-        motor_change_tickB = 0;
     }
 }
 
@@ -423,24 +388,34 @@ void x68fdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     static bool last_media_inserted[2] = {false, false};
     // メディアの挿入状態を検出
     // 以下もセットする
-    // GP2のDISK_IN_A_n (OUT2=bit5)
-    // GP2のDISK_IN_B_n (OUT3=bit4)
-    // GP2のERR_DISK_A_n (OUT2=bit3)
-    // GP2のERR_DISK_B_n (OUT3=bit2)
+    // GP2の DISK_IN_A_n (Virtual Input 2=bit5)
+    // GP2の DISK_IN_B_n (Virtual Input 3=bit4)
+    // GP2の ERR_DISK_A_n (Virtual Input 4=bit3)
+    // GP2の ERR_DISK_B_n (Virtual Input 5=bit2)
+    // GP3の DISK_IN_A_n (Virtual Input 2=bit5)
+    // GP3の DISK_IN_B_n (Virtual Input 3=bit4)
     uint8_t gp2_vin = greenpak_get_virtualinput(2 - 1);
-    gp2_vin = (gp2_vin & 0xc0) | 0x0c;  // 仮に両方ともディスクあり、エラーなしにする
-
+    uint8_t gp3_vin = greenpak_get_virtualinput(3 - 1);
+    uint8_t gp2_vin_new = gp2_vin;
+    uint8_t gp3_vin_new = gp3_vin;
     for (int i = 0; i < 2; i++) {
         drive_status_t* drv = &ctx->drive[i];
-        if (drv->inserted && !last_media_inserted[i]) {
+        if (!last_media_inserted[i] && drv->inserted) {
             // 挿入された
-            gp2_vin |= (1 << (5 + i));  // DISK_IN_A_n / DISK_IN_B_n をセット
+            gp2_vin_new &= ~(1 << (5 - i));  // DISK_IN_A_n / DISK_IN_B_n をクリア
+            gp3_vin_new &= ~(1 << (5 - i));  // DISK_IN_A_n / DISK_IN_B_n をクリア
         }
-        if (!drv->inserted && last_media_inserted[i]) {
+        if (last_media_inserted[i] && !drv->inserted) {
             // 取り出された
-            gp2_vin &= ~(1 << (5 + i));  // DISK_IN_A_n / DISK_IN_B_n をクリア
+            gp2_vin_new |= (1 << (5 - i));  // DISK_IN_A_n / DISK_IN_B_n をセット
+            gp3_vin_new |= (1 << (5 - i));  // DISK_IN_A_n / DISK_IN_B_n をセット
         }
         last_media_inserted[i] = drv->inserted;
     }
-    greenpak_set_virtualinput(2 - 1, gp2_vin);
+    if (gp2_vin != gp2_vin_new) {
+        greenpak_set_virtualinput(2 - 1, gp2_vin_new);
+    }
+    if (gp3_vin != gp3_vin_new) {
+        greenpak_set_virtualinput(3 - 1, gp3_vin_new);
+    }
 }
