@@ -46,7 +46,8 @@ typedef enum {
 typedef struct drive_status {
     bool connected;                 // ドライブが接続されているか
     uint8_t drive_id;               // ドライブID (0-3)
-    bool media_inserted;            // メディアが挿入されているか
+    bool force_ejected;             // メディアの強制排出状態かどうか(論理排出状態)
+    bool inserted;                  // メディアが挿入されているか。force_ejectedがtrueのときは必ずfalse
     bool ready;                     // ドライブが準備完了か
     bool mode_select_inverted;      // MODE SELECT信号の極性反転
     fdd_in_use_mode_t in_use_mode;  // IN-USE信号の動作モード

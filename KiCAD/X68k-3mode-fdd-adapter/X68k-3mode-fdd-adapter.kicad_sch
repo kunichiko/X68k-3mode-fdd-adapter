@@ -7596,7 +7596,7 @@
 	)
 	(wire
 		(pts
-			(xy 97.79 252.73) (xy 114.3 252.73)
+			(xy 88.9 252.73) (xy 114.3 252.73)
 		)
 		(stroke
 			(width 0)
@@ -8073,6 +8073,16 @@
 			(type default)
 		)
 		(uuid "26268b9a-b832-4f1d-a148-4bd86085c747")
+	)
+	(wire
+		(pts
+			(xy 134.62 133.35) (xy 167.64 133.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "27190d5b-79a1-4d3b-afe8-a06fa87e0cf6")
 	)
 	(wire
 		(pts
@@ -8946,7 +8956,7 @@
 	)
 	(wire
 		(pts
-			(xy 134.62 138.43) (xy 153.67 138.43)
+			(xy 134.62 138.43) (xy 190.5 138.43)
 		)
 		(stroke
 			(width 0)
@@ -10616,7 +10626,7 @@
 	)
 	(wire
 		(pts
-			(xy 95.25 255.27) (xy 114.3 255.27)
+			(xy 86.36 255.27) (xy 114.3 255.27)
 		)
 		(stroke
 			(width 0)
@@ -10703,6 +10713,16 @@
 			(type default)
 		)
 		(uuid "d090b802-b583-450e-8ed5-6c1bc7d59ae6")
+	)
+	(wire
+		(pts
+			(xy 134.62 135.89) (xy 179.07 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d0db1ef2-7768-4391-bc22-815311b9be5a")
 	)
 	(wire
 		(pts
@@ -12814,6 +12834,16 @@
 		)
 		(uuid "a935b8e8-e378-49e8-9155-1ffbc4333219")
 	)
+	(label "DRIVE_SELECT_A"
+		(at 114.3 252.73 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "ab02d277-b6fc-42d4-9765-a1749357e792")
+	)
 	(label "EJECT"
 		(at 35.56 238.76 180)
 		(effects
@@ -12993,16 +13023,6 @@
 			(justify left bottom)
 		)
 		(uuid "bd2ed453-0714-488c-9b38-dd83b0adc057")
-	)
-	(label "INDEX"
-		(at 114.3 252.73 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "bdd9a3a0-4d1a-4ba4-8710-e179013ecf57")
 	)
 	(label "WRITE_DATA"
 		(at 35.56 248.92 180)
@@ -15758,6 +15778,81 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 179.07 135.89 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "2b2b5eaf-a349-4b05-b0df-1258529e4f7a")
+		(property "Reference" "TP114"
+			(at 180.594 132.334 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 180.34 135.128 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
+			(at 184.15 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 184.15 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 179.07 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 179.07 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "517b0d91-416d-43b2-b6f8-350eb53ecf50")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "TP114")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 392.43 92.71 270)
 		(unit 1)
@@ -16841,7 +16936,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 97.79 252.73 0)
+		(at 88.9 252.73 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -16849,7 +16944,7 @@
 		(dnp no)
 		(uuid "3be8c512-6e7d-4a83-9133-18ce53d72bfa")
 		(property "Reference" "TP110"
-			(at 95.25 247.396 0)
+			(at 86.36 247.396 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16858,7 +16953,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 99.06 251.968 0)
+			(at 90.17 251.968 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16867,7 +16962,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 102.87 252.73 0)
+			(at 93.98 252.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16876,7 +16971,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 102.87 252.73 0)
+			(at 93.98 252.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16885,7 +16980,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 97.79 252.73 0)
+			(at 88.9 252.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16894,7 +16989,7 @@
 			)
 		)
 		(property "LCIC" ""
-			(at 97.79 252.73 0)
+			(at 88.9 252.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19242,6 +19337,81 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 167.64 133.35 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "73517a7e-74df-45e1-ae67-3e299882aa0d")
+		(property "Reference" "TP102"
+			(at 169.164 129.794 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 168.91 132.588 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
+			(at 172.72 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 172.72 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 167.64 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 167.64 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "439e6b11-4fe5-4ece-b88e-a7e9f84a761b")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "TP102")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 295.91 46.99 0)
 		(unit 1)
@@ -20517,7 +20687,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 153.67 138.43 0)
+		(at 190.5 138.43 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -20525,7 +20695,7 @@
 		(dnp no)
 		(uuid "8455f5b6-3569-47da-aa31-33ef2321dd90")
 		(property "Reference" "TP105"
-			(at 155.194 134.874 0)
+			(at 192.024 134.874 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20534,7 +20704,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 154.94 137.668 0)
+			(at 191.77 137.668 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20543,7 +20713,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 158.75 138.43 0)
+			(at 195.58 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20552,7 +20722,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 158.75 138.43 0)
+			(at 195.58 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20561,7 +20731,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 153.67 138.43 0)
+			(at 190.5 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20570,7 +20740,7 @@
 			)
 		)
 		(property "LCIC" ""
-			(at 153.67 138.43 0)
+			(at 190.5 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22491,7 +22661,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 95.25 255.27 0)
+		(at 86.36 255.27 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -22499,7 +22669,7 @@
 		(dnp no)
 		(uuid "aa3e9940-7035-4337-8668-b11f12578b8a")
 		(property "Reference" "TP111"
-			(at 92.71 249.936 0)
+			(at 83.82 249.936 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22508,7 +22678,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 96.52 254.508 0)
+			(at 87.63 254.508 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22517,7 +22687,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 100.33 255.27 0)
+			(at 91.44 255.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22526,7 +22696,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 100.33 255.27 0)
+			(at 91.44 255.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22535,7 +22705,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 95.25 255.27 0)
+			(at 86.36 255.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22544,7 +22714,7 @@
 			)
 		)
 		(property "LCIC" ""
-			(at 95.25 255.27 0)
+			(at 86.36 255.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
