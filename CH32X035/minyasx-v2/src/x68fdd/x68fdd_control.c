@@ -95,6 +95,10 @@ void x68fdd_init(minyasx_context_t* ctx) {
 
     // Enable the SysTick IRQ
     NVIC_EnableIRQ(SysTicK_IRQn);
+
+    // GP ENABLE
+    // GPIOC->BSHR = (1 << 6);  // GP_ENABLE (High=Enable)
+    GPIOC->BCR = (1 << 6);  // GP_ENABLE (Low=Disable)
 }
 
 /*
@@ -260,6 +264,8 @@ void SysTick_Handler(void) {
     const uint32_t min_duration_deassert = SYSTICK_ONE_MICROSECOND * 30000;  // 30msec
     uint32_t motor_change_tickA = 0;
     uint32_t motor_change_tickB = 0;
+    (void)motor_change_tickA;
+    (void)motor_change_tickB;
     if (!double_option_A) {
         if (opt_a && opt_a_pair) {
             // OPTION SELECT Aとペアの両方がアサートされたので、計測
@@ -350,9 +356,6 @@ void SysTick_Handler(void) {
             set_mode_select(&g_ctx->drive[1], FDD_RPM_360);
         }
     }
-
-    // GP ENABLE
-    GPIOC->BSHR = (1 << 19);  // GP_ENABLE (High=Enable)
 
     // MOTOR ON信号(PA12)がアクティブならREADY信号をアクティブにする
     // GreenPAKは各ドライブにDriveSelect信号がアサートされると、
