@@ -68,8 +68,10 @@ void pcfdd_init(minyasx_context_t* ctx) {
     for (int i = 0; i < 2; i++) {
         ctx->drive[i].connected = true;  // TODO
         ctx->drive[i].force_ejected = false;
+        ctx->drive[i].eject_masked = false;
         ctx->drive[i].inserted = false;
         ctx->drive[i].ready = false;
+        ctx->drive[i].led_blink = false;
         ctx->drive[i].rpm_control = FDD_RPM_CONTROL_9SCDRV;
         ctx->drive[i].rpm_setting = FDD_RPM_360;
         ctx->drive[i].rpm_measured = FDD_RPM_UNKNOWN;
@@ -604,6 +606,14 @@ void pcfdd_update_setting(minyasx_context_t* ctx, int drive) {
     default:
         break;
     }
+}
+
+void pcfdd_try_eject(minyasx_context_t* ctx, int drive) {
+    if (drive < 0 || drive > 1) return;
+    if (ctx->drive[drive].eject_masked) {
+        return;
+    }
+    pcfdd_force_eject(ctx, drive);
 }
 
 void pcfdd_force_eject(minyasx_context_t* ctx, int drive) {

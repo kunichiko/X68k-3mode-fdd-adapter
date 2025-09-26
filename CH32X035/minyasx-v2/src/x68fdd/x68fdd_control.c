@@ -63,7 +63,7 @@ void x68fdd_init(minyasx_context_t* ctx) {
     // 有効化
     EXTI->RTENR |= EXTI_RTENR_TR0 | EXTI_RTENR_TR1 | EXTI_RTENR_TR2 | EXTI_RTENR_TR3 |     // 立ち上がりエッジ検出をセット
                    EXTI_RTENR_TR12 | EXTI_RTENR_TR13 | EXTI_RTENR_TR14 | EXTI_RTENR_TR15;  //
-    EXTI->FTENR |= EXTI_FTENR_TR0 | EXTI_FTENR_TR1 | EXTI_FTENR_TR2 | EXTI_FTENR_TR3 |     // 立ち下がりエッジ検出をセット
+    EXTI->FTENR |= EXTI_FTENR_TR0 | EXTI_FTENR_TR1 |  // 立ち下がりエッジ検出をセット (OPTION_SELECT_A/Bは立ち上がりのみ)
                    EXTI_FTENR_TR12 | EXTI_FTENR_TR13 | EXTI_FTENR_TR14 | EXTI_FTENR_TR15;  //
 
     EXTI->INTFR = EXTI_INTF_INTF0 | EXTI_INTF_INTF1 | EXTI_INTF_INTF2 | EXTI_INTF_INTF3 |     // 割り込みフラグをクリア
@@ -150,12 +150,44 @@ void EXTI7_0_IRQHandler(void) {
         }
     }
     if (intfr & EXTI_INTF_INTF2) {
-        // PA2 (OPTION_SELECT_A) の割り込み
+        // PA2 (OPTION_SELECT_A) の割り込み (立ち上がりのみ)
         EXTI->INTFR = EXTI_INTF_INTF2;  // フラグをクリア
+        // このタイミングで EJECT(PA4), EJECT_MASK(PA5), LED_BLINK(PA8)の状態を確認する
+        uint32_t porta = GPIOA->INDR;
+        drive_status_t* drive = &g_ctx->drive[0];  // Aドライブ
+        if ((porta & (1 << 4)) == 0) {             // EJECT (Low=Eject)
+            pcfdd_force_eject(g_ctx, 0);           // Aドライブを強制排出
+        }
+        if ((porta & (1 << 5)) == 0) {  // EJECT_MASK (Low=Mask)
+            drive->eject_masked = true;
+        } else {
+            drive->eject_masked = false;
+        }
+        if ((porta & (1 << 8)) == 0) {  // LED_BLINK (Low=Blink)
+            drive->led_blink = true;    // LEDが点滅中
+        } else {
+            drive->led_blink = false;  // LEDが点滅中でない
+        }
     }
     if (intfr & EXTI_INTF_INTF3) {
-        // PA3 (OPTION_SELECT_B) の割り込み
+        // PA3 (OPTION_SELECT_B) の割り込み (立ち上がりのみ)
         EXTI->INTFR = EXTI_INTF_INTF3;  // フラグをクリア
+        // このタイミングで EJECT(PA4), EJECT_MASK(PA5), LED_BLINK(PA8)の状態を確認する
+        uint32_t porta = GPIOA->INDR;
+        drive_status_t* drive = &g_ctx->drive[1];  // Bドライブ
+        if ((porta & (1 << 4)) == 0) {             // EJECT (Low=Eject)
+            pcfdd_force_eject(g_ctx, 1);           // Bドライブを強制排出
+        }
+        if ((porta & (1 << 5)) == 0) {  // EJECT_MASK (Low=Mask)
+            drive->eject_masked = true;
+        } else {
+            drive->eject_masked = false;
+        }
+        if ((porta & (1 << 8)) == 0) {  // LED_BLINK (Low=Blink)
+            drive->led_blink = true;    // LEDが点滅中
+        } else {
+            drive->led_blink = false;  // LEDが点滅中でない
+        }
     }
 }
 
@@ -384,6 +416,8 @@ void x68fdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     uint8_t amode = double_option_A ? 'Q' : 'D';
     uint8_t bmode = double_option_B ? 'Q' : 'D';
     ui_printf(UI_PAGE_DEBUG, "OP A%d%d%c B%d%d%c %d", opt_a, opt_a_pair, amode, opt_b, opt_b_pair, bmode, systick_irq_counter);
+
+    // EJECT, EJECT_MASKの監視はGPIO割り込みで行うのでここでは不要
 
     static bool last_media_inserted[2] = {false, false};
     // メディアの挿入状態を検出
