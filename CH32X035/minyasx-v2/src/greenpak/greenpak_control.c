@@ -143,7 +143,7 @@ void greenpak_set_virtualinput(int unit, uint8_t val) {
 }
 
 bool greenpak_get_matrixinput(int unit, uint8_t inputno) {
-    if (unit < 0 || unit >= 4) return false;        // 範囲外
+    if (unit < 0 || unit > 3) return false;         // 範囲外
     if (inputno < 0 || inputno > 63) return false;  // 範囲外
 
     // Matrix Input レジスタは 0x74..0x7B にあり、8個ずつ8バイトに分かれている

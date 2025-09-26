@@ -247,10 +247,10 @@ int main() {
     GPIOA->BSXR = (1 << (23 - 16));  // Pull-Up
 
     // GPIOC
-    // PC19 : GP_ENABLE (出力: High=Enable, Low=Disable) tbd
-    GPIOC->CFGHR &= ~(0xf << (4 * (19 - 16)));
-    GPIOC->CFGHR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * (19 - 16));
-    GPIOC->BCR = (1 << 19);  // Disable (Low)
+    // PC6 : GP_ENABLE (出力: High=Enable, Low=Disable) tbd
+    GPIOC->CFGLR &= ~(0xf << (4 * 6));
+    GPIOC->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 6);
+    GPIOC->BCR = (1 << 6);  // Disable (Low)
 
     //
     // コンテキストの初期化
@@ -315,7 +315,7 @@ int main() {
 
     // 音再生コンテキストの初期化
     // タイマーの初期化の関係があるので pcfdd_init() の後に呼ぶ
-    play_init(&ctx);
+    play_init(ctx);
 
     // メインループ
     ui_clear(UI_PAGE_DEBUG);

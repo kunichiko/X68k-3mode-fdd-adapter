@@ -1,7 +1,7 @@
 #include "ui/ui_control.h"
 
 // USB-PD Status page
-static void ui_page_pdstatus_enter(ui_page_context_t* pctx);
+void ui_page_pdstatus_enter(ui_page_context_t* pctx);
 void ui_page_pdstatus_poll(ui_page_context_t* pctx, uint32_t systick_ms);
 void ui_page_pdstatus_keyin(ui_page_context_t* pctx, ui_key_mask_t keys);
 

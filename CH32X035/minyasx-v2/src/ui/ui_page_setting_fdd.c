@@ -1,3 +1,4 @@
+#include "pcfdd/pcfdd_control.h"
 #include "ui/ui_control.h"
 
 // FDD Setting page

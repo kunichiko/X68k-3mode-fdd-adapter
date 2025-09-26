@@ -62,8 +62,9 @@ void beep_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
                 uint32_t period_us = 1000000u / (uint32_t)hz;
                 if (period_us == 0) period_us = 1;  // 上限保護
 
-                TIM3->ATRLR = period_us - 1;   // PWM 周期
-                TIM3->CH2CVR = period_us / 2;  // 50% duty
+                TIM3->ATRLR = period_us - 1;     // PWM 周期
+                                                 //                TIM3->CH2CVR = period_us / 2;  // 50% duty
+                TIM3->CH2CVR = period_us / 128;  // 25% duty
 
                 // 一括反映
                 TIM3->SWEVGR |= TIM_UG;

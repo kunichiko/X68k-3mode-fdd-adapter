@@ -152,9 +152,9 @@ void ui_write_null(char c) {
 }
 
 ui_write_t writers[UI_PAGE_MAX] = {
-    ui_write_0, ui_write_1, ui_write_2,  ui_write_3,  //
-    ui_write_4, ui_write_5, ui_write_6,  ui_write_7,  //
-    ui_write_8, ui_write_9, ui_write_10,
+    ui_write_0, ui_write_1, ui_write_2, ui_write_3,  //
+    ui_write_4, ui_write_5, ui_write_6, ui_write_7,  //
+    ui_write_8, ui_write_9,
 };
 
 ui_write_t ui_get_writer(ui_page_type_t page) {
