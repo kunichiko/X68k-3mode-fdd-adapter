@@ -67,7 +67,8 @@ void pcfdd_init(minyasx_context_t* ctx) {
     // PCFDDコントローラの初期化コードをここに追加
     for (int i = 0; i < 2; i++) {
         ctx->drive[i].connected = true;  // TODO
-        ctx->drive[i].media_inserted = false;
+        ctx->drive[i].force_ejected = false;
+        ctx->drive[i].inserted = false;
         ctx->drive[i].ready = false;
         ctx->drive[i].rpm_control = FDD_RPM_CONTROL_9SCDRV;
         ctx->drive[i].rpm_setting = FDD_RPM_360;
@@ -605,20 +606,29 @@ void pcfdd_update_setting(minyasx_context_t* ctx, int drive) {
     }
 }
 
-void pcfdd_set_media_inserted(minyasx_context_t* ctx, int drive, bool media_inserted) {
+void pcfdd_force_eject(minyasx_context_t* ctx, int drive) {
     if (drive < 0 || drive > 1) return;
-    if (media_inserted) {
-        // 論理インサートを実施
-        // TODO: 実際にFDメディアが入っているかを確認した上で設定する
-        ctx->drive[drive].media_inserted = true;
-        ctx->drive[drive].ready = true;
-        ctx->drive[drive].rpm_measured = FDD_RPM_UNKNOWN;
-        ctx->drive[drive].bps_measured = BPS_UNKNOWN;
-    } else {
-        // 論理イジェクトを実施
-        ctx->drive[drive].media_inserted = false;
-        ctx->drive[drive].ready = false;
-        ctx->drive[drive].rpm_measured = FDD_RPM_UNKNOWN;
-        ctx->drive[drive].bps_measured = BPS_UNKNOWN;
-    }
+    // PCFDDコントローラの強制イジェクトコードをここに追加
+    ctx->drive[drive].force_ejected = true;
+    ctx->drive[drive].inserted = false;
+    ctx->drive[drive].ready = false;
+    ctx->drive[drive].rpm_measured = FDD_RPM_UNKNOWN;
+    ctx->drive[drive].bps_measured = BPS_UNKNOWN;
+}
+
+/**
+ * メディアの存在を調べ、挿入されていたらinsertedをtrueにする
+ */
+void pcfdd_detect_media(minyasx_context_t* ctx, int drive) {
+    if (drive < 0 || drive > 1) return;
+    drive_status_t* d = &ctx->drive[drive];
+    if (!d->connected) return;
+    if (!d->force_ejected && d->inserted) return;  // 既に挿入済み
+
+    // TODO: 実際にFDメディアが入っているかを確認した上で設定する
+    d->force_ejected = false;
+    d->inserted = true;
+    d->ready = true;
+    d->rpm_measured = FDD_RPM_UNKNOWN;
+    d->bps_measured = BPS_UNKNOWN;
 }

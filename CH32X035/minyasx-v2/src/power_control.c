@@ -189,7 +189,7 @@ void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     // ● OFF状態から、ONになったことの検出方法
     // INDEX信号がX68000側でプルアップされることを利用し、
     // GreenPAKの INDEX_OUTの端子の状態をチェックすることで電源ONになったと判定する。
-    // INDEX_OUT端子の入力は、GreenPAK2の Matrix Input 7 (IO8 Digital Input) に接続されている。
+    // INDEX_OUT端子の入力は、GreenPAK2の Matrix Input 11 (IO12 Digital Input) に接続されている。
     // ● ON状態から、OFFになったことの検出方法
     // たまたまINDEX信号がLowになっただけの可能性もあるので、以下の方法を用いる。
     // * まず、I2C経由で、GreenPAKのVirtual Input Registerをセットして内部のD-FFをクリアしておく
@@ -226,8 +226,8 @@ void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
         greenpak_set_virtualinput(GP_UNIT, vin0);
         greenpak_set_virtualinput(GP_UNIT, vin1);
         greenpak_set_virtualinput(GP_UNIT, vin0);
-        // Matrix Input 7 (IO8 Digital Input) をチェックする
-        bool index_state = greenpak_get_matrixinput(GP_UNIT, 7);
+        // Matrix Input 11 (IO12 Digital Input) をチェックする
+        bool index_state = greenpak_get_matrixinput(GP_UNIT, 11);
         if (index_state) {
             // HighなのでON状態が継続していると判断し判定終了
             last_indexlow_ms = 0;
@@ -237,7 +237,7 @@ void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     }
     if (!is_x68k_pwr_on) {
         // OFF状態の時は、ON状態になったかどうかをチェックする
-        bool index_state = greenpak_get_matrixinput(GP_UNIT, 7);
+        bool index_state = greenpak_get_matrixinput(GP_UNIT, 11);
         if (index_state) {
             // HighなのでON状態になったと判断する
             is_x68k_pwr_on = true;

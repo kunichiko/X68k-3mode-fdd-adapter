@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "greenpak/greenpak_control.h"
 #include "pcfdd/pcfdd_control.h"
 #include "ui/ui_control.h"
 
@@ -418,4 +419,28 @@ void x68fdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     uint8_t amode = double_option_A ? 'Q' : 'D';
     uint8_t bmode = double_option_B ? 'Q' : 'D';
     ui_printf(UI_PAGE_DEBUG, "OP A%d%d%c B%d%d%c %d", opt_a, opt_a_pair, amode, opt_b, opt_b_pair, bmode, systick_irq_counter);
+
+    static bool last_media_inserted[2] = {false, false};
+    // メディアの挿入状態を検出
+    // 以下もセットする
+    // GP2のDISK_IN_A_n (OUT2=bit5)
+    // GP2のDISK_IN_B_n (OUT3=bit4)
+    // GP2のERR_DISK_A_n (OUT2=bit3)
+    // GP2のERR_DISK_B_n (OUT3=bit2)
+    uint8_t gp2_vin = greenpak_get_virtualinput(2 - 1);
+    gp2_vin = (gp2_vin & 0xc0) | 0x0c;  // 仮に両方ともディスクあり、エラーなしにする
+
+    for (int i = 0; i < 2; i++) {
+        drive_status_t* drv = &ctx->drive[i];
+        if (drv->inserted && !last_media_inserted[i]) {
+            // 挿入された
+            gp2_vin |= (1 << (5 + i));  // DISK_IN_A_n / DISK_IN_B_n をセット
+        }
+        if (!drv->inserted && last_media_inserted[i]) {
+            // 取り出された
+            gp2_vin &= ~(1 << (5 + i));  // DISK_IN_A_n / DISK_IN_B_n をクリア
+        }
+        last_media_inserted[i] = drv->inserted;
+    }
+    greenpak_set_virtualinput(2 - 1, gp2_vin);
 }

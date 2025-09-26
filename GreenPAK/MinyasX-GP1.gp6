@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GPDProject version="38" oldestCompatibleVersion="32" GPDVersion="6.49.001" lastChange="20 Sep 2025 17:58:16" projectChecksumState="1" projectChecksum="d2fd87dc">
+<GPDProject version="38" oldestCompatibleVersion="32" GPDVersion="6.49.001" lastChange="26 Sep 2025 13:28:39" projectChecksumState="1" projectChecksum="8b96e601">
     <generalProjectSettings/>
     <chip family="04" type="06" friendlyName="GreenPAK 6" partNumber="36" package="16">
-        <nvmData registerLenght="2048">2D B 3D C3 49 38 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 80 A6 EA 7A DB CD 6D 33 B7 BD DC B6 72 DB CC 6D 2B 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 E7 EF FC 0 0 0 0 10 5 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 30 0 30 30 0 0 0 0 30 30 30 0 30 D 51 51 51 51 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 14 22 30 C 0 0 0 0 0 0 0 E8 8E 0 0 8F 0 0 0 0 0 0 0 0 0 0 0 0 0 80 20 0 1 0 0 FE 2 1 0 FD 2 0 1 0 FB 2 1 0 F7 2 0 1 0 FE 2 1 0 FB 2 0 1 0 0 2 0 1 0 0 0 2 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 A5</nvmData>
+        <nvmData registerLenght="2048">2D B 3D C3 49 38 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 80 A6 EA 7A DB CD 6D 33 B7 BD DC B6 72 DB CC 6D 2B 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 E7 EF FC 27 0 0 0 10 5 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 30 0 30 30 0 0 0 0 80 30 30 0 30 D 51 51 51 51 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 14 22 30 C 0 0 0 0 0 0 0 E8 8E 0 0 8F 0 0 0 0 0 0 0 0 0 0 0 0 0 80 20 0 1 0 0 FE 2 1 0 FD 2 0 1 0 FB 2 1 0 F7 2 0 1 0 FE 2 1 0 FB 2 0 1 0 0 2 0 1 0 0 0 2 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 A5</nvmData>
         <eepromData id="0">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</eepromData>
-        <checksum crc32="0xA8733D23" version="7"/>
+        <checksum crc32="0xFE01D952" version="7"/>
         <VDDItem id="0">
             <item id="0" caption="VDD (PIN 20)">
                 <graphics pos="(329.57,-300.19)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
@@ -57,7 +57,7 @@
                 <textLabel pos="(5.61,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">SDA</textLabel>
             </item>
         </IOPad>
-        <IOPad id="9" useCaseMode="0">
+        <IOPad id="9" useCaseMode="2">
             <item id="9" caption="PIN 11 (IO6)">
                 <graphics pos="(437.83,702.39)" angle="180" flipping="2" hidden="0" tOrigin="(20.00,10.00)"/>
             </item>
@@ -462,6 +462,9 @@
         </wire>
         <wire output="0" input="509" autoRouting="1" pen="#ff8000ff;1.00;1;32;128" lineType="2" protected="1" CWLid="-1" wireText="VDD" wireState="1">
             <points/>
+        </wire>
+        <wire output="191" input="515" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="13" wireText="DRIVE_SELECT_A_n" wireState="0">
+            <points>(196.00,-76.00); (393.00,-76.00); (393.00,712.00); (415.00,712.00)</points>
         </wire>
     </chip>
     <emulatorConfiguration version="4" oldestCompatibleVersion="4">
