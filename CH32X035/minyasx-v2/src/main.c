@@ -304,14 +304,19 @@ int main() {
     }
 
     // 以下もセットする
-    // GP2のDISK_IN_A_n (OUT2=bit5)
-    // GP2のDISK_IN_B_n (OUT3=bit4)
-    // GP2のERR_DISK_A_n (OUT2=bit3)
-    // GP2のERR_DISK_B_n (OUT3=bit2)
+    // GP2の DISK_IN_A_n (Virtual Input 2=bit5)
+    // GP2の DISK_IN_B_n (Virtual Input 3=bit4)
+    // GP2の ERR_DISK_A_n (Virtual Input 4=bit3)
+    // GP2の ERR_DISK_B_n (Virtual Input 5=bit2)
+    // GP3の DISK_IN_A_n (Virtual Input 2=bit5)
+    // GP3の DISK_IN_B_n (Virtual Input 3=bit4)
     uint8_t gp2_vin = greenpak_get_virtualinput(2 - 1);
-    gp2_vin = (gp2_vin & 0xc0) | 0x0c;  // 仮に両方ともディスクあり、エラーなしにする
-    // gp2_vin = (gp2_vin & 0xc0) | 0x00;  // TODO: DISK_INは正論理なのかも？
+    gp2_vin &= 0xc0;  // 仮に両方ともディスクあり
+    gp2_vin |= 0x0c;  // エラーなしにする
     greenpak_set_virtualinput(2 - 1, gp2_vin);
+    uint8_t gp3_vin = greenpak_get_virtualinput(3 - 1);
+    gp3_vin &= 0xc0;  // 仮に両方ともディスクありにする
+    greenpak_set_virtualinput(3 - 1, gp3_vin);
 
     // 音再生コンテキストの初期化
     // タイマーの初期化の関係があるので pcfdd_init() の後に呼ぶ

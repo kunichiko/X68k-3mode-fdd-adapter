@@ -29,8 +29,8 @@ void ui_page_about_enter(ui_page_context_t* pctx) {
     // Aboutページのポーリング処理
     for (int i = 0; i < 2; i++) {
         ui_cursor(page, 7, 4 + i);
-        if (ctx->drive[0].connected) {
-            ui_printf(page, " ID%d", ctx->drive[0].drive_id);
+        if (ctx->drive[i].connected) {
+            ui_printf(page, " ID%d", ctx->drive[i].drive_id);
         } else {
             ui_print(page, " N/A");
         }
