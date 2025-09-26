@@ -47,8 +47,10 @@ typedef struct drive_status {
     bool connected;                 // ドライブが接続されているか
     uint8_t drive_id;               // ドライブID (0-3)
     bool force_ejected;             // メディアの強制排出状態かどうか(論理排出状態)
+    bool eject_masked;              // イジェクト操作がマスクされているか
     bool inserted;                  // メディアが挿入されているか。force_ejectedがtrueのときは必ずfalse
     bool ready;                     // ドライブが準備完了か
+    bool led_blink;                 // LEDが点滅中か
     bool mode_select_inverted;      // MODE SELECT信号の極性反転
     fdd_in_use_mode_t in_use_mode;  // IN-USE信号の動作モード
     fdd_rpm_control_t rpm_control;  // 回転数制御方式

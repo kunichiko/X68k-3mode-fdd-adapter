@@ -26,6 +26,15 @@ uint32_t fdd_bps_mode_to_value(fdd_bps_mode_t m);
  */
 void pcfdd_update_setting(minyasx_context_t* ctx, int drive);
 
+/**
+ * イジェクト操作を試みます
+ * EJECT_MASKが有効な場合は無視されます
+ */
+void pcfdd_try_eject(minyasx_context_t* ctx, int drive);
+
+/**
+ * ドライブを強制的にイジェクト状態にします
+ */
 void pcfdd_force_eject(minyasx_context_t* ctx, int drive);
 
 /**
