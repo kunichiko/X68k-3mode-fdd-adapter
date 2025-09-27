@@ -17,7 +17,7 @@ typedef enum {
 
 void pcfdd_set_current_ds(pcfdd_ds_t ds);
 
-void set_mode_select(drive_status_t* drive, fdd_rpm_mode_t rpm);
+void pcfdd_set_rpm_mode_select(drive_status_t* drive, fdd_rpm_mode_t rpm);
 
 uint32_t fdd_bps_mode_to_value(fdd_bps_mode_t m);
 
@@ -42,7 +42,6 @@ void pcfdd_force_eject(minyasx_context_t* ctx, int drive);
  * force_eject状態も解除されます。
  */
 void pcfdd_detect_media(minyasx_context_t* ctx, int drive);  // drive: 0=FDD_A or 1=FDD_B
-
 
 char* pcfdd_state_to_string(drive_state_t state);
 

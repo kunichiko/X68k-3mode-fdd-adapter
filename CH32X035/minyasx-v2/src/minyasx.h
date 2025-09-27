@@ -8,6 +8,11 @@
 #include "sound/beep_context.h"
 #include "sound/play_context.h"
 
+// Number of ticks elapsed per millisecond (48,000 when using 48MHz Clock)
+#define SYSTICK_ONE_MILLISECOND ((uint32_t)FUNCONF_SYSTEM_CORE_CLOCK / 1000)
+// Number of ticks elapsed per microsecond (48 when using 48MHz Clock)
+#define SYSTICK_ONE_MICROSECOND ((uint32_t)FUNCONF_SYSTEM_CORE_CLOCK / 1000000)
+
 typedef enum {
     FDD_RPM_CONTROL_NONE = 0,
     FDD_RPM_CONTROL_300 = 1,

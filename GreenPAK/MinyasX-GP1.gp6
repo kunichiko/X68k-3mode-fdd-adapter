@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GPDProject version="38" oldestCompatibleVersion="32" GPDVersion="6.49.001" lastChange="26 Sep 2025 13:28:39" projectChecksumState="1" projectChecksum="8b96e601">
+<GPDProject version="38" oldestCompatibleVersion="32" GPDVersion="6.49.001" lastChange="27 Sep 2025 23:59:48" projectChecksumState="1" projectChecksum="2113c326">
     <generalProjectSettings/>
     <chip family="04" type="06" friendlyName="GreenPAK 6" partNumber="36" package="16">
-        <nvmData registerLenght="2048">2D B 3D C3 49 38 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 80 A6 EA 7A DB CD 6D 33 B7 BD DC B6 72 DB CC 6D 2B 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 E7 EF FC 27 0 0 0 10 5 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 30 0 30 30 0 0 0 0 80 30 30 0 30 D 51 51 51 51 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 14 22 30 C 0 0 0 0 0 0 0 E8 8E 0 0 8F 0 0 0 0 0 0 0 0 0 0 0 0 0 80 20 0 1 0 0 FE 2 1 0 FD 2 0 1 0 FB 2 1 0 F7 2 0 1 0 FE 2 1 0 FB 2 0 1 0 0 2 0 1 0 0 0 2 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 A5</nvmData>
+        <nvmData registerLenght="2048">2D B 3D C3 49 38 8 C 0 0 0 0 0 0 0 0 0 0 0 0 0 0 80 A6 EA 7A DB CD 6D 33 B7 BD DC B6 72 DB CC 6D 2B 0 0 0 0 0 0 0 0 0 0 0 0 52 0 0 E7 EF FC 27 0 0 0 10 5 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 5C 0 30 30 0 0 0 0 80 30 30 0 51 D 51 51 51 51 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 14 22 30 C 0 0 0 0 0 0 0 E8 8E 0 0 DD 0 0 0 0 0 0 0 0 0 0 0 0 0 80 20 0 1 0 0 FE 2 1 0 FD 2 0 1 0 FB 2 1 0 F7 2 0 1 0 FE 2 1 0 FB 2 0 1 0 0 2 0 1 0 0 0 2 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 A5</nvmData>
         <eepromData id="0">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</eepromData>
-        <checksum crc32="0xFE01D952" version="7"/>
+        <checksum crc32="0x2897E6D5" version="7"/>
         <VDDItem id="0">
             <item id="0" caption="VDD (PIN 20)">
                 <graphics pos="(329.57,-300.19)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
@@ -16,9 +16,10 @@
                 <textLabel pos="(-4.18,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">ENABEL</textLabel>
             </item>
         </IOPad>
-        <IOPad id="2" useCaseMode="1">
+        <IOPad id="2" useCaseMode="4">
             <item id="2" caption="PIN 18 (IO1)">
-                <graphics pos="(434.13,258.91)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
+                <graphics pos="(437.79,544.51)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
+                <textLabel pos="(-13.74,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">STEP_DOSV</textLabel>
             </item>
         </IOPad>
         <IOPad id="3" useCaseMode="1">
@@ -83,6 +84,7 @@
         <IOPad id="14" useCaseMode="1">
             <item id="14" caption="PIN 6 (IO9)">
                 <graphics pos="(-500.35,521.23)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
+                <textLabel pos="(-2.64,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">STEP_n</textLabel>
             </item>
         </IOPad>
         <IOPad id="15" useCaseMode="4">
@@ -182,7 +184,7 @@
         </LUT>
         <LUT id="39" regularShape="0" mode="0">
             <item id="39" caption="3-bit LUT0/DFF/LATCH3">
-                <graphics pos="(-347.77,333.38)" angle="270" flipping="0" hidden="1" tOrigin="(20.00,15.00)"/>
+                <graphics pos="(189.39,535.30)" angle="270" flipping="3" hidden="0" tOrigin="(20.00,15.00)"/>
             </item>
         </LUT>
         <LUT id="40" regularShape="0" mode="0">
@@ -465,6 +467,21 @@
         </wire>
         <wire output="191" input="515" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="13" wireText="DRIVE_SELECT_A_n" wireState="0">
             <points>(196.00,-76.00); (393.00,-76.00); (393.00,712.00); (415.00,712.00)</points>
+        </wire>
+        <wire output="141" input="497" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="24" wireText="EN" wireState="1">
+            <points/>
+        </wire>
+        <wire output="161" input="496" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="28" wireText="NET28" wireState="0">
+            <points>(244.00,550.00); (415.00,550.00)</points>
+        </wire>
+        <wire output="152" input="548" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="27" wireText="NET27" wireState="0">
+            <points>(-438.00,537.00); (173.00,537.00)</points>
+        </wire>
+        <wire output="63" input="549" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="29" wireText="STEP_MCU" wireState="1">
+            <points/>
+        </wire>
+        <wire output="1" input="550" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="-1" wireText="GND" wireState="1">
+            <points/>
         </wire>
     </chip>
     <emulatorConfiguration version="4" oldestCompatibleVersion="4">

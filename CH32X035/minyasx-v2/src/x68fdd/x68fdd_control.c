@@ -4,21 +4,19 @@
 #include <stdint.h>
 
 #include "greenpak/greenpak_control.h"
+#include "minyasx.h"
 #include "pcfdd/pcfdd_control.h"
 #include "ui/ui_control.h"
 
 volatile uint32_t exti_int_counter = 0;
 
-const bool double_option_A_always = true;   // OPTION_SELECT_Aが両方アサートされるようにする
-const bool double_option_B_always = false;  // OPTION_SELECT_Bが両方アサートされるようにする
+const bool double_option_A_always = false;  // 強制的にOPTION_SELECT_Aが両方アサートされるようにする
+const bool double_option_B_always = false;  // 強制的にOPTION_SELECT_Bが両方アサートされるようにする
 
 volatile bool double_option_A = double_option_A_always;
 volatile bool double_option_B = double_option_B_always;
 
-// Number of ticks elapsed per millisecond (48,000 when using 48MHz Clock)
-#define SYSTICK_ONE_MILLISECOND ((uint32_t)FUNCONF_SYSTEM_CORE_CLOCK / 1000)
-// Number of ticks elapsed per microsecond (48 when using 48MHz Clock)
-#define SYSTICK_ONE_MICROSECOND ((uint32_t)FUNCONF_SYSTEM_CORE_CLOCK / 1000000)
+#define SYSTICK_INT_USEC 100  // SysTickの割り込み周期
 
 // 割り込みルーチンからコンテキストを参照できるようにする
 static minyasx_context_t* g_ctx = NULL;
@@ -75,6 +73,8 @@ void x68fdd_init(minyasx_context_t* ctx) {
     NVIC_EnableIRQ(EXTI7_0_IRQn);   // EXTI 7-0割り込みを有効にする
     NVIC_EnableIRQ(EXTI15_8_IRQn);  // EXTI 15-8割り込みを有効にする
 
+    NVIC_SetPriority(EXTI15_8_IRQn, 1);  // 優先度を高くする
+
     //
     // GPIO割り込みだけでは対応できない処理のために、SysTick割り込みを100usec単位で発生させる
     //
@@ -82,7 +82,7 @@ void x68fdd_init(minyasx_context_t* ctx) {
     SysTick->CTLR = 0x0000;
 
     // 100usec 単位で割り込みをかける、
-    SysTick->CMP = 100 * SYSTICK_ONE_MICROSECOND - 1;
+    SysTick->CMP = SYSTICK_INT_USEC * SYSTICK_ONE_MICROSECOND - 1;
 
     // Reset the Count Register, and the global millis counter to 0
     SysTick->CNT = 0x00000000;
@@ -107,10 +107,11 @@ void x68fdd_init(minyasx_context_t* ctx) {
  */
 void EXTI7_0_IRQHandler(void) __attribute__((interrupt));
 void EXTI7_0_IRQHandler(void) {
+    uint32_t porta = GPIOA->INDR;
+    uint32_t intfr = EXTI->INTFR;  // 割り込みフラグを取得
+
     exti_int_counter++;
 
-    uint32_t intfr = EXTI->INTFR;  // 割り込みフラグを取得
-    uint32_t porta = GPIOA->INDR;
     if (intfr & EXTI_INTF_INTF0) {
         // PA0 (DRIVE_SELECT_A) の割り込み
         EXTI->INTFR = EXTI_INTF_INTF0;  // フラグをクリア
@@ -121,9 +122,9 @@ void EXTI7_0_IRQHandler(void) {
         } else {
             // DRIVE_SELECT_A_nがLow(有効)になった
             if (double_option_A) {
-                set_mode_select(&g_ctx->drive[0], FDD_RPM_300);
+                pcfdd_set_rpm_mode_select(&g_ctx->drive[0], FDD_RPM_300);
             } else {
-                set_mode_select(&g_ctx->drive[0], FDD_RPM_360);
+                pcfdd_set_rpm_mode_select(&g_ctx->drive[0], FDD_RPM_360);
             }
             GPIOB->BCR = (1 << 3);            // DRIVE_SELECT_DOSV_B inactive (Low) to avoid both selected
             GPIOB->BSHR = (1 << 2);           // DRIVE_SELECT_DOSV_A active (High)
@@ -140,9 +141,9 @@ void EXTI7_0_IRQHandler(void) {
         } else {
             // DRIVE_SELECT_B_nがLow(有効)になった
             if (double_option_B) {
-                set_mode_select(&g_ctx->drive[1], FDD_RPM_300);
+                pcfdd_set_rpm_mode_select(&g_ctx->drive[1], FDD_RPM_300);
             } else {
-                set_mode_select(&g_ctx->drive[1], FDD_RPM_360);
+                pcfdd_set_rpm_mode_select(&g_ctx->drive[1], FDD_RPM_360);
             }
             GPIOB->BCR = (1 << 2);            // DRIVE_SELECT_DOSV_A inactive (Low) to avoid both selected
             GPIOB->BSHR = (1 << 3);           // DRIVE_SELECT_DOSV_B active (High)
@@ -153,7 +154,6 @@ void EXTI7_0_IRQHandler(void) {
         // PA2 (OPTION_SELECT_A) の割り込み (立ち上がりのみ)
         EXTI->INTFR = EXTI_INTF_INTF2;  // フラグをクリア
         // このタイミングで EJECT(PA4), EJECT_MASK(PA5), LED_BLINK(PA8)の状態を確認する
-        uint32_t porta = GPIOA->INDR;
         drive_status_t* drive = &g_ctx->drive[0];  // Aドライブ
         if ((porta & (1 << 4)) == 0) {             // EJECT (Low=Eject)
             pcfdd_force_eject(g_ctx, 0);           // Aドライブを強制排出
@@ -173,7 +173,6 @@ void EXTI7_0_IRQHandler(void) {
         // PA3 (OPTION_SELECT_B) の割り込み (立ち上がりのみ)
         EXTI->INTFR = EXTI_INTF_INTF3;  // フラグをクリア
         // このタイミングで EJECT(PA4), EJECT_MASK(PA5), LED_BLINK(PA8)の状態を確認する
-        uint32_t porta = GPIOA->INDR;
         drive_status_t* drive = &g_ctx->drive[1];  // Bドライブ
         if ((porta & (1 << 4)) == 0) {             // EJECT (Low=Eject)
             pcfdd_force_eject(g_ctx, 1);           // Bドライブを強制排出
@@ -194,56 +193,21 @@ void EXTI7_0_IRQHandler(void) {
 void EXTI15_8_IRQHandler(void) __attribute__((interrupt));
 void EXTI15_8_IRQHandler(void) {
     exti_int_counter++;
-    uint32_t intfr = EXTI->INTFR;  // 割り込みフラグを取得
+
+    // PA12: MOTOR_ON       -> PB4: MOTOR_ON_DOSV (論理逆)
+    // PA13: DIRECTION      -> PB5: DIRECTION_DOSV (論理逆)
+    // PA15: SIDE_SELECT    -> PB7: SIDE_SELECT_DOSV (論理逆)
+    // この4つのGPIO入力のバイパスをまとめて処理する
     uint32_t porta = GPIOA->INDR;
-    if (intfr & EXTI_INTF_INTF12) {
-        // PA12: MOTOR_ON の割り込み
-        // PB4 : MOTOR_ON_DOSV output (論理逆) に反映する
-        EXTI->INTFR = EXTI_INTF_INTF12;  // フラグをクリア
-        if (porta & (1 << 12)) {
-            // MOTOR_ONがHighになった
-            GPIOB->BCR = (1 << 4);  // Motor ON inactive
-        } else {
-            // MOTOR_ONがLowになった
-            GPIOB->BSHR = (1 << 4);  // Motor ON active
-        }
-    }
-    if (intfr & EXTI_INTF_INTF13) {
-        // PA13: DIRECTION の割り込み
-        // PB5 : DIRECTION_DOSV output (論理逆) に反映する
-        EXTI->INTFR = EXTI_INTF_INTF13;  // フラグをクリア
-        if (porta & (1 << 13)) {
-            // DIRECTIONがHighになった
-            GPIOB->BCR = (1 << 5);  // Direction反転
-        } else {
-            // DIRECTIONがLowになった
-            GPIOB->BSHR = (1 << 5);  // Direction非反転
-        }
-    }
-    if (intfr & EXTI_INTF_INTF14) {
-        // PA14: STEP の割り込み
-        // PB6 : STEP_DOSV output (論理逆) に反映する
-        EXTI->INTFR = EXTI_INTF_INTF14;  // フラグをクリア
-        if (porta & (1 << 14)) {
-            // STEPがHighになった
-            GPIOB->BCR = (1 << 6);  // Step inactive
-        } else {
-            // STEPがLowになった
-            GPIOB->BSHR = (1 << 6);  // Step active
-        }
-    }
-    if (intfr & EXTI_INTF_INTF15) {
-        // PA15: SIDE_SELECT の割り込み
-        // PB7 : SIDE_SELECT_DOSV output (論理逆) に反映する
-        EXTI->INTFR = EXTI_INTF_INTF15;  // フラグをクリア
-        if (porta & (1 << 15)) {
-            // SIDE_SELECTがHighになった
-            GPIOB->BCR = (1 << 7);  // Side Select
-        } else {
-            // SIDE_SELECTがLowになった
-            GPIOB->BSHR = (1 << 7);  // Side Select
-        }
-    }
+    uint32_t mask = (1 << 15) | (1 << 13) | (1 << 12);
+    uint32_t active_bits = (~porta) & mask;  // Lowアクティブなので反転する
+    uint32_t inactive_bits = porta & mask;   // 1になっているビットを抽出
+
+    // bit12-15を bit4-7 に移動してGPIOBに反映する
+    GPIOB->BSHR = (active_bits >> 8);   // Highにする
+    GPIOB->BCR = (inactive_bits >> 8);  // Lowにする
+
+    EXTI->INTFR = EXTI_INTF_INTF12 | EXTI_INTF_INTF13 | EXTI_INTF_INTF14 | EXTI_INTF_INTF15;  // フラグをクリア
 }
 
 volatile uint32_t systick_irq_counter = 0;
@@ -263,7 +227,7 @@ void SysTick_Handler(void) {
     // If more than this number of ticks elapse before the trigger is reset,
     // you may miss your next interrupt trigger
     // (Make sure the IQR is lightweight and CMP value is reasonable)
-    SysTick->CMP = SysTick->CNT + 100 * SYSTICK_ONE_MICROSECOND;
+    SysTick->CMP = SysTick->CNT + SYSTICK_INT_USEC * SYSTICK_ONE_MICROSECOND;
 
     // Clear the trigger state for the next IRQ
     SysTick->SR = 0x00000000;
@@ -369,16 +333,16 @@ void SysTick_Handler(void) {
     if (ds_a) {
         if (double_option_A) {
             // DRIVE_SELECT_Aがアサートされていて、OPTION SELECT Aが同時アサートされている
-            set_mode_select(&g_ctx->drive[0], FDD_RPM_300);
+            pcfdd_set_rpm_mode_select(&g_ctx->drive[0], FDD_RPM_300);
         } else {
-            set_mode_select(&g_ctx->drive[0], FDD_RPM_360);
+            pcfdd_set_rpm_mode_select(&g_ctx->drive[0], FDD_RPM_360);
         }
     }
     if (ds_b) {
         if (double_option_B) {
-            set_mode_select(&g_ctx->drive[1], FDD_RPM_300);
+            pcfdd_set_rpm_mode_select(&g_ctx->drive[1], FDD_RPM_300);
         } else {
-            set_mode_select(&g_ctx->drive[1], FDD_RPM_360);
+            pcfdd_set_rpm_mode_select(&g_ctx->drive[1], FDD_RPM_360);
         }
     }
 }

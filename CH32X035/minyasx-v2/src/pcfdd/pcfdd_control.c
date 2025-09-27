@@ -7,7 +7,7 @@
 #include "greenpak/greenpak_control.h"
 #include "ui/ui_control.h"
 
-#define BPS_TIM_PRESCALER_SHIFT 1                         // 実際に取り込む頻度を下げる頻度 (IC1PSCの値。0=1/1, 1=1/2, 2=1/4, 3=1/8)
+#define BPS_TIM_PRESCALER_SHIFT 3                         // 実際に取り込む頻度を下げる頻度 (IC1PSCの値。0=1/1, 1=1/2, 2=1/4, 3=1/8)
 #define BPS_TIM_PRESCALER (1 << BPS_TIM_PRESCALER_SHIFT)  // 48MHz/(BPS_TIM_PRESCALER) = 4MHz(既定) → 0.25us resolution
 
 #define SCALE (1u << BPS_TIM_PRESCALER_SHIFT)
@@ -20,9 +20,35 @@ static volatile uint32_t cap_buf_ds0[READ_DATA_CAP_N];
 static volatile uint32_t cap_buf_ds1[READ_DATA_CAP_N];
 static volatile uint32_t* cap_buf_active = cap_buf_ds0; /* 切替用 */
 
-void set_mode_select(drive_status_t* drive, fdd_rpm_mode_t rpm) {
+/**
+ * PC FDDのMODE SELECT信号を設定し、回転数変更を試みます
+ * ただし、rpm_controlの設定が固定になっている場合は変更しません。
+ */
+void pcfdd_set_rpm_mode_select(drive_status_t* drive, fdd_rpm_mode_t rpm) {
     uint32_t flag = (1 << 0);  // MODE_SELECT_DOSV のビット位置
     bool inverted = drive->mode_select_inverted;
+
+    switch (drive->rpm_control) {
+    case FDD_RPM_CONTROL_300:
+        rpm = FDD_RPM_300;
+        break;
+    case FDD_RPM_CONTROL_360:
+        rpm = FDD_RPM_360;
+        break;
+    case FDD_RPM_CONTROL_NONE:
+        // NONEの場合は、rpm引数は無視される
+        // 回転数制御なしの場合は、ドライブのデフォルト動作に任せるので、MODE_SELECTはディアサートする
+        GPIOB->BCR = flag;  // MODE_SELECT_DOSVをクリア
+        drive->rpm_setting = FDD_RPM_UNKNOWN;
+        return;
+    case FDD_RPM_CONTROL_9SCDRV:
+    case FDD_RPM_CONTROL_BPS:
+        // これらのモードでは、rpm引数がそのまま使われる
+        break;
+    default:
+        // 想定外の値の場合は、変更しない
+        return;
+    }
     drive->rpm_setting = rpm;
     // MODE_SELECT_DOSV の設定
     if (((rpm == FDD_RPM_300) && !inverted) || ((rpm == FDD_RPM_360) && inverted)) {
@@ -61,7 +87,7 @@ void pcfdd_init(minyasx_context_t* ctx) {
         ctx->drive[i].state = DRIVE_STATE_POWER_OFF;
         ctx->drive[i].eject_masked = false;
         ctx->drive[i].led_blink = false;
-        ctx->drive[i].rpm_control = FDD_RPM_CONTROL_9SCDRV;
+        ctx->drive[i].rpm_control = FDD_RPM_CONTROL_360;  // FDD_RPM_CONTROL_9SCDRV;
         ctx->drive[i].rpm_setting = FDD_RPM_360;
         ctx->drive[i].rpm_measured = FDD_RPM_UNKNOWN;
         ctx->drive[i].bps_measured = BPS_UNKNOWN;
@@ -144,11 +170,11 @@ void pcfdd_init(minyasx_context_t* ctx) {
     TIM1->CTLR1 |= TIM_CEN;
 
     // DMA割り込み有効
-    NVIC_EnableIRQ(DMA1_Channel2_IRQn);
+    // NVIC_EnableIRQ(DMA1_Channel2_IRQn);
 
     // MODE_SELECT_DOSV の初期化
-    set_mode_select(&ctx->drive[0], ctx->drive[0].rpm_setting);
-    set_mode_select(&ctx->drive[1], ctx->drive[1].rpm_setting);
+    pcfdd_set_rpm_mode_select(&ctx->drive[0], ctx->drive[0].rpm_setting);
+    pcfdd_set_rpm_mode_select(&ctx->drive[1], ctx->drive[1].rpm_setting);
 }
 
 /*
@@ -473,6 +499,20 @@ void pcfdd_set_current_ds(pcfdd_ds_t ds) {
 //
 //
 
+void step_dosv(int drive) {
+    if (drive < 0 || drive > 1) {
+        return;
+    }
+    // GreenPAK1の Vitrual Input 7 (bit0) に STEP_DOSV を接続している
+    uint8_t gp1_vin = greenpak_get_virtualinput(1 - 1);
+    gp1_vin |= (1 << 0);  // bit0 = 1 (STEP_DOSV = 1)
+    greenpak_set_virtualinput(1 - 1, gp1_vin);
+    Delay_Ms(1);
+    gp1_vin &= ~(1 << 0);  // bit0 = 0 (STEP_DOSV = 0)
+    greenpak_set_virtualinput(1 - 1, gp1_vin);
+    Delay_Ms(3);
+}
+
 bool seek_to_track0(int drive) {
     ui_printf(UI_PAGE_LOG, "Seek Track0 (D:%d)\n", drive);
     if (drive < 0 || drive > 1) {
@@ -484,10 +524,7 @@ bool seek_to_track0(int drive) {
     GPIOB->BSHR = (1 << (2 + drive));  // Drive Select A/B active
     GPIOB->BSHR = (1 << 5);            // DIRECTION_DOSV active (内周方向)
     for (int i = 0; i < 10; i++) {
-        GPIOB->BSHR = (1 << 6);  // STEP_DOSV = 1
-        Delay_Ms(1);
-        GPIOB->BCR = (1 << 6);  // STEP_DOSV = 0
-        Delay_Ms(3);
+        step_dosv(drive);
     }
     // ここで 100msec待つ(Track00以外でシークを一度確定しないとDISK_CHANGEがクリアされないドライブがある)
     Delay_Ms(100);
@@ -502,10 +539,7 @@ bool seek_to_track0(int drive) {
             // TRACK0_DOSV = 0 (Low) になった
             break;
         }
-        GPIOB->BSHR = (1 << 6);  // STEP_DOSV = 1
-        Delay_Ms(1);
-        GPIOB->BCR = (1 << 6);  // STEP_DOSV = 0
-        Delay_Ms(3);
+        step_dosv(drive);
     }
     Delay_Ms(100);
     GPIOB->BCR = (1 << (2 + drive));  // Drive Select A/B inactive
@@ -702,12 +736,51 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     }
 
     // DISK_CHANGE_DOSV (PB8) の変化を監視し、変化があったらメディア検出状態に遷移する
+#if 0
+    static int disk_change_count[2] = {0, 0};
     for (int drive = 0; drive < 2; drive++) {
         drive_status_t* drv = &ctx->drive[drive];
         uint32_t gpiob = GPIOB->INDR;
         bool drive_select = (gpiob & (1 << (2 + drive)));  // Drive Select A/B active?
         bool disk_change = (gpiob & (1 << 8)) == 0;        // DISK_CHANGE_DOSV = 0 (Low) active?
-        if (drive_select && disk_change) {
+        if (drive_select) {
+            if (disk_change) {
+                disk_change_count[drive]++;
+                if (disk_change_count[drive] >= 3) {
+                    // 3回連続でDISK_CHANGEがアサートされている
+                    disk_change_count[drive] = 0;
+                    ui_printf(UI_PAGE_LOG, "D%d: Disk Chg det\n", drive);
+                    if (drv->state == DRIVE_STATE_READY) {
+                        // READY状態でDISK_CHANGEがアサートされたらメディア検出状態に遷移する
+                        // アクセス中なのでちょっと怖いが……
+                        drv->state = DRIVE_STATE_MEDIA_DETECTING;
+                    }
+                    if (drv->state == DRIVE_STATE_NO_MEDIA) {
+                        // NO_MEDIAでDISK_CHANGEがアサートされたらメディア検出状態に遷移する
+                        drv->state = DRIVE_STATE_MEDIA_DETECTING;
+                    }
+                }
+            } else {
+                disk_change_count[drive] = 0;
+            }
+        }
+    }
+#endif
+    for (int drive = 0; drive < 2; drive++) {
+        drive_status_t* drv = &ctx->drive[drive];
+        uint32_t systick_start = SysTick->CNTL;
+        bool disk_change_det = true;
+        while ((SysTick->CNTL - systick_start) < (10 * 1000 * 48)) {  // 10msec継続しているか
+            uint32_t gpiob = GPIOB->INDR;
+            bool drive_select = (gpiob & (1 << (2 + drive)));  // Drive Select A/B active?
+            bool disk_change = (gpiob & (1 << 8)) == 0;        // DISK_CHANGE_DOSV = 0 (Low) active?
+            if (!drive_select || !disk_change) {
+                disk_change_det = false;
+                break;
+            }
+        }
+        if (disk_change_det) {
+            ui_printf(UI_PAGE_LOG, "Disk Chg det %1d\n", drive);
             if (drv->state == DRIVE_STATE_READY) {
                 // READY状態でDISK_CHANGEがアサートされたらメディア検出状態に遷移する
                 // アクセス中なのでちょっと怖いが……
@@ -719,6 +792,13 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
             }
         }
     }
+
+    // RPMとBPSの計測を1秒毎に行う
+    static uint64_t last_tick = 0;
+    if (systick_ms - last_tick < 1000) {
+        return;
+    }
+    last_tick = systick_ms;
 
     // RPMのタイムアウト監視
     {
@@ -753,19 +833,18 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
             ctx->drive[drive].rpm_measured = FDD_RPM_UNKNOWN;
             continue;
         }
-        if (index_width[drive] < 166 + ((200 - 166) / 2)) {
+        int margin = (200 - 166) / 2;
+        if (166 - margin < index_width[drive] && index_width[drive] < 166 + margin) {
             ctx->drive[drive].rpm_measured = FDD_RPM_360;
-        } else {
+        } else if (200 - margin < index_width[drive] && index_width[drive] < 200 + margin) {
             ctx->drive[drive].rpm_measured = FDD_RPM_300;
+        } else {
+            // それ以外は無視
+            (void)0;
         }
     }
-    // bpsの計測を1秒毎に行う
-    static uint64_t last_tick = 0;
-    if (systick_ms - last_tick < 1000) {
-        return;
-    }
-    last_tick = systick_ms;
 
+    // BPSの計測結果を反映
     fdd_bps_mode_t bps0 = pcfdd_bps_decide_and_reset(0); /* DS0のbpsを取得 */
     fdd_bps_mode_t bps1 = pcfdd_bps_decide_and_reset(1); /* DS1のbpsを取得 */
     ctx->drive[0].bps_measured = bps0;

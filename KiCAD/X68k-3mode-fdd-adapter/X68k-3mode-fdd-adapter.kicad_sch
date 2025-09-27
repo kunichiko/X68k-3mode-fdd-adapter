@@ -9306,6 +9306,16 @@
 	)
 	(wire
 		(pts
+			(xy 256.54 212.09) (xy 278.13 212.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "74582fa1-9b39-4dcf-bcb6-2051e7f0a98d")
+	)
+	(wire
+		(pts
 			(xy 374.65 24.13) (xy 374.65 26.67)
 		)
 		(stroke
@@ -12574,6 +12584,16 @@
 		)
 		(uuid "7fc8d691-6dc6-4ade-adb0-d33e8e07772c")
 	)
+	(label "STEP_DOSV_MCU"
+		(at 134.62 125.73 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "823e7197-9bc8-43ad-b7b0-1e65c55279ec")
+	)
 	(label "WRITE_GATE"
 		(at 114.3 247.65 180)
 		(effects
@@ -13234,16 +13254,6 @@
 		)
 		(uuid "d53093cf-652f-4915-b003-bf5eb6aeef6a")
 	)
-	(label "STEP_DOSV_MCU"
-		(at 256.54 212.09 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "d5ceb380-84c6-4193-8ab1-7fb34ed8706f")
-	)
 	(label "IN_USE_DOSV_MCU"
 		(at 256.54 199.39 0)
 		(effects
@@ -13273,6 +13283,16 @@
 			(justify left bottom)
 		)
 		(uuid "d83bf4f3-610d-4c01-ae06-776eaba44ee0")
+	)
+	(label "STEP"
+		(at 114.3 135.89 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "d9a8e565-945e-44b7-91d8-aeb792476594")
 	)
 	(label "WRITE_DATA"
 		(at 114.3 250.19 180)
@@ -22214,6 +22234,82 @@
 			(project ""
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "J105")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 278.13 212.09 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "a1d6d36f-dbbe-4f78-828c-0882746228de")
+		(property "Reference" "TP115"
+			(at 280.67 206.756 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 276.86 211.328 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
+			(at 273.05 212.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 273.05 212.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 278.13 212.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCIC" ""
+			(at 278.13 212.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "3fa25d47-9d2b-4c76-9d6f-949b2015912a")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "TP115")
 					(unit 1)
 				)
 			)
