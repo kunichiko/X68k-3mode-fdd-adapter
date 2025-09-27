@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include "ch32fun.h"
+#include "greenpak/greenpak_control.h"
 #include "ui/ui_control.h"
 
 #define BPS_TIM_PRESCALER_SHIFT 1                         // 実際に取り込む頻度を下げる頻度 (IC1PSCの値。0=1/1, 1=1/2, 2=1/4, 3=1/8)
@@ -58,10 +59,7 @@ void pcfdd_init(minyasx_context_t* ctx) {
     // PCFDDコントローラの初期化コードをここに追加
     for (int i = 0; i < 2; i++) {
         ctx->drive[i].state = DRIVE_STATE_POWER_OFF;
-        ctx->drive[i].force_ejected = false;
         ctx->drive[i].eject_masked = false;
-        ctx->drive[i].inserted = false;
-        ctx->drive[i].ready = false;
         ctx->drive[i].led_blink = false;
         ctx->drive[i].rpm_control = FDD_RPM_CONTROL_9SCDRV;
         ctx->drive[i].rpm_setting = FDD_RPM_360;
@@ -69,7 +67,7 @@ void pcfdd_init(minyasx_context_t* ctx) {
         ctx->drive[i].bps_measured = BPS_UNKNOWN;
     }
     //
-    // FDのINDEX信号の立ち上がり/立ち下がりエッジを検出するために、Timer3 Channel1を使う
+    // FDのINDEX信号(PA6)の立ち上がり/立ち下がりエッジを検出するために、Timer3 Channel1を使う
     // Timer3は Channel2で BeepのPWM出力でも使っていて、動的にタイムアウト値(ARR)が変更されてしまうので、
     // Indexパルス幅の検出は、SysTick->CNTの値を直接読むことで実現している
     //
@@ -476,7 +474,7 @@ void pcfdd_set_current_ds(pcfdd_ds_t ds) {
 //
 
 bool seek_to_track0(int drive) {
-    ui_printf(UI_PAGE_LOG, "Seek to Track0 (Drive %d)\n", drive);
+    ui_printf(UI_PAGE_LOG, "Seek Track0 (D:%d)\n", drive);
     if (drive < 0 || drive > 1) {
         return false;
     }
@@ -491,6 +489,9 @@ bool seek_to_track0(int drive) {
         GPIOB->BCR = (1 << 6);  // STEP_DOSV = 0
         Delay_Ms(3);
     }
+    // ここで 300msec待つ(Track00以外でシークを一度確定しないとDISK_CHANGEがクリアされないドライブがある？)
+    Delay_Ms(300);
+    // シーク
     GPIOB->BCR = (1 << 5);  // DIRECTION_DOSV inactive (正論理, 外周方向)
     seek_count = 0;
     while (seek_count < 200) {
@@ -514,24 +515,180 @@ bool seek_to_track0(int drive) {
 uint32_t last_index_ms = 0;
 bool last_index_state = false;
 
+static void process_initializing(minyasx_context_t* ctx, int drive) {
+    if (ctx->drive[drive].state != DRIVE_STATE_INITIALIZING) return;
+
+    // シークしてトラック0に戻す
+    if (seek_to_track0(drive)) {
+        ctx->drive[drive].state = DRIVE_STATE_MEDIA_DETECTING;
+        ctx->drive[drive].rpm_measured = FDD_RPM_UNKNOWN;
+        ctx->drive[drive].bps_measured = BPS_UNKNOWN;
+    } else {
+        // トラック0に戻れなかった =  ドライブが存在しない
+        ctx->drive[drive].state = DRIVE_STATE_NOT_CONNECTED;
+        ctx->drive[drive].rpm_measured = FDD_RPM_UNKNOWN;
+        ctx->drive[drive].bps_measured = BPS_UNKNOWN;
+    }
+}
+
+static void process_media_detecting(minyasx_context_t* ctx, int drive) {
+    if (ctx->drive[drive].state != DRIVE_STATE_MEDIA_DETECTING) return;
+
+    drive_status_t* d = &ctx->drive[drive];
+
+    // 割り込みを禁止して、Drive Selectがアクティブな状態で確認する
+    while (1) {
+        __disable_irq();
+        uint32_t gpiob = GPIOB->INDR;
+        if ((gpiob & 0xc) == 0) {
+            break;
+        }
+        // DS0/DS1のいずれかがアクティブな状態
+        __enable_irq();
+        Delay_Ms(10);  // 少し待つ
+    }
+    // ここには割り込み禁止状態かつ、DS0/DS1のいずれもアクティブでない状態で来る
+
+    // 1. まずはGreenPAK 3のメディア挿入状態をDisableにする
+    // そうすると、X68000側にはINDEXやREAD_DATAが届かなくなるので、
+    // PCFDD側のDrive Selectをアクティブにしても問題なくなる
+    // GP3の DISK_IN_A_n (Virtual Input 2=bit5)
+    // GP3の DISK_IN_B_n (Virtual Input 3=bit4)
+    uint8_t gp3_vin = greenpak_get_virtualinput(3 - 1);
+    gp3_vin |= (1 << (5 - drive));  // bit4/5を1にして、DISK_IN_x_nをDisableにする
+    greenpak_set_virtualinput(3 - 1, gp3_vin);
+
+    // 2. TRACK00にシークする
+    // これをするとPC FDDの DISK_CHANGEもクリアされる
+    seek_to_track0(drive);
+
+    // 3. PC FDD側のDrive Selectをアクティブにし、MOTOR_ONもアクティブにする
+    GPIOB->BSHR = (1 << (2 + drive));  // Drive Select A/B active
+    if ((GPIOB->INDR & (1 << 4)) == 0) {
+        GPIOB->BSHR = (1 << 4);  // MOTOR_ON_DOSV active
+        // モーターの回転が安定するまで 300msec待つ
+        Delay_Ms(300);
+    }
+
+    // 4. 500msecの間に INDEXパルスが来るかを監視する
+    uint32_t systick_start = SysTick->CNTL;
+    bool index_low_seen = false;
+    bool index_high_seen = false;
+    while ((SysTick->CNTL - systick_start) < (500 * 1000 * 48)) {
+        uint32_t gpioa = GPIOA->INDR;
+        if ((gpioa & (1 << 6)) == 0) {
+            // INDEX_DOSV (PA6) = 0 (Low) になった
+            index_low_seen = true;
+        }
+        if ((gpioa & (1 << 6)) != 0) {
+            // INDEX_DOSV (PA6) = 1 (High) になった
+            index_high_seen = true;
+        }
+        if (index_low_seen && index_high_seen) {
+            break;
+        }
+    }
+
+    // 5. INDEXパルスの有無で、メディアの有無を判断する
+    if (!(index_low_seen && index_high_seen)) {
+        // INDEXパルスが来なかった
+        // →メディア無しと判断する
+        d->state = DRIVE_STATE_NO_MEDIA;
+        d->rpm_measured = FDD_RPM_UNKNOWN;
+        d->bps_measured = BPS_UNKNOWN;
+    } else {
+        // INDEXパルスが来た
+        // →メディア有りと判断する
+        d->state = DRIVE_STATE_READY;
+        d->rpm_measured = FDD_RPM_UNKNOWN;
+        d->bps_measured = BPS_UNKNOWN;
+        gp3_vin &= ~(1 << (5 - drive));  // bit4/5を0にして、DISK_IN_x_nをEnableにする
+        greenpak_set_virtualinput(3 - 1, gp3_vin);
+    }
+
+    // 6. Drive Selectを非アクティブにする
+    // MOTOR_ONはそのままでOK (X68000側でMOTOR_ONを解除すると、GPIO割り込みがかかって止まる)
+    GPIOB->BCR = (1 << (2 + drive));  // Drive Select A/B inactive
+
+    // 6. 割り込みを有効に戻す
+    __enable_irq();
+    return;
+}
+
+static void process_no_media(minyasx_context_t* ctx, int drive) {
+    if (ctx->drive[drive].state != DRIVE_STATE_NO_MEDIA) return;
+
+    // メディア無し状態の処理（必要なら追加）
+    // 例えば、一定時間経過後に再度メディア検出を試みるなど
+}
+
+static void process_ready(minyasx_context_t* ctx, int drive) {
+    if (ctx->drive[drive].state != DRIVE_STATE_READY) return;
+
+    // READY状態の処理
+
+    // 1. READY_MCUをActiveにする
+    // MOTOR ON信号(PA12)がアクティブならREADY信号をアクティブにする
+    // GreenPAKは各ドライブにDriveSelect信号がアサートされると、
+    // このREADY信号の値を返却します
+    if (!(GPIOA->INDR & GPIO_Pin_12)) {
+        // MOTOR_ON アクティブ
+        GPIOB->BCR = (drive == 0) ? GPIO_Pin_12 : GPIO_Pin_13;  // READY_MCU_A_n / READY_MCU_B_n (Low=準備完了)
+    } else {
+        GPIOB->BSHR = (drive == 0) ? GPIO_Pin_12 : GPIO_Pin_13;  // READY_MCU_A_n / READY_MCU_B_n (High=準備完了でない)
+    }
+
+    // 2. GP2,GP3の DISK_IN_x_n をEnableにする
+    uint8_t gp2_vin = greenpak_get_virtualinput(2 - 1);
+    gp2_vin &= ~(1 << (5 - drive));  // bit4/5を0にして、DISK_IN_x_nをEnableにする
+    greenpak_set_virtualinput(2 - 1, gp2_vin);
+
+    uint8_t gp3_vin = greenpak_get_virtualinput(3 - 1);
+    gp3_vin &= ~(1 << (5 - drive));  // bit4/5を0にして、DISK_IN_x_nをEnableにする
+    greenpak_set_virtualinput(3 - 1, gp3_vin);
+}
+
 void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     // PCFDDコントローラの定期処理コード
     for (int drive = 0; drive < 2; drive++) {
-        if (ctx->drive[drive].state == DRIVE_STATE_INITIALIZING) {
-            // 初期化中はシークしてトラック0に戻す
-            if (seek_to_track0(drive)) {
-                ctx->drive[drive].state = DRIVE_STATE_POWER_ON;
-                ctx->drive[drive].inserted = false;
-                ctx->drive[drive].ready = false;
-                ctx->drive[drive].rpm_measured = FDD_RPM_UNKNOWN;
-                ctx->drive[drive].bps_measured = BPS_UNKNOWN;
-            } else {
-                // トラック0に戻れなかった
-                ctx->drive[drive].state = DRIVE_STATE_NOT_CONNECTED;
-                ctx->drive[drive].inserted = false;
-                ctx->drive[drive].ready = false;
-                ctx->drive[drive].rpm_measured = FDD_RPM_UNKNOWN;
-                ctx->drive[drive].bps_measured = BPS_UNKNOWN;
+        switch (ctx->drive[drive].state) {
+        case DRIVE_STATE_POWER_OFF:
+            break;
+        case DRIVE_STATE_INITIALIZING:
+            process_initializing(ctx, drive);
+            break;
+        case DRIVE_STATE_NOT_CONNECTED:
+            break;
+        case DRIVE_STATE_MEDIA_DETECTING:
+            process_media_detecting(ctx, drive);
+            break;
+        case DRIVE_STATE_NO_MEDIA:
+
+            process_no_media(ctx, drive);
+            break;
+        case DRIVE_STATE_READY:
+            process_ready(ctx, drive);
+            break;
+        default:
+            break;
+        }
+    }
+
+    // DISK_CHANGE_DOSV (PB8) の変化を監視し、変化があったらメディア検出状態に遷移する
+    for (int drive = 0; drive < 2; drive++) {
+        drive_status_t* drv = &ctx->drive[drive];
+        uint32_t gpiob = GPIOB->INDR;
+        bool drive_select = (gpiob & (1 << (2 + drive)));  // Drive Select A/B active?
+        bool disk_change = (gpiob & (1 << 8)) == 0;        // DISK_CHANGE_DOSV = 0 (Low) active?
+        if (drive_select && disk_change) {
+            if (drv->state == DRIVE_STATE_READY) {
+                // READY状態でDISK_CHANGEがアサートされたらメディア検出状態に遷移する
+                // アクセス中なのでちょっと怖いが……
+                drv->state = DRIVE_STATE_MEDIA_DETECTING;
+            }
+            if (drv->state == DRIVE_STATE_NO_MEDIA) {
+                // NO_MEDIAでDISK_CHANGEがアサートされたらメディア検出状態に遷移する
+                drv->state = DRIVE_STATE_MEDIA_DETECTING;
             }
         }
     }
@@ -630,12 +787,13 @@ void pcfdd_try_eject(minyasx_context_t* ctx, int drive) {
 
 void pcfdd_force_eject(minyasx_context_t* ctx, int drive) {
     if (drive < 0 || drive > 1) return;
-    // PCFDDコントローラの強制イジェクトコードをここに追加
-    ctx->drive[drive].force_ejected = true;
-    ctx->drive[drive].inserted = false;
-    ctx->drive[drive].ready = false;
-    ctx->drive[drive].rpm_measured = FDD_RPM_UNKNOWN;
-    ctx->drive[drive].bps_measured = BPS_UNKNOWN;
+    drive_status_t* d = &ctx->drive[drive];
+    if (d->state != DRIVE_STATE_READY) {
+        return;
+    }
+    d->state = DRIVE_STATE_NO_MEDIA;
+    d->rpm_measured = FDD_RPM_UNKNOWN;
+    d->bps_measured = BPS_UNKNOWN;
 }
 
 /**
@@ -644,13 +802,30 @@ void pcfdd_force_eject(minyasx_context_t* ctx, int drive) {
 void pcfdd_detect_media(minyasx_context_t* ctx, int drive) {
     if (drive < 0 || drive > 1) return;
     drive_status_t* d = &ctx->drive[drive];
-    if (d->state != DRIVE_STATE_POWER_ON) return;
-    if (!d->force_ejected && d->inserted) return;  // 既に挿入済み
-
-    // TODO: 実際にFDメディアが入っているかを確認した上で設定する
-    d->force_ejected = false;
-    d->inserted = true;
-    d->ready = true;
+    if ((d->state != DRIVE_STATE_NO_MEDIA) &&  //
+        (d->state != DRIVE_STATE_READY)) {
+        return;
+    }
+    d->state = DRIVE_STATE_MEDIA_DETECTING;
     d->rpm_measured = FDD_RPM_UNKNOWN;
     d->bps_measured = BPS_UNKNOWN;
+}
+
+char* pcfdd_state_to_string(drive_state_t state) {
+    switch (state) {
+    case DRIVE_STATE_POWER_OFF:
+        return "-----";
+    case DRIVE_STATE_INITIALIZING:
+        return "Init.";
+    case DRIVE_STATE_NOT_CONNECTED:
+        return "*****";
+    case DRIVE_STATE_MEDIA_DETECTING:
+        return ">>>>>";
+    case DRIVE_STATE_NO_MEDIA:
+        return "Eject";
+    case DRIVE_STATE_READY:
+        return "Ready";
+    default:
+        return "Unknown";
+    }
 }

@@ -1,3 +1,4 @@
+#include "pcfdd/pcfdd_control.h"
 #include "ui_control.h"
 
 // About page
@@ -29,23 +30,7 @@ void ui_page_about_enter(ui_page_context_t* pctx) {
     // Aboutページのポーリング処理
     for (int i = 0; i < 2; i++) {
         ui_cursor(page, 7, 4 + i);
-        switch (ctx->drive[i].state) {
-        case DRIVE_STATE_POWER_OFF:
-            ui_print(page, "Power Off ");
-            break;
-        case DRIVE_STATE_NOT_CONNECTED:
-            ui_print(page, "No Drive  ");
-            break;
-        case DRIVE_STATE_INITIALIZING:
-            ui_print(page, "Init...   ");
-            break;
-        case DRIVE_STATE_POWER_ON:
-            ui_print(page, "Ready     ");
-            break;
-        default:
-            ui_print(page, "Unknown   ");
-            break;
-        }
+        ui_printf(page, "%s", pcfdd_state_to_string(ctx->drive[i].state));
     }
 }
 

@@ -43,4 +43,7 @@ void pcfdd_force_eject(minyasx_context_t* ctx, int drive);
  */
 void pcfdd_detect_media(minyasx_context_t* ctx, int drive);  // drive: 0=FDD_A or 1=FDD_B
 
+
+char* pcfdd_state_to_string(drive_state_t state);
+
 #endif

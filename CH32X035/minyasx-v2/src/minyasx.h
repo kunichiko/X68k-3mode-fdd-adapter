@@ -44,19 +44,18 @@ typedef enum {
 } fdd_bps_mode_t;
 
 typedef enum drive_state {
-    DRIVE_STATE_POWER_OFF = 0,      // 電源オフ状態
-    DRIVE_STATE_NOT_CONNECTED = 1,  // ドライブが接続されていない場合はこの状態に陥る
-    DRIVE_STATE_INITIALIZING = 2,   // ドライブに電源が供給された後、初期化中の状態。初期化に失敗するとNOT_CONNECTEDになる
-    DRIVE_STATE_POWER_ON = 3,       // 電源オン状態（初期化完了。メディア挿入状態は無関係）
+    DRIVE_STATE_POWER_OFF = 0,        // 電源オフ状態
+    DRIVE_STATE_NOT_CONNECTED = 1,    // ドライブが接続されていない場合はこの状態に陥る
+    DRIVE_STATE_INITIALIZING = 2,     // ドライブに電源が供給された後、初期化中の状態。初期化に失敗するとNOT_CONNECTEDになる
+    DRIVE_STATE_MEDIA_DETECTING = 3,  // メディアの挿入状態を確認中
+    DRIVE_STATE_NO_MEDIA = 4,         // メディアが挿入されていない状態 (論理イジェクトとは関係ない物理的な検出状態)
+    DRIVE_STATE_READY = 5,            // ドライブがアクセス可能な状態 (メディア挿入検出済みだが、論理イジェクトとは関係ないので注意)
 } drive_state_t;
 
 typedef struct drive_status {
     drive_state_t state;            // ドライブの状態
     uint8_t drive_id;               // ドライブID (0-3)
-    bool force_ejected;             // メディアの強制排出状態かどうか(論理排出状態)
     bool eject_masked;              // イジェクト操作がマスクされているか
-    bool inserted;                  // メディアが挿入されているか。force_ejectedがtrueのときは必ずfalse
-    bool ready;                     // ドライブが準備完了か
     bool led_blink;                 // LEDが点滅中か
     bool mode_select_inverted;      // MODE SELECT信号の極性反転
     fdd_in_use_mode_t in_use_mode;  // IN-USE信号の動作モード
