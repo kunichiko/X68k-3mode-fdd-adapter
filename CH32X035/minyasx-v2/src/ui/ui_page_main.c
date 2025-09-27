@@ -41,8 +41,7 @@ void ui_page_main_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
     // ドライブ情報の表示
     for (int i = 0; i < 2; i++) {
         ui_cursor(page, 0, 0 + i * 4);
-        bool ready = (ctx->drive[i].state == DRIVE_STATE_POWER_ON) && ctx->drive[i].inserted;
-        ui_printf(page, "%c[%s]", (i == 0 ? 'A' : 'B'), ready ? "ready" : "eject");
+        ui_printf(page, "%c[%s]", (i == 0 ? 'A' : 'B'), pcfdd_state_to_string(ctx->drive[i].state));
         ui_cursor(page, 0, 1 + i * 4);
         ui_printf(page, " S:%3drpm", ctx->drive[i].rpm_setting == FDD_RPM_300 ? 300 : 360);
         //
@@ -74,11 +73,11 @@ void ui_page_main_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
     }
     if (keys & UI_KEY_EJECT_A) {
         // ドライブAのイジェクトボタン
-        if (pctx->ctx->drive[0].inserted) {
+        if (pctx->ctx->drive[0].state == DRIVE_STATE_READY) {
             // 既に挿入されている場合は強制排出
             pcfdd_force_eject(pctx->ctx, 0);
             return;
-        } else {
+        } else if (pctx->ctx->drive[0].state == DRIVE_STATE_NO_MEDIA) {
             // 挿入されていない場合は挿入を試みる
             pcfdd_detect_media(pctx->ctx, 0);
             return;
@@ -86,11 +85,11 @@ void ui_page_main_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
     }
     if (keys & UI_KEY_EJECT_B) {
         // ドライブBのイジェクトボタン
-        if (pctx->ctx->drive[1].inserted) {
+        if (pctx->ctx->drive[1].state == DRIVE_STATE_READY) {
             // 既に挿入されている場合は強制排出
             pcfdd_force_eject(pctx->ctx, 1);
             return;
-        } else {
+        } else if (pctx->ctx->drive[1].state == DRIVE_STATE_NO_MEDIA) {
             // 挿入されていない場合は挿入を試みる
             pcfdd_detect_media(pctx->ctx, 1);
             return;

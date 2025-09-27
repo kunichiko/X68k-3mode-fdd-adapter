@@ -381,21 +381,6 @@ void SysTick_Handler(void) {
             set_mode_select(&g_ctx->drive[1], FDD_RPM_360);
         }
     }
-
-    // DRIVE_SELECTがアサートされている時に DISK_CHANGEがアサートされている場合は
-    // メディアの挿入状態が変化したと判断する
-
-    // MOTOR ON信号(PA12)がアクティブならREADY信号をアクティブにする
-    // GreenPAKは各ドライブにDriveSelect信号がアサートされると、
-    // このREADY信号の値を返却します
-    for (int i = 0; i < 2; i++) {
-        drive_status_t* drv = &g_ctx->drive[i];
-        if (!(GPIOA->INDR & GPIO_Pin_12) && drv->ready && (drv->state == DRIVE_STATE_POWER_ON)) {
-            GPIOB->BCR = (i == 0) ? GPIO_Pin_12 : GPIO_Pin_13;  // READY_MCU_A_n / READY_MCU_B_n (Low=準備完了)
-        } else {
-            GPIOB->BSHR = (i == 0) ? GPIO_Pin_12 : GPIO_Pin_13;  // READY_MCU_A_n / READY_MCU_B_n (High=準備完了でない)
-        }
-    }
 }
 
 void x68fdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
@@ -420,39 +405,5 @@ void x68fdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     uint8_t bmode = double_option_B ? 'Q' : 'D';
     ui_printf(UI_PAGE_DEBUG, "OP A%d%d%c B%d%d%c %d", opt_a, opt_a_pair, amode, opt_b, opt_b_pair, bmode, systick_irq_counter);
 
-    // EJECT, EJECT_MASKの監視はGPIO割り込みで行うのでここでは不要
-
-    static bool last_media_inserted[2] = {false, false};
-    // メディアの挿入状態を検出
-    // 以下もセットする
-    // GP2の DISK_IN_A_n (Virtual Input 2=bit5)
-    // GP2の DISK_IN_B_n (Virtual Input 3=bit4)
-    // GP2の ERR_DISK_A_n (Virtual Input 4=bit3)
-    // GP2の ERR_DISK_B_n (Virtual Input 5=bit2)
-    // GP3の DISK_IN_A_n (Virtual Input 2=bit5)
-    // GP3の DISK_IN_B_n (Virtual Input 3=bit4)
-    uint8_t gp2_vin = greenpak_get_virtualinput(2 - 1);
-    uint8_t gp3_vin = greenpak_get_virtualinput(3 - 1);
-    uint8_t gp2_vin_new = gp2_vin;
-    uint8_t gp3_vin_new = gp3_vin;
-    for (int i = 0; i < 2; i++) {
-        drive_status_t* drv = &ctx->drive[i];
-        if (!last_media_inserted[i] && drv->inserted) {
-            // 挿入された
-            gp2_vin_new &= ~(1 << (5 - i));  // DISK_IN_A_n / DISK_IN_B_n をクリア
-            gp3_vin_new &= ~(1 << (5 - i));  // DISK_IN_A_n / DISK_IN_B_n をクリア
-        }
-        if (last_media_inserted[i] && !drv->inserted) {
-            // 取り出された
-            gp2_vin_new |= (1 << (5 - i));  // DISK_IN_A_n / DISK_IN_B_n をセット
-            gp3_vin_new |= (1 << (5 - i));  // DISK_IN_A_n / DISK_IN_B_n をセット
-        }
-        last_media_inserted[i] = drv->inserted;
-    }
-    if (gp2_vin != gp2_vin_new) {
-        greenpak_set_virtualinput(2 - 1, gp2_vin_new);
-    }
-    if (gp3_vin != gp3_vin_new) {
-        greenpak_set_virtualinput(3 - 1, gp3_vin_new);
-    }
+    // EJECT, EJECT_MASK, LED_BLINKの監視はGPIO割り込みで行うのでここでは不要
 }
