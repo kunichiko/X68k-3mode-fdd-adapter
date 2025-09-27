@@ -480,19 +480,20 @@ bool seek_to_track0(int drive) {
     }
 
     int seek_count = 0;
-    // シークA
+    // シーク Part1
     GPIOB->BSHR = (1 << (2 + drive));  // Drive Select A/B active
     GPIOB->BSHR = (1 << 5);            // DIRECTION_DOSV active (内周方向)
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < 10; i++) {
         GPIOB->BSHR = (1 << 6);  // STEP_DOSV = 1
         Delay_Ms(1);
         GPIOB->BCR = (1 << 6);  // STEP_DOSV = 0
         Delay_Ms(3);
     }
-    // ここで 300msec待つ(Track00以外でシークを一度確定しないとDISK_CHANGEがクリアされないドライブがある？)
-    Delay_Ms(300);
-    // シーク
+    // ここで 100msec待つ(Track00以外でシークを一度確定しないとDISK_CHANGEがクリアされないドライブがある)
+    Delay_Ms(100);
+    // シーク Part2
     GPIOB->BCR = (1 << 5);  // DIRECTION_DOSV inactive (正論理, 外周方向)
+    Delay_Ms(1);
     seek_count = 0;
     while (seek_count < 200) {
         seek_count++;
@@ -506,7 +507,9 @@ bool seek_to_track0(int drive) {
         GPIOB->BCR = (1 << 6);  // STEP_DOSV = 0
         Delay_Ms(3);
     }
+    Delay_Ms(100);
     GPIOB->BCR = (1 << (2 + drive));  // Drive Select A/B inactive
+    Delay_Ms(100);
 
     // 戻り値: 200ステップ以内にトラック0に到達したらtrue
     return (seek_count < 200);
@@ -536,8 +539,33 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
 
     drive_status_t* d = &ctx->drive[drive];
 
+    // なにはともあれ、READY_MCUや DISK_INを無効化して、アクセスを止める
+    // そうすると、X68000側にはINDEXやREAD_DATAが届かなくなるので、
+    // PCFDD側のDrive Selectをアクティブにしても問題なくなる
+    // GP3の DISK_IN_A_n (Virtual Input 2=bit5)
+    // GP3の DISK_IN_B_n (Virtual Input 3=bit4)
+
+    // READY_MCUをInactiveにする
+    GPIOB->BSHR = (drive == 0) ? GPIO_Pin_12 : GPIO_Pin_13;  // READY_MCU_A_n / READY_MCU_B_n (High=準備完了でない)
+    // GP2,GP3の DISK_IN_x_n をDisableにする
+    uint8_t gp2_vin = greenpak_get_virtualinput(2 - 1);
+    gp2_vin |= (1 << (5 - drive));  // bit4/5を1にして、DISK_IN_x_nをDisableにする
+    greenpak_set_virtualinput(2 - 1, gp2_vin);
+    uint8_t gp3_vin = greenpak_get_virtualinput(3 - 1);
+    gp3_vin |= (1 << (5 - drive));  // bit4/5を1にして、DISK_IN_x_nをDisableにする
+    greenpak_set_virtualinput(3 - 1, gp3_vin);
+
     // 割り込みを禁止して、Drive Selectがアクティブな状態で確認する
+    uint32_t systick_start = SysTick->CNTL;
     while (1) {
+        if ((SysTick->CNTL - systick_start) > (100 * 1000 * 48)) {
+            // 100msec以上待ってもDS0/DS1が解除されない場合は、一旦イジェクト状態で確定してしまう
+            d->state = DRIVE_STATE_NO_MEDIA;
+            d->rpm_measured = FDD_RPM_UNKNOWN;
+            d->bps_measured = BPS_UNKNOWN;
+            __enable_irq();
+            return;
+        }
         __disable_irq();
         uint32_t gpiob = GPIOB->INDR;
         if ((gpiob & 0xc) == 0) {
@@ -548,15 +576,6 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
         Delay_Ms(10);  // 少し待つ
     }
     // ここには割り込み禁止状態かつ、DS0/DS1のいずれもアクティブでない状態で来る
-
-    // 1. まずはGreenPAK 3のメディア挿入状態をDisableにする
-    // そうすると、X68000側にはINDEXやREAD_DATAが届かなくなるので、
-    // PCFDD側のDrive Selectをアクティブにしても問題なくなる
-    // GP3の DISK_IN_A_n (Virtual Input 2=bit5)
-    // GP3の DISK_IN_B_n (Virtual Input 3=bit4)
-    uint8_t gp3_vin = greenpak_get_virtualinput(3 - 1);
-    gp3_vin |= (1 << (5 - drive));  // bit4/5を1にして、DISK_IN_x_nをDisableにする
-    greenpak_set_virtualinput(3 - 1, gp3_vin);
 
     // 2. TRACK00にシークする
     // これをするとPC FDDの DISK_CHANGEもクリアされる
@@ -571,7 +590,7 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
     }
 
     // 4. 500msecの間に INDEXパルスが来るかを監視する
-    uint32_t systick_start = SysTick->CNTL;
+    systick_start = SysTick->CNTL;
     bool index_low_seen = false;
     bool index_high_seen = false;
     while ((SysTick->CNTL - systick_start) < (500 * 1000 * 48)) {
@@ -618,8 +637,16 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
 static void process_no_media(minyasx_context_t* ctx, int drive) {
     if (ctx->drive[drive].state != DRIVE_STATE_NO_MEDIA) return;
 
-    // メディア無し状態の処理（必要なら追加）
-    // 例えば、一定時間経過後に再度メディア検出を試みるなど
+    // メディア無し状態の処理
+    // 1. READY_MCUをInactiveにする
+    GPIOB->BSHR = (drive == 0) ? GPIO_Pin_12 : GPIO_Pin_13;  // READY_MCU_A_n / READY_MCU_B_n (High=準備完了でない)
+    // 2. GP2,GP3の DISK_IN_x_n をDisableにする
+    uint8_t gp2_vin = greenpak_get_virtualinput(2 - 1);
+    gp2_vin |= (1 << (5 - drive));  // bit4/5を1にして、DISK_IN_x_nをDisableにする
+    greenpak_set_virtualinput(2 - 1, gp2_vin);
+    uint8_t gp3_vin = greenpak_get_virtualinput(3 - 1);
+    gp3_vin |= (1 << (5 - drive));  // bit4/5を1にして、DISK_IN_x_nをDisableにする
+    greenpak_set_virtualinput(3 - 1, gp3_vin);
 }
 
 static void process_ready(minyasx_context_t* ctx, int drive) {
