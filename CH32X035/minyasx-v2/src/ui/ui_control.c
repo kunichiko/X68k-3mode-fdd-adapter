@@ -8,14 +8,20 @@ static ui_page_type_t current_page = UI_PAGE_MAIN;
 
 void ui_refresh(void) {
     // 現在のページに対応するバッファを取得
-    ui_page_context_t *win = &ui_pages[current_page];
+    ui_page_context_t *pcon = &ui_pages[current_page];
     // OLEDをバッファの内容で更新
     for (int y = 0; y < 8; y++) {
         OLED_cursor(0, y);
         for (int x = 0; x < 21; x++) {
-            char c = win->buf[y][x];
+            char c = pcon->buf[y][x];
             OLED_write(c);
         }
+    }
+    // カーソル位置に移動
+    OLED_cursor(pcon->x * 6, pcon->y);
+    // カーソル表示
+    if (pcon->scroll_enable) {
+        OLED_plot_cursor(true);
     }
 }
 
@@ -44,15 +50,15 @@ void ui_clear(ui_page_type_t page) {
     if (page < 0 || page >= UI_PAGE_MAX) {
         return;  // 無効なページ番号
     }
-    ui_page_context_t *win = &ui_pages[page];
+    ui_page_context_t *pcon = &ui_pages[page];
     // バッファをクリア
     for (int y = 0; y < 8; y++) {
         for (int x = 0; x < 21; x++) {
-            win->buf[y][x] = ' ';  // スペースでクリア
+            pcon->buf[y][x] = ' ';  // スペースでクリア
         }
     }
-    win->x = 0;
-    win->y = 0;
+    pcon->x = 0;
+    pcon->y = 0;
     if (current_page == page) {
         // 現在のページがアクティブならOLEDもクリア
         OLED_clear();
@@ -64,13 +70,13 @@ void ui_cursor(ui_page_type_t page, uint8_t x, uint8_t y) {
     if (page < 0 || page >= UI_PAGE_MAX) {
         return;  // 無効なページ番号
     }
-    ui_page_context_t *win = &ui_pages[page];
+    ui_page_context_t *pcon = &ui_pages[page];
     if (x < 0) x = 0;
     if (x >= 21) x = 20;
     if (y < 0) y = 0;
     if (y >= 8) y = 7;
-    win->x = x;
-    win->y = y;
+    pcon->x = x;
+    pcon->y = y;
     if (current_page == page) {
         OLED_cursor(x * 6, y);
     }
@@ -80,36 +86,80 @@ void ui_print(ui_page_type_t page, char *str) {
     while (*str) ui_write(page, *str++);
 }
 
+static void ui_show_cursor(ui_page_context_t *pcon) {
+    if (!pcon->scroll_enable) {
+        // スクロールしない場合はカーソルを表示しない
+        return;
+    }
+    if (current_page == pcon->page) {
+        OLED_cursor(pcon->x * 6, pcon->y);
+        OLED_plot_cursor(true);  // カーソル表示
+    }
+}
+static void ui_check_scroll(ui_page_context_t *pcon) {
+    if (pcon->y < 8) {
+        // スクロール不要
+        ui_show_cursor(pcon);
+        return;
+    }
+    if (!pcon->scroll_enable) {
+        // スクロールしない場合は単純オーバーラップ
+        pcon->y = 0;
+        return;
+    }
+
+    // スクロールする場合
+    int start_line = pcon->scroll_keepheader ? 1 : 0;
+    for (int y = start_line + 1; y < 8; y++) {
+        for (int x = 0; x < 21; x++) {
+            pcon->buf[y - 1][x] = pcon->buf[y][x];
+        }
+    }
+    for (int x = 0; x < 21; x++) {
+        pcon->buf[7][x] = ' ';  // 最下行をクリア
+    }
+    pcon->y = 7;
+    if (current_page == pcon->page) {
+        ui_refresh();  // OLEDを更新
+        ui_cursor(pcon->page, pcon->x, pcon->y);
+    }
+    ui_show_cursor(pcon);
+    return;
+}
+
 void ui_write(ui_page_type_t page, char c) {
     // 現在のページに対応するバッファを取得
-    ui_page_context_t *win = &ui_pages[page];
+    ui_page_context_t *pcon = &ui_pages[page];
     // バッファに文字を書き込む
     if (c == '\n') {
-        win->x = 0;
-        win->y++;
-        if (win->y >= 8) {
-            win->y = 0;  // 簡易的にスクロールせずに戻す
+        // スクロール有効の場合はカーソルが出ているので消す
+        if (pcon->scroll_enable && current_page == page) {
+            OLED_plot_cursor(false);  // カーソル消去
         }
+        pcon->x = 0;
+        pcon->y++;
     } else if (c == '\r') {
-        win->x = 0;
+        // スクロール有効の場合はカーソルが出ているので消す
+        if (pcon->scroll_enable && current_page == page) {
+            OLED_plot_cursor(false);  // カーソル消去
+        }
+        pcon->x = 0;
     } else {
-        if (win->x < 21 && win->y < 8) {
-            win->buf[win->y][win->x] = c;
+        if (pcon->x < 21 && pcon->y < 8) {
+            pcon->buf[pcon->y][pcon->x] = c;
             if (current_page == page) {
                 // 現在のページがアクティブならOLEDに反映
-                OLED_cursor(win->x * 6, win->y);  // Xは6ドット幅で計算
+                OLED_cursor(pcon->x * 6, pcon->y);  // Xは6ドット幅で計算
                 OLED_write(c);
             }
-            win->x++;
-            if (win->x >= 21) {
-                win->x = 0;
-                win->y++;
-                if (win->y >= 8) {
-                    win->y = 0;  // 簡易的にスクロールせずに戻す
-                }
+            pcon->x++;
+            if (pcon->x >= 21) {
+                pcon->x = 0;
+                pcon->y++;
             }
         }
     }
+    ui_check_scroll(pcon);
     return;
 }
 
@@ -152,9 +202,9 @@ void ui_write_null(char c) {
 }
 
 ui_write_t writers[UI_PAGE_MAX] = {
-    ui_write_0, ui_write_1, ui_write_2, ui_write_3,  //
-    ui_write_4, ui_write_5, ui_write_6, ui_write_7,  //
-    ui_write_8, ui_write_9,
+    ui_write_0, ui_write_1, ui_write_2,  ui_write_3,  //
+    ui_write_4, ui_write_5, ui_write_6,  ui_write_7,  //
+    ui_write_8, ui_write_9, ui_write_10,              //
 };
 
 ui_write_t ui_get_writer(ui_page_type_t page) {
@@ -180,6 +230,8 @@ void ui_init(minyasx_context_t *ctx) {
         ui_pages[i].enter = NULL;
         ui_pages[i].poll = NULL;
         ui_pages[i].keyin = NULL;
+        ui_pages[i].scroll_enable = false;
+        ui_pages[i].scroll_keepheader = false;
     }
     // OLEDの初期化
     OLED_init();
@@ -198,14 +250,15 @@ void ui_init(minyasx_context_t *ctx) {
     ui_page_setting_fddb_init(&ui_pages[UI_PAGE_SETTING_FDDB]);
     ui_page_debug_init(&ui_pages[UI_PAGE_DEBUG]);
     ui_page_debug_init_pcfdd(&ui_pages[UI_PAGE_DEBUG_PCFDD]);
+    ui_page_log_init(&ui_pages[UI_PAGE_LOG]);
 }
 
 void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
     // 各ページのポーリング処理
     for (int i = 0; i < UI_PAGE_MAX; i++) {
-        ui_page_context_t *win = &ui_pages[i];
-        if (win->poll) {
-            win->poll(win, systick_ms);
+        ui_page_context_t *pcon = &ui_pages[i];
+        if (pcon->poll) {
+            pcon->poll(pcon, systick_ms);
         }
     }
 

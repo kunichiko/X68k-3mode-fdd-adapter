@@ -28,19 +28,23 @@ void ui_page_debug_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
         // PCFDDデバッグページに遷移
         ui_change_page(UI_PAGE_DEBUG_PCFDD);
     }
-    if ((keys & UI_KEY_RIGHT) || (keys & UI_KEY_ENTER)) {
+    if (keys & UI_KEY_RIGHT) {
+        // ログページに遷移
+        ui_change_page(UI_PAGE_LOG);
+    }
+    if (keys & UI_KEY_ENTER) {
         // メインページに戻る
         ui_change_page(UI_PAGE_MAIN);
     }
 }
 
 void ui_page_debug_keyin_pcfdd(ui_page_context_t* pctx, ui_key_mask_t keys) {
-    if (keys & UI_KEY_ENTER) {
-        // メインページに戻る
-        ui_change_page(UI_PAGE_MAIN);
-    }
     if (keys & UI_KEY_RIGHT) {
         // 通常のデバッグページに遷移
         ui_change_page(UI_PAGE_DEBUG);
+    }
+    if (keys & UI_KEY_ENTER) {
+        // メインページに戻る
+        ui_change_page(UI_PAGE_MAIN);
     }
 }

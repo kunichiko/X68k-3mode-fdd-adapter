@@ -64,6 +64,8 @@
 extern "C" {
 #endif
 
+#include <stdbool.h>
+
 #include "i2c/i2c_ch32x035.h"  // choose your I2C library
 
 // OLED Parameters
@@ -132,6 +134,7 @@ void OLED_write(char c);                 // Write a character or handle control 
 void OLED_print(char *str);              // Print a string
 void OLED_cursor(uint8_t x, uint8_t y);  // Set cursor
 void OLED_textinvert(uint8_t yes);       // Invert text
+void OLED_plot_cursor(bool on);          // Show or hide cursor
 
 #if OLED_BIGCHARS > 0
 void OLED_textsize(uint8_t size);  // Set text size (0: 5x8, 1: 5x16, 2: 10x16)

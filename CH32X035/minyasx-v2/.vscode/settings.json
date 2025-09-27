@@ -14,6 +14,7 @@
         "print.h": "c",
         "greenpak_control.h": "c",
         "pcfdd_control.h": "c",
-        "ui_control.h": "c"
+        "ui_control.h": "c",
+        "ina3221_control.h": "c"
     }
 }

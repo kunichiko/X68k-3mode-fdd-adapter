@@ -1,4 +1,4 @@
-#include "power_control.h"
+#include "power/power_control.h"
 #include "ui/ui_control.h"
 
 // Common Setting page

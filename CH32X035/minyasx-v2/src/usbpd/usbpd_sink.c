@@ -14,6 +14,9 @@ static pd_control_t PD_control = {
     .CC2_ConnectTimes = 0,
 };
 
+// ソフトリセット中を示すフラグ
+static bool s_softreset_pending = false;
+
 FixedSourceCap_t PD_SC_fixed[5];
 PPSSourceCap_t PD_SC_PPS[2];
 
@@ -27,6 +30,18 @@ __attribute__((aligned(4))) uint8_t PD_SC_buffer[28];  // PD Source Cap buffer
 
 // Prototype
 void PD_update(void);
+void PD_sendData(uint8_t length);
+
+static void PD_sendControl(uint8_t type) {
+    USBPD_MessageHeader_t mh;
+    mh.d16 = 0u;
+    mh.MessageHeader.MessageID = PD_control.SinkMessageID;
+    mh.MessageHeader.MessageType = type;  // 例: USBPD_CONTROL_MSG_SOFT_RESET
+    mh.MessageHeader.NumberOfDataObjects = 0u;
+    mh.MessageHeader.SpecificationRevision = PD_control.PD_Version;
+    *(uint16_t *)&PD_TR_buffer[0] = mh.d16;
+    PD_sendData(2);
+}
 
 // Negotiate current settings and wait until finished (return 1) or timeout (return 0)
 uint8_t PD_negotiate(void) {
@@ -297,6 +312,11 @@ void PD_process(void) {
             PD_RX_mode();
             NVIC_SetPriority(USBPD_IRQn, 0x00);
             NVIC_EnableIRQ(USBPD_IRQn);
+
+            // 再同期のためのSOFT_RESETを一発
+            PD_control.SinkMessageID = 0;
+            s_softreset_pending = true;
+            PD_sendControl(USBPD_CONTROL_MSG_SOFT_RESET);
         }
         break;
 
@@ -413,11 +433,31 @@ void PD_RX_analyze(void) {
                 break;
 
             case USBPD_CONTROL_MSG_ACCEPT:
-                PD_control.CC_State = CC_WAIT_PS_RDY;
+                if (s_softreset_pending) {
+                    // SOFT_RESETに対するACCEPT応答
+                    s_softreset_pending = false;
+                    // Soft Reset 完了 → 能力の取り直しを能動要求
+                    PD_sendControl(USBPD_CONTROL_MSG_GET_SRC_CAP);
+                } else {
+                    // こちらは RDO（REQUEST）に対する ACCEPT
+                    PD_control.CC_State = CC_WAIT_PS_RDY;
+                }
+
                 break;
 
             case USBPD_CONTROL_MSG_PS_RDY:
                 PD_control.CC_State = CC_PS_RDY;
+                break;
+
+            case USBPD_CONTROL_MSG_SOFT_RESET:
+                // 両者のMessageIDをリセット
+                PD_control.SinkMessageID = 0;
+                PD_control.SourceMessageID = 0;
+                // こちらからACCEPT返答
+                PD_sendControl(USBPD_CONTROL_MSG_ACCEPT);
+                // そのまま能力を取り直す（能動要求）
+                PD_sendControl(USBPD_CONTROL_MSG_GET_SRC_CAP);
+                // その後、SRC_CAP 受信で CC_SOURCE_CAP に遷移するのでこのままステートを変更しなくてOK
                 break;
 
             default:
@@ -429,7 +469,10 @@ void PD_RX_analyze(void) {
                 PD_control.CC_State = CC_SOURCE_CAP;
                 PD_control.SourcePDONum = mh.MessageHeader.NumberOfDataObjects;
                 PD_control.PD_Version = mh.MessageHeader.SpecificationRevision;
-                PD_memcpy(PD_SC_buffer, &PD_TR_buffer[2], 28);
+                // 実際の個数分だけコピー
+                uint8_t bytes = PD_control.SourcePDONum * 4u;
+                if (bytes > sizeof(PD_SC_buffer)) bytes = sizeof(PD_SC_buffer);
+                PD_memcpy(PD_SC_buffer, &PD_TR_buffer[2], bytes);
                 break;
 
             default:
