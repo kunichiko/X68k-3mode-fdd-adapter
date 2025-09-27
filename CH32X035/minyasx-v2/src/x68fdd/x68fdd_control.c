@@ -115,11 +115,11 @@ void EXTI7_0_IRQHandler(void) {
         // PA0 (DRIVE_SELECT_A) の割り込み
         EXTI->INTFR = EXTI_INTF_INTF0;  // フラグをクリア
         if (porta & (1 << 0)) {
-            // DRIVE_SELECT_AがHighになった
+            // DRIVE_SELECT_A_nがHigh(無効)になった
             GPIOB->BCR = (1 << 2);                // DRIVE_SELECT_DOSV_A inactive (Low)
             pcfdd_set_current_ds(PCFDD_DS_NONE);  // 現在のドライブ選択をNoneにセット
         } else {
-            // DRIVE_SELECT_AがLowになった
+            // DRIVE_SELECT_A_nがLow(有効)になった
             if (double_option_A) {
                 set_mode_select(&g_ctx->drive[0], FDD_RPM_300);
             } else {
@@ -134,11 +134,11 @@ void EXTI7_0_IRQHandler(void) {
         // PA1 (DRIVE_SELECT_B) の割り込み
         EXTI->INTFR = EXTI_INTF_INTF1;  // フラグをクリア
         if (porta & (1 << 1)) {
-            // DRIVE_SELECT_BがHighになった
+            // DRIVE_SELECT_B_nがHigh(無効)になった
             GPIOB->BCR = (1 << 3);                // DRIVE_SELECT_DOSV_B inactive (Low)
             pcfdd_set_current_ds(PCFDD_DS_NONE);  // 現在のドライブ選択をNoneにセット
         } else {
-            // DRIVE_SELECT_BがLowになった
+            // DRIVE_SELECT_B_nがLow(有効)になった
             if (double_option_B) {
                 set_mode_select(&g_ctx->drive[1], FDD_RPM_300);
             } else {
@@ -382,12 +382,15 @@ void SysTick_Handler(void) {
         }
     }
 
+    // DRIVE_SELECTがアサートされている時に DISK_CHANGEがアサートされている場合は
+    // メディアの挿入状態が変化したと判断する
+
     // MOTOR ON信号(PA12)がアクティブならREADY信号をアクティブにする
     // GreenPAKは各ドライブにDriveSelect信号がアサートされると、
     // このREADY信号の値を返却します
     for (int i = 0; i < 2; i++) {
         drive_status_t* drv = &g_ctx->drive[i];
-        if (!(GPIOA->INDR & GPIO_Pin_12) && drv->ready && drv->connected) {
+        if (!(GPIOA->INDR & GPIO_Pin_12) && drv->ready && (drv->state == DRIVE_STATE_POWER_ON)) {
             GPIOB->BCR = (i == 0) ? GPIO_Pin_12 : GPIO_Pin_13;  // READY_MCU_A_n / READY_MCU_B_n (Low=準備完了)
         } else {
             GPIOB->BSHR = (i == 0) ? GPIO_Pin_12 : GPIO_Pin_13;  // READY_MCU_A_n / READY_MCU_B_n (High=準備完了でない)

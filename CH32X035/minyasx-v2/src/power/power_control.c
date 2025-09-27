@@ -164,6 +164,10 @@ void enable_fdd_power(minyasx_context_t* ctx, bool enable) {
             }
         }
         fdd_power_enabled = true;
+        // ドライブの初期化を始める
+        for (int i = 0; i < 2; i++) {
+            ctx->drive[i].state = DRIVE_STATE_INITIALIZING;
+        }
     } else {
         // FDDの電源OFF
         GPIOA->BCR = (1 << (20));  // Disable (+12V_EXT_EN=Low)
