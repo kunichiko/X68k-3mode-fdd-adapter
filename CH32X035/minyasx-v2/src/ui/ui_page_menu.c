@@ -4,6 +4,9 @@ static void ui_page_menu_keyin(ui_page_context_t* pctx, ui_key_mask_t keys);
 
 static int position = 1;  // メニューの選択行
 
+#define DEBUG_MENU_ENABLED 1  // デバッグメニューを有効にする場合はコメントアウトを外す
+#define NUM_MENU_ITEMS (DEBUG_MENU_ENABLED ? 7 : 6)
+
 void ui_page_menu_init(ui_page_context_t* win) {
     win->enter = NULL;
     win->poll = NULL;
@@ -17,7 +20,11 @@ void ui_page_menu_init(ui_page_context_t* win) {
     ui_print(UI_PAGE_MENU, " Common Setting\n");
     ui_print(UI_PAGE_MENU, " FDD A Setting\n");
     ui_print(UI_PAGE_MENU, " FDD B Setting\n");
-    ui_cursor(UI_PAGE_MENU, 0, 7);
+#ifdef DEBUG_MENU_ENABLED
+    ui_print(UI_PAGE_MENU, " Debug Setting\n");
+#else
+    ui_print(UI_PAGE_MENU, " \n");
+#endif
     ui_print(UI_PAGE_MENU, " RETURN");
 }
 
@@ -27,7 +34,7 @@ static void set_position(int pos) {
     int new_pos = pos;
     if (new_pos < 1) new_pos = 1;
     if (new_pos > 7) new_pos = 7;
-    while (new_pos == 6) {
+    while (new_pos >= NUM_MENU_ITEMS && new_pos < 7) {
         new_pos = (new_pos < position) ? new_pos - 1 : new_pos + 1;  // 空行を飛ばす
     }
     position = new_pos;
@@ -39,6 +46,12 @@ static void ui_page_menu_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
         set_position(position - 1);
     } else if (keys & UI_KEY_DOWN) {
         set_position(position + 1);
+    }
+    if (keys & UI_KEY_LEFT) {
+        // メインページに戻る
+        ui_change_page(UI_PAGE_MAIN);
+        set_position(1);  // 戻しておく
+        return;
     }
 
     // Enterキーで選択されたメニューを実行
@@ -63,6 +76,10 @@ static void ui_page_menu_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
         case 5:
             // FDD B Setting
             ui_change_page(UI_PAGE_SETTING_FDDB);
+            break;
+        case 6:
+            // Debug Setting
+            ui_change_page(UI_PAGE_SETTING_DEBUG);
             break;
         case 7:
             // RETURN

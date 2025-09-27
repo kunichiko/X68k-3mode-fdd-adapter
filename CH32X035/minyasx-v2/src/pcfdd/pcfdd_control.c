@@ -6,15 +6,6 @@
 #include "ch32fun.h"
 #include "ui/ui_control.h"
 
-/**
- * @brief タイマーをタイムアウトさせるカウンタ値 -1
- * 128μ秒単位でカウントしているので、0x07ffだと 128μ秒 * 2048 = 262.144msec となる
- * この周期でタイムアウト割り込みがかかり、実際に 262msec 以上変化がないと判断した場合はタイムアウトとする
- * INDEXは 300RPMの時200msec, 360RPMの時166msec なので、262msec 以上へんかがなければ
- * INDEX信号が来ていないと判断できる
- */
-const uint16_t TIMER_TIMEOUT = 0x07ff;
-
 #define BPS_TIM_PRESCALER_SHIFT 1                         // 実際に取り込む頻度を下げる頻度 (IC1PSCの値。0=1/1, 1=1/2, 2=1/4, 3=1/8)
 #define BPS_TIM_PRESCALER (1 << BPS_TIM_PRESCALER_SHIFT)  // 48MHz/(BPS_TIM_PRESCALER) = 4MHz(既定) → 0.25us resolution
 
@@ -66,7 +57,7 @@ static inline drive_t current_drive_from_gpio(void) {
 void pcfdd_init(minyasx_context_t* ctx) {
     // PCFDDコントローラの初期化コードをここに追加
     for (int i = 0; i < 2; i++) {
-        ctx->drive[i].connected = true;  // TODO
+        ctx->drive[i].state = DRIVE_STATE_POWER_OFF;
         ctx->drive[i].force_ejected = false;
         ctx->drive[i].eject_masked = false;
         ctx->drive[i].inserted = false;
@@ -157,63 +148,7 @@ void pcfdd_init(minyasx_context_t* ctx) {
     // DMA割り込み有効
     NVIC_EnableIRQ(DMA1_Channel2_IRQn);
 
-    //
-    // シーク
-    //
-    int seek_count = 0;
-    // シークA
-    GPIOB->BSHR = (1 << 2);  // Drive Select A active for test
-    GPIOB->BSHR = (1 << 5);  // DIRECTION_DOSV active (内周方向)
-    for (int i = 0; i < 50; i++) {
-        GPIOB->BSHR = (1 << 6);  // STEP_DOSV = 1
-        Delay_Ms(1);
-        GPIOB->BCR = (1 << 6);  // STEP_DOSV = 0
-        Delay_Ms(3);
-    }
-    GPIOB->BCR = (1 << 5);  // DIRECTION_DOSV inactive (正論理, 外周方向)
-    seek_count = 0;
-    while (seek_count < 200) {
-        seek_count++;
-        // TRACK0を見て、トラック0に到達したら抜ける
-        if ((GPIOB->INDR & (1 << 10)) == 0) {
-            // TRACK0_DOSV = 0 (Low) になった
-            break;
-        }
-        GPIOB->BSHR = (1 << 6);  // STEP_DOSV = 1
-        Delay_Ms(1);
-        GPIOB->BCR = (1 << 6);  // STEP_DOSV = 0
-        Delay_Ms(3);
-    }
-    GPIOB->BCR = (1 << 2);  // Drive Select A inactive for test
-
-    Delay_Ms(1);
-
-    // シークB
-    GPIOB->BSHR = (1 << 3);  // Drive Select B active for test
-    GPIOB->BSHR = (1 << 5);  // DIRECTION_DOSV active (内周方向)
-    for (int i = 0; i < 50; i++) {
-        GPIOB->BSHR = (1 << 6);  // STEP_DOSV = 1
-        Delay_Ms(1);
-        GPIOB->BCR = (1 << 6);  // STEP_DOSV = 0
-        Delay_Ms(3);
-    }
-    GPIOB->BCR = (1 << 5);  // DIRECTION_DOSV inactive (正論理, 外周方向)
-    seek_count = 0;
-    while (seek_count < 200) {
-        seek_count++;
-        // TRACK0を見て、トラック0に到達したら抜ける
-        if ((GPIOB->INDR & (1 << 10)) == 0) {
-            // TRACK0_DOSV = 0 (Low) になった
-            break;
-        }
-        GPIOB->BSHR = (1 << 6);  // STEP_DOSV = 1
-        Delay_Ms(1);
-        GPIOB->BCR = (1 << 6);  // STEP_DOSV = 0
-        Delay_Ms(3);
-    }
-    GPIOB->BCR = (1 << 3);  // Drive Select B inactive for test
-
-    //
+    // MODE_SELECT_DOSV の初期化
     set_mode_select(&ctx->drive[0], ctx->drive[0].rpm_setting);
     set_mode_select(&ctx->drive[1], ctx->drive[1].rpm_setting);
 }
@@ -225,18 +160,13 @@ void pcfdd_init(minyasx_context_t* ctx) {
 void TIM3_IRQHandler(void) __attribute__((interrupt));
 void TIM3_IRQHandler(void) {
     drive_t drv = current_drive_from_gpio();
+    uint32_t now_cycles = SysTick->CNT;
+
     // ---- UIF: タイムアウト監視（現在の対象ドライブに限定）----
+    // スピーカーのPWMと兼用しているので、タイムアウトは起こらない場合があるので使えない
+    // →ポーリングでタイムアウトを見ることにする
     if (TIM3->INTFR & TIM_UIF) {
         TIM3->INTFR &= ~TIM_UIF;
-
-        if (drv != DRIVE_NONE && s_current_drive == drv && s_have_prev_edge) {
-            uint32_t now_cycles = SysTick->CNT;
-            uint32_t delta_us = (now_cycles - s_last_edge_cycles) / 48u;
-            if (delta_us > TIMEOUT_US) {
-                index_width[drv] = 0;  // 500ms 以上エッジ無し → タイムアウト
-                // 基準は保持（次のエッジで復帰）
-            }
-        }
         return;
     }
 
@@ -254,12 +184,12 @@ void TIM3_IRQHandler(void) {
             s_current_drive = drv;
             s_have_prev_edge = 0;
             s_last_edge_cycles = 0;
+            s_last_edge_cycles = now_cycles;
+            return;
         }
 
         // NONE（不明）なら今回のエッジは無視
         if (drv == DRIVE_NONE) return;
-
-        uint32_t now_cycles = SysTick->CNT;
 
         if (!s_have_prev_edge) {
             // 基準確立のみ
@@ -545,30 +475,112 @@ void pcfdd_set_current_ds(pcfdd_ds_t ds) {
 //
 //
 
+bool seek_to_track0(int drive) {
+    ui_printf(UI_PAGE_LOG, "Seek to Track0 (Drive %d)\n", drive);
+    if (drive < 0 || drive > 1) {
+        return false;
+    }
+
+    int seek_count = 0;
+    // シークA
+    GPIOB->BSHR = (1 << (2 + drive));  // Drive Select A/B active
+    GPIOB->BSHR = (1 << 5);            // DIRECTION_DOSV active (内周方向)
+    for (int i = 0; i < 50; i++) {
+        GPIOB->BSHR = (1 << 6);  // STEP_DOSV = 1
+        Delay_Ms(1);
+        GPIOB->BCR = (1 << 6);  // STEP_DOSV = 0
+        Delay_Ms(3);
+    }
+    GPIOB->BCR = (1 << 5);  // DIRECTION_DOSV inactive (正論理, 外周方向)
+    seek_count = 0;
+    while (seek_count < 200) {
+        seek_count++;
+        // TRACK0を見て、トラック0に到達したら抜ける
+        if ((GPIOB->INDR & (1 << 10)) == 0) {
+            // TRACK0_DOSV = 0 (Low) になった
+            break;
+        }
+        GPIOB->BSHR = (1 << 6);  // STEP_DOSV = 1
+        Delay_Ms(1);
+        GPIOB->BCR = (1 << 6);  // STEP_DOSV = 0
+        Delay_Ms(3);
+    }
+    GPIOB->BCR = (1 << (2 + drive));  // Drive Select A/B inactive
+
+    // 戻り値: 200ステップ以内にトラック0に到達したらtrue
+    return (seek_count < 200);
+}
+
 uint32_t last_index_ms = 0;
 bool last_index_state = false;
 
 void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
-    // PCFDDコントローラのポーリングコードをここに追加
+    // PCFDDコントローラの定期処理コード
+    for (int drive = 0; drive < 2; drive++) {
+        if (ctx->drive[drive].state == DRIVE_STATE_INITIALIZING) {
+            // 初期化中はシークしてトラック0に戻す
+            if (seek_to_track0(drive)) {
+                ctx->drive[drive].state = DRIVE_STATE_POWER_ON;
+                ctx->drive[drive].inserted = false;
+                ctx->drive[drive].ready = false;
+                ctx->drive[drive].rpm_measured = FDD_RPM_UNKNOWN;
+                ctx->drive[drive].bps_measured = BPS_UNKNOWN;
+            } else {
+                // トラック0に戻れなかった
+                ctx->drive[drive].state = DRIVE_STATE_NOT_CONNECTED;
+                ctx->drive[drive].inserted = false;
+                ctx->drive[drive].ready = false;
+                ctx->drive[drive].rpm_measured = FDD_RPM_UNKNOWN;
+                ctx->drive[drive].bps_measured = BPS_UNKNOWN;
+            }
+        }
+    }
+
+    // RPMのタイムアウト監視
+    {
+        uint32_t now_cycles = SysTick->CNT;
+        drive_t drv = current_drive_from_gpio();
+        if (drv == DRIVE_NONE) {
+            // NONEなら(ドライブがどちらもアクティブでない場合)一旦リセット
+            s_current_drive = DRIVE_NONE;
+            s_have_prev_edge = 0;
+            s_last_edge_cycles = 0;
+        } else if (s_current_drive == DRIVE_NONE) {
+            // NONE→A/Bに変わった場合は、基準確立からやり直し
+            s_current_drive = drv;
+            s_have_prev_edge = 0;
+            s_last_edge_cycles = now_cycles;
+
+        } else {
+            // ここではタイムアウトのみ検出
+            // INDEXパルスが来ていれば、後述の「CC1IF」で処理される
+            uint32_t delta_us = (now_cycles - s_last_edge_cycles) / 48u;
+            if (delta_us > TIMEOUT_US) {
+                index_width[drv] = 0;  // 500ms 以上エッジ無し → タイムアウト
+                                       // 基準は保持（次のエッジで復帰）
+            }
+        }
+    }
+
+    // RPMの計測結果を反映
+    for (int drive = 0; drive < 2; drive++) {
+        if (index_width[drive] == 0) {
+            // タイムアウト中
+            ctx->drive[drive].rpm_measured = FDD_RPM_UNKNOWN;
+            continue;
+        }
+        if (index_width[drive] < 166 + ((200 - 166) / 2)) {
+            ctx->drive[drive].rpm_measured = FDD_RPM_360;
+        } else {
+            ctx->drive[drive].rpm_measured = FDD_RPM_300;
+        }
+    }
+    // bpsの計測を1秒毎に行う
     static uint64_t last_tick = 0;
     if (systick_ms - last_tick < 1000) {
         return;
     }
     last_tick = systick_ms;
-
-    ui_cursor(UI_PAGE_DEBUG_PCFDD, 0, 0);
-    for (int i = 0; i < 2; i++) {
-        if (index_width[i] > 166 - 5 && index_width[i] < 166 + 5) {
-            ctx->drive[i].rpm_measured = FDD_RPM_360;
-            ui_printf(UI_PAGE_DEBUG_PCFDD, "REV:360  ");
-        } else if (index_width[i] > 200 - 5 && index_width[i] < 200 + 5) {
-            ctx->drive[i].rpm_measured = FDD_RPM_300;
-            ui_printf(UI_PAGE_DEBUG_PCFDD, "REV:300  ");
-        } else {
-            ctx->drive[i].rpm_measured = FDD_RPM_UNKNOWN;
-            ui_printf(UI_PAGE_DEBUG_PCFDD, "REV:---- ");
-        }
-    }
 
     fdd_bps_mode_t bps0 = pcfdd_bps_decide_and_reset(0); /* DS0のbpsを取得 */
     fdd_bps_mode_t bps1 = pcfdd_bps_decide_and_reset(1); /* DS1のbpsを取得 */
@@ -632,7 +644,7 @@ void pcfdd_force_eject(minyasx_context_t* ctx, int drive) {
 void pcfdd_detect_media(minyasx_context_t* ctx, int drive) {
     if (drive < 0 || drive > 1) return;
     drive_status_t* d = &ctx->drive[drive];
-    if (!d->connected) return;
+    if (d->state != DRIVE_STATE_POWER_ON) return;
     if (!d->force_ejected && d->inserted) return;  // 既に挿入済み
 
     // TODO: 実際にFDメディアが入っているかを確認した上で設定する

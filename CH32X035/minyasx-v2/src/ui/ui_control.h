@@ -17,9 +17,10 @@ typedef enum {
     UI_PAGE_SETTING_COMMON = 5,  // Common settings page
     UI_PAGE_SETTING_FDDA = 6,    // FD Drive A settings page
     UI_PAGE_SETTING_FDDB = 7,    // FD Drive B settings page
-    UI_PAGE_DEBUG = 8,           // Debug page
-    UI_PAGE_DEBUG_PCFDD = 9,     // PCFDD debug page
-    UI_PAGE_LOG = 10,            // Log page
+    UI_PAGE_SETTING_DEBUG = 8,   // Debug settings page
+    UI_PAGE_DEBUG = 9,           // Debug page
+    UI_PAGE_DEBUG_PCFDD = 10,    // PCFDD debug page
+    UI_PAGE_LOG = 11,            // Log page
     UI_PAGE_MAX,
 } ui_page_type_t;
 
@@ -67,6 +68,7 @@ void ui_page_pdstatus_init(ui_page_context_t* win);
 void ui_page_setting_common_init(ui_page_context_t* win);
 void ui_page_setting_fdda_init(ui_page_context_t* win);
 void ui_page_setting_fddb_init(ui_page_context_t* win);
+void ui_page_setting_debug_init(ui_page_context_t* win);
 void ui_page_debug_init(ui_page_context_t* win);
 void ui_page_debug_init_pcfdd(ui_page_context_t* win);
 void ui_page_log_init(ui_page_context_t* win);

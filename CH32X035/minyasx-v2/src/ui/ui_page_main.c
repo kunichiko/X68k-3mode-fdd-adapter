@@ -41,7 +41,7 @@ void ui_page_main_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
     // ドライブ情報の表示
     for (int i = 0; i < 2; i++) {
         ui_cursor(page, 0, 0 + i * 4);
-        bool ready = ctx->drive[i].connected && ctx->drive[i].inserted;
+        bool ready = (ctx->drive[i].state == DRIVE_STATE_POWER_ON) && ctx->drive[i].inserted;
         ui_printf(page, "%c[%s]", (i == 0 ? 'A' : 'B'), ready ? "ready" : "eject");
         ui_cursor(page, 0, 1 + i * 4);
         ui_printf(page, " S:%3drpm", ctx->drive[i].rpm_setting == FDD_RPM_300 ? 300 : 360);

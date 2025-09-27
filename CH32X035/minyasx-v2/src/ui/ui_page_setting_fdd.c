@@ -200,6 +200,12 @@ void ui_page_setting_fdd_keyin(ui_page_context_t* pctx, ui_key_mask_t keys, int 
     if (keys & UI_KEY_DOWN) {
         set_position(position + 1, drive);
     }
+    if (keys & UI_KEY_LEFT) {
+        // メニューページに戻る
+        ui_change_page(UI_PAGE_MENU);
+        set_position(1, drive);  // 戻しておく
+        return;
+    }
     if (keys & UI_KEY_ENTER) {
         switch (position) {
         case 1: {  // RPM

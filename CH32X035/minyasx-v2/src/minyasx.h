@@ -43,8 +43,15 @@ typedef enum {
     BPS_600K,
 } fdd_bps_mode_t;
 
+typedef enum drive_state {
+    DRIVE_STATE_POWER_OFF = 0,      // 電源オフ状態
+    DRIVE_STATE_NOT_CONNECTED = 1,  // ドライブが接続されていない場合はこの状態に陥る
+    DRIVE_STATE_INITIALIZING = 2,   // ドライブに電源が供給された後、初期化中の状態。初期化に失敗するとNOT_CONNECTEDになる
+    DRIVE_STATE_POWER_ON = 3,       // 電源オン状態（初期化完了。メディア挿入状態は無関係）
+} drive_state_t;
+
 typedef struct drive_status {
-    bool connected;                 // ドライブが接続されているか
+    drive_state_t state;            // ドライブの状態
     uint8_t drive_id;               // ドライブID (0-3)
     bool force_ejected;             // メディアの強制排出状態かどうか(論理排出状態)
     bool eject_masked;              // イジェクト操作がマスクされているか

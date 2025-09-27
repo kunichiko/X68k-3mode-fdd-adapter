@@ -196,15 +196,18 @@ void ui_write_9(char c) {
 void ui_write_10(char c) {
     ui_write(10, c);
 }
+void ui_write_11(char c) {
+    ui_write(11, c);
+}
 void ui_write_null(char c) {
     // 何もしない
     (void)c;
 }
 
 ui_write_t writers[UI_PAGE_MAX] = {
-    ui_write_0, ui_write_1, ui_write_2,  ui_write_3,  //
-    ui_write_4, ui_write_5, ui_write_6,  ui_write_7,  //
-    ui_write_8, ui_write_9, ui_write_10,              //
+    ui_write_0, ui_write_1, ui_write_2,  ui_write_3,   //
+    ui_write_4, ui_write_5, ui_write_6,  ui_write_7,   //
+    ui_write_8, ui_write_9, ui_write_10, ui_write_11,  //
 };
 
 ui_write_t ui_get_writer(ui_page_type_t page) {
@@ -248,6 +251,7 @@ void ui_init(minyasx_context_t *ctx) {
     ui_page_setting_common_init(&ui_pages[UI_PAGE_SETTING_COMMON]);
     ui_page_setting_fdda_init(&ui_pages[UI_PAGE_SETTING_FDDA]);
     ui_page_setting_fddb_init(&ui_pages[UI_PAGE_SETTING_FDDB]);
+    ui_page_setting_debug_init(&ui_pages[UI_PAGE_SETTING_DEBUG]);
     ui_page_debug_init(&ui_pages[UI_PAGE_DEBUG]);
     ui_page_debug_init_pcfdd(&ui_pages[UI_PAGE_DEBUG_PCFDD]);
     ui_page_log_init(&ui_pages[UI_PAGE_LOG]);
