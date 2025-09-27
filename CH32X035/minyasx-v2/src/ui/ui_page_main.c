@@ -69,8 +69,8 @@ void ui_page_main_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
         ui_change_page(UI_PAGE_MENU);
     }
     if (keys & UI_KEY_LEFT) {
-        // デバッグページに遷移
-        ui_change_page(UI_PAGE_DEBUG);
+        // ログページに遷移
+        ui_change_page(UI_PAGE_LOG);
     }
     if (keys & UI_KEY_EJECT_A) {
         // ドライブAのイジェクトボタン

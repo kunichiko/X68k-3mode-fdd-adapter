@@ -19,6 +19,7 @@ typedef enum {
     UI_PAGE_SETTING_FDDB = 7,    // FD Drive B settings page
     UI_PAGE_DEBUG = 8,           // Debug page
     UI_PAGE_DEBUG_PCFDD = 9,     // PCFDD debug page
+    UI_PAGE_LOG = 10,            // Log page
     UI_PAGE_MAX,
 } ui_page_type_t;
 
@@ -49,6 +50,8 @@ typedef struct ui_page_context_t {
     uint8_t buf[8][21];  // 128x64dot with 6x8font = 21x8char
     uint8_t x;
     uint8_t y;
+    bool scroll_enable;      // true: 画面下端でスクロールする, false: しない
+    bool scroll_keepheader;  // true: スクロール時にヘッダー行を維持する
     ui_page_enter_t enter;
     ui_page_poll_t poll;
     ui_page_keyin_t keyin;
@@ -66,6 +69,7 @@ void ui_page_setting_fdda_init(ui_page_context_t* win);
 void ui_page_setting_fddb_init(ui_page_context_t* win);
 void ui_page_debug_init(ui_page_context_t* win);
 void ui_page_debug_init_pcfdd(ui_page_context_t* win);
+void ui_page_log_init(ui_page_context_t* win);
 
 typedef void (*ui_write_t)(char c);  // Write a character or handle control characters
 

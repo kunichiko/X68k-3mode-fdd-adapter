@@ -24,7 +24,7 @@
 #include "led/led_control.h"
 #include "oled/oled_control.h"
 #include "pcfdd/pcfdd_control.h"
-#include "power_control.h"
+#include "power/power_control.h"
 #include "sound/play_control.h"
 #include "ui/ui_control.h"
 #include "x68fdd/x68fdd_control.h"
@@ -262,7 +262,7 @@ int main() {
     ui_change_page(UI_PAGE_MAIN);
 
     Delay_Ms(1000);
-    ui_change_page(UI_PAGE_DEBUG);
+    ui_change_page(UI_PAGE_LOG);
 
     // INA3221を最初に初期化して電圧電流を測定できるようにする
     ina3221_init();
@@ -284,7 +284,7 @@ int main() {
     // LED制御を開始する
     WS2812_SPI_init();
 
-    Delay_Ms(1000);
+    Delay_Ms(500);
 
     //
     pcfdd_init(ctx);

@@ -315,6 +315,17 @@ void OLED_plotChar(char c) {
 #endif
 }
 
+void OLED_plot_cursor(bool on) {
+    if (on) {
+        OLED_textinvert(1);
+        OLED_plotChar(' ');
+        OLED_textinvert(0);
+    } else {
+        OLED_plotChar(' ');
+    }
+    OLED_cursor(OLED_x - 6, OLED_y);
+}
+
 // OLED write a character or handle control characters
 void OLED_write(char c) {
     if (c & 0x80) {
