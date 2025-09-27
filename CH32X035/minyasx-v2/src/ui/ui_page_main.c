@@ -74,8 +74,8 @@ void ui_page_main_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
     if (keys & UI_KEY_EJECT_A) {
         // ドライブAのイジェクトボタン
         if (pctx->ctx->drive[0].state == DRIVE_STATE_READY) {
-            // 既に挿入されている場合は強制排出
-            pcfdd_force_eject(pctx->ctx, 0);
+            // 既に挿入されている場合は排出を試みる
+            pcfdd_try_eject(pctx->ctx, 0);
             return;
         } else if (pctx->ctx->drive[0].state == DRIVE_STATE_NO_MEDIA) {
             // 挿入されていない場合は挿入を試みる
@@ -86,8 +86,8 @@ void ui_page_main_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
     if (keys & UI_KEY_EJECT_B) {
         // ドライブBのイジェクトボタン
         if (pctx->ctx->drive[1].state == DRIVE_STATE_READY) {
-            // 既に挿入されている場合は強制排出
-            pcfdd_force_eject(pctx->ctx, 1);
+            // 既に挿入されている場合は排出を試みる
+            pcfdd_try_eject(pctx->ctx, 1);
             return;
         } else if (pctx->ctx->drive[1].state == DRIVE_STATE_NO_MEDIA) {
             // 挿入されていない場合は挿入を試みる

@@ -227,13 +227,13 @@ void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
         return;
     } else if (is_x68k_pwr_on) {
         // ON状態の時は、OFF状態になったかどうかをチェックする
-        // まずは、D-FFをクリアするために Bit0(Virtual Input7) を 0→1→0 にする
+        // まずは、D-FFをクリアするために D-FFの nRESET につながっている Virtual Input7 (Bit0) を 1→0→1 にする
         uint8_t vin = greenpak_get_virtualinput(GP_UNIT);
         uint8_t vin0 = vin & ~(1 << 0);
         uint8_t vin1 = vin0 | (1 << 0);
-        greenpak_set_virtualinput(GP_UNIT, vin0);
         greenpak_set_virtualinput(GP_UNIT, vin1);
         greenpak_set_virtualinput(GP_UNIT, vin0);
+        greenpak_set_virtualinput(GP_UNIT, vin1);
         // Matrix Input 11 (IO12 Digital Input) をチェックする
         bool index_state = greenpak_get_matrixinput(GP_UNIT, 11);
         if (index_state) {

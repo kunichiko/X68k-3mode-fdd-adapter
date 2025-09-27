@@ -168,7 +168,7 @@ int main() {
     // PB3 : DRIVE_SEL_DOSV_B (出力: Low=inactive, High=active)
     // PB4 : MOTOR_ON_DOSV (出力: Low=モータOFF, High=モータON)
     // PB5 : DIRECTION_DOSV (出力: Low=非反転, High=反転) tbd
-    // PB6 : STEP_DOSV (出力: Low=inactive, High=active)
+    // PB6 : STEP_DOSV (未使用)
     // PB7 : SIDE_SELECT_DOSV (出力: Low=表, High=裏)
     // PB8 : DISK_CHANGE_DOSV (入力: Low=ディスクチェンジ, Pull-Up)
     // PB9 : READ_DATA_DOSV (入力: フロッピーディスクの読み出しデータ: Pull-Up)
@@ -204,10 +204,10 @@ int main() {
     GPIOB->CFGLR &= ~(0xf << (4 * 5));
     GPIOB->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 5);
     GPIOB->BCR = (1 << 5);
-    // PB6: STEP_DOSV output
+    // PB6: STEP_DOSV (Not-Used)
     GPIOB->CFGLR &= ~(0xf << (4 * 6));
-    GPIOB->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 6);
-    GPIOB->BCR = (1 << 6);
+    GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * 6);
+    GPIOB->BSHR = (1 << 6);  // Pull-Up
     // PB7: SIDE_SELECT_DOSV output
     GPIOB->CFGLR &= ~(0xf << (4 * 7));
     GPIOB->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 7);
@@ -327,7 +327,7 @@ int main() {
     ui_change_page(UI_PAGE_MAIN);
 
     // 音再生テスト
-    play_start_melody(ctx, &melody_power_on);
+    // play_start_melody(ctx, &melody_power_on);
 
     while (1) {
         uint64_t systick = SysTick->CNT;
