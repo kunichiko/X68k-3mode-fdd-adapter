@@ -1,4 +1,4 @@
-# tools/hex4_to_greenpak.py
+# tools/hex5_to_greenpak.py
 Import("env")
 from pathlib import Path
 import os
@@ -66,13 +66,13 @@ const uint8_t GREENPAK{idx}_IMAGE[GREENPAK{idx}_SIZE] = {{
 {rows(image)}
 }};
 """)
-    print(f"[hex4] greenpak{idx}: base=0x{base:04X} size={len(image)} -> {h.name}, {c.name}")
+    print(f"[hex5] greenpak{idx}: base=0x{base:04X} size={len(image)} -> {h.name}, {c.name}")
 
-for i in range(1,5):
+for i in range(1,6):
     ip = pick_input(i)
     if ip.exists():
         base, img = parse_ihex(ip.read_text().splitlines())
     else:
-        print(f"[hex4] WARN: not found: {ip} -> emit empty")
+        print(f"[hex5] WARN: not found: {ip} -> emit empty")
         base, img = 0, bytearray()
     emit(i, base, img)

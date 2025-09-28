@@ -272,7 +272,7 @@ void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
     ui_key_mask_t keys = UI_KEY_NONE;
     static ui_key_mask_t last_keys = UI_KEY_NONE;
 
-    // キー入力はGP4のIO端子をI2Cで読める
+    // キー入力はGP5のIO端子をI2Cで読める
     // GPのIO端子の入力状態はレジスタ0x74,0x75で読める
     // 0x74:
     // - bit1: IO0 (UP)
@@ -283,15 +283,15 @@ void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
     // 0x75:
     // - bit4: IO13 (EJECT_B)
     // - bit5: IO14 (EJECT_A)
-    uint8_t gp4_io0_7 = gp_reg_get(gp_target_addr[3], 0x74);
-    uint8_t gp4_io8_15 = gp_reg_get(gp_target_addr[3], 0x75);
-    if ((gp4_io0_7 & (1 << 1)) == 0) keys |= UI_KEY_UP;
-    if ((gp4_io0_7 & (1 << 2)) == 0) keys |= UI_KEY_DOWN;
-    if ((gp4_io0_7 & (1 << 3)) == 0) keys |= UI_KEY_LEFT;
-    if ((gp4_io0_7 & (1 << 4)) == 0) keys |= UI_KEY_RIGHT;
-    if ((gp4_io0_7 & (1 << 5)) == 0) keys |= UI_KEY_ENTER;
-    if ((gp4_io8_15 & (1 << 4)) == 0) keys |= UI_KEY_EJECT_B;
-    if ((gp4_io8_15 & (1 << 5)) == 0) keys |= UI_KEY_EJECT_A;
+    uint8_t gp5_io0_7 = gp_reg_get(gp_target_addr[4], 0x74);
+    uint8_t gp5_io8_15 = gp_reg_get(gp_target_addr[4], 0x75);
+    if ((gp5_io0_7 & (1 << 1)) == 0) keys |= UI_KEY_UP;
+    if ((gp5_io0_7 & (1 << 2)) == 0) keys |= UI_KEY_DOWN;
+    if ((gp5_io0_7 & (1 << 3)) == 0) keys |= UI_KEY_LEFT;
+    if ((gp5_io0_7 & (1 << 4)) == 0) keys |= UI_KEY_RIGHT;
+    if ((gp5_io0_7 & (1 << 5)) == 0) keys |= UI_KEY_ENTER;
+    if ((gp5_io8_15 & (1 << 4)) == 0) keys |= UI_KEY_EJECT_B;
+    if ((gp5_io8_15 & (1 << 5)) == 0) keys |= UI_KEY_EJECT_A;
 
     if (keys == last_keys) {
         // キー状態が変化していない
@@ -364,19 +364,16 @@ ui_log_level_t ui_log_get_level(void) {
     return current_log_level;
 }
 
-void ui_log_print(ui_log_level_t level, const char *message) {
+void ui_log(ui_log_level_t level, const char *message) {
     if (level < current_log_level) {
         return;  // 現在のログレベルより低いログは無視
     }
     ui_printf(UI_PAGE_LOG, message);
 }
 
-void ui_log_printf(ui_log_level_t level, const char *format, ...) {
+ui_write_t ui_get_log_writer(ui_log_level_t level) {
     if (level < current_log_level) {
-        return;  // 現在のログレベルより低いログは無視
+        return ui_write_null;  // 現在のログレベルより低いログは無視
     }
-    va_list args;
-    va_start(args, format);
-    ui_printf(UI_PAGE_LOG, format, args);
-    va_end(args);
+    return ui_get_writer(UI_PAGE_LOG);
 }

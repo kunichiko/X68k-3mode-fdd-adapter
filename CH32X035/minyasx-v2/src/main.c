@@ -271,7 +271,7 @@ int main() {
     ina3221_init();
 
     //
-    // greenpak_force_program_verify(0x02, 2);  // GreenPAK3を強制プログラム
+    // greenpak_force_program_verify(0x2a, 4);  // GreenPAKを強制プログラム
 
     // GreenPAKのコンフィグを読み出してOLEDに表示
     // greenpak_dump_oled();
@@ -346,19 +346,19 @@ int main() {
             if (ui_get_current_page() == UI_PAGE_BOOT) {
                 ui_change_page(UI_PAGE_MAIN);
             }
-            ui_log_print(UI_LOG_LEVEL_TRACE, "1");
+            ui_log(UI_LOG_LEVEL_TRACE, "1");
             WS2812_SPI_poll(ctx, ms);
-            ui_log_print(UI_LOG_LEVEL_TRACE, "2");
+            ui_log(UI_LOG_LEVEL_TRACE, "2");
             ina3221_poll(ctx, ms);
-            ui_log_print(UI_LOG_LEVEL_TRACE, "3");
+            ui_log(UI_LOG_LEVEL_TRACE, "3");
             pcfdd_poll(ctx, ms);
-            ui_log_print(UI_LOG_LEVEL_TRACE, "4");
+            ui_log(UI_LOG_LEVEL_TRACE, "4");
             x68fdd_poll(ctx, ms);
-            ui_log_print(UI_LOG_LEVEL_TRACE, "5");
+            ui_log(UI_LOG_LEVEL_TRACE, "5");
             ui_poll(ctx, ms);
-            ui_log_print(UI_LOG_LEVEL_TRACE, "6");
+            ui_log(UI_LOG_LEVEL_TRACE, "6");
             play_poll(ctx, ms);
-            ui_log_print(UI_LOG_LEVEL_TRACE, "7");
+            ui_log(UI_LOG_LEVEL_TRACE, "7");
         } else {
             // X68000側の電源ON要求が来るまで待機する
             ui_change_page(UI_PAGE_BOOT);

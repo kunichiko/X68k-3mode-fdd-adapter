@@ -126,7 +126,8 @@ typedef enum {
 
 void ui_log_set_level(ui_log_level_t level);
 ui_log_level_t ui_log_get_level(void);
-void ui_log_print(ui_log_level_t level, const char* message);
-void ui_log_printf(ui_log_level_t level, const char* format, ...);
+void ui_log(ui_log_level_t level, const char* message);
+ui_write_t ui_get_log_writer(ui_log_level_t level);
+#define ui_logf(level, f, ...) printF(ui_get_log_writer(level), f, ##__VA_ARGS__)
 
 #endif  // UI_CONTROL_H

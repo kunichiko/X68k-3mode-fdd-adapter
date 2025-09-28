@@ -7,6 +7,7 @@
 #include "greenpak/greenpak2.h"
 #include "greenpak/greenpak3.h"
 #include "greenpak/greenpak4.h"
+#include "greenpak/greenpak5.h"
 #include "greenpak_control.h"
 #include "greenpak_program.h"
 #include "i2c/i2c_ch32x035.h"
@@ -22,11 +23,12 @@ typedef struct {
     const uint8_t *image;
 } gp_img_t;
 
-static const gp_img_t gp_img[4] = {
+static const gp_img_t gp_img[GP_NUM] = {
     {GREENPAK1_BASE, GREENPAK1_SIZE, GREENPAK1_IMAGE},
     {GREENPAK2_BASE, GREENPAK2_SIZE, GREENPAK2_IMAGE},
     {GREENPAK3_BASE, GREENPAK3_SIZE, GREENPAK3_IMAGE},
     {GREENPAK4_BASE, GREENPAK4_SIZE, GREENPAK4_IMAGE},
+    {GREENPAK5_BASE, GREENPAK5_SIZE, GREENPAK5_IMAGE},
 };
 
 // 連続書込み（ページ分割, STOPはwriteBufferが発行）
@@ -95,17 +97,18 @@ void greenpak_force_program_verify(uint8_t addr, uint8_t unit) {
 void greenpak_autoprogram_verify(void) {
     ui_clear(UI_PAGE_DEBUG);
 
-    // まず既定の最終配置（0x12, 0x1A, 0x22, 0x2A）と 0x0A（作業用）をスキャン
-    int present[4] = {
-        I2C_probe(gp_target_addr[0]),
-        I2C_probe(gp_target_addr[1]),
-        I2C_probe(gp_target_addr[2]),
-        I2C_probe(gp_target_addr[3]),
+    // まず既定の最終配置（0x12, 0x1A, 0x22, 0x2A, 0x30）と 0x0A（作業用）をスキャン
+    int present[GP_NUM] = {
+        I2C_probe(gp_target_addr[0]),  //
+        I2C_probe(gp_target_addr[1]),  //
+        I2C_probe(gp_target_addr[2]),  //
+        I2C_probe(gp_target_addr[3]),  //
+        I2C_probe(gp_target_addr[4]),
     };
     int clr_present = I2C_probe(gp_target_addr_cleared);
     int def_present = I2C_probe(gp_target_addr_default);
 
-    if (!present[0] && !present[1] && !present[2] && !present[3] && !def_present) {
+    if (!present[0] && !present[1] && !present[2] && !present[3] && !present[4] && !def_present) {
         // どこにも居ない → 表示して終了
         show_not_found_and_exit();
         return;
@@ -124,6 +127,9 @@ void greenpak_autoprogram_verify(void) {
     if (present[3]) {
         ui_print(UI_PAGE_LOG, "4 ");
     }
+    if (present[4]) {
+        ui_print(UI_PAGE_LOG, "5 ");
+    }
     if (def_present) {
         ui_print(UI_PAGE_LOG, "def ");
     }
@@ -139,7 +145,7 @@ void greenpak_autoprogram_verify(void) {
         int all_seen = present[0] && present[1] && present[2] && present[3];
 
         // 居るものは verify→差分があれば上書き（最終番地側へ書く）
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < GP_NUM; i++) {
             if (present[i] && gp_img[i].size > 0) {
                 int same = gp_compare_image(gp_target_addr[i], gp_img[i].base, gp_img[i].image, gp_img[i].size - 0x10);
                 if (same) {
