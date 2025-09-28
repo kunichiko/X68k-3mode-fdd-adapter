@@ -50,11 +50,12 @@ typedef enum {
 
 typedef enum drive_state {
     DRIVE_STATE_POWER_OFF = 0,        // 電源オフ状態
-    DRIVE_STATE_NOT_CONNECTED = 1,    // ドライブが接続されていない場合はこの状態に陥る
-    DRIVE_STATE_INITIALIZING = 2,     // ドライブに電源が供給された後、初期化中の状態。初期化に失敗するとNOT_CONNECTEDになる
-    DRIVE_STATE_MEDIA_DETECTING = 3,  // メディアの挿入状態を確認中
-    DRIVE_STATE_NO_MEDIA = 4,         // メディアが挿入されていない状態 (論理イジェクトとは関係ない物理的な検出状態)
-    DRIVE_STATE_READY = 5,            // ドライブがアクセス可能な状態 (メディア挿入検出済みだが、論理イジェクトとは関係ないので注意)
+    DRIVE_STATE_NOT_CONNECTED = 1,    // ドライブが物理的に接続されていない場合
+    DRIVE_STATE_DISABLED = 2,         // ドライブがDisableになっている場合
+    DRIVE_STATE_INITIALIZING = 3,     // ドライブに電源が供給された後、初期化中の状態。初期化に失敗するとNOT_CONNECTEDになる
+    DRIVE_STATE_MEDIA_DETECTING = 4,  // メディアの挿入状態を確認中
+    DRIVE_STATE_NO_MEDIA = 5,         // メディアが挿入されていない状態 (論理イジェクトとは関係ない物理的な検出状態)
+    DRIVE_STATE_READY = 6,            // ドライブがアクセス可能な状態 (メディア挿入検出済みだが、論理イジェクトとは関係ないので注意)
 } drive_state_t;
 
 typedef struct drive_status {
@@ -88,6 +89,8 @@ typedef struct usbpd_status {
 } usbpd_status_t;
 
 typedef struct minyasx_context {
+    // 起動ステータス
+    bool power_on;
     // 電源情報
     power_status_t power[3];
     // USB-PD情報

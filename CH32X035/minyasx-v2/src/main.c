@@ -260,6 +260,9 @@ int main() {
     // UIシステムを初期化する
     ui_init(ctx);
     ui_change_page(UI_PAGE_MAIN);
+    ui_cursor(UI_PAGE_BOOT, 0, 2);
+    ui_print(UI_PAGE_BOOT, "      Minyas X\n");
+    ui_print(UI_PAGE_BOOT, "    - Sleeping -\n");
 
     Delay_Ms(1000);
     ui_change_page(UI_PAGE_LOG);
@@ -301,6 +304,8 @@ int main() {
     if (idA == 0 || idA == 2) {
         // ドライブAが0か2にセットされた時のみドライブBが利用可能
         ctx->drive[1].drive_id = idA + 1;
+    } else {
+        ctx->drive[1].state = DRIVE_STATE_DISABLED;
     }
 
     // 以下もセットする
@@ -329,61 +334,34 @@ int main() {
     // 音再生テスト
     // play_start_melody(ctx, &melody_power_on);
 
+    //    ui_log_set_level(UI_LOG_LEVEL_INFO);
+    ui_log_set_level(UI_LOG_LEVEL_TRACE);
+
     while (1) {
         uint64_t systick = SysTick->CNT;
         uint32_t ms = systick / (F_CPU / 1000);
-        WS2812_SPI_poll(ctx, ms);
-        ina3221_poll(ctx, ms);
-        pcfdd_poll(ctx, ms);
-        x68fdd_poll(ctx, ms);
-        ui_poll(ctx, ms);
-        play_poll(ctx, ms);
         power_control_poll(ctx, ms);
 
-#if 0
-        // GP2のVirtual Input レジスタの値を直接読む
-        uint8_t gp1_vin2 = gp_reg_get(gp_target_addr[1 - 1], 0x7a);
-        uint8_t gp2_vin2 = gp_reg_get(gp_target_addr[2 - 1], 0x7a);
-        ui_cursor(UI_PAGE_DEBUG, 0, 6);
-        ui_printf(UI_PAGE_DEBUG, "GP1 VIN=%02x\n", gp1_vin2);
-        ui_printf(UI_PAGE_DEBUG, "GP2 VIN=%02x\n", gp2_vin2);
-#endif
-
-        // MOTOR_ONの監視
-        ui_cursor(UI_PAGE_DEBUG, 0, 6);
-        if ((GPIOA->INDR & (1 << 12)) == 0) {
-            // MOTOR_ON=Low (ON)
-            ui_print(UI_PAGE_DEBUG, "MOTOR ON ");
-        } else {
-            // MOTOR_ON=High (OFF)
-            ui_print(UI_PAGE_DEBUG, "MOTOR OFF");
-        }
-
-#if 0
-        // PA0: DRIVE_SELECT_A, PA1: DRIVE_SELECT_B を監視して、
-        // アサートされたら信号の状態を読み出す。
-        uint32_t porta = GPIOA->INDR;
-        if ((porta & 0x03) != 0x03) {
-            // どちらかがLowになった
-            ui_clear(UI_PAGE_DEBUG, );
-            ui_printf(UI_PAGE_DEBUG, "DS change detected: %02X\n", porta & 0x03);
-            while ((porta & 0x03) != 0x03) {
-                // どちらかがLowになっている間ループ
-                uint8_t dsa = (porta >> 0) & 1;
-                uint8_t dsb = (porta >> 1) & 1;
-                uint8_t opa = (porta >> 2) & 1;
-                uint8_t opb = (porta >> 3) & 1;
-                // GP2のVirtual Input レジスタの値を直接読む
-                uint8_t gp2_vin = gp_reg_get(gp_target_addr[2 - 1], 0x7a);
-                // OLEDに表示
-                ui_cursor(UI_PAGE_DEBUG, 0, 1);
-                ui_printf(UI_PAGE_DEBUG, "A:DS=%d OP=%d \n", dsa, opa);
-                ui_printf(UI_PAGE_DEBUG, "B:DS=%d OP=%d \n", dsb, opb);
-                ui_printf(UI_PAGE_DEBUG, "GP2 VIN=%02x\n", gp2_vin);
-                porta = GPIOA->INDR;
+        if (ctx->power_on) {
+            if (ui_get_current_page() == UI_PAGE_BOOT) {
+                ui_change_page(UI_PAGE_MAIN);
             }
-            ui_clear(UI_PAGE_DEBUG, );
+            ui_log_print(UI_LOG_LEVEL_TRACE, "1");
+            WS2812_SPI_poll(ctx, ms);
+            ui_log_print(UI_LOG_LEVEL_TRACE, "2");
+            ina3221_poll(ctx, ms);
+            ui_log_print(UI_LOG_LEVEL_TRACE, "3");
+            pcfdd_poll(ctx, ms);
+            ui_log_print(UI_LOG_LEVEL_TRACE, "4");
+            x68fdd_poll(ctx, ms);
+            ui_log_print(UI_LOG_LEVEL_TRACE, "5");
+            ui_poll(ctx, ms);
+            ui_log_print(UI_LOG_LEVEL_TRACE, "6");
+            play_poll(ctx, ms);
+            ui_log_print(UI_LOG_LEVEL_TRACE, "7");
+        } else {
+            // X68000側の電源ON要求が来るまで待機する
+            ui_change_page(UI_PAGE_BOOT);
         }
-#endif
     }
 }

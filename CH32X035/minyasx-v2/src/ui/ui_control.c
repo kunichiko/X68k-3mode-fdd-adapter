@@ -239,7 +239,8 @@ void ui_init(minyasx_context_t *ctx) {
     // OLEDの初期化
     OLED_init();
     OLED_display(1);  // ディスプレイをオンにする
-    OLED_flip(1, 1);  // 必要に応じて画面を反転
+    // OLED_flip(1, 1);  // 必要に応じて画面を反転
+    OLED_flip(0, 0);  // 必要に応じて画面を反転
     OLED_clear();     // 画面をクリア
     current_page = UI_PAGE_MAIN;
 
@@ -351,4 +352,31 @@ void ui_select_keyin(ui_select_t *select, ui_key_mask_t keys) {
     }
     // 選択肢の表示を更新
     ui_select_print(select, true);
+}
+
+static ui_log_level_t current_log_level = UI_LOG_LEVEL_INFO;
+
+void ui_log_set_level(ui_log_level_t level) {
+    current_log_level = level;
+}
+
+ui_log_level_t ui_log_get_level(void) {
+    return current_log_level;
+}
+
+void ui_log_print(ui_log_level_t level, const char *message) {
+    if (level < current_log_level) {
+        return;  // 現在のログレベルより低いログは無視
+    }
+    ui_printf(UI_PAGE_LOG, message);
+}
+
+void ui_log_printf(ui_log_level_t level, const char *format, ...) {
+    if (level < current_log_level) {
+        return;  // 現在のログレベルより低いログは無視
+    }
+    va_list args;
+    va_start(args, format);
+    ui_printf(UI_PAGE_LOG, format, args);
+    va_end(args);
 }

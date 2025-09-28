@@ -5,6 +5,7 @@
 minyasx_context_t* minyasx_init(void) {
     static minyasx_context_t ctx;
 
+    ctx.power_on = false;  // 起動ステータス初期化
     // 電源情報の初期化
     ctx.power[0].label = "VBUS";
     ctx.power[1].label = "FD12";
