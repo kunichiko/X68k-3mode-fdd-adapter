@@ -4,6 +4,7 @@
 
 #include "greenpak/greenpak_control.h"
 #include "i2c/i2c_ch32x035.h"
+#include "ui/ui_control.h"
 
 #define GP_REG_RST_LATCH 0xC8                   // Reset and Latch Register (RLR)
 #define GP_REG_ER_SR 0xE3                       // Erase Status/Control Register (ERSR)
@@ -37,6 +38,7 @@ void gp_program_with_erase(uint8_t addr7, uint16_t base, const uint8_t *img, uin
     gp_erase_range(addr7, base, size);                  // 先に消去
     for (int i = 0; i < 16; i++) {
         // 16バイトずつウエイトを入れて書く
+        ui_logf(UI_LOG_LEVEL_INFO, "%d ", 16 - i);
         Delay_Ms(100);
         gp_write_seq(nvm_addr7, base + i * 16, &img[i * 16], (size - i * 16 > 16) ? 16 : (size - i * 16));
     }

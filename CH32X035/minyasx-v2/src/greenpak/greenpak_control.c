@@ -6,10 +6,10 @@
 
 // GreenPAKのI2Cアドレス（7bit）
 // クリア済み、作業用、最終配置4個
-const uint8_t gp_target_addr_cleared = 0x01;  // クリア済み
-const uint8_t gp_target_addr_default = 0x08;  // 作業用
-const uint8_t gp_target_addr[4] = {0x10, 0x18, 0x20, 0x28};
-static uint8_t gp_virtual_input_cache[4] = {0, 0, 0, 0};  // 仮想入力キャッシュ
+const uint8_t gp_target_addr_cleared = 0x01;                            // クリア済み
+const uint8_t gp_target_addr_default = 0x08;                            // 作業用
+const uint8_t gp_target_addr[GP_NUM] = {0x10, 0x18, 0x20, 0x28, 0x30};  // 最終配置
+static uint8_t gp_virtual_input_cache[GP_NUM] = {0, 0, 0, 0, 0};        // 仮想入力キャッシュ
 
 uint8_t gp_reg_get(uint8_t addr7, uint8_t reg) {
     uint8_t reg_addr7 = (uint8_t)((addr7 & 0xfc) + 1);  // 0x00を使わないために+1する
@@ -124,7 +124,7 @@ void greenpak_dump_oled_with_addr(uint8_t addr) {
 }
 
 uint8_t greenpak_get_virtualinput(int unit) {
-    if (unit < 0 || unit >= 4) return 0;  // 範囲外
+    if (unit < 0 || unit >= GP_NUM) return 0;  // 範囲外
     return gp_virtual_input_cache[unit];
 }
 
@@ -136,14 +136,14 @@ uint8_t greenpak_get_virtualinput(int unit) {
   VirtualInput番号とビットの並び順が逆なので注意!!!
  */
 void greenpak_set_virtualinput(int unit, uint8_t val) {
-    if (unit < 0 || unit >= 4) return;  // 範囲外
+    if (unit < 0 || unit >= GP_NUM) return;  // 範囲外
 
     gp_virtual_input_cache[unit] = val;
     gp_reg_set(gp_target_addr[unit], 0x7a, val);
 }
 
 bool greenpak_get_matrixinput(int unit, uint8_t inputno) {
-    if (unit < 0 || unit > 3) return false;         // 範囲外
+    if (unit < 0 || unit >= GP_NUM) return false;   // 範囲外
     if (inputno < 0 || inputno > 63) return false;  // 範囲外
 
     // Matrix Input レジスタは 0x74..0x7B にあり、8個ずつ8バイトに分かれている
