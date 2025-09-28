@@ -190,8 +190,9 @@ int main() {
     GPIOB->BCR = (1 << 1);
     // PB2: DRIVE_SELECT_DOSV_A output
     GPIOB->CFGLR &= ~(0xf << (4 * 2));
-    GPIOB->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 2);
-    GPIOB->BCR = (1 << 2);
+    //    GPIOB->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 2);
+    //    GPIOB->BCR = (1 << 2);
+    GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_FLOATING) << (4 * 2);
     // PB3: DRIVE_SELECT_DOSV_B output
     GPIOB->CFGLR &= ~(0xf << (4 * 3));
     GPIOB->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 3);

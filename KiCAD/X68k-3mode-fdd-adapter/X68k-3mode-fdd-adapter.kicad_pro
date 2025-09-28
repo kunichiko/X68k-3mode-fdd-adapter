@@ -700,6 +700,14 @@
     [
       "31293df3-a871-47ca-8f5f-1d9e3b862849",
       "SerialLEDs"
+    ],
+    [
+      "7defe649-9190-42cf-8c3c-7fea8463f0db",
+      "open_drain_buffer8"
+    ],
+    [
+      "ce2e0d8c-ca2f-4f70-94dd-1ea4b4041b72",
+      "open_drain_buffer9"
     ]
   ],
   "text_variables": {}

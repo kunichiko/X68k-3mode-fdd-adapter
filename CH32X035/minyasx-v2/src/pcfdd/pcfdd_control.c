@@ -514,6 +514,20 @@ void step_dosv(int drive) {
     Delay_Ms(3);
 }
 
+void drive_select(int drive, bool active) {
+    if (drive < 0 || drive > 1) {
+        return;
+    }
+    // GreenPAK1の Virtual Input 5/6 (bit2/1) に DS0/DS1 を接続している
+    uint8_t gp1_vin = greenpak_get_virtualinput(1 - 1);
+    if (active) {
+        gp1_vin |= (1 << (2 - drive));  // bit2/1 = 1 (DS0/DS1 active)
+    } else {
+        gp1_vin &= ~(1 << (2 - drive));  // bit2/1 = 0 (DS0/DS1 inactive)
+    }
+    greenpak_set_virtualinput(1 - 1, gp1_vin);
+}
+
 bool seek_to_track0(int drive) {
     ui_printf(UI_PAGE_LOG, "Seek Track0 (D:%d)\n", drive);
     if (drive < 0 || drive > 1) {
@@ -522,8 +536,8 @@ bool seek_to_track0(int drive) {
 
     int seek_count = 0;
     // シーク Part1
-    GPIOB->BSHR = (1 << (2 + drive));  // Drive Select A/B active
-    GPIOB->BSHR = (1 << 5);            // DIRECTION_DOSV active (内周方向)
+    drive_select(drive, true);
+    GPIOB->BSHR = (1 << 5);  // DIRECTION_DOSV active (内周方向)
     for (int i = 0; i < 10; i++) {
         step_dosv(drive);
     }
@@ -543,7 +557,7 @@ bool seek_to_track0(int drive) {
         step_dosv(drive);
     }
     Delay_Ms(100);
-    GPIOB->BCR = (1 << (2 + drive));  // Drive Select A/B inactive
+    drive_select(drive, false);
     Delay_Ms(100);
 
     // 戻り値: 200ステップ以内にトラック0に到達したらtrue
@@ -617,7 +631,8 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
     seek_to_track0(drive);
 
     // 3. PC FDD側のDrive Selectをアクティブにし、MOTOR_ONもアクティブにする
-    GPIOB->BSHR = (1 << (2 + drive));  // Drive Select A/B active
+    //    GPIOB->BSHR = (1 << (2 + drive));  // Drive Select A/B active
+    drive_select(drive, true);
     if ((GPIOB->INDR & (1 << 4)) == 0) {
         GPIOB->BSHR = (1 << 4);  // MOTOR_ON_DOSV active
         // モーターの回転が安定するまで 300msec待つ
@@ -662,7 +677,8 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
 
     // 6. Drive Selectを非アクティブにする
     // MOTOR_ONはそのままでOK (X68000側でMOTOR_ONを解除すると、GPIO割り込みがかかって止まる)
-    GPIOB->BCR = (1 << (2 + drive));  // Drive Select A/B inactive
+    //    GPIOB->BCR = (1 << (2 + drive));  // Drive Select A/B inactive
+    drive_select(drive, false);
 
     // 6. 割り込みを有効に戻す
     __enable_irq();

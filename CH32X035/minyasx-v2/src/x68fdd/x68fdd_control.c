@@ -233,7 +233,7 @@ void SysTick_Handler(void) {
     SysTick->SR = 0x00000000;
 
     // GPIO割り込み(EXTI)の取りこぼしがあっても反映されるように保険をいれておく
-    copy_drive_signals_to_dosv();
+    // copy_drive_signals_to_dosv();
 
     // 9SCDRVサポート
     // OPTION SELECT 信号の同時アサートによる回転数変更に対応する
