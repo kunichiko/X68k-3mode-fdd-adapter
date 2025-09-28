@@ -87,7 +87,8 @@ void pcfdd_init(minyasx_context_t* ctx) {
         ctx->drive[i].state = DRIVE_STATE_POWER_OFF;
         ctx->drive[i].eject_masked = false;
         ctx->drive[i].led_blink = false;
-        ctx->drive[i].rpm_control = FDD_RPM_CONTROL_360;  // FDD_RPM_CONTROL_9SCDRV;
+        //        ctx->drive[i].rpm_control = FDD_RPM_CONTROL_360;
+        ctx->drive[i].rpm_control = FDD_RPM_CONTROL_9SCDRV;
         ctx->drive[i].rpm_setting = FDD_RPM_360;
         ctx->drive[i].rpm_measured = FDD_RPM_UNKNOWN;
         ctx->drive[i].bps_measured = BPS_UNKNOWN;
@@ -170,7 +171,7 @@ void pcfdd_init(minyasx_context_t* ctx) {
     TIM1->CTLR1 |= TIM_CEN;
 
     // DMA割り込み有効
-    // NVIC_EnableIRQ(DMA1_Channel2_IRQn);
+    NVIC_EnableIRQ(DMA1_Channel2_IRQn);
 
     // MODE_SELECT_DOSV の初期化
     pcfdd_set_rpm_mode_select(&ctx->drive[0], ctx->drive[0].rpm_setting);
@@ -720,6 +721,8 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
             break;
         case DRIVE_STATE_NOT_CONNECTED:
             break;
+        case DRIVE_STATE_DISABLED:
+            break;
         case DRIVE_STATE_MEDIA_DETECTING:
             process_media_detecting(ctx, drive);
             break;
@@ -921,10 +924,12 @@ char* pcfdd_state_to_string(drive_state_t state) {
     switch (state) {
     case DRIVE_STATE_POWER_OFF:
         return "-----";
-    case DRIVE_STATE_INITIALIZING:
-        return "Init.";
     case DRIVE_STATE_NOT_CONNECTED:
         return "*****";
+    case DRIVE_STATE_DISABLED:
+        return "Disbl";
+    case DRIVE_STATE_INITIALIZING:
+        return "Init.";
     case DRIVE_STATE_MEDIA_DETECTING:
         return ">>>>>";
     case DRIVE_STATE_NO_MEDIA:

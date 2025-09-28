@@ -30,7 +30,12 @@ void ui_page_about_enter(ui_page_context_t* pctx) {
     // Aboutページのポーリング処理
     for (int i = 0; i < 2; i++) {
         ui_cursor(page, 7, 4 + i);
-        ui_printf(page, "%s", pcfdd_state_to_string(ctx->drive[i].state));
+        drive_state_t state = ctx->drive[i].state;
+        if (state == DRIVE_STATE_NOT_CONNECTED || state == DRIVE_STATE_DISABLED) {
+            ui_printf(page, "%s", pcfdd_state_to_string(ctx->drive[i].state));
+        } else {
+            ui_printf(page, "%s ID=%d ", pcfdd_state_to_string(ctx->drive[i].state), ctx->drive[i].drive_id);
+        }
     }
 }
 

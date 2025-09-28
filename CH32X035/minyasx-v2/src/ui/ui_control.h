@@ -115,4 +115,18 @@ typedef struct {
 void ui_select_init(ui_select_t* select);
 void ui_select_keyin(ui_select_t* select, ui_key_mask_t keys);
 
+// ログ表示用
+
+typedef enum {
+    UI_LOG_LEVEL_TRACE = 0,  // トレース（詳細情報、デバッグ用）
+    UI_LOG_LEVEL_INFO = 1,   // 情報
+    UI_LOG_LEVEL_WARN = 2,   // 警告
+    UI_LOG_LEVEL_ERROR = 3,  // エラー
+} ui_log_level_t;
+
+void ui_log_set_level(ui_log_level_t level);
+ui_log_level_t ui_log_get_level(void);
+void ui_log_print(ui_log_level_t level, const char* message);
+void ui_log_printf(ui_log_level_t level, const char* format, ...);
+
 #endif  // UI_CONTROL_H

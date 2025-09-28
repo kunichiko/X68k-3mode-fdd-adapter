@@ -166,6 +166,9 @@ void enable_fdd_power(minyasx_context_t* ctx, bool enable) {
         fdd_power_enabled = true;
         // ドライブの初期化を始める
         for (int i = 0; i < 2; i++) {
+            if (ctx->drive[i].state == DRIVE_STATE_DISABLED) {
+                continue;
+            }
             ctx->drive[i].state = DRIVE_STATE_INITIALIZING;
         }
     } else {
@@ -219,6 +222,7 @@ void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
         }
         // D-FFがクリアされたままなのでOFF状態になったと判断する
         is_x68k_pwr_on = false;
+        ctx->power_on = false;  // 起動ステータスを保存しておく
         ui_print(UI_PAGE_DEBUG, "X68K PWR OFF\n");
         last_indexlow_ms = 0;
         enable_fdd_power(ctx, false);  // FDDの電源をOFFにする
@@ -249,6 +253,7 @@ void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
         if (index_state) {
             // HighなのでON状態になったと判断する
             is_x68k_pwr_on = true;
+            ctx->power_on = true;  // 起動ステータスを保存しておく
             ui_print(UI_PAGE_DEBUG, "X68K PWR ON \n");
             last_indexlow_ms = 0;
             enable_fdd_power(ctx, true);  // FDDの電源をONにする

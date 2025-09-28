@@ -31,7 +31,6 @@ void x68fdd_init(minyasx_context_t* ctx) {
     // PA3 : OPTION_SELECT_B
     // PA12: MOTOR_ON
     // PA13: DIRECTION
-    // PA14: STEP
     // PA15: SIDE_SELECT
     AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI0);   // EXTI0 の設定をクリア
     AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI0_PA;   // EXTI0 を PA (00) に設定
@@ -45,30 +44,28 @@ void x68fdd_init(minyasx_context_t* ctx) {
     AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI12_PA;  // EXTI12を PA (00) に設定
     AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI13);  // EXTI13の設定をクリア
     AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI13_PA;  // EXTI13を PA (00) に設定
-    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI14);  // EXTI14の設定をクリア
-    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI14_PA;  // EXTI14を PA (00) に設定
     AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI15);  // EXTI15の設定をクリア
     AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI15_PA;  // EXTI15を PA (00) に設定
 
     // 一旦クリアしてから割り込みを有効にする
-    EXTI->INTENR &= ~(EXTI_INTENR_MR0 | EXTI_INTENR_MR1 | EXTI_INTENR_MR2 | EXTI_INTENR_MR3 |      // 割り込み無効化
-                      EXTI_INTENR_MR12 | EXTI_INTENR_MR13 | EXTI_INTENR_MR14 | EXTI_INTENR_MR15);  //
-    EXTI->RTENR &= ~(EXTI_RTENR_TR0 | EXTI_RTENR_TR1 | EXTI_RTENR_TR2 | EXTI_RTENR_TR3 |           // 立ち上がりエッジ検出をクリア
-                     EXTI_RTENR_TR12 | EXTI_RTENR_TR13 | EXTI_RTENR_TR14 | EXTI_RTENR_TR15);       //
-    EXTI->FTENR &= ~(EXTI_FTENR_TR0 | EXTI_FTENR_TR1 | EXTI_FTENR_TR2 | EXTI_FTENR_TR3 |           // 立ち下がりエッジ検出をクリア
-                     EXTI_FTENR_TR12 | EXTI_FTENR_TR13 | EXTI_FTENR_TR14 | EXTI_FTENR_TR15);       //
+    EXTI->INTENR &= ~(EXTI_INTENR_MR0 | EXTI_INTENR_MR1 | EXTI_INTENR_MR2 | EXTI_INTENR_MR3 |  // 割り込み無効化
+                      EXTI_INTENR_MR12 | EXTI_INTENR_MR13 | EXTI_INTENR_MR15);                 //
+    EXTI->RTENR &= ~(EXTI_RTENR_TR0 | EXTI_RTENR_TR1 | EXTI_RTENR_TR2 | EXTI_RTENR_TR3 |       // 立ち上がりエッジ検出をクリア
+                     EXTI_RTENR_TR12 | EXTI_RTENR_TR13 | EXTI_RTENR_TR15);                     //
+    EXTI->FTENR &= ~(EXTI_FTENR_TR0 | EXTI_FTENR_TR1 | EXTI_FTENR_TR2 | EXTI_FTENR_TR3 |       // 立ち下がりエッジ検出をクリア
+                     EXTI_FTENR_TR12 | EXTI_FTENR_TR13 | EXTI_FTENR_TR15);                     //
 
     // 有効化
-    EXTI->RTENR |= EXTI_RTENR_TR0 | EXTI_RTENR_TR1 | EXTI_RTENR_TR2 | EXTI_RTENR_TR3 |     // 立ち上がりエッジ検出をセット
-                   EXTI_RTENR_TR12 | EXTI_RTENR_TR13 | EXTI_RTENR_TR14 | EXTI_RTENR_TR15;  //
-    EXTI->FTENR |= EXTI_FTENR_TR0 | EXTI_FTENR_TR1 |  // 立ち下がりエッジ検出をセット (OPTION_SELECT_A/Bは立ち上がりのみ)
-                   EXTI_FTENR_TR12 | EXTI_FTENR_TR13 | EXTI_FTENR_TR14 | EXTI_FTENR_TR15;  //
+    EXTI->RTENR |= EXTI_RTENR_TR0 | EXTI_RTENR_TR1 | EXTI_RTENR_TR2 | EXTI_RTENR_TR3 |  // 立ち上がりエッジ検出をセット
+                   EXTI_RTENR_TR12 | EXTI_RTENR_TR13 | EXTI_RTENR_TR15;                 //
+    EXTI->FTENR |= EXTI_FTENR_TR0 | EXTI_FTENR_TR1 |                     // 立ち下がりエッジ検出をセット (OPTION_SELECT_A/Bは立ち上がりのみ)
+                   EXTI_FTENR_TR12 | EXTI_FTENR_TR13 | EXTI_FTENR_TR15;  //
 
-    EXTI->INTFR = EXTI_INTF_INTF0 | EXTI_INTF_INTF1 | EXTI_INTF_INTF2 | EXTI_INTF_INTF3 |     // 割り込みフラグをクリア
-                  EXTI_INTF_INTF12 | EXTI_INTF_INTF13 | EXTI_INTF_INTF14 | EXTI_INTF_INTF15;  //
+    EXTI->INTFR = EXTI_INTF_INTF0 | EXTI_INTF_INTF1 | EXTI_INTF_INTF2 | EXTI_INTF_INTF3 |  // 割り込みフラグをクリア
+                  EXTI_INTF_INTF12 | EXTI_INTF_INTF13 | EXTI_INTF_INTF15;                  //
 
-    EXTI->INTENR |= EXTI_INTENR_MR0 | EXTI_INTENR_MR1 | EXTI_INTENR_MR2 | EXTI_INTENR_MR3 |     // 割り込み有効化
-                    EXTI_INTENR_MR12 | EXTI_INTENR_MR13 | EXTI_INTENR_MR14 | EXTI_INTENR_MR15;  //
+    EXTI->INTENR |= EXTI_INTENR_MR0 | EXTI_INTENR_MR1 | EXTI_INTENR_MR2 | EXTI_INTENR_MR3 |  // 割り込み有効化
+                    EXTI_INTENR_MR12 | EXTI_INTENR_MR13 | EXTI_INTENR_MR15;                  //
 
     NVIC_EnableIRQ(EXTI7_0_IRQn);   // EXTI 7-0割り込みを有効にする
     NVIC_EnableIRQ(EXTI15_8_IRQn);  // EXTI 15-8割り込みを有効にする
@@ -190,24 +187,27 @@ void EXTI7_0_IRQHandler(void) {
     }
 }
 
-void EXTI15_8_IRQHandler(void) __attribute__((interrupt));
-void EXTI15_8_IRQHandler(void) {
-    exti_int_counter++;
-
+static void copy_drive_signals_to_dosv(void) {
     // PA12: MOTOR_ON       -> PB4: MOTOR_ON_DOSV (論理逆)
     // PA13: DIRECTION      -> PB5: DIRECTION_DOSV (論理逆)
     // PA15: SIDE_SELECT    -> PB7: SIDE_SELECT_DOSV (論理逆)
-    // この4つのGPIO入力のバイパスをまとめて処理する
     uint32_t porta = GPIOA->INDR;
     uint32_t mask = (1 << 15) | (1 << 13) | (1 << 12);
     uint32_t active_bits = (~porta) & mask;  // Lowアクティブなので反転する
     uint32_t inactive_bits = porta & mask;   // 1になっているビットを抽出
 
-    // bit12-15を bit4-7 に移動してGPIOBに反映する
+    // bit12,13,15を bit4,5,7 に移動してGPIOBに反映する
     GPIOB->BSHR = (active_bits >> 8);   // Highにする
     GPIOB->BCR = (inactive_bits >> 8);  // Lowにする
+}
 
-    EXTI->INTFR = EXTI_INTF_INTF12 | EXTI_INTF_INTF13 | EXTI_INTF_INTF14 | EXTI_INTF_INTF15;  // フラグをクリア
+void EXTI15_8_IRQHandler(void) __attribute__((interrupt));
+void EXTI15_8_IRQHandler(void) {
+    exti_int_counter++;
+
+    copy_drive_signals_to_dosv();
+    // EXTI14は未使用
+    EXTI->INTFR = EXTI_INTF_INTF12 | EXTI_INTF_INTF13 | EXTI_INTF_INTF15;  // フラグをクリア
 }
 
 volatile uint32_t systick_irq_counter = 0;
@@ -231,6 +231,9 @@ void SysTick_Handler(void) {
 
     // Clear the trigger state for the next IRQ
     SysTick->SR = 0x00000000;
+
+    // GPIO割り込み(EXTI)の取りこぼしがあっても反映されるように保険をいれておく
+    copy_drive_signals_to_dosv();
 
     // 9SCDRVサポート
     // OPTION SELECT 信号の同時アサートによる回転数変更に対応する
