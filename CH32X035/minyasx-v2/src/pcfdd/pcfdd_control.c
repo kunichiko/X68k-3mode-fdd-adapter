@@ -500,13 +500,20 @@ void pcfdd_set_current_ds(pcfdd_ds_t ds) {
 //
 //
 
-void step_dosv(int drive) {
+void step_dosv(int drive, bool direction_inward) {
     if (drive < 0 || drive > 1) {
         return;
     }
-    // GreenPAK1の Vitrual Input 7 (bit0) に STEP_DOSV を接続している
+    // GreenPAK1の Vitrual Input に以下を接続している
+    // 7 (bit0)  = STEP_DOSV (正論理)
+    // 6 (bit1)  = DIRECTION_DOSV (正論理)
     uint8_t gp1_vin = greenpak_get_virtualinput(1 - 1);
     gp1_vin |= (1 << 0);  // bit0 = 1 (STEP_DOSV = 1)
+    if (direction_inward) {
+        gp1_vin |= (1 << 1);  // bit1 = 1 (DIRECTION_DOSV = 1, 内周方向)
+    } else {
+        gp1_vin &= ~(1 << 1);  // bit1 = 0 (DIRECTION_DOSV = 0, 外周方向)
+    }
     greenpak_set_virtualinput(1 - 1, gp1_vin);
     Delay_Ms(1);
     gp1_vin &= ~(1 << 0);  // bit0 = 0 (STEP_DOSV = 0)
@@ -537,15 +544,12 @@ bool seek_to_track0(int drive) {
     int seek_count = 0;
     // シーク Part1
     drive_select(drive, true);
-    GPIOB->BSHR = (1 << 5);  // DIRECTION_DOSV active (内周方向)
     for (int i = 0; i < 10; i++) {
-        step_dosv(drive);
+        step_dosv(drive, true);  // 内周方向にステップ
     }
     // ここで 100msec待つ(Track00以外でシークを一度確定しないとDISK_CHANGEがクリアされないドライブがある)
     Delay_Ms(100);
     // シーク Part2
-    GPIOB->BCR = (1 << 5);  // DIRECTION_DOSV inactive (正論理, 外周方向)
-    Delay_Ms(1);
     seek_count = 0;
     while (seek_count < 200) {
         seek_count++;
@@ -554,7 +558,7 @@ bool seek_to_track0(int drive) {
             // TRACK0_DOSV = 0 (Low) になった
             break;
         }
-        step_dosv(drive);
+        step_dosv(drive, false);  // 外周方向にステップ
     }
     Delay_Ms(100);
     drive_select(drive, false);
