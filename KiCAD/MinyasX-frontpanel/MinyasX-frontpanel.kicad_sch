@@ -1022,6 +1022,411 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Jumper:Jumper_2_Bridged"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "JP"
+				(at 0 1.905 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Jumper_2_Bridged"
+				(at 0 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Jumper, 2-pole, closed/bridged"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "Jumper SPST"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Jumper* TestPoint*2Pads* TestPoint*Bridge*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Jumper_2_Bridged_0_0"
+				(circle
+					(center -2.032 0)
+					(radius 0.508)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 2.032 0)
+					(radius 0.508)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "Jumper_2_Bridged_0_1"
+				(arc
+					(start -1.524 0.254)
+					(mid 0 0.762)
+					(end 1.524 0.254)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "Jumper_2_Bridged_1_1"
+				(pin passive line
+					(at -5.08 0 0)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 0 180)
+					(length 2.54)
+					(name "B"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "LED:WS2812B-2020"
+			(pin_names
+				(offset 0.254)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "D"
+				(at 5.08 5.715 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify right bottom)
+				)
+			)
+			(property "Value" "WS2812B-2020"
+				(at 1.27 -5.715 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" "LED_SMD:LED_WS2812B-2020_PLCC4_2.0x2.0mm"
+				(at 1.27 -7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/4684/4684_WS2812B-2020_V1.3_EN.pdf"
+				(at 2.54 -9.525 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Description" "RGB LED with integrated controller, 2.0 x 2.0 mm, 12 mA"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "RGB LED NeoPixel Nano addressable"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "LED*WS2812*-2020_PLCC4*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "WS2812B-2020_0_0"
+				(text "RGB"
+					(at 2.286 -4.191 0)
+					(effects
+						(font
+							(size 0.762 0.762)
+						)
+					)
+				)
+			)
+			(symbol "WS2812B-2020_0_1"
+				(polyline
+					(pts
+						(xy 1.27 -2.54) (xy 1.778 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -3.556) (xy 1.778 -3.556)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.286 -1.524) (xy 1.27 -2.54) (xy 1.27 -2.032)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.286 -2.54) (xy 1.27 -3.556) (xy 1.27 -3.048)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.683 -1.016) (xy 3.683 -3.556) (xy 3.683 -4.064)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 4.699 -1.524) (xy 2.667 -1.524) (xy 3.683 -3.556) (xy 4.699 -1.524)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 4.699 -3.556) (xy 2.667 -3.556)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 5.08 5.08)
+					(end -5.08 -5.08)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "WS2812B-2020_1_1"
+				(pin input line
+					(at -7.62 0 0)
+					(length 2.54)
+					(name "DIN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 7.62 270)
+					(length 2.54)
+					(name "VDD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 -7.62 90)
+					(length 2.54)
+					(name "VSS"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 7.62 0 180)
+					(length 2.54)
+					(name "DOUT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Mechanical:MountingHole_Pad"
 			(pin_numbers
 				(hide yes)
@@ -2082,161 +2487,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "x68000-ext:SK6812MINI-HS"
-			(pin_names
-				(offset 1.016)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "LED"
-				(at 3.81 -5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "SK6812MINI-HS"
-				(at 5.08 8.89 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "x68k-lib:SK6812MINI-HS"
-				(at 15.24 -7.62 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 -1.27 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "RGB LED with integrated controller"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "LCSC" "C2922787"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "RGB LED NeoPixel"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "SK6812MINI-HS_0_1"
-				(rectangle
-					(start -6.35 6.35)
-					(end 6.35 -3.81)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type background)
-					)
-				)
-			)
-			(symbol "SK6812MINI-HS_1_1"
-				(pin input line
-					(at -8.89 1.27 0)
-					(length 2.54)
-					(name "DIN"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 0 8.89 270)
-					(length 2.54)
-					(name "VDD"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 0 -6.35 90)
-					(length 2.54)
-					(name "VSS"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin output line
-					(at 8.89 1.27 180)
-					(length 2.54)
-					(name "DOUT"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "x68000-ext:SKRHAAE010"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -2478,6 +2728,15 @@
 			)
 			(property "Description" "GreenPAK Programmable Mixed-Signal Matrix with In-System Programmability, TSSOP-20"
 				(at 0 6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "LCSC" "C3281959"
+				(at 0 0 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -2889,192 +3148,12 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "x68000-ext:XC6201P332MR-G"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "U"
-				(at 0 8.89 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "XC6201P332MR-G"
-				(at 0 6.35 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5_HandSoldering"
-				(at -1.27 11.43 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "https://www.torexsemi.com/file/xc6220/XC6220.pdf"
-				(at 19.05 -25.4 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "1A, Low Drop-out Voltage Regulator, Fixed Output 3.3V, SOT-23-5"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "LDO Voltage Regulator 1A"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "SOT?23*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "XC6201P332MR-G_0_1"
-				(rectangle
-					(start -5.08 3.81)
-					(end 5.08 -2.54)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-			)
-			(symbol "XC6201P332MR-G_1_1"
-				(pin power_in line
-					(at -7.62 2.54 0)
-					(length 2.54)
-					(name "VI"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin no_connect line
-					(at -7.62 -1.27 0)
-					(length 2.54)
-					(hide yes)
-					(name "NC"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 0 -5.08 90)
-					(length 2.54)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_out line
-					(at 7.62 2.54 180)
-					(length 2.54)
-					(name "VO"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin no_connect line
-					(at 7.62 -1.27 180)
-					(length 2.54)
-					(hide yes)
-					(name "NC"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 	)
 	(junction
-		(at 93.98 67.31)
+		(at 60.96 66.04)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "55b5f8b0-aa86-4038-b30b-9afe720cc64d")
-	)
-	(junction
-		(at 60.96 63.5)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "5862341c-7ddc-4d5f-9307-3a4d592d9dbc")
+		(uuid "3161e9fb-b7d6-4ccd-af2d-afc656690aab")
 	)
 	(junction
 		(at 222.25 135.89)
@@ -3089,12 +3168,6 @@
 		(uuid "62096abb-f22f-4163-a967-7de2308b9543")
 	)
 	(junction
-		(at 104.14 57.15)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "6d3ccc1d-ae97-46f1-ada3-becc49f78392")
-	)
-	(junction
 		(at 60.96 71.12)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3107,16 +3180,16 @@
 		(uuid "d9503ddc-8e8c-4825-a5f9-5a9406341bfa")
 	)
 	(junction
-		(at 60.96 66.04)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "e2dd2a75-4b82-416a-9608-10f95473e94c")
-	)
-	(junction
 		(at 60.96 73.66)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "eca89e36-4e85-4f26-9bea-38dc7631b640")
+	)
+	(junction
+		(at 85.09 132.08)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "fa034c79-a247-4e5f-a99d-836a8a37eeb4")
 	)
 	(junction
 		(at 186.69 45.72)
@@ -3130,29 +3203,13 @@
 		(color 0 0 0 0)
 		(uuid "fc57e262-42ad-4995-9c69-380869487ceb")
 	)
-	(junction
-		(at 83.82 57.15)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "fef1b972-1b0b-4815-a10a-e9f01c5118a1")
-	)
 	(no_connect
 		(at 157.48 138.43)
 		(uuid "915120fb-69e8-48d2-9479-36735f25ab6d")
 	)
 	(no_connect
-		(at 153.67 176.53)
+		(at 152.4 176.53)
 		(uuid "b8962c82-e402-43b1-bc57-46cc9b4baa3b")
-	)
-	(wire
-		(pts
-			(xy 83.82 57.15) (xy 83.82 59.69)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "00434939-264d-474b-bc24-6790bf3901d1")
 	)
 	(wire
 		(pts
@@ -3163,6 +3220,16 @@
 			(type default)
 		)
 		(uuid "02b77acc-84a2-43b3-ac0e-b58d265a7e6d")
+	)
+	(wire
+		(pts
+			(xy 85.09 132.08) (xy 85.09 140.97)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0338ac73-f8d7-4600-84df-216e761fb696")
 	)
 	(wire
 		(pts
@@ -3186,13 +3253,13 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 90.17) (xy 40.64 90.17)
+			(xy 81.28 140.97) (xy 85.09 140.97)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "0a63e339-19cf-49a3-84d3-321bc174183e")
+		(uuid "09ed2552-5e70-4385-aea1-05b29c1b85dd")
 	)
 	(wire
 		(pts
@@ -3206,16 +3273,6 @@
 	)
 	(wire
 		(pts
-			(xy 101.6 57.15) (xy 104.14 57.15)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0c6f2083-f602-4c14-be8a-ca6848acbe4c")
-	)
-	(wire
-		(pts
 			(xy 245.11 21.59) (xy 241.3 21.59)
 		)
 		(stroke
@@ -3226,6 +3283,16 @@
 	)
 	(wire
 		(pts
+			(xy 60.96 22.86) (xy 60.96 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "123add06-e523-476d-9bfe-8498e178e77c")
+	)
+	(wire
+		(pts
 			(xy 250.19 137.16) (xy 247.65 137.16)
 		)
 		(stroke
@@ -3233,6 +3300,16 @@
 			(type default)
 		)
 		(uuid "12df2047-153a-4190-8148-bd7fab538d9f")
+	)
+	(wire
+		(pts
+			(xy 43.18 90.17) (xy 40.64 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "131e2d0e-f68d-4840-8878-1a7916c5dc46")
 	)
 	(wire
 		(pts
@@ -3256,26 +3333,6 @@
 	)
 	(wire
 		(pts
-			(xy 83.82 64.77) (xy 83.82 67.31)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "203da6c5-a74c-4331-872f-2d62f8fab00b")
-	)
-	(wire
-		(pts
-			(xy 60.96 63.5) (xy 58.42 63.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "21906329-c347-4efd-ac53-bb3ac1085c00")
-	)
-	(wire
-		(pts
 			(xy 162.56 60.96) (xy 194.31 60.96)
 		)
 		(stroke
@@ -3293,6 +3350,16 @@
 			(type default)
 		)
 		(uuid "2a614b7e-bcd2-4dbf-858c-f885fd179740")
+	)
+	(wire
+		(pts
+			(xy 125.73 176.53) (xy 137.16 176.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2b48c60c-7fa8-4fd6-b301-fc716fff37fe")
 	)
 	(wire
 		(pts
@@ -3326,36 +3393,6 @@
 	)
 	(wire
 		(pts
-			(xy 127 176.53) (xy 135.89 176.53)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2f75ffd1-515a-4624-996d-a16c50b3e75a")
-	)
-	(wire
-		(pts
-			(xy 83.82 67.31) (xy 93.98 67.31)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "32f1c718-d562-41fa-9eec-5f986e82a58c")
-	)
-	(wire
-		(pts
-			(xy 104.14 49.53) (xy 104.14 57.15)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3876972c-0420-48b6-8c31-020e2cd53eff")
-	)
-	(wire
-		(pts
 			(xy 177.8 130.81) (xy 167.64 130.81)
 		)
 		(stroke
@@ -3363,16 +3400,6 @@
 			(type default)
 		)
 		(uuid "39da83b7-78b3-469f-aaf2-f3c02eefba1b")
-	)
-	(wire
-		(pts
-			(xy 93.98 67.31) (xy 93.98 68.58)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3a5a9af6-109e-40a1-9667-ef11487a8f80")
 	)
 	(wire
 		(pts
@@ -3416,7 +3443,7 @@
 	)
 	(wire
 		(pts
-			(xy 30.48 176.53) (xy 48.26 176.53)
+			(xy 30.48 176.53) (xy 49.53 176.53)
 		)
 		(stroke
 			(width 0)
@@ -3433,6 +3460,16 @@
 			(type default)
 		)
 		(uuid "41f0f33a-092c-4f1f-8ff2-54ce28d4c5d7")
+	)
+	(wire
+		(pts
+			(xy 85.09 132.08) (xy 86.36 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4453b136-7af0-4c37-b8eb-610289bc59d9")
 	)
 	(wire
 		(pts
@@ -3476,16 +3513,6 @@
 	)
 	(wire
 		(pts
-			(xy 104.14 57.15) (xy 104.14 59.69)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "52d2283d-9b20-497e-b06a-63c413fe2cb7")
-	)
-	(wire
-		(pts
 			(xy 194.31 49.53) (xy 194.31 45.72)
 		)
 		(stroke
@@ -3493,16 +3520,6 @@
 			(type default)
 		)
 		(uuid "55968c5a-ece2-4235-9dc7-b1cdd2842fe8")
-	)
-	(wire
-		(pts
-			(xy 66.04 176.53) (xy 74.93 176.53)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "57d912d7-d41d-40d8-94bf-5333d5b3ef47")
 	)
 	(wire
 		(pts
@@ -3523,6 +3540,26 @@
 			(type default)
 		)
 		(uuid "5dfafaec-f6a2-46d6-ab3d-fe0882ef3c67")
+	)
+	(wire
+		(pts
+			(xy 83.82 134.62) (xy 86.36 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "60542c47-7bd4-4941-b852-7c2b3ee07666")
+	)
+	(wire
+		(pts
+			(xy 64.77 176.53) (xy 76.2 176.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "60ace668-0a4b-42f0-91e8-fde3d5761fac")
 	)
 	(wire
 		(pts
@@ -3556,23 +3593,13 @@
 	)
 	(wire
 		(pts
-			(xy 92.71 176.53) (xy 109.22 176.53)
+			(xy 83.82 132.08) (xy 85.09 132.08)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "7089e7a1-d67e-4edb-8fb4-0af45bcd45f0")
-	)
-	(wire
-		(pts
-			(xy 93.98 64.77) (xy 93.98 67.31)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "73c1c651-1b72-47bb-84d3-511bd2d533f1")
+		(uuid "7cf8c043-c1d0-4b2f-b0de-d8dcc99a1c68")
 	)
 	(wire
 		(pts
@@ -3596,6 +3623,16 @@
 	)
 	(wire
 		(pts
+			(xy 83.82 121.92) (xy 86.36 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7fbfea44-8b1e-4979-952f-ef498754d812")
+	)
+	(wire
+		(pts
 			(xy 201.93 135.89) (xy 207.01 135.89)
 		)
 		(stroke
@@ -3603,26 +3640,6 @@
 			(type default)
 		)
 		(uuid "802ec766-9440-46c7-8ef9-8789c516cc33")
-	)
-	(wire
-		(pts
-			(xy 83.82 57.15) (xy 86.36 57.15)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "804e164a-04fe-499d-bd33-da5d721fa7b3")
-	)
-	(wire
-		(pts
-			(xy 60.96 60.96) (xy 58.42 60.96)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "81b9ef95-ef22-4150-a604-1529069d9c98")
 	)
 	(wire
 		(pts
@@ -3686,6 +3703,16 @@
 	)
 	(wire
 		(pts
+			(xy 36.83 66.04) (xy 45.72 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9792ba2e-a3c3-46f4-8173-840e466b909d")
+	)
+	(wire
+		(pts
 			(xy 134.62 60.96) (xy 142.24 60.96)
 		)
 		(stroke
@@ -3716,6 +3743,16 @@
 	)
 	(wire
 		(pts
+			(xy 91.44 176.53) (xy 110.49 176.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a27947ad-b40a-4253-8e14-2365ddcac49a")
+	)
+	(wire
+		(pts
 			(xy 111.76 119.38) (xy 106.68 119.38)
 		)
 		(stroke
@@ -3726,7 +3763,7 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 92.71) (xy 40.64 92.71)
+			(xy 43.18 95.25) (xy 40.64 95.25)
 		)
 		(stroke
 			(width 0)
@@ -3786,26 +3823,6 @@
 	)
 	(wire
 		(pts
-			(xy 93.98 67.31) (xy 104.14 67.31)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bdf5049e-70c3-48fa-87d6-73535af67475")
-	)
-	(wire
-		(pts
-			(xy 83.82 49.53) (xy 83.82 57.15)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bdfbab84-4392-4163-9cf9-1c7b8201c0fa")
-	)
-	(wire
-		(pts
 			(xy 60.96 71.12) (xy 60.96 73.66)
 		)
 		(stroke
@@ -3833,16 +3850,6 @@
 			(type default)
 		)
 		(uuid "c83ad508-8e45-4e4b-948f-270ddd15991d")
-	)
-	(wire
-		(pts
-			(xy 60.96 63.5) (xy 60.96 66.04)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c9ef03e7-f030-41eb-8f4b-fb8a0115ce24")
 	)
 	(wire
 		(pts
@@ -3886,13 +3893,23 @@
 	)
 	(wire
 		(pts
-			(xy 104.14 64.77) (xy 104.14 67.31)
+			(xy 43.18 92.71) (xy 40.64 92.71)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d4679042-5f05-4995-868d-c3ce11c857b0")
+		(uuid "cf6a5433-fc70-481d-85de-42ce778a3bd4")
+	)
+	(wire
+		(pts
+			(xy 68.58 63.5) (xy 68.58 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d2cfb64e-b0a2-4016-a540-f513a96a04e0")
 	)
 	(wire
 		(pts
@@ -3906,6 +3923,16 @@
 	)
 	(wire
 		(pts
+			(xy 83.82 129.54) (xy 86.36 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d7f91924-d558-4bdd-9863-d495565b33ae")
+	)
+	(wire
+		(pts
 			(xy 36.83 63.5) (xy 45.72 63.5)
 		)
 		(stroke
@@ -3913,16 +3940,6 @@
 			(type default)
 		)
 		(uuid "d8bb54fc-24c3-43f8-90c6-ff9452a4d325")
-	)
-	(wire
-		(pts
-			(xy 60.96 60.96) (xy 60.96 63.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d9b31bba-4357-4c27-b3fb-261eafeaead0")
 	)
 	(wire
 		(pts
@@ -3996,6 +4013,16 @@
 	)
 	(wire
 		(pts
+			(xy 83.82 124.46) (xy 86.36 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e717bff9-ef8d-4b20-bc34-759d561f6261")
+	)
+	(wire
+		(pts
 			(xy 162.56 57.15) (xy 186.69 57.15)
 		)
 		(stroke
@@ -4003,6 +4030,16 @@
 			(type default)
 		)
 		(uuid "e990d3ba-9d08-49af-a1e5-9a8b566dac84")
+	)
+	(wire
+		(pts
+			(xy 68.58 66.04) (xy 60.96 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "edda7c51-c3a3-4654-b28c-2780d6d97da8")
 	)
 	(wire
 		(pts
@@ -4046,6 +4083,16 @@
 	)
 	(wire
 		(pts
+			(xy 83.82 127) (xy 86.36 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fafca76e-2071-4603-ad9a-b6508eac751a")
+	)
+	(wire
+		(pts
 			(xy 99.06 105.41) (xy 99.06 107.95)
 		)
 		(stroke
@@ -4053,6 +4100,16 @@
 			(type default)
 		)
 		(uuid "fd85118d-7955-4a29-9a5e-d8c36c2c8feb")
+	)
+	(label "VDD_MCU"
+		(at 43.18 90.17 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "01a8217b-8869-4493-8fe2-883fd3c89612")
 	)
 	(label "CENTER"
 		(at 142.24 128.27 180)
@@ -4074,16 +4131,6 @@
 		)
 		(uuid "13afd38c-582b-4173-b49a-f912ec0372fa")
 	)
-	(label "CONTROLLER_OPTION"
-		(at 43.18 90.17 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "169fc199-f26c-4a56-8bc4-bb54789aee00")
-	)
 	(label "EJECT_A"
 		(at 201.93 125.73 180)
 		(effects
@@ -4095,7 +4142,7 @@
 		(uuid "16eba6bb-2223-4b7b-aefe-4a55a5b11da7")
 	)
 	(label "LED_DATA"
-		(at 43.18 92.71 0)
+		(at 43.18 95.25 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4264,6 +4311,26 @@
 		)
 		(uuid "cab79e82-8bdf-4120-93de-b26be3919f5f")
 	)
+	(label "+3.3V"
+		(at 43.18 92.71 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "cbbbae86-f83f-490c-bb67-04fec6aacea5")
+	)
+	(label "CONT_PUSH"
+		(at 81.28 140.97 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "d26f0a34-57a3-4640-a828-1b011c1347f4")
+	)
 	(label "DOWN"
 		(at 177.8 130.81 0)
 		(effects
@@ -4274,13 +4341,13 @@
 		)
 		(uuid "d56ac2be-07d0-47be-b265-43a9111849c5")
 	)
-	(label "CONTROLLER_OPTION"
-		(at 45.72 66.04 180)
+	(label "CONT_PUSH"
+		(at 58.42 60.96 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right bottom)
+			(justify left bottom)
 		)
 		(uuid "da9e662f-8401-41ac-a33a-2be0c729ddfd")
 	)
@@ -4293,6 +4360,16 @@
 			(justify right bottom)
 		)
 		(uuid "dbe70952-fba9-4e04-9ef5-903bdf05f0a4")
+	)
+	(label "LED_DATA"
+		(at 30.48 176.53 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "de1da209-715a-4dfd-bde0-84db4e6db8f2")
 	)
 	(label "EJECT_A"
 		(at 81.28 116.84 180)
@@ -4334,89 +4411,9 @@
 		)
 		(uuid "f5079c73-92e5-4a4b-91ef-47f412996a08")
 	)
-	(hierarchical_label "LED_DATA"
-		(shape input)
-		(at 30.48 176.53 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "a7d28ac7-171d-4a23-bc15-9d2b2075b183")
-	)
-	(symbol
-		(lib_id "Device:C_Small")
-		(at 83.82 62.23 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "02539202-29f3-468b-a8f6-0be7b85ad562")
-		(property "Reference" "C25"
-			(at 78.74 60.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "1uF"
-			(at 77.47 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 83.82 62.23 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 83.82 62.23 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 83.82 62.23 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "2cafb9e1-c18a-4663-a8c9-01f4dc6a23c4")
-		)
-		(pin "2"
-			(uuid "bdb8ddd6-06ad-427a-b2a3-444f2b920da9")
-		)
-		(instances
-			(project "MinyasX-frontpanel"
-				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "C25")
-					(unit 1)
-				)
-			)
-		)
-	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 40.64 92.71 90)
+		(at 40.64 95.25 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -4424,7 +4421,7 @@
 		(dnp no)
 		(uuid "04908bb2-a1a2-470c-96d8-72744dff6e62")
 		(property "Reference" "TP112"
-			(at 36.068 92.71 90)
+			(at 36.068 95.25 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4433,7 +4430,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 28.194 92.964 90)
+			(at 28.194 95.504 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4442,7 +4439,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 40.64 87.63 0)
+			(at 40.64 90.17 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4451,7 +4448,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 40.64 87.63 0)
+			(at 40.64 90.17 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4460,7 +4457,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 40.64 92.71 0)
+			(at 40.64 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4824,6 +4821,91 @@
 		)
 	)
 	(symbol
+		(lib_id "LED:WS2812B-2020")
+		(at 144.78 176.53 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "15c05948-1913-4eab-8a90-d743ab45d181")
+		(property "Reference" "D104"
+			(at 158.75 170.1098 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "WS2812B-2020"
+			(at 158.75 172.6498 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "LED_SMD:LED_WS2812B-2020_PLCC4_2.0x2.0mm"
+			(at 146.05 184.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/4684/4684_WS2812B-2020_V1.3_EN.pdf"
+			(at 147.32 186.055 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "RGB LED with integrated controller, 2.0 x 2.0 mm, 12 mA"
+			(at 144.78 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C965555"
+			(at 144.78 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "4bb00743-5f10-442b-8fce-3af3b6ad482d")
+		)
+		(pin "1"
+			(uuid "44a3c78d-b7d6-42bd-928a-2d55333b87e7")
+		)
+		(pin "3"
+			(uuid "36bbbe8f-f49e-43c7-b401-c5b6198e5718")
+		)
+		(pin "4"
+			(uuid "4e2a47b4-4513-4695-9bc1-7f55af8049e4")
+		)
+		(instances
+			(project "MinyasX-frontpanel"
+				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
+					(reference "D104")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:PWR_FLAG")
 		(at 25.4 22.86 0)
 		(unit 1)
@@ -4883,72 +4965,6 @@
 			(project ""
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
 					(reference "#FLG0101")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3.3V")
-		(at 104.14 49.53 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "1c2e2c27-d3bf-4195-be64-75c799f0de48")
-		(property "Reference" "#PWR045"
-			(at 104.14 53.34 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+3.3V"
-			(at 104.14 44.45 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 104.14 49.53 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 104.14 49.53 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
-			(at 104.14 49.53 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "08d4e8e9-be1d-4a05-a5ed-64227a0fb573")
-		)
-		(instances
-			(project "MinyasX-frontpanel"
-				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR045")
 					(unit 1)
 				)
 			)
@@ -5021,75 +5037,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 93.98 68.58 0)
-		(mirror y)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "21b61583-a41e-448b-8dd7-58687234bff3")
-		(property "Reference" "#PWR044"
-			(at 93.98 74.93 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 93.98 73.66 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 93.98 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 93.98 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 93.98 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "fe0e2eea-f906-4ee5-8e6e-56d50ce5d7ac")
-		)
-		(instances
-			(project "MinyasX-frontpanel"
-				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR044")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 86.36 134.62 90)
+		(at 83.82 134.62 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -5097,7 +5046,7 @@
 		(dnp no)
 		(uuid "22173b11-bd54-4d63-b900-c53dc016f5ca")
 		(property "Reference" "TP106"
-			(at 81.788 134.62 90)
+			(at 79.248 134.62 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5106,7 +5055,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 73.914 134.874 90)
+			(at 71.374 134.874 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5115,7 +5064,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 86.36 129.54 0)
+			(at 83.82 129.54 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5124,7 +5073,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 86.36 129.54 0)
+			(at 83.82 129.54 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5133,7 +5082,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 86.36 134.62 0)
+			(at 83.82 134.62 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5620,34 +5569,32 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 86.36 127 90)
+		(lib_id "Jumper:Jumper_2_Bridged")
+		(at 63.5 63.5 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "4d799686-f739-4eac-bf91-255f96a2c9f8")
-		(property "Reference" "TP103"
-			(at 81.788 127 90)
+		(uuid "40a19af7-d51a-446f-89a3-c7b6cb94f5dc")
+		(property "Reference" "JP101"
+			(at 63.5 64.516 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
-			(at 73.914 127.254 90)
+		(property "Value" "Jumper_2_Bridged"
+			(at 74.676 61.976 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 86.36 121.92 0)
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm"
+			(at 63.5 63.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5656,7 +5603,76 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 86.36 121.92 0)
+			(at 63.5 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Jumper, 2-pole, closed/bridged"
+			(at 63.5 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "05f64510-3a8e-47bd-8a29-eeeb1e5b89a4")
+		)
+		(pin "2"
+			(uuid "26d7520e-7d4a-47d8-b80e-3f3ff4795d3b")
+		)
+		(instances
+			(project ""
+				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
+					(reference "JP101")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 40.64 90.17 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "41ff34d3-8778-4775-9909-1da59a8f89a4")
+		(property "Reference" "TP109"
+			(at 36.068 90.17 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 28.194 90.424 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
+			(at 40.64 85.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 40.64 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5665,7 +5681,158 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 86.36 127 0)
+			(at 40.64 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "54060366-4f4f-4c68-b711-1081b284a839")
+		)
+		(instances
+			(project "MinyasX-frontpanel"
+				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
+					(reference "TP109")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "LED:WS2812B-2020")
+		(at 83.82 176.53 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "483a354d-a480-4467-ba1b-223c3f1315d4")
+		(property "Reference" "D102"
+			(at 97.79 170.1098 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "WS2812B-2020"
+			(at 97.79 172.6498 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "LED_SMD:LED_WS2812B-2020_PLCC4_2.0x2.0mm"
+			(at 85.09 184.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/4684/4684_WS2812B-2020_V1.3_EN.pdf"
+			(at 86.36 186.055 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "RGB LED with integrated controller, 2.0 x 2.0 mm, 12 mA"
+			(at 83.82 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C965555"
+			(at 83.82 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "2abf4e4d-c4b4-4385-80a7-222c65ab1c3d")
+		)
+		(pin "1"
+			(uuid "e525ef4d-68ba-4fa1-b067-ec2b8d061d28")
+		)
+		(pin "3"
+			(uuid "0acf1c42-f754-42a5-8e7e-266711368a93")
+		)
+		(pin "4"
+			(uuid "5c733855-3ad9-455a-9850-08e60b0279b7")
+		)
+		(instances
+			(project "MinyasX-frontpanel"
+				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
+					(reference "D102")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 83.82 127 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "4d799686-f739-4eac-bf91-255f96a2c9f8")
+		(property "Reference" "TP103"
+			(at 79.248 127 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 71.374 127.254 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
+			(at 83.82 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 83.82 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 83.82 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5822,7 +5989,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 86.36 124.46 90)
+		(at 83.82 124.46 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -5830,7 +5997,7 @@
 		(dnp no)
 		(uuid "5c139d0e-d369-4b24-9e0e-623c741d5dc5")
 		(property "Reference" "TP102"
-			(at 81.788 124.46 90)
+			(at 79.248 124.46 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5839,7 +6006,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 73.914 124.714 90)
+			(at 71.374 124.714 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5848,7 +6015,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 86.36 119.38 0)
+			(at 83.82 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5857,7 +6024,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 86.36 119.38 0)
+			(at 83.82 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5866,7 +6033,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 86.36 124.46 0)
+			(at 83.82 124.46 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5955,7 +6122,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 86.36 121.92 90)
+		(at 83.82 121.92 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -5963,7 +6130,7 @@
 		(dnp no)
 		(uuid "5fde24f3-310b-42f0-9f1f-7648a2c5e4b3")
 		(property "Reference" "TP101"
-			(at 81.788 121.92 90)
+			(at 79.248 121.92 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5972,7 +6139,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 73.914 122.174 90)
+			(at 71.374 122.174 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5981,7 +6148,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 86.36 116.84 0)
+			(at 83.82 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5990,7 +6157,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 86.36 116.84 0)
+			(at 83.82 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5999,7 +6166,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 86.36 121.92 0)
+			(at 83.82 121.92 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6080,83 +6247,6 @@
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
 					(reference "#PWR0106")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "x68000-ext:XC6201P332MR-G")
-		(at 93.98 59.69 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "6621806d-7923-4f06-b5e0-bb8ee09e91d6")
-		(property "Reference" "U17"
-			(at 93.98 49.53 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "XC6201P332MR-G"
-			(at 93.98 52.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5_HandSoldering"
-			(at 92.71 48.26 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.torexsemi.com/file/xc6220/XC6220.pdf"
-			(at 113.03 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 93.98 59.69 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "c26946d9-748b-4186-8185-20ab47919979")
-		)
-		(pin "2"
-			(uuid "13cd075f-4ab2-42fa-a09a-53204163fc58")
-		)
-		(pin "3"
-			(uuid "3ee1e811-e27e-499f-9357-e456130b9139")
-		)
-		(pin "4"
-			(uuid "f2b4ee24-4892-442e-9a4c-2ef36377391a")
-		)
-		(pin "5"
-			(uuid "7670fe3c-eebd-4ddc-9926-d0ca78a39ab9")
-		)
-		(instances
-			(project "MinyasX-frontpanel"
-				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "U17")
 					(unit 1)
 				)
 			)
@@ -6369,6 +6459,72 @@
 		)
 	)
 	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 60.96 27.94 0)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "736160d0-2a70-4371-a6ca-7a35791df750")
+		(property "Reference" "#FLG0103"
+			(at 60.96 29.845 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 60.96 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 60.96 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 60.96 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 60.96 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "33da987b-52b2-4a8c-8c82-8ef6afbcc248")
+		)
+		(instances
+			(project "MinyasX-frontpanel"
+				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
+					(reference "#FLG0103")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+3.3V")
 		(at 152.4 43.18 0)
 		(unit 1)
@@ -6566,7 +6722,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 86.36 129.54 90)
+		(at 83.82 129.54 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -6574,7 +6730,7 @@
 		(dnp no)
 		(uuid "80ce695d-6be5-42d1-b9bc-7edaa4dde9e6")
 		(property "Reference" "TP104"
-			(at 81.788 129.54 90)
+			(at 79.248 129.54 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6583,7 +6739,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 73.914 129.794 90)
+			(at 71.374 129.794 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6592,7 +6748,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 86.36 124.46 0)
+			(at 83.82 124.46 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6601,7 +6757,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 86.36 124.46 0)
+			(at 83.82 124.46 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6610,7 +6766,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 86.36 129.54 0)
+			(at 83.82 129.54 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6696,6 +6852,91 @@
 		)
 	)
 	(symbol
+		(lib_id "LED:WS2812B-2020")
+		(at 57.15 176.53 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8845005d-3c15-49e5-ba70-441518d46461")
+		(property "Reference" "D101"
+			(at 71.12 170.1098 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "WS2812B-2020"
+			(at 71.12 172.6498 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "LED_SMD:LED_WS2812B-2020_PLCC4_2.0x2.0mm"
+			(at 58.42 184.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/4684/4684_WS2812B-2020_V1.3_EN.pdf"
+			(at 59.69 186.055 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "RGB LED with integrated controller, 2.0 x 2.0 mm, 12 mA"
+			(at 57.15 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C965555"
+			(at 57.15 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "cdace28a-97f9-4ca3-9e16-45d6c198dfb4")
+		)
+		(pin "1"
+			(uuid "0558de2a-ce71-4d4c-a188-e1a9150bfeda")
+		)
+		(pin "3"
+			(uuid "64b0bc4c-720b-4734-bda7-a812ddca1d95")
+		)
+		(pin "4"
+			(uuid "a5b8c73f-c92d-4e48-ba79-3787176f86a9")
+		)
+		(instances
+			(project "MinyasX-frontpanel"
+				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
+					(reference "D101")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "x68000-ext:SLG46826G(V2)")
 		(at 96.52 125.73 0)
 		(unit 1)
@@ -6742,6 +6983,15 @@
 		)
 		(property "Description" "GreenPAK Programmable Mixed-Signal Matrix with In-System Programmability, TSSOP-20"
 			(at 96.52 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C3281959"
+			(at 96.52 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7019,72 +7269,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:VDD")
-		(at 83.82 49.53 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "a074bda1-c3f9-43a0-8ef0-4ca36d24c5a8")
-		(property "Reference" "#PWR043"
-			(at 83.82 53.34 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "VDD_MCU"
-			(at 82.55 40.894 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 83.82 49.53 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 83.82 49.53 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"VDD\""
-			(at 83.82 49.53 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "fe7cfcc8-5535-4d64-be11-317f29f6da16")
-		)
-		(instances
-			(project "MinyasX-frontpanel"
-				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR043")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 205.74 57.15 0)
 		(unit 1)
@@ -7347,86 +7531,6 @@
 		)
 	)
 	(symbol
-		(lib_id "x68000-ext:SK6812MINI-HS")
-		(at 144.78 177.8 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "ae1dfa2f-a2e9-45ad-82d4-a83d32667dea")
-		(property "Reference" "D104"
-			(at 149.098 167.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SK6812MINI"
-			(at 152.908 169.672 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "x68k-lib:SK6812MINI-HS"
-			(at 160.02 185.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/2686/SK6812MINI_REV.01-1-2.pdf"
-			(at 144.78 179.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "EJECT B"
-			(at 144.78 160.274 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C2922787"
-			(at 144.78 177.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "9cf8da3b-9196-444b-8c1f-51955ceb4fa8")
-		)
-		(pin "3"
-			(uuid "0f646594-8b49-4f7f-aa7e-3d97670a91f9")
-		)
-		(pin "4"
-			(uuid "ac04042e-622f-4fb7-b152-806d279fad9c")
-		)
-		(pin "2"
-			(uuid "e4e91d66-38a6-4535-9b4c-780e862d584b")
-		)
-		(instances
-			(project "MinyasX-frontpanel"
-				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "D104")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector:TestPoint")
 		(at 106.68 132.08 270)
 		(mirror x)
@@ -7488,86 +7592,6 @@
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
 					(reference "TP108")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "x68000-ext:SK6812MINI-HS")
-		(at 118.11 177.8 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "b072b8e8-726b-452a-80bb-b5782711bd17")
-		(property "Reference" "D103"
-			(at 123.19 166.878 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SK6812MINI"
-			(at 126.238 169.418 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "x68k-lib:SK6812MINI-HS"
-			(at 133.35 185.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/2686/SK6812MINI_REV.01-1-2.pdf"
-			(at 118.11 179.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "ACC B"
-			(at 118.11 160.02 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C2922787"
-			(at 118.11 177.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "4"
-			(uuid "6724732a-48a0-4bf8-b691-933e212a91b0")
-		)
-		(pin "2"
-			(uuid "949e55be-97f6-43e4-b3bd-ace53389db78")
-		)
-		(pin "3"
-			(uuid "e9b7cb15-da6e-4d6c-a0a4-ee58eee4b963")
-		)
-		(pin "1"
-			(uuid "f99fd4b7-b9a4-450e-b88f-42e27eaf4b27")
-		)
-		(instances
-			(project "MinyasX-frontpanel"
-				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "D103")
 					(unit 1)
 				)
 			)
@@ -7641,7 +7665,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 86.36 132.08 90)
+		(at 83.82 132.08 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -7649,7 +7673,7 @@
 		(dnp no)
 		(uuid "b0d903ba-56e7-45b7-aefb-8c4f88f3ea31")
 		(property "Reference" "TP105"
-			(at 81.788 132.08 90)
+			(at 79.248 132.08 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7658,7 +7682,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 73.914 132.334 90)
+			(at 71.374 132.334 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7667,7 +7691,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 86.36 127 0)
+			(at 83.82 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7676,7 +7700,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 86.36 127 0)
+			(at 83.82 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7685,7 +7709,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 86.36 132.08 0)
+			(at 83.82 132.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7802,16 +7826,16 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C_Small")
-		(at 104.14 62.23 0)
+		(lib_id "Connector:TestPoint")
+		(at 40.64 92.71 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "b9e692c9-42f2-4f21-bf59-6bde8825d863")
-		(property "Reference" "C26"
-			(at 106.68 60.96 0)
+		(uuid "c3d94e46-f924-4137-ac91-958e89aaabd3")
+		(property "Reference" "TP110"
+			(at 36.068 92.71 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7819,8 +7843,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1uF"
-			(at 107.95 64.77 0)
+		(property "Value" "TestPoint"
+			(at 28.194 92.964 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7828,8 +7852,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 104.14 62.23 0)
+		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
+			(at 40.64 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7838,7 +7862,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 104.14 62.23 0)
+			(at 40.64 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7846,8 +7870,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
-			(at 104.14 62.23 0)
+		(property "Description" "test point"
+			(at 40.64 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7856,15 +7880,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "6f9dcb2c-183b-44d1-a41f-2add724f3523")
-		)
-		(pin "2"
-			(uuid "c459f9e8-e745-47cd-bb95-bc9dcd90a818")
+			(uuid "74adefaa-081c-46be-aefc-3ad9323ae844")
 		)
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "C26")
+					(reference "TP110")
 					(unit 1)
 				)
 			)
@@ -8101,86 +8122,6 @@
 		)
 	)
 	(symbol
-		(lib_id "x68000-ext:SK6812MINI-HS")
-		(at 57.15 177.8 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "c9a46fbc-3a4c-4412-9744-7d27c5564a23")
-		(property "Reference" "D101"
-			(at 62.23 166.878 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SK6812MINI"
-			(at 65.278 169.418 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "x68k-lib:SK6812MINI-HS"
-			(at 72.39 185.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/2686/SK6812MINI_REV.01-1-2.pdf"
-			(at 57.15 179.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "ACC A"
-			(at 57.15 159.766 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C2922787"
-			(at 57.15 177.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "4"
-			(uuid "2b537e7e-dd0b-4bdc-b86a-111baee2cb8e")
-		)
-		(pin "2"
-			(uuid "8896cf71-b825-4a68-847e-7aa7943cef4b")
-		)
-		(pin "3"
-			(uuid "10728ada-1e6f-49c9-b0d8-55d1389e1518")
-		)
-		(pin "1"
-			(uuid "b3d6bc58-abe1-44ff-a223-eeb7f37b8682")
-		)
-		(instances
-			(project "MinyasX-frontpanel"
-				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "D101")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:PWR_FLAG")
 		(at 48.26 27.94 0)
 		(mirror x)
@@ -8317,34 +8258,53 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 40.64 90.17 90)
+		(lib_id "LED:WS2812B-2020")
+		(at 118.11 176.53 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "d5bbf3c2-d86e-4891-abf2-f427ffa61947")
-		(property "Reference" "TP109"
-			(at 36.068 90.17 90)
+		(fields_autoplaced yes)
+		(uuid "d2241214-1362-4640-9675-e51ab7aeb29f")
+		(property "Reference" "D103"
+			(at 132.08 170.1098 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
-			(at 28.194 90.424 90)
+		(property "Value" "WS2812B-2020"
+			(at 132.08 172.6498 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 40.64 85.09 0)
+		(property "Footprint" "LED_SMD:LED_WS2812B-2020_PLCC4_2.0x2.0mm"
+			(at 119.38 184.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/4684/4684_WS2812B-2020_V1.3_EN.pdf"
+			(at 120.65 186.055 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "RGB LED with integrated controller, 2.0 x 2.0 mm, 12 mA"
+			(at 118.11 176.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8352,8 +8312,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
-			(at 40.64 85.09 0)
+		(property "LCSC" "C965555"
+			(at 118.11 176.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8361,22 +8321,22 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "test point"
-			(at 40.64 90.17 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
+		(pin "2"
+			(uuid "06aa2fff-d8d7-4b5a-9605-aae1e306704e")
 		)
 		(pin "1"
-			(uuid "228d8757-1d02-43e4-b37a-3b8fb0f13178")
+			(uuid "35d9f0d4-1311-4304-acd3-495fee7430df")
+		)
+		(pin "3"
+			(uuid "c68418a7-a026-4f79-a3ff-bca8898db341")
+		)
+		(pin "4"
+			(uuid "82bd767c-38e9-4807-91fa-a9e42db33acc")
 		)
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "TP109")
+					(reference "D103")
 					(unit 1)
 				)
 			)
@@ -8579,6 +8539,72 @@
 		)
 	)
 	(symbol
+		(lib_id "power:VDD")
+		(at 60.96 22.86 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "e5239583-ea52-46e5-b20e-5c92346ceabc")
+		(property "Reference" "#PWR0127"
+			(at 60.96 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3.3V"
+			(at 58.166 18.034 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 60.96 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 60.96 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"VDD\""
+			(at 60.96 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8388240c-6b65-484f-98eb-295e602256cd")
+		)
+		(instances
+			(project "MinyasX-frontpanel"
+				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
+					(reference "#PWR0127")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C_Small")
 		(at 205.74 52.07 0)
 		(unit 1)
@@ -8736,40 +8762,16 @@
 		)
 	)
 	(symbol
-		(lib_id "x68000-ext:SK6812MINI-HS")
-		(at 83.82 177.8 0)
+		(lib_id "power:+5V")
+		(at 36.83 66.04 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "f62767e8-85a6-418c-bc8e-53066c344bca")
-		(property "Reference" "D102"
-			(at 88.138 167.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SK6812MINI"
-			(at 91.948 169.672 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "x68k-lib:SK6812MINI-HS"
-			(at 99.06 185.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/2686/SK6812MINI_REV.01-1-2.pdf"
-			(at 83.82 179.07 0)
+		(uuid "efd91085-1df4-4b0d-a3a2-9c3610243ea9")
+		(property "Reference" "#PWR0126"
+			(at 40.64 66.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8777,16 +8779,34 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "EJECT A"
-			(at 83.82 159.766 0)
+		(property "Value" "+3.3V"
+			(at 29.464 65.278 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "LCSC" "C2922787"
-			(at 78.74 180.34 0)
+		(property "Footprint" ""
+			(at 36.83 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 36.83 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 36.83 66.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8795,21 +8815,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "48bbeeec-b789-4908-964e-902d1d0a3530")
-		)
-		(pin "3"
-			(uuid "e9ff5aad-2833-4d8b-bf84-88f50068edfd")
-		)
-		(pin "4"
-			(uuid "255f58bd-d5d9-4818-8d15-9cd8decf187e")
-		)
-		(pin "2"
-			(uuid "2c21434f-608d-4abc-b384-18d8aca3c932")
+			(uuid "e92e924f-c7f1-4bf6-9ab2-d062dc3df4ef")
 		)
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "D102")
+					(reference "#PWR0126")
 					(unit 1)
 				)
 			)
