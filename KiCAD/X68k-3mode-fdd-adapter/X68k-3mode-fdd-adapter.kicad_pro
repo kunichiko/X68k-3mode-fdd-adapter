@@ -586,12 +586,6 @@
         },
         {
           "group_by": false,
-          "label": "LCIC",
-          "name": "LCIC",
-          "show": false
-        },
-        {
-          "group_by": false,
           "label": "説明",
           "name": "Description",
           "show": false
@@ -613,8 +607,8 @@
       "group_symbols": true,
       "include_excluded_from_bom": false,
       "name": "",
-      "sort_asc": true,
-      "sort_field": "Reference"
+      "sort_asc": false,
+      "sort_field": "Description"
     },
     "connection_grid_size": 50.0,
     "drawing": {

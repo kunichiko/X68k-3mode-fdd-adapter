@@ -1288,15 +1288,6 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" ""
-			(at 105.41 96.52 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "1"
 			(uuid "3e218d3f-2190-4b48-99c0-9afa9e4baee1")
 		)
@@ -1357,15 +1348,6 @@
 			)
 		)
 		(property "Description" "Jumper, 2-pole, small symbol, open"
-			(at 109.22 69.85 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
 			(at 109.22 69.85 0)
 			(effects
 				(font
@@ -1436,15 +1418,6 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
-			(at 115.57 69.85 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
 			(at 115.57 69.85 0)
 			(effects
 				(font
@@ -1533,15 +1506,6 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" ""
-			(at 111.76 78.74 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "1"
 			(uuid "dbc9bd00-7b98-4af9-a83b-dc51220006e1")
 		)
@@ -1585,7 +1549,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-323_SC-70"
+		(property "Footprint" "Package_TO_SOT_SMD:SC-59_Handsoldering"
 			(at 118.11 93.345 0)
 			(effects
 				(font
@@ -1607,15 +1571,6 @@
 			)
 		)
 		(property "Description" "0.3A Ic, 20V Vce, NPN Transistor, For Muting and Switching, SOT-323"
-			(at 113.03 91.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
 			(at 113.03 91.44 0)
 			(effects
 				(font
@@ -1783,7 +1738,7 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "e9e5144f-90bc-4b49-96a3-ed0f5eb0def1")
 		(property "Reference" "BZ1701"
@@ -1821,15 +1776,6 @@
 			)
 		)
 		(property "Description" "Speaker"
-			(at 124.46 78.74 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
 			(at 124.46 78.74 0)
 			(effects
 				(font
