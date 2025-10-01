@@ -4420,7 +4420,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "04908bb2-a1a2-470c-96d8-72744dff6e62")
-		(property "Reference" "TP112"
+		(property "Reference" "TP2003"
 			(at 36.068 95.25 90)
 			(effects
 				(font
@@ -4471,7 +4471,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "TP112")
+					(reference "TP2003")
 					(unit 1)
 				)
 			)
@@ -4487,7 +4487,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "073c4353-27ca-4a5d-817e-b08a16c06a28")
-		(property "Reference" "H102"
+		(property "Reference" "H2002"
 			(at 250.1901 35.56 0)
 			(effects
 				(font
@@ -4548,7 +4548,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "H102")
+					(reference "H2002")
 					(unit 1)
 				)
 			)
@@ -4564,7 +4564,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "07555ea9-b213-4be1-b0af-78f1d8ec693e")
-		(property "Reference" "SW102"
+		(property "Reference" "SW2002"
 			(at 212.09 128.27 0)
 			(effects
 				(font
@@ -4625,7 +4625,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "SW102")
+					(reference "SW2002")
 					(unit 1)
 				)
 			)
@@ -4641,7 +4641,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0f094e49-1b65-4afe-86ca-3346ffa8fb2c")
-		(property "Reference" "#PWR0108"
+		(property "Reference" "#PWR02028"
 			(at 234.95 21.59 0)
 			(effects
 				(font
@@ -4691,7 +4691,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0108")
+					(reference "#PWR02028")
 					(unit 1)
 				)
 			)
@@ -4707,7 +4707,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0fb8366f-906b-4d1d-b3a8-ee2eb1ae815c")
-		(property "Reference" "#PWR0112"
+		(property "Reference" "#PWR02023"
 			(at 172.72 140.97 0)
 			(effects
 				(font
@@ -4757,7 +4757,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0112")
+					(reference "#PWR02023")
 					(unit 1)
 				)
 			)
@@ -4773,7 +4773,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1316f4c5-263b-4c02-b396-be1fd10b5e01")
-		(property "Reference" "#PWR078"
+		(property "Reference" "#PWR02022"
 			(at 152.4 73.66 0)
 			(effects
 				(font
@@ -4823,7 +4823,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR078")
+					(reference "#PWR02022")
 					(unit 1)
 				)
 			)
@@ -4839,7 +4839,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "15c05948-1913-4eab-8a90-d743ab45d181")
-		(property "Reference" "D104"
+		(property "Reference" "D2004"
 			(at 158.75 170.1098 0)
 			(effects
 				(font
@@ -4908,7 +4908,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "D104")
+					(reference "D2004")
 					(unit 1)
 				)
 			)
@@ -4923,7 +4923,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "1b08c854-fcdb-4396-bf67-2372e0138fdd")
-		(property "Reference" "#FLG0101"
+		(property "Reference" "#FLG02001"
 			(at 25.4 20.955 0)
 			(effects
 				(font
@@ -4973,7 +4973,7 @@
 		(instances
 			(project ""
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#FLG0101")
+					(reference "#FLG02001")
 					(unit 1)
 				)
 			)
@@ -4989,7 +4989,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1e5d11c2-a370-406a-bb46-a3a1c54b31a0")
-		(property "Reference" "#PWR0120"
+		(property "Reference" "#PWR02012"
 			(at 83.82 194.31 0)
 			(effects
 				(font
@@ -5039,7 +5039,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0120")
+					(reference "#PWR02012")
 					(unit 1)
 				)
 			)
@@ -5054,7 +5054,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "22173b11-bd54-4d63-b900-c53dc016f5ca")
-		(property "Reference" "TP106"
+		(property "Reference" "TP2009"
 			(at 79.248 134.62 90)
 			(effects
 				(font
@@ -5105,7 +5105,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "TP106")
+					(reference "TP2009")
 					(unit 1)
 				)
 			)
@@ -5121,7 +5121,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "23f3a7f1-7e34-4260-b85d-a626dfb40f03")
-		(property "Reference" "#PWR0110"
+		(property "Reference" "#PWR02015"
 			(at 113.03 102.87 0)
 			(effects
 				(font
@@ -5171,7 +5171,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0110")
+					(reference "#PWR02015")
 					(unit 1)
 				)
 			)
@@ -5187,7 +5187,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "254d8a83-a86f-40bf-8beb-6c80ea417485")
-		(property "Reference" "#PWR0118"
+		(property "Reference" "#PWR02008"
 			(at 57.15 194.31 0)
 			(effects
 				(font
@@ -5237,7 +5237,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0118")
+					(reference "#PWR02008")
 					(unit 1)
 				)
 			)
@@ -5253,7 +5253,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2b4bfe0d-f1ef-4b9a-9307-0b21caba8465")
-		(property "Reference" "#PWR0109"
+		(property "Reference" "#PWR02029"
 			(at 234.95 33.02 0)
 			(effects
 				(font
@@ -5303,7 +5303,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0109")
+					(reference "#PWR02029")
 					(unit 1)
 				)
 			)
@@ -5318,7 +5318,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2da49d2e-270f-462a-9d25-85323a99fcfa")
-		(property "Reference" "#PWR0114"
+		(property "Reference" "#PWR02002"
 			(at 35.56 26.67 0)
 			(effects
 				(font
@@ -5369,7 +5369,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0114")
+					(reference "#PWR02002")
 					(unit 1)
 				)
 			)
@@ -5384,7 +5384,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2ff3f2f0-5311-459c-bfdb-b2c82e3c7729")
-		(property "Reference" "#PWR0117"
+		(property "Reference" "#PWR02006"
 			(at 48.26 26.67 0)
 			(effects
 				(font
@@ -5435,7 +5435,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0117")
+					(reference "#PWR02006")
 					(unit 1)
 				)
 			)
@@ -5451,7 +5451,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "39186b21-f336-492f-b809-11c28ddf7e79")
-		(property "Reference" "#PWR0113"
+		(property "Reference" "#PWR02001"
 			(at 25.4 34.29 0)
 			(effects
 				(font
@@ -5501,7 +5501,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0113")
+					(reference "#PWR02001")
 					(unit 1)
 				)
 			)
@@ -5517,7 +5517,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "39ec4262-e30d-4408-bf61-3736576e30e9")
-		(property "Reference" "R30"
+		(property "Reference" "R2001"
 			(at 189.23 50.7999 0)
 			(effects
 				(font
@@ -5571,7 +5571,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "R30")
+					(reference "R2001")
 					(unit 1)
 				)
 			)
@@ -5586,7 +5586,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "40a19af7-d51a-446f-89a3-c7b6cb94f5dc")
-		(property "Reference" "JP101"
+		(property "Reference" "JP2001"
 			(at 63.5 64.516 0)
 			(effects
 				(font
@@ -5638,7 +5638,7 @@
 		(instances
 			(project ""
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "JP101")
+					(reference "JP2001")
 					(unit 1)
 				)
 			)
@@ -5653,7 +5653,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "41ff34d3-8778-4775-9909-1da59a8f89a4")
-		(property "Reference" "TP109"
+		(property "Reference" "TP2001"
 			(at 36.068 90.17 90)
 			(effects
 				(font
@@ -5704,7 +5704,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "TP109")
+					(reference "TP2001")
 					(unit 1)
 				)
 			)
@@ -5720,7 +5720,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "483a354d-a480-4467-ba1b-223c3f1315d4")
-		(property "Reference" "D102"
+		(property "Reference" "D2002"
 			(at 97.79 170.1098 0)
 			(effects
 				(font
@@ -5789,7 +5789,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "D102")
+					(reference "D2002")
 					(unit 1)
 				)
 			)
@@ -5804,7 +5804,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "4d799686-f739-4eac-bf91-255f96a2c9f8")
-		(property "Reference" "TP103"
+		(property "Reference" "TP2006"
 			(at 79.248 127 90)
 			(effects
 				(font
@@ -5855,7 +5855,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "TP103")
+					(reference "TP2006")
 					(unit 1)
 				)
 			)
@@ -5871,7 +5871,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "56b800e6-ac0f-4e10-b40a-b2830df35345")
-		(property "Reference" "R31"
+		(property "Reference" "R2002"
 			(at 196.85 50.7999 0)
 			(effects
 				(font
@@ -5925,7 +5925,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "R31")
+					(reference "R2002")
 					(unit 1)
 				)
 			)
@@ -5940,7 +5940,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5a8c55b6-b6a1-42e5-81c8-bf7394aa5c3d")
-		(property "Reference" "#PWR0101"
+		(property "Reference" "#PWR02003"
 			(at 40.64 60.96 0)
 			(effects
 				(font
@@ -5990,7 +5990,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0101")
+					(reference "#PWR02003")
 					(unit 1)
 				)
 			)
@@ -6005,7 +6005,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5c139d0e-d369-4b24-9e0e-623c741d5dc5")
-		(property "Reference" "TP102"
+		(property "Reference" "TP2005"
 			(at 79.248 124.46 90)
 			(effects
 				(font
@@ -6056,7 +6056,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "TP102")
+					(reference "TP2005")
 					(unit 1)
 				)
 			)
@@ -6072,7 +6072,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5dd6e8dc-1722-43ad-b1c7-bb374f073325")
-		(property "Reference" "TP107"
+		(property "Reference" "TP2010"
 			(at 111.252 129.54 90)
 			(effects
 				(font
@@ -6123,7 +6123,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "TP107")
+					(reference "TP2010")
 					(unit 1)
 				)
 			)
@@ -6138,7 +6138,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5fde24f3-310b-42f0-9f1f-7648a2c5e4b3")
-		(property "Reference" "TP101"
+		(property "Reference" "TP2004"
 			(at 79.248 121.92 90)
 			(effects
 				(font
@@ -6189,7 +6189,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "TP101")
+					(reference "TP2004")
 					(unit 1)
 				)
 			)
@@ -6205,7 +6205,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "62931fcd-b005-4bdc-841d-c3a369ba1dac")
-		(property "Reference" "#PWR0106"
+		(property "Reference" "#PWR02013"
 			(at 96.52 156.21 0)
 			(effects
 				(font
@@ -6255,7 +6255,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0106")
+					(reference "#PWR02013")
 					(unit 1)
 				)
 			)
@@ -6271,7 +6271,7 @@
 		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "682bdd43-57a3-4d47-a6fd-6ab46f5321fc")
-		(property "Reference" "J101"
+		(property "Reference" "J2002"
 			(at 261.62 138.43 90)
 			(effects
 				(font
@@ -6329,7 +6329,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "J101")
+					(reference "J2002")
 					(unit 1)
 				)
 			)
@@ -6345,7 +6345,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "70514bda-79c8-4996-b599-b6543d5f27fb")
-		(property "Reference" "#PWR0116"
+		(property "Reference" "#PWR02007"
 			(at 57.15 172.72 0)
 			(effects
 				(font
@@ -6395,7 +6395,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0116")
+					(reference "#PWR02007")
 					(unit 1)
 				)
 			)
@@ -6411,7 +6411,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "73376382-ec7d-418e-8887-f08782aab3e0")
-		(property "Reference" "#PWR0111"
+		(property "Reference" "#PWR02016"
 			(at 113.03 113.03 0)
 			(effects
 				(font
@@ -6461,7 +6461,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0111")
+					(reference "#PWR02016")
 					(unit 1)
 				)
 			)
@@ -6477,7 +6477,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "736160d0-2a70-4371-a6ca-7a35791df750")
-		(property "Reference" "#FLG0103"
+		(property "Reference" "#FLG02004"
 			(at 60.96 29.845 0)
 			(effects
 				(font
@@ -6527,7 +6527,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#FLG0103")
+					(reference "#FLG02004")
 					(unit 1)
 				)
 			)
@@ -6542,7 +6542,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "74928cae-69db-4d4f-9126-52dc5a27b7a6")
-		(property "Reference" "#PWR077"
+		(property "Reference" "#PWR02021"
 			(at 152.4 46.99 0)
 			(effects
 				(font
@@ -6592,7 +6592,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR077")
+					(reference "#PWR02021")
 					(unit 1)
 				)
 			)
@@ -6607,7 +6607,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7fd8a682-9636-48f7-af95-14920b9f9529")
-		(property "Reference" "#PWR0103"
+		(property "Reference" "#PWR02030"
 			(at 241.3 134.62 0)
 			(effects
 				(font
@@ -6657,7 +6657,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0103")
+					(reference "#PWR02030")
 					(unit 1)
 				)
 			)
@@ -6673,7 +6673,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "800eef42-3954-4eb6-aa2d-c47e27738e40")
-		(property "Reference" "#PWR0105"
+		(property "Reference" "#PWR02010"
 			(at 60.96 85.09 0)
 			(effects
 				(font
@@ -6723,7 +6723,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0105")
+					(reference "#PWR02010")
 					(unit 1)
 				)
 			)
@@ -6738,7 +6738,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "80ce695d-6be5-42d1-b9bc-7edaa4dde9e6")
-		(property "Reference" "TP104"
+		(property "Reference" "TP2007"
 			(at 79.248 129.54 90)
 			(effects
 				(font
@@ -6789,7 +6789,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "TP104")
+					(reference "TP2007")
 					(unit 1)
 				)
 			)
@@ -6804,7 +6804,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "86c75a6e-f4e0-46df-be91-635d77ea7e6d")
-		(property "Reference" "#PWR0104"
+		(property "Reference" "#PWR02031"
 			(at 251.46 137.16 0)
 			(effects
 				(font
@@ -6854,7 +6854,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0104")
+					(reference "#PWR02031")
 					(unit 1)
 				)
 			)
@@ -6870,7 +6870,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8845005d-3c15-49e5-ba70-441518d46461")
-		(property "Reference" "D101"
+		(property "Reference" "D2001"
 			(at 71.12 170.1098 0)
 			(effects
 				(font
@@ -6939,7 +6939,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "D101")
+					(reference "D2001")
 					(unit 1)
 				)
 			)
@@ -6954,7 +6954,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8d93a768-5e9a-499a-b247-bf1fd0a64ffe")
-		(property "Reference" "U101"
+		(property "Reference" "U2001"
 			(at 98.6633 146.05 0)
 			(effects
 				(font
@@ -7071,7 +7071,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "U101")
+					(reference "U2001")
 					(unit 1)
 				)
 			)
@@ -7087,7 +7087,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "93cc60ea-a63b-4fc7-b4fc-4e45e7ca244e")
-		(property "Reference" "#PWR0125"
+		(property "Reference" "#PWR02027"
 			(at 222.25 148.59 0)
 			(effects
 				(font
@@ -7137,7 +7137,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0125")
+					(reference "#PWR02027")
 					(unit 1)
 				)
 			)
@@ -7153,7 +7153,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "988de4dc-cca4-41d0-bd6a-6b4f74609370")
-		(property "Reference" "SW101"
+		(property "Reference" "SW2001"
 			(at 212.09 118.11 0)
 			(effects
 				(font
@@ -7214,7 +7214,7 @@
 		(instances
 			(project ""
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "SW101")
+					(reference "SW2001")
 					(unit 1)
 				)
 			)
@@ -7230,7 +7230,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "9ef5a8c9-5511-464a-9b7d-7fae9fb58806")
-		(property "Reference" "#FLG0102"
+		(property "Reference" "#FLG02002"
 			(at 35.56 29.845 0)
 			(effects
 				(font
@@ -7280,7 +7280,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#FLG0102")
+					(reference "#FLG02002")
 					(unit 1)
 				)
 			)
@@ -7296,7 +7296,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a39c5a9f-5c5f-42f8-a91b-d44e35795b0f")
-		(property "Reference" "#PWR0100"
+		(property "Reference" "#PWR02026"
 			(at 205.74 63.5 0)
 			(effects
 				(font
@@ -7346,7 +7346,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0100")
+					(reference "#PWR02026")
 					(unit 1)
 				)
 			)
@@ -7362,7 +7362,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a4ad501a-cf70-4879-980f-e2c4349f547e")
-		(property "Reference" "#PWR0123"
+		(property "Reference" "#PWR02019"
 			(at 144.78 172.72 0)
 			(effects
 				(font
@@ -7412,7 +7412,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0123")
+					(reference "#PWR02019")
 					(unit 1)
 				)
 			)
@@ -7427,7 +7427,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a4e650c8-706e-4ca7-b448-efa58225a7b2")
-		(property "Reference" "#PWR099"
+		(property "Reference" "#PWR02025"
 			(at 205.74 46.99 0)
 			(effects
 				(font
@@ -7477,7 +7477,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR099")
+					(reference "#PWR02025")
 					(unit 1)
 				)
 			)
@@ -7492,7 +7492,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a6320fc3-b926-4882-af81-8004d8869585")
-		(property "Reference" "#PWR0107"
+		(property "Reference" "#PWR02014"
 			(at 99.06 109.22 0)
 			(effects
 				(font
@@ -7542,7 +7542,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0107")
+					(reference "#PWR02014")
 					(unit 1)
 				)
 			)
@@ -7558,7 +7558,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ae2cff17-d8ef-4ccb-a9e8-1c07df84568c")
-		(property "Reference" "TP108"
+		(property "Reference" "TP2011"
 			(at 111.252 132.08 90)
 			(effects
 				(font
@@ -7609,7 +7609,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "TP108")
+					(reference "TP2011")
 					(unit 1)
 				)
 			)
@@ -7625,7 +7625,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b097f63c-a807-43c7-a08b-fc4c3e3f5a70")
-		(property "Reference" "#PWR0122"
+		(property "Reference" "#PWR02018"
 			(at 118.11 194.31 0)
 			(effects
 				(font
@@ -7675,7 +7675,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0122")
+					(reference "#PWR02018")
 					(unit 1)
 				)
 			)
@@ -7690,7 +7690,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "b0d903ba-56e7-45b7-aefb-8c4f88f3ea31")
-		(property "Reference" "TP105"
+		(property "Reference" "TP2008"
 			(at 79.248 132.08 90)
 			(effects
 				(font
@@ -7741,7 +7741,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "TP105")
+					(reference "TP2008")
 					(unit 1)
 				)
 			)
@@ -7756,7 +7756,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "b81e17be-bed4-4b3f-8573-6613b6f56621")
-		(property "Reference" "U22"
+		(property "Reference" "U2002"
 			(at 145.415 48.895 0)
 			(effects
 				(font
@@ -7801,7 +7801,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C129512"
+		(property "LCSC" "C2652413"
 			(at 152.4 55.88 0)
 			(effects
 				(font
@@ -7837,7 +7837,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "U22")
+					(reference "U2002")
 					(unit 1)
 				)
 			)
@@ -7852,7 +7852,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c3d94e46-f924-4137-ac91-958e89aaabd3")
-		(property "Reference" "TP110"
+		(property "Reference" "TP2002"
 			(at 36.068 92.71 90)
 			(effects
 				(font
@@ -7903,7 +7903,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "TP110")
+					(reference "TP2002")
 					(unit 1)
 				)
 			)
@@ -7919,7 +7919,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c4f6eea4-d8cb-48ef-b73b-f1099c327fe9")
-		(property "Reference" "#PWR0124"
+		(property "Reference" "#PWR02020"
 			(at 144.78 194.31 0)
 			(effects
 				(font
@@ -7969,7 +7969,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0124")
+					(reference "#PWR02020")
 					(unit 1)
 				)
 			)
@@ -7985,7 +7985,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c90be6a7-8a89-4161-bc2f-15c8a1e93504")
-		(property "Reference" "J102"
+		(property "Reference" "J2001"
 			(at 52.07 54.61 0)
 			(effects
 				(font
@@ -8076,7 +8076,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "J102")
+					(reference "J2001")
 					(unit 1)
 				)
 			)
@@ -8092,7 +8092,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c9965385-05ab-4ee0-9aab-468a06cb081f")
-		(property "Reference" "#PWR0119"
+		(property "Reference" "#PWR02011"
 			(at 83.82 172.72 0)
 			(effects
 				(font
@@ -8142,7 +8142,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0119")
+					(reference "#PWR02011")
 					(unit 1)
 				)
 			)
@@ -8158,7 +8158,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ceed5d6f-46ce-4afc-b5ff-9377af4b0d52")
-		(property "Reference" "#FLG0104"
+		(property "Reference" "#FLG02003"
 			(at 48.26 29.845 0)
 			(effects
 				(font
@@ -8208,7 +8208,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#FLG0104")
+					(reference "#FLG02003")
 					(unit 1)
 				)
 			)
@@ -8224,7 +8224,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "cfe72085-bafd-4fdf-8de2-97b90b39a757")
-		(property "Reference" "C101"
+		(property "Reference" "C2001"
 			(at 115.57 101.6062 0)
 			(effects
 				(font
@@ -8278,7 +8278,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "C101")
+					(reference "C2001")
 					(unit 1)
 				)
 			)
@@ -8294,7 +8294,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d2241214-1362-4640-9675-e51ab7aeb29f")
-		(property "Reference" "D103"
+		(property "Reference" "D2003"
 			(at 132.08 170.1098 0)
 			(effects
 				(font
@@ -8363,7 +8363,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "D103")
+					(reference "D2003")
 					(unit 1)
 				)
 			)
@@ -8378,7 +8378,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d839931a-c757-4e9a-95e2-a22002654517")
-		(property "Reference" "#PWR0115"
+		(property "Reference" "#PWR02024"
 			(at 186.69 46.99 0)
 			(effects
 				(font
@@ -8428,7 +8428,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0115")
+					(reference "#PWR02024")
 					(unit 1)
 				)
 			)
@@ -8443,7 +8443,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d9090eb1-5faf-400a-9f4d-6fcfaafc5599")
-		(property "Reference" "#PWR0102"
+		(property "Reference" "#PWR02004"
 			(at 40.64 63.5 0)
 			(effects
 				(font
@@ -8493,7 +8493,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0102")
+					(reference "#PWR02004")
 					(unit 1)
 				)
 			)
@@ -8509,7 +8509,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d9a03f7b-a451-4e7b-b99a-c460e974b486")
-		(property "Reference" "#PWR0121"
+		(property "Reference" "#PWR02017"
 			(at 118.11 172.72 0)
 			(effects
 				(font
@@ -8559,7 +8559,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0121")
+					(reference "#PWR02017")
 					(unit 1)
 				)
 			)
@@ -8574,7 +8574,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e5239583-ea52-46e5-b20e-5c92346ceabc")
-		(property "Reference" "#PWR0127"
+		(property "Reference" "#PWR02009"
 			(at 60.96 26.67 0)
 			(effects
 				(font
@@ -8625,7 +8625,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0127")
+					(reference "#PWR02009")
 					(unit 1)
 				)
 			)
@@ -8641,7 +8641,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e59a6bd4-6f3a-4666-8c19-c97aae26ddb9")
-		(property "Reference" "C37"
+		(property "Reference" "C2002"
 			(at 208.28 50.8062 0)
 			(effects
 				(font
@@ -8695,7 +8695,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "C37")
+					(reference "C2002")
 					(unit 1)
 				)
 			)
@@ -8711,7 +8711,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ed1a6f9f-d300-40e1-b5ac-504154e49cc5")
-		(property "Reference" "U102"
+		(property "Reference" "U2003"
 			(at 157.48 115.57 0)
 			(effects
 				(font
@@ -8791,7 +8791,7 @@
 		(instances
 			(project ""
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "U102")
+					(reference "U2003")
 					(unit 1)
 				)
 			)
@@ -8806,7 +8806,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "efd91085-1df4-4b0d-a3a2-9c3610243ea9")
-		(property "Reference" "#PWR0126"
+		(property "Reference" "#PWR02005"
 			(at 40.64 66.04 0)
 			(effects
 				(font
@@ -8856,7 +8856,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "#PWR0126")
+					(reference "#PWR02005")
 					(unit 1)
 				)
 			)
@@ -8872,7 +8872,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "fb75ca7f-269b-4ae1-942e-7d7c7a1b54a5")
-		(property "Reference" "H101"
+		(property "Reference" "H2001"
 			(at 250.1901 24.13 0)
 			(effects
 				(font
@@ -8933,7 +8933,7 @@
 		(instances
 			(project "MinyasX-frontpanel"
 				(path "/80e520bf-7441-4877-abbb-ba5bde50a5a4"
-					(reference "H101")
+					(reference "H2001")
 					(unit 1)
 				)
 			)
