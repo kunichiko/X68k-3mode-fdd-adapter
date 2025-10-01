@@ -4800,15 +4800,6 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" ""
-			(at 214.63 101.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "3"
 			(uuid "60e7e72c-020d-459c-be0e-8ace4e1b438a")
 		)
@@ -4947,15 +4938,6 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" ""
-			(at 119.38 228.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "2"
 			(uuid "ff1813ca-3e69-41e4-9576-c0942a849633")
 		)
@@ -5023,15 +5005,6 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" ""
-			(at 100.33 210.82 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "2"
 			(uuid "a6f112d2-afe8-411a-a5e7-87ad05913708")
 		)
@@ -5092,15 +5065,6 @@
 			)
 		)
 		(property "Description" "300mA 75dB@(100Hz) Fixed 5V Positive 13.2V SOT-23 Voltage Regulators - Linear, Low Drop Out (LDO) Regulators ROHS"
-			(at 170.18 203.2 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
 			(at 170.18 203.2 0)
 			(effects
 				(font
@@ -5257,15 +5221,6 @@
 			)
 		)
 		(property "LCSC" "C602037"
-			(at 226.06 109.22 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
 			(at 226.06 109.22 0)
 			(effects
 				(font
@@ -5570,15 +5525,6 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" ""
-			(at 158.75 210.82 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "1"
 			(uuid "b5fdce8f-ee01-42df-ac14-c982b21f0399")
 		)
@@ -5640,15 +5586,6 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
-			(at 168.91 157.48 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
 			(at 168.91 157.48 0)
 			(effects
 				(font
@@ -5725,7 +5662,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" ""
+		(property "LCSC" "C16214"
 			(at 142.24 53.34 0)
 			(effects
 				(font
@@ -5800,15 +5737,6 @@
 		)
 		(property "Description" "Dual P-Channel MOSFET"
 			(at 162.56 154.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
-			(at 162.56 154.94 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5903,15 +5831,6 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" ""
-			(at 250.19 106.68 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "1"
 			(uuid "92789f24-1181-4e8f-810b-1fbb4124ce4e")
 		)
@@ -5973,15 +5892,6 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
-			(at 111.76 228.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
 			(at 111.76 228.6 0)
 			(effects
 				(font
@@ -6054,15 +5964,6 @@
 		)
 		(property "Description" "Dual P-Channel MOSFET"
 			(at 176.53 104.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
-			(at 176.53 104.14 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6234,15 +6135,6 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" ""
-			(at 168.91 166.37 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "1"
 			(uuid "66893bf3-deb1-4cab-856f-4f8cf104d29c")
 		)
@@ -6370,15 +6262,6 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
-			(at 170.18 55.88 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
 			(at 170.18 55.88 0)
 			(effects
 				(font
@@ -6522,15 +6405,6 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" ""
-			(at 170.18 106.68 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "1"
 			(uuid "8bbc55ed-e5fc-49cf-af17-26737028f1a8")
 		)
@@ -6594,15 +6468,6 @@
 		)
 		(property "Description" "Dual P-Channel MOSFET"
 			(at 163.83 104.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
-			(at 163.83 104.14 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6763,15 +6628,6 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" ""
-			(at 105.41 203.2 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "1"
 			(uuid "5114ddba-fc96-4a58-8e8e-6f5091d84a40")
 		)
@@ -6833,15 +6689,6 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
-			(at 170.18 115.57 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
 			(at 170.18 115.57 0)
 			(effects
 				(font
@@ -6926,15 +6773,6 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" ""
-			(at 281.94 152.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "1"
 			(uuid "3924d0f2-215a-457b-8bf8-b2d6beb0f2dc")
 		)
@@ -7004,15 +6842,6 @@
 			)
 		)
 		(property "LCSC" "C2765186"
-			(at 78.74 218.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
 			(at 78.74 218.44 0)
 			(effects
 				(font
@@ -7129,15 +6958,6 @@
 		)
 		(property "Description" "Dual P-Channel MOSFET"
 			(at 163.83 53.34 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
-			(at 163.83 53.34 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7371,15 +7191,6 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" ""
-			(at 190.5 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "1"
 			(uuid "7a503e20-23c7-482b-80f2-81c3bbecb350")
 		)
@@ -7515,15 +7326,6 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" ""
-			(at 170.18 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "1"
 			(uuid "a5988ffa-1f5e-495b-811a-7832256bb1bd")
 		)
@@ -7589,15 +7391,6 @@
 			)
 		)
 		(property "Description" "Digital NPN Transistor, 4k7/47k, SOT-23"
-			(at 171.45 176.53 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
 			(at 171.45 176.53 0)
 			(effects
 				(font
@@ -7829,15 +7622,6 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" ""
-			(at 205.74 184.15 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "1"
 			(uuid "291b7a31-e0a8-4c57-a7c5-10913e8254a5")
 		)
@@ -7902,15 +7686,6 @@
 		)
 		(property "Description" "Dual P-Channel MOSFET"
 			(at 256.54 104.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
-			(at 256.54 104.14 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8138,15 +7913,6 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" ""
-			(at 100.33 208.28 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "2"
 			(uuid "8f9ebaf0-158d-4e06-9fab-c31d1c0756a0")
 		)
@@ -8224,15 +7990,6 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" ""
-			(at 190.5 203.2 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "1"
 			(uuid "ac8fe703-31e0-4b6a-9475-7cca6da197ad")
 		)
@@ -8297,15 +8054,6 @@
 		)
 		(property "Description" "Dual P-Channel MOSFET"
 			(at 175.26 154.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
-			(at 175.26 154.94 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8401,15 +8149,6 @@
 			)
 		)
 		(property "LCSC" "C51205"
-			(at 203.2 109.22 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
 			(at 203.2 109.22 0)
 			(effects
 				(font
@@ -8619,15 +8358,6 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" ""
-			(at 181.61 210.82 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(property "LCSC" "C19110"
 			(at 181.61 210.82 0)
 			(effects
@@ -8698,15 +8428,6 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
-			(at 250.19 115.57 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
 			(at 250.19 115.57 0)
 			(effects
 				(font
@@ -8851,15 +8572,6 @@
 				(hide yes)
 			)
 		)
-		(property "LCIC" ""
-			(at 243.84 104.14 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "7"
 			(uuid "06cdd91e-aa03-43c3-af3d-adea665e10d6")
 		)
@@ -8942,15 +8654,6 @@
 		)
 		(property "Description" "Dual P-Channel MOSFET"
 			(at 176.53 53.34 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
-			(at 176.53 53.34 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9041,15 +8744,6 @@
 			)
 		)
 		(property "Description" "Digital NPN Transistor, 4k7/47k, SOT-23"
-			(at 172.72 129.54 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
 			(at 172.72 129.54 0)
 			(effects
 				(font
