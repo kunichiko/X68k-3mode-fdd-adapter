@@ -164,12 +164,12 @@ int main() {
     // GPIOB
     // PB0 : MODE_SELECT_DOSV (出力: Low=360RPM, High=300RPM, 逆のものもあるらしい)
     // PB1 : INUSE_DOSV (出力: Low=未使用, High=使用中) tbd
-    // PB2 : DRIVE_SEL_DOSV_A (出力: Low=inactive, High=active)
-    // PB3 : DRIVE_SEL_DOSV_B (出力: Low=inactive, High=active)
-    // PB4 : MOTOR_ON_DOSV (出力: Low=モータOFF, High=モータON)
+    // PB2 : DRIVE_SEL_DOSV_A (未使用)
+    // PB3 : DRIVE_SEL_DOSV_B (未使用)
+    // PB4 : MOTOR_ON_DOSV (未使用)
     // PB5 : DIRECTION_DOSV (未使用)
     // PB6 : STEP_DOSV (未使用)
-    // PB7 : SIDE_SELECT_DOSV (出力: Low=表, High=裏)
+    // PB7 : SIDE_SELECT_DOSV (未使用)
     // PB8 : DISK_CHANGE_DOSV (入力: Low=ディスクチェンジ, Pull-Up)
     // PB9 : READ_DATA_DOSV (入力: フロッピーディスクの読み出しデータ: Pull-Up)
     // PB10: TRACK0_DOSV (入力: Low=トラック0, Pull-Up)
@@ -195,15 +195,15 @@ int main() {
     GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_FLOATING) << (4 * 2);
     // PB3: DRIVE_SELECT_DOSV_B output
     GPIOB->CFGLR &= ~(0xf << (4 * 3));
-    GPIOB->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 3);
+    GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_FLOATING) << (4 * 3);
     GPIOB->BCR = (1 << 3);
     // PB4: MOTOR_ON_DOSV output
     GPIOB->CFGLR &= ~(0xf << (4 * 4));
-    GPIOB->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 4);
+    GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_FLOATING) << (4 * 4);
     GPIOB->BCR = (1 << 4);
     // PB5: DIRECTION_DOSV (Not-Used)
     GPIOB->CFGLR &= ~(0xf << (4 * 5));
-    GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_OUT_PP) << (4 * 5);
+    GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_FLOATING) << (4 * 5);
     // GPIOB->BCR = (1 << 5);
     //  PB6: STEP_DOSV (Not-Used)
     GPIOB->CFGLR &= ~(0xf << (4 * 6));
@@ -211,7 +211,7 @@ int main() {
     //    GPIOB->BCR = (1 << 6);
     // PB7: SIDE_SELECT_DOSV output
     GPIOB->CFGLR &= ~(0xf << (4 * 7));
-    GPIOB->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 7);
+    GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_FLOATING) << (4 * 7);
     GPIOB->BCR = (1 << 7);
     // PB8: DISK_CHANGE_DOSV input
     GPIOB->CFGHR &= ~(0xf << (4 * (8 - 8)));
@@ -248,7 +248,7 @@ int main() {
     GPIOA->BSXR = (1 << (23 - 16));  // Pull-Up
 
     // GPIOC
-    // PC6 : GP_ENABLE (出力: High=Enable, Low=Disable) tbd
+    // PC6 : LOCK_REQ (出力: High=LocRequest, Low=NotRequest)
     GPIOC->CFGLR &= ~(0xf << (4 * 6));
     GPIOC->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 6);
     GPIOC->BCR = (1 << 6);  // Disable (Low)

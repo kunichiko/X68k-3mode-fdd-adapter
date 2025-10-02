@@ -19,11 +19,11 @@ void ui_page_setting_debug_enter(ui_page_context_t* pctx) {
     ui_page_type_t page = pctx->page;
     ui_cursor(page, 0, 0);
     ui_print(page, "[Debug Setting]\n");
-    ui_print(page, ">MOTOR     [----]\n");
-    ui_print(page, " GP ENABLE [----]\n");
-    ui_print(page, " FDDPW ENA [----]\n");
-    ui_print(page, " DS A      [----]\n");
-    ui_print(page, " DS B      [----]\n");
+    ui_print(page, ">MOTOR [---------]\n");
+    ui_print(page, " LOCK  [---------]\n");
+    ui_print(page, " FDDPW [---------]\n");
+    ui_print(page, " DS A  [---------]\n");
+    ui_print(page, " DS B  [---------]\n");
     ui_print(page, "\n");
     ui_print(page, " RETURN");
 }
@@ -37,25 +37,38 @@ void ui_page_setting_debug_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
     // PBN4の出力状態を読み取り、MOTORのON/OFFを表示する
     uint32_t portb = GPIOB->INDR;
     bool motor_enabled = (portb & (1 << 4));  // MOTOR_ON_DOSV is active high
-    ui_cursor(pctx->page, 12, 1);
-    ui_printf(pctx->page, "%4s", motor_enabled ? "ON  " : "OFF ");
-    // PCFDDのGP ENABLE出力 (PC6) の状態を読み取り、表示する
+    ui_cursor(pctx->page, 8, 1);
+    ui_printf(pctx->page, "%4s", motor_enabled ? "ON       " : "OFF      ");
+    // PCFDDのLOCK状態を読み取り、表示する
     uint32_t portc = GPIOC->INDR;
-    bool gp_enabled = (portc & (1 << 6));  // GP_ENABLE is active high
-    ui_cursor(pctx->page, 12, 2);
-    ui_printf(pctx->page, "%4s", gp_enabled ? "ON  " : "OFF ");
+    bool lock_req = (portc & (1 << 6));  // LOCK is active high
+    bool lock_ack = false;               // tbd
+    ui_cursor(pctx->page, 8, 2);
+    if (!lock_req && !lock_ack) {
+        // Not Request
+        ui_printf(pctx->page, "Released ");
+    } else if (lock_req && !lock_ack) {
+        // Request
+        ui_printf(pctx->page, "Request  ");
+    } else if (lock_req && lock_ack) {
+        // Acknowledge
+        ui_printf(pctx->page, "Locked   ");
+    } else {
+        // Invalid
+        ui_printf(pctx->page, "Releasing");
+    }
     // FDD Power Enableの状態を読み取り、表示する
     bool fddpw_enabled = fdd_power_is_enabled();
-    ui_cursor(pctx->page, 12, 3);
-    ui_printf(pctx->page, "%4s", fddpw_enabled ? "ON  " : "OFF ");
+    ui_cursor(pctx->page, 8, 3);
+    ui_printf(pctx->page, "%4s", fddpw_enabled ? "ON       " : "OFF      ");
     // DS A (PB2) の状態を読み取り、表示する
     bool ds_a_enabled = (portb & (1 << 2));  // FDD_DS_A is active high
-    ui_cursor(pctx->page, 12, 4);
-    ui_printf(pctx->page, "%4s", ds_a_enabled ? "ON  " : "OFF ");
+    ui_cursor(pctx->page, 8, 4);
+    ui_printf(pctx->page, "%4s", ds_a_enabled ? "ON       " : "OFF      ");
     // DS B (PB3) の状態を読み取り、表示する
     bool ds_b_enabled = (portb & (1 << 3));  // FDD_DS_B is active high
-    ui_cursor(pctx->page, 12, 5);
-    ui_printf(pctx->page, "%4s", ds_b_enabled ? "ON  " : "OFF ");
+    ui_cursor(pctx->page, 8, 5);
+    ui_printf(pctx->page, "%4s", ds_b_enabled ? "ON       " : "OFF      ");
 }
 
 //
