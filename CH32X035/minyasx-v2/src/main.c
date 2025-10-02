@@ -169,7 +169,7 @@ int main() {
     // PB4 : MOTOR_ON_DOSV (未使用)
     // PB5 : DIRECTION_DOSV (未使用)
     // PB6 : STEP_DOSV (未使用)
-    // PB7 : SIDE_SELECT_DOSV (未使用)
+    // PB7 : SIDE_SELECT_DOSV (未使用)→　この端子はLOCK_ACKに変更しました
     // PB8 : DISK_CHANGE_DOSV (入力: Low=ディスクチェンジ, Pull-Up)
     // PB9 : READ_DATA_DOSV (入力: フロッピーディスクの読み出しデータ: Pull-Up)
     // PB10: TRACK0_DOSV (入力: Low=トラック0, Pull-Up)
@@ -209,7 +209,7 @@ int main() {
     GPIOB->CFGLR &= ~(0xf << (4 * 6));
     GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_FLOATING) << (4 * 6);
     //    GPIOB->BCR = (1 << 6);
-    // PB7: SIDE_SELECT_DOSV output
+    // PB7: LOCK_ACK input
     GPIOB->CFGLR &= ~(0xf << (4 * 7));
     GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_FLOATING) << (4 * 7);
     GPIOB->BCR = (1 << 7);

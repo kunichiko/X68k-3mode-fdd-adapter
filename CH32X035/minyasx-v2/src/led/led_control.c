@@ -93,5 +93,5 @@ void WS2812_SPI_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
         phases[k] += ((((rands[k & 0xff]) + 0xf) << 2) + (((rands[k & 0xff]) + 0xf) << 1)) >> 1;
     }
 
-    // WS2812BDMAStart(NR_LEDS);
+    WS2812BDMAStart(NR_LEDS);
 }

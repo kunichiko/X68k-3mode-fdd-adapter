@@ -504,20 +504,24 @@ void step_dosv(int drive, bool direction_inward) {
     if (drive < 0 || drive > 1) {
         return;
     }
-    // GreenPAK1の Vitrual Input に以下を接続している
-    // 7 (bit0)  = STEP_DOSV (正論理)
-    // 6 (bit1)  = DIRECTION_DOSV (正論理)
-    uint8_t gp1_vin = greenpak_get_virtualinput(1 - 1);
-    gp1_vin |= (1 << 0);  // bit0 = 1 (STEP_DOSV = 1)
+    // GreenPAK4の Vitrual Input に以下を接続している
+    // 7 (bit0)  = MOTOR_ON (正論理)
+    // 6 (bit1)  = DIRECTION (正論理)
+    // 5 (bit2)  = STEP (正論理)
+    // 4 (bit3)  = SIDE_SELECT (正論理)
+    // LOCK_ACKがアサートされている間だけ上記信号は有効になるので、
+    // LOCKはすでに撮れた状態でこのメソッドを呼ぶこと
+    uint8_t gp4_vin = greenpak_get_virtualinput(4 - 1);
+    gp4_vin |= (1 << 2);  // bit2 = 1 (STEP = 1)
     if (direction_inward) {
-        gp1_vin |= (1 << 1);  // bit1 = 1 (DIRECTION_DOSV = 1, 内周方向)
+        gp4_vin |= (1 << 1);  // bit1 = 1 (DIRECTION = 1, 内周方向)
     } else {
-        gp1_vin &= ~(1 << 1);  // bit1 = 0 (DIRECTION_DOSV = 0, 外周方向)
+        gp4_vin &= ~(1 << 1);  // bit1 = 0 (DIRECTION = 0, 外周方向)
     }
-    greenpak_set_virtualinput(1 - 1, gp1_vin);
+    greenpak_set_virtualinput(4 - 1, gp4_vin);
     Delay_Ms(1);
-    gp1_vin &= ~(1 << 0);  // bit0 = 0 (STEP_DOSV = 0)
-    greenpak_set_virtualinput(1 - 1, gp1_vin);
+    gp4_vin &= ~(1 << 2);  // bit2 = 0 (STEP = 0)
+    greenpak_set_virtualinput(4 - 1, gp4_vin);
     Delay_Ms(3);
 }
 
@@ -574,6 +578,19 @@ bool last_index_state = false;
 static void process_initializing(minyasx_context_t* ctx, int drive) {
     if (ctx->drive[drive].state != DRIVE_STATE_INITIALIZING) return;
 
+    // 1. LOCK_REQをアサートして、LOCK_ACKがアサートされるまで待つ
+    GPIOC->BSHR = GPIO_Pin_6;  // LOCK_REQ active (High=アクセス禁止)
+    uint32_t systick_start = SysTick->CNTL;
+    while ((GPIOB->INDR & GPIO_Pin_7) == 0) {
+        // LOCK_ACKがアサートされるまで待つ
+        // (100msec以上待っても来ない場合は、一旦リターンし次回の呼び出しで再度試みる)
+        if ((SysTick->CNTL - systick_start) > (100 * 1000 * 48)) {
+            // 100msec以上待ってもLOCK_ACKが来らない場合は、一旦リターンする
+            GPIOC->BCR = GPIO_Pin_6;  // LOCK_REQ inactive
+            return;
+        }
+    }
+
     // シークしてトラック0に戻す
     if (seek_to_track0(drive)) {
         ctx->drive[drive].state = DRIVE_STATE_MEDIA_DETECTING;
@@ -585,6 +602,9 @@ static void process_initializing(minyasx_context_t* ctx, int drive) {
         ctx->drive[drive].rpm_measured = FDD_RPM_UNKNOWN;
         ctx->drive[drive].bps_measured = BPS_UNKNOWN;
     }
+
+    // ロックを解除する
+    GPIOC->BCR = GPIO_Pin_6;  // LOCK_REQ inactive
 }
 
 static void process_media_detecting(minyasx_context_t* ctx, int drive) {
@@ -592,43 +612,27 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
 
     drive_status_t* d = &ctx->drive[drive];
 
-    // なにはともあれ、READY_MCUや DISK_INを無効化して、アクセスを止める
-    // そうすると、X68000側にはINDEXやREAD_DATAが届かなくなるので、
-    // PCFDD側のDrive Selectをアクティブにしても問題なくなる
-    // GP3の DISK_IN_A_n (Virtual Input 2=bit5)
-    // GP3の DISK_IN_B_n (Virtual Input 3=bit4)
+    // なにはともあれ、LOCK_REQ (PC6)をアサートしてアクセスを止める
+    // LOCK_REQをアサートすると、GP1は DRIVE_SELECT_A/Bが両方ともアクティブじゃないタイミングで
+    // LOCK_ACK (PB7)をアサートする
+    // LOCK_ACKがアサートされている間は、READY以外の信号がX68000側に届かなくなる
+    // そうすると、X68000側にはINDEXが届かなくなるので、X68000のFDCはINDEXを待ち続けるため、
+    // その隙に　PCFDD側のDrive Selectをアクティブにしても問題なくなる
 
-    // READY_MCUをInactiveにする
-    GPIOB->BSHR = (drive == 0) ? GPIO_Pin_12 : GPIO_Pin_13;  // READY_MCU_A_n / READY_MCU_B_n (High=準備完了でない)
-    // GP2,GP3の DISK_IN_x_n をDisableにする
-    uint8_t gp2_vin = greenpak_get_virtualinput(2 - 1);
-    gp2_vin |= (1 << (5 - drive));  // bit4/5を1にして、DISK_IN_x_nをDisableにする
-    greenpak_set_virtualinput(2 - 1, gp2_vin);
-    uint8_t gp3_vin = greenpak_get_virtualinput(3 - 1);
-    gp3_vin |= (1 << (5 - drive));  // bit4/5を1にして、DISK_IN_x_nをDisableにする
-    greenpak_set_virtualinput(3 - 1, gp3_vin);
-
-    // 割り込みを禁止して、Drive Selectがアクティブな状態で確認する
+    // 1. LOCK_REQをアサートして、LOCK_ACKがアサートされるまで待つ
+    GPIOC->BSHR = GPIO_Pin_6;  // LOCK_REQ active (High=アクセス禁止)
     uint32_t systick_start = SysTick->CNTL;
-    while (1) {
+    while ((GPIOB->INDR & GPIO_Pin_7) == 0) {
+        // LOCK_ACKがアサートされるまで待つ
+        // (100msec以上待っても来ない場合は、一旦リターンし次回の呼び出しで再度試みる)
         if ((SysTick->CNTL - systick_start) > (100 * 1000 * 48)) {
-            // 100msec以上待ってもDS0/DS1が解除されない場合は、一旦イジェクト状態で確定してしまう
-            d->state = DRIVE_STATE_NO_MEDIA;
-            d->rpm_measured = FDD_RPM_UNKNOWN;
-            d->bps_measured = BPS_UNKNOWN;
-            __enable_irq();
+            // 100msec以上待ってもLOCK_ACKが来らない場合は、一旦リターンする
+            GPIOC->BCR = GPIO_Pin_6;  // LOCK_REQ inactive
             return;
         }
-        __disable_irq();
-        uint32_t gpiob = GPIOB->INDR;
-        if ((gpiob & 0xc) == 0) {
-            break;
-        }
-        // DS0/DS1のいずれかがアクティブな状態
-        __enable_irq();
-        Delay_Ms(10);  // 少し待つ
     }
-    // ここには割り込み禁止状態かつ、DS0/DS1のいずれもアクティブでない状態で来る
+
+    // TODO: ここでDRIVE_SELECT_A/Bが両方ともアクティブでないことを確認する
 
     // 2. TRACK00にシークする
     // これをするとPC FDDの DISK_CHANGEもクリアされる
@@ -675,6 +679,7 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
         d->state = DRIVE_STATE_READY;
         d->rpm_measured = FDD_RPM_UNKNOWN;
         d->bps_measured = BPS_UNKNOWN;
+        uint8_t gp3_vin = greenpak_get_virtualinput(3 - 1);
         gp3_vin &= ~(1 << (5 - drive));  // bit4/5を0にして、DISK_IN_x_nをEnableにする
         greenpak_set_virtualinput(3 - 1, gp3_vin);
     }
@@ -684,8 +689,9 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
     //    GPIOB->BCR = (1 << (2 + drive));  // Drive Select A/B inactive
     drive_select(drive, false);
 
-    // 6. 割り込みを有効に戻す
-    __enable_irq();
+    // 6. ロックを解除する
+    GPIOC->BCR = GPIO_Pin_6;  // LOCK_REQ inactive
+
     return;
 }
 

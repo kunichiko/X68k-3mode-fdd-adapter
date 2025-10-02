@@ -185,9 +185,63 @@ bool fdd_power_is_enabled(void) {
 }
 
 static bool is_x68k_pwr_on = false;
+static const bool force_x68k_pwr_on = true;  // trueにすると、X68Kの電源ONを強制的に検出したことにする
 static uint32_t last_indexlow_ms = 0;
 
 const int GP_UNIT = 2;  // GreenPAK3を使う
+
+/**
+ * @brief X68Kの電源がONになったことを検出したかどうか
+ * ● OFF状態から、ONになったことの検出方法
+ * INDEX信号がX68000側でプルアップされることを利用し、
+ *  GreenPAKの INDEX_OUTの端子の状態をチェックすることで電源ONになったと判定する。
+ *  INDEX_OUT端子の入力は、GreenPAK2の Matrix Input 11 (IO12 Digital Input) に接続されている。
+ */
+static bool detect_x68k_power_on(uint32_t systick_ms) {
+    if (force_x68k_pwr_on) {
+        return true;
+    }
+    bool index_state = greenpak_get_matrixinput(GP_UNIT, 11);
+    // indexがHighならON状態になったと判断する
+    return index_state;
+}
+
+static bool detect_x68k_power_off(uint32_t systick_ms) {
+    if (force_x68k_pwr_on) {
+        return false;
+    }
+    if (last_indexlow_ms != 0) {
+        if (systick_ms < last_indexlow_ms + 500) {
+            return false;  // 500msec待つ
+        }
+        // 500msec経過したので、D-FFの状態をチェックする
+        bool dffq = greenpak_get_matrixinput(GP_UNIT, 46) ? 0x01 : 0x00;
+        if (dffq) {
+            // D-FFがセットされたままなのでON状態が継続していると判断する
+            last_indexlow_ms = 0;
+            return false;
+        }
+        // D-FFがクリアされたままなのでOFF状態になったと判断する
+        return true;
+    }
+    // まずは、D-FFをクリアするために D-FFの nRESET につながっている Virtual Input7 (Bit0) を 1→0→1 にする
+    uint8_t vin = greenpak_get_virtualinput(GP_UNIT);
+    uint8_t vin0 = vin & ~(1 << 0);
+    uint8_t vin1 = vin0 | (1 << 0);
+    greenpak_set_virtualinput(GP_UNIT, vin1);
+    greenpak_set_virtualinput(GP_UNIT, vin0);
+    greenpak_set_virtualinput(GP_UNIT, vin1);
+    // Matrix Input 11 (IO12 Digital Input) をチェックする
+    bool index_state = greenpak_get_matrixinput(GP_UNIT, 11);
+    if (index_state) {
+        // HighなのでON状態が継続していると判断し判定終了
+        last_indexlow_ms = 0;
+        return false;
+    }
+    // LowなのでOFF状態になった可能性があるので、500msec後にD-FFの状態をチェックする
+    last_indexlow_ms = systick_ms;
+    return false;
+}
 
 void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     static uint32_t last_systick_ms = 0;
@@ -197,10 +251,6 @@ void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     last_systick_ms = systick_ms;
 
     // X68Kの電源が入っているかどうかをチェックする
-    // ● OFF状態から、ONになったことの検出方法
-    // INDEX信号がX68000側でプルアップされることを利用し、
-    // GreenPAKの INDEX_OUTの端子の状態をチェックすることで電源ONになったと判定する。
-    // INDEX_OUT端子の入力は、GreenPAK2の Matrix Input 11 (IO12 Digital Input) に接続されている。
     // ● ON状態から、OFFになったことの検出方法
     // たまたまINDEX信号がLowになっただけの可能性もあるので、以下の方法を用いる。
     // * まず、I2C経由で、GreenPAKのVirtual Input Registerをセットして内部のD-FFをクリアしておく
@@ -209,49 +259,23 @@ void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     // * D-FF (7) の出力は Matrix Input 46に接続されている
 
     ui_cursor(UI_PAGE_DEBUG, 0, 0);
-    if (last_indexlow_ms != 0) {
-        if (systick_ms < last_indexlow_ms + 500) {
-            return;  // 500msec待つ
-        }
-        // 500msec経過したので、D-FFの状態をチェックする
-        bool dffq = greenpak_get_matrixinput(GP_UNIT, 46) ? 0x01 : 0x00;
-        if (dffq) {
-            // D-FFがセットされたままなのでON状態が継続していると判断する
-            last_indexlow_ms = 0;
-            return;
-        }
-        // D-FFがクリアされたままなのでOFF状態になったと判断する
-        is_x68k_pwr_on = false;
-        ctx->power_on = false;  // 起動ステータスを保存しておく
-        ui_print(UI_PAGE_DEBUG, "X68K PWR OFF\n");
-        last_indexlow_ms = 0;
-        enable_fdd_power(ctx, false);  // FDDの電源をOFFにする
-        // TODO 本来このタイミングではないが、ここでLOCK_REQUESTをかけておく
-        GPIOC->BSHR = (1 << 6);  // LOCK_REQUEST = ON
-        return;
-    } else if (is_x68k_pwr_on) {
+    if (is_x68k_pwr_on) {
         // ON状態の時は、OFF状態になったかどうかをチェックする
-        // まずは、D-FFをクリアするために D-FFの nRESET につながっている Virtual Input7 (Bit0) を 1→0→1 にする
-        uint8_t vin = greenpak_get_virtualinput(GP_UNIT);
-        uint8_t vin0 = vin & ~(1 << 0);
-        uint8_t vin1 = vin0 | (1 << 0);
-        greenpak_set_virtualinput(GP_UNIT, vin1);
-        greenpak_set_virtualinput(GP_UNIT, vin0);
-        greenpak_set_virtualinput(GP_UNIT, vin1);
-        // Matrix Input 11 (IO12 Digital Input) をチェックする
-        bool index_state = greenpak_get_matrixinput(GP_UNIT, 11);
-        if (index_state) {
-            // HighなのでON状態が継続していると判断し判定終了
+        if (detect_x68k_power_off(systick_ms)) {
+            // OFF状態になったことを検出した
+            is_x68k_pwr_on = false;
+            ctx->power_on = false;  // 起動ステータスを保存しておく
+            ui_print(UI_PAGE_DEBUG, "X68K PWR OFF\n");
             last_indexlow_ms = 0;
+            enable_fdd_power(ctx, false);  // FDDの電源をOFFにする
+            // TODO 本来このタイミングではないが、ここでLOCK_REQUESTをかけておく
+            GPIOC->BSHR = (1 << 6);  // LOCK_REQUEST = ON
             return;
         }
-        last_indexlow_ms = systick_ms;
     }
     if (!is_x68k_pwr_on) {
         // OFF状態の時は、ON状態になったかどうかをチェックする
-        bool index_state = greenpak_get_matrixinput(GP_UNIT, 11);
-        if (index_state) {
-            // HighなのでON状態になったと判断する
+        if (detect_x68k_power_on(systick_ms)) {
             is_x68k_pwr_on = true;
             ctx->power_on = true;  // 起動ステータスを保存しておく
             ui_print(UI_PAGE_DEBUG, "X68K PWR ON \n");
