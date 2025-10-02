@@ -6928,6 +6928,236 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "GP駆動に変更"
+		(exclude_from_sim no)
+		(at 308.356 194.056 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "01ebc6bf-b82c-43c6-ab18-441449fe51e4")
+	)
+	(text "GP3"
+		(exclude_from_sim no)
+		(at 112.268 229.108 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+				(thickness 0.508)
+				(bold yes)
+			)
+		)
+		(uuid "1070ab51-cd24-422b-8d26-630bab812b76")
+	)
+	(text "未使用"
+		(exclude_from_sim no)
+		(at 275.336 211.074 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "11b6bb80-fa89-4604-8519-b90358de642f")
+	)
+	(text "GP1"
+		(exclude_from_sim no)
+		(at 113.538 114.046 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+				(thickness 0.508)
+				(bold yes)
+			)
+		)
+		(uuid "1b723e8d-741f-4cd7-b7e3-1b311933ef1a")
+	)
+	(text "GP駆動に変更"
+		(exclude_from_sim no)
+		(at 308.356 168.91 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "28248b98-2275-4865-9f70-383163ca3e74")
+	)
+	(text "GP駆動に変更"
+		(exclude_from_sim no)
+		(at 308.356 155.702 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "51a9568c-e736-4b23-b3d5-1a770931654b")
+	)
+	(text "未使用"
+		(exclude_from_sim no)
+		(at 275.082 205.994 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "6eaca6df-2461-4e2a-ba74-8ed064f104c9")
+	)
+	(text "新規"
+		(exclude_from_sim no)
+		(at 280.924 225.298 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "6fd18e68-35ff-4a47-a6b6-4481af632e1e")
+	)
+	(text "V2.0.1基板にパッチを当てた状態を回路図に起こした物"
+		(exclude_from_sim no)
+		(at 101.092 5.842 0)
+		(effects
+			(font
+				(size 5.08 5.08)
+				(thickness 1.524)
+				(bold yes)
+			)
+		)
+		(uuid "71cc9335-d849-4313-83ab-f9cee07d86f9")
+	)
+	(text "GP4"
+		(exclude_from_sim no)
+		(at 113.03 304.546 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+				(thickness 0.508)
+				(bold yes)
+			)
+		)
+		(uuid "87ee3f35-4013-4229-bd6b-bedebdf2e20a")
+	)
+	(text "未使用"
+		(exclude_from_sim no)
+		(at 282.702 213.614 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "91bc8cc2-c923-4bc5-a4c7-0f5de67af78a")
+	)
+	(text "GP駆動に変更"
+		(exclude_from_sim no)
+		(at 308.102 181.102 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "932b0768-2b40-4a55-8501-b2af85a670e6")
+	)
+	(text "外付けの万能基板上に実装"
+		(exclude_from_sim no)
+		(at 123.952 292.862 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "a920f483-6f1d-4806-991c-97ec8a0b6665")
+	)
+	(text "未使用"
+		(exclude_from_sim no)
+		(at 280.416 201.168 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "b2594691-271d-458d-9a91-5e8522d90588")
+	)
+	(text "未使用"
+		(exclude_from_sim no)
+		(at 280.416 208.788 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "bb2b2d46-2b46-458e-a6ee-27e6586cd32d")
+	)
+	(text "V2.1基板とはDATA/GATE端子が逆\nGPが直接ドライブするので論理が逆"
+		(exclude_from_sim no)
+		(at 166.624 249.174 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "c5408b85-fb4d-4d2a-b8e1-41fc9cb8311b")
+	)
+	(text "V2.1基板とはREQ/ACK端子が逆"
+		(exclude_from_sim no)
+		(at 180.848 121.158 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "c87f11f1-0a15-4d83-8d00-508ca1aaa833")
+	)
+	(text "未使用"
+		(exclude_from_sim no)
+		(at 280.416 203.708 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "cefed749-3e5d-4e76-afea-beb931d37cd9")
+	)
+	(text "GP駆動に変更"
+		(exclude_from_sim no)
+		(at 308.356 206.756 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "de5e315d-dfd9-476d-b0a9-f889744d4e20")
+	)
+	(text "GP駆動に変更"
+		(exclude_from_sim no)
+		(at 307.848 218.694 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "e22d32ff-84a8-4ab5-a17b-0b407a8e70a8")
+	)
+	(text "37にあったGP_ENABLEを廃止し移動"
+		(exclude_from_sim no)
+		(at 286.004 236.728 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "e738abd2-156e-4575-a981-2df249181bca")
+	)
+	(text "GP2"
+		(exclude_from_sim no)
+		(at 113.03 171.45 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+				(thickness 0.508)
+				(bold yes)
+			)
+		)
+		(uuid "f23ea522-e669-42c3-9f16-7591b5c54d2b")
+	)
 	(junction
 		(at 389.89 43.18)
 		(diameter 0)
@@ -6975,6 +7205,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "0c95200e-ade4-4533-bf1e-6cd024775495")
+	)
+	(junction
+		(at 153.67 125.73)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "1708a2f0-c26d-45a3-9d4e-2a968b4ce21a")
 	)
 	(junction
 		(at 358.14 199.39)
@@ -8046,6 +8282,26 @@
 	)
 	(wire
 		(pts
+			(xy 134.62 328.93) (xy 154.94 328.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "22027b8a-2b4d-462c-9897-fd48a1136628")
+	)
+	(wire
+		(pts
+			(xy 134.62 336.55) (xy 135.89 336.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "22135cf2-0957-49b2-90d6-86efc32268ee")
+	)
+	(wire
+		(pts
 			(xy 358.14 167.64) (xy 365.76 167.64)
 		)
 		(stroke
@@ -8073,16 +8329,6 @@
 			(type default)
 		)
 		(uuid "26268b9a-b832-4f1d-a148-4bd86085c747")
-	)
-	(wire
-		(pts
-			(xy 134.62 133.35) (xy 167.64 133.35)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "27190d5b-79a1-4d3b-afe8-a06fa87e0cf6")
 	)
 	(wire
 		(pts
@@ -8283,6 +8529,16 @@
 			(type default)
 		)
 		(uuid "30e4251a-38a7-4968-8b66-5d9ad35a2840")
+	)
+	(wire
+		(pts
+			(xy 165.1 125.73) (xy 153.67 125.73)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "31d88363-c770-4417-846d-2715dd28bb9a")
 	)
 	(wire
 		(pts
@@ -8576,6 +8832,16 @@
 	)
 	(wire
 		(pts
+			(xy 134.62 326.39) (xy 152.4 326.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "449dd924-9181-4db4-8d3d-84cd30c8295b")
+	)
+	(wire
+		(pts
 			(xy 40.64 226.06) (xy 35.56 226.06)
 		)
 		(stroke
@@ -8806,6 +9072,16 @@
 	)
 	(wire
 		(pts
+			(xy 140.97 336.55) (xy 149.86 336.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "56399729-e6f7-44e8-8abb-90b1368e1891")
+	)
+	(wire
+		(pts
 			(xy 358.14 144.78) (xy 365.76 144.78)
 		)
 		(stroke
@@ -8956,7 +9232,7 @@
 	)
 	(wire
 		(pts
-			(xy 134.62 138.43) (xy 190.5 138.43)
+			(xy 134.62 138.43) (xy 172.72 138.43)
 		)
 		(stroke
 			(width 0)
@@ -8983,6 +9259,16 @@
 			(type default)
 		)
 		(uuid "6179d81a-2a10-4b53-88e9-dfd473ee212c")
+	)
+	(wire
+		(pts
+			(xy 88.9 328.93) (xy 114.3 328.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "61b513ef-99e1-4765-bc54-95ac00900b16")
 	)
 	(wire
 		(pts
@@ -9306,16 +9592,6 @@
 	)
 	(wire
 		(pts
-			(xy 256.54 212.09) (xy 278.13 212.09)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "74582fa1-9b39-4dcf-bcb6-2051e7f0a98d")
-	)
-	(wire
-		(pts
 			(xy 374.65 24.13) (xy 374.65 26.67)
 		)
 		(stroke
@@ -9343,6 +9619,16 @@
 			(type default)
 		)
 		(uuid "74f30c40-a9b0-4a45-a4fa-099990198c90")
+	)
+	(wire
+		(pts
+			(xy 86.36 331.47) (xy 114.3 331.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "75824ead-ca68-4877-bc89-d550d34eb689")
 	)
 	(wire
 		(pts
@@ -9676,6 +9962,16 @@
 	)
 	(wire
 		(pts
+			(xy 91.44 326.39) (xy 114.3 326.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8c4ea33c-1428-402f-9258-491603b8c38c")
+	)
+	(wire
+		(pts
 			(xy 358.14 194.31) (xy 358.14 196.85)
 		)
 		(stroke
@@ -9803,16 +10099,6 @@
 			(type default)
 		)
 		(uuid "940cd7b8-77c5-406a-b37b-d1f56d30dc22")
-	)
-	(wire
-		(pts
-			(xy 256.54 237.49) (xy 278.13 237.49)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9549a077-0c03-43c1-b27e-d63e32fe710e")
 	)
 	(wire
 		(pts
@@ -10276,6 +10562,16 @@
 	)
 	(wire
 		(pts
+			(xy 153.67 125.73) (xy 134.62 125.73)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aedf6c9f-5af7-4432-8427-035dfe4a70d7")
+	)
+	(wire
+		(pts
 			(xy 140.97 52.07) (xy 161.29 52.07)
 		)
 		(stroke
@@ -10453,6 +10749,16 @@
 			(type default)
 		)
 		(uuid "bd3873df-799a-427d-814f-453f374fd128")
+	)
+	(wire
+		(pts
+			(xy 134.62 334.01) (xy 149.86 334.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "be679713-775c-4d64-ad48-e2ccc5719c2c")
 	)
 	(wire
 		(pts
@@ -10726,16 +11032,6 @@
 	)
 	(wire
 		(pts
-			(xy 134.62 135.89) (xy 179.07 135.89)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d0db1ef2-7768-4391-bc22-815311b9be5a")
-	)
-	(wire
-		(pts
 			(xy 52.07 213.36) (xy 52.07 215.9)
 		)
 		(stroke
@@ -10843,16 +11139,6 @@
 			(type default)
 		)
 		(uuid "d5b57d99-bb36-4ada-8f3a-b78661e53de0")
-	)
-	(wire
-		(pts
-			(xy 256.54 226.06) (xy 278.13 226.06)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d60ead9e-7797-4302-9e17-8448baa3aadc")
 	)
 	(wire
 		(pts
@@ -11053,16 +11339,6 @@
 			(type default)
 		)
 		(uuid "e0ae65e6-93f0-4fe7-ae52-254d775ec93e")
-	)
-	(wire
-		(pts
-			(xy 134.62 125.73) (xy 153.67 125.73)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e12b1e2b-82f6-4a7b-afd6-37e9fdc41a95")
 	)
 	(wire
 		(pts
@@ -11514,7 +11790,7 @@
 		)
 		(uuid "00af1df2-3bf3-48d5-bab8-f4f56dc71cdb")
 	)
-	(label "MOTOR_ON_DOSV_MCU"
+	(label "MOTOR_ON_MCU"
 		(at 256.54 207.01 0)
 		(effects
 			(font
@@ -11544,7 +11820,7 @@
 		)
 		(uuid "0746653e-4ddf-4b2b-a5f5-de295c551a66")
 	)
-	(label "DRIVE_SELECT_DOSV_A_MCU"
+	(label "DRIVE_SELECT_A_MCU"
 		(at 256.54 201.93 0)
 		(effects
 			(font
@@ -11784,6 +12060,16 @@
 		)
 		(uuid "26b4421a-d55a-4163-b6d4-e050c781a199")
 	)
+	(label "I2C_SDA"
+		(at 149.86 336.55 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "27a1139d-6970-479f-be5e-2bd9b7100b8d")
+	)
 	(label "I2C_SCL"
 		(at 152.4 200.66 180)
 		(effects
@@ -11844,7 +12130,7 @@
 		)
 		(uuid "2b402ccf-4f82-4e93-8b85-8c58b7df3435")
 	)
-	(label "GP_ENABLE"
+	(label "LOCK_ACK_GP"
 		(at 134.62 237.49 0)
 		(effects
 			(font
@@ -11964,7 +12250,7 @@
 		)
 		(uuid "33d47cf1-7de7-4cf5-947a-2e4a6d1c14c8")
 	)
-	(label "DRIVE_SELECT_DOSV_A_MCU"
+	(label "DRIVE_SELECT_A_GP_ALT"
 		(at 316.23 158.75 180)
 		(effects
 			(font
@@ -12064,6 +12350,16 @@
 		)
 		(uuid "454ef0b6-ee98-49e5-a273-d03d12f1d26d")
 	)
+	(label "DRIVE_SELECT_B_GP_ALT"
+		(at 114.3 135.89 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "46531f89-0103-49f1-a8b9-7dc893cb0ca6")
+	)
 	(label "TRACK_00"
 		(at 114.3 237.49 180)
 		(effects
@@ -12074,7 +12370,7 @@
 		)
 		(uuid "492cf55e-c4bf-4151-91e0-24fa655f26e0")
 	)
-	(label "SIDE_SELECT_DOSV_MCU"
+	(label "SIDE_SELECT_GP"
 		(at 316.23 222.25 180)
 		(effects
 			(font
@@ -12094,7 +12390,7 @@
 		)
 		(uuid "4aae9cf9-bc4e-4c15-8b83-ff119736e0ac")
 	)
-	(label "MODE_SELECT_DOSV_MCU"
+	(label "MODE_SELECT_MCU"
 		(at 316.23 133.35 180)
 		(effects
 			(font
@@ -12154,7 +12450,7 @@
 		)
 		(uuid "51223e40-a7ba-456f-97e7-e5a3555d39bc")
 	)
-	(label "MOTOR_ON_DOSV_MCU"
+	(label "MOTOR_ON_GP"
 		(at 316.23 184.15 180)
 		(effects
 			(font
@@ -12164,7 +12460,7 @@
 		)
 		(uuid "536db9da-1a2c-4cb4-a045-886ccd1bca6f")
 	)
-	(label "DRIVE_SELECT_B"
+	(label "DRIVE_SELECT_B_GP"
 		(at 134.62 135.89 0)
 		(effects
 			(font
@@ -12214,7 +12510,7 @@
 		)
 		(uuid "59bd73fd-4196-4106-8923-dc10f3b7c64f")
 	)
-	(label "IN_USE_DOSV_MCU"
+	(label "IN_USE_MCU"
 		(at 316.23 146.05 180)
 		(effects
 			(font
@@ -12334,6 +12630,16 @@
 		)
 		(uuid "647d6bbb-dddc-4319-a416-b63152cdeb2e")
 	)
+	(label "STEP"
+		(at 114.3 318.77 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "64a52e33-2f31-4a6c-b3f9-aadb6f38f951")
+	)
 	(label "BUZZER"
 		(at 226.06 214.63 180)
 		(effects
@@ -12383,6 +12689,16 @@
 			(justify left bottom)
 		)
 		(uuid "6d55cbeb-cb84-43ce-92d4-897f9afe2dec")
+	)
+	(label "MOTOR_ON_GP"
+		(at 134.62 316.23 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6e03b9e4-ccab-4744-93c4-ad9523fe9eb0")
 	)
 	(label "STEP"
 		(at 57.15 160.02 0)
@@ -12564,7 +12880,7 @@
 		)
 		(uuid "7fae4d05-8159-475e-b2f6-216b7dc8810d")
 	)
-	(label "MODE_SELECT_DOSV_MCU"
+	(label "MODE_SELECT_MCU"
 		(at 256.54 196.85 0)
 		(effects
 			(font
@@ -12583,16 +12899,6 @@
 			(justify right bottom)
 		)
 		(uuid "7fc8d691-6dc6-4ade-adb0-d33e8e07772c")
-	)
-	(label "STEP_DOSV_MCU"
-		(at 134.62 125.73 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "823e7197-9bc8-43ad-b7b0-1e65c55279ec")
 	)
 	(label "WRITE_GATE"
 		(at 114.3 247.65 180)
@@ -12624,7 +12930,7 @@
 		)
 		(uuid "853b914a-4bab-4dfb-8b0d-ea58bb8b67f1")
 	)
-	(label "DRIVE_SELECT_A"
+	(label "DRIVE_SELECT_A_GP"
 		(at 134.62 133.35 0)
 		(effects
 			(font
@@ -12644,7 +12950,7 @@
 		)
 		(uuid "88b14252-50cb-403c-9fb2-9385e101797d")
 	)
-	(label "DRIVE_SELECT_DOSV_B_MCU"
+	(label "DRIVE_SELECT_B_MCU"
 		(at 256.54 204.47 0)
 		(effects
 			(font
@@ -12663,6 +12969,16 @@
 			(justify left bottom)
 		)
 		(uuid "895bf617-0323-4ab6-b7b0-bbc2ff75a7ea")
+	)
+	(label "LOCK_ACK_GP"
+		(at 134.62 313.69 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "8a8b40a4-cead-4527-958d-de5d7a28513b")
 	)
 	(label "OPTION_SELECT_1"
 		(at 44.45 139.7 180)
@@ -12774,7 +13090,7 @@
 		)
 		(uuid "957160f4-c045-45bc-a381-2ddd83a6169e")
 	)
-	(label "DIRECTION_DOSV_MCU"
+	(label "DIRECTION_GP"
 		(at 316.23 196.85 180)
 		(effects
 			(font
@@ -12783,6 +13099,26 @@
 			(justify right bottom)
 		)
 		(uuid "96ef9c6f-4c2f-4525-8beb-34bff06b0b72")
+	)
+	(label "DIRECTION_GP"
+		(at 134.62 318.77 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "97485641-e60f-4fb3-9397-f37eea34ad73")
+	)
+	(label "I2C_SCL"
+		(at 149.86 334.01 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "98345837-41d9-462b-b74c-6a9b9b84e0c6")
 	)
 	(label "WRITE_PROTECT"
 		(at 57.15 170.18 0)
@@ -12803,6 +13139,36 @@
 			(justify right bottom)
 		)
 		(uuid "9b2e084c-abd1-4fda-94c7-b01273aa40f7")
+	)
+	(label "LOCK_ACK_GP_ALT"
+		(at 114.3 140.97 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "9cfe012d-6c9a-4e98-84b3-c3e454ed2fd3")
+	)
+	(label "MOTOR_ON"
+		(at 114.3 313.69 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "a1c4cb54-e0ae-43e5-8e88-6e2b09a84faa")
+	)
+	(label "DRIVE_SELECT_A_GP_ALT"
+		(at 114.3 328.93 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "a229691f-32d9-484b-b18b-5267140285ff")
 	)
 	(label "IN_USE_DOSV"
 		(at 331.47 146.05 0)
@@ -12844,7 +13210,7 @@
 		)
 		(uuid "a7b5b8ef-210b-448c-9376-a728e677c153")
 	)
-	(label "GP_ENABLE"
+	(label "LOCK_REQ_MCU"
 		(at 256.54 237.49 0)
 		(effects
 			(font
@@ -12854,7 +13220,7 @@
 		)
 		(uuid "a935b8e8-e378-49e8-9155-1ffbc4333219")
 	)
-	(label "DRIVE_SELECT_A"
+	(label "DRIVE_SELECT_A_GP_ALT"
 		(at 114.3 252.73 180)
 		(effects
 			(font
@@ -13164,7 +13530,7 @@
 		)
 		(uuid "c4f62f83-3596-45e1-ba41-41395319765a")
 	)
-	(label "STEP_DOSV_MCU"
+	(label "STEP_GP"
 		(at 316.23 209.55 180)
 		(effects
 			(font
@@ -13214,6 +13580,16 @@
 		)
 		(uuid "cb2394c0-68c8-4c0a-b0f3-fc40ff0231b1")
 	)
+	(label "LOCK_ACK_GP"
+		(at 134.62 123.19 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ccca3e6e-c49f-4d3a-b889-88f3a0ab5fa9")
+	)
 	(label "INDEX_DOSV"
 		(at 378.46 134.62 0)
 		(effects
@@ -13223,6 +13599,16 @@
 			(justify left bottom)
 		)
 		(uuid "cdb76e57-5a46-4ea8-87d2-75b261e95571")
+	)
+	(label "STEP_DOSV_MCU"
+		(at 256.54 212.09 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "cdd9c044-64b3-4169-9e70-308a327d79f1")
 	)
 	(label "I2C_SDA"
 		(at 143.51 146.05 180)
@@ -13244,6 +13630,16 @@
 		)
 		(uuid "cfc9020f-11c1-4b85-be70-6e54a2640ec7")
 	)
+	(label "DRIVE_SELECT_A_GP_ALT"
+		(at 134.62 138.43 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d2e2439b-5800-4ea9-96d4-cf8f3ed73f7e")
+	)
 	(label "MOTOR_ON_DOSV"
 		(at 331.47 184.15 0)
 		(effects
@@ -13254,7 +13650,7 @@
 		)
 		(uuid "d53093cf-652f-4915-b003-bf5eb6aeef6a")
 	)
-	(label "IN_USE_DOSV_MCU"
+	(label "IN_USE_MCU"
 		(at 256.54 199.39 0)
 		(effects
 			(font
@@ -13284,15 +13680,15 @@
 		)
 		(uuid "d83bf4f3-610d-4c01-ae06-776eaba44ee0")
 	)
-	(label "STEP"
-		(at 114.3 135.89 180)
+	(label "STEP_GP"
+		(at 134.62 321.31 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right bottom)
+			(justify left bottom)
 		)
-		(uuid "d9a8e565-945e-44b7-91d8-aeb792476594")
+		(uuid "d952b29b-4094-4163-b52d-3239594c89bb")
 	)
 	(label "WRITE_DATA"
 		(at 114.3 250.19 180)
@@ -13324,6 +13720,16 @@
 		)
 		(uuid "dd974a27-b5d5-44ab-be24-326402d8f38f")
 	)
+	(label "SIDE_SELECT_GP"
+		(at 134.62 323.85 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "dda0cd55-9651-4c22-b16b-4beccf4af166")
+	)
 	(label "READY_MCU_B"
 		(at 256.54 232.41 0)
 		(effects
@@ -13353,6 +13759,16 @@
 			(justify right bottom)
 		)
 		(uuid "e00cf444-7c66-4abb-8498-fac51fde215f")
+	)
+	(label "DIRECTION"
+		(at 114.3 316.23 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e024f076-6d0d-4303-a173-7b0ab2b691b9")
 	)
 	(label "READY_MCU_A"
 		(at 256.54 229.87 0)
@@ -13404,8 +13820,8 @@
 		)
 		(uuid "e6416c18-daed-4d67-abf3-0fcb413b17ab")
 	)
-	(label "GP_ENABLE"
-		(at 134.62 123.19 0)
+	(label "LOCK_REQ_MCU"
+		(at 165.1 125.73 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -13434,7 +13850,7 @@
 		)
 		(uuid "e7d29fa6-ecfd-4385-8133-482b817743be")
 	)
-	(label "GP_ENABLE"
+	(label "LOCK_ACK_GP"
 		(at 134.62 180.34 0)
 		(effects
 			(font
@@ -13484,7 +13900,7 @@
 		)
 		(uuid "eedb72e4-da46-4cc6-8895-4f49b8db3fca")
 	)
-	(label "DRIVE_SELECT_DOSV_B_MCU"
+	(label "DRIVE_SELECT_B_GP"
 		(at 316.23 171.45 180)
 		(effects
 			(font
@@ -13533,6 +13949,16 @@
 			(justify left bottom)
 		)
 		(uuid "f455c4c5-2e62-4b8b-af25-cd98828c8ddf")
+	)
+	(label "SIDE_SELECT"
+		(at 114.3 321.31 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "f46d7b9e-06b5-46b6-ac8e-b8b009d3a284")
 	)
 	(label "I2C_SCL"
 		(at 143.51 143.51 180)
@@ -13715,6 +14141,72 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "R127")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 91.44 326.39 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "041f0bcf-115c-44fa-8a42-1c87c71d35d7")
+		(property "Reference" "TP115"
+			(at 88.9 321.056 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 92.71 325.628 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
+			(at 96.52 326.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 96.52 326.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 91.44 326.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1a3a670e-67ba-4eb7-8328-075d8933f04f")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "TP115")
 					(unit 1)
 				)
 			)
@@ -14087,6 +14579,71 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "D104")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 82.55 306.07 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "096cdd6e-0bcc-48c5-ae86-25c437a9bb7a")
+		(property "Reference" "#PWR0177"
+			(at 82.55 309.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "VDD_FDDIF"
+			(at 82.55 300.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 82.55 306.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 82.55 306.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 82.55 306.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "34e36afd-a0a1-4f1d-a8dc-07abc77b0f35")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "#PWR0177")
 					(unit 1)
 				)
 			)
@@ -14645,6 +15202,72 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 82.55 311.15 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "116f3ea6-0c72-4663-bfda-52a4b3d23ad3")
+		(property "Reference" "#PWR0178"
+			(at 82.55 317.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 82.55 316.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 82.55 311.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 82.55 311.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 82.55 311.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1ed8da1a-91b6-456f-9bc5-ab9b004ac0d9")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "#PWR0178")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:PWR_FLAG")
 		(at 140.97 52.07 0)
 		(unit 1)
@@ -14862,6 +15485,72 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 152.4 326.39 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "14965108-0159-49b9-9e4f-b948a4475660")
+		(property "Reference" "TP116"
+			(at 153.924 322.834 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 153.67 325.628 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
+			(at 157.48 326.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 157.48 326.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 152.4 326.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c5aaff5b-85cd-4037-ba9f-a2adcef29080")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "TP116")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
 		(at 316.23 20.32 0)
 		(unit 1)
@@ -15013,82 +15702,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 278.13 237.49 0)
-		(mirror y)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "19c28f04-372c-4681-bf32-1dc4005f139a")
-		(property "Reference" "TP112"
-			(at 280.67 232.156 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 276.86 236.728 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 273.05 237.49 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 273.05 237.49 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 278.13 237.49 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
-			(at 278.13 237.49 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "c905a8c1-9488-4653-911e-2d1dd20b9082")
-		)
-		(instances
-			(project "X68k-3mode-fdd-adapter"
-				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "TP112")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:+5V")
 		(at 241.3 189.23 0)
 		(unit 1)
@@ -15220,6 +15833,76 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C_Small")
+		(at 82.55 308.61 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1dc21dab-bca1-4815-a3da-3cf6f8a836e4")
+		(property "Reference" "C108"
+			(at 85.09 307.3462 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1uF"
+			(at 85.09 309.8862 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 82.55 308.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 82.55 308.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 82.55 308.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d83829aa-9c1f-419f-bb83-9b71a9884997")
+		)
+		(pin "2"
+			(uuid "05769452-1120-435e-8cd6-524b004e1e8e")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "C108")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 389.89 54.61 0)
 		(unit 1)
@@ -15280,6 +15963,74 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "#PWR0176")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Jumper:Jumper_2_Small_Open")
+		(at 138.43 336.55 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "226bc456-a080-4a91-8516-1cf4c6fe8382")
+		(property "Reference" "JP107"
+			(at 138.176 338.328 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Jumper_2_Small_Open"
+			(at 138.43 332.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm"
+			(at 138.43 336.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 138.43 336.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Jumper, 2-pole, small symbol, open"
+			(at 138.43 336.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "5c197771-910f-41f4-828d-838d4c0e57c3")
+		)
+		(pin "1"
+			(uuid "7eb87f23-982e-4497-967e-4ac0289190be")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "JP107")
 					(unit 1)
 				)
 			)
@@ -15799,15 +16550,15 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 179.07 135.89 0)
+		(at 88.9 328.93 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "2b2b5eaf-a349-4b05-b0df-1258529e4f7a")
-		(property "Reference" "TP114"
-			(at 180.594 132.334 0)
+		(uuid "29dc6482-481c-46b6-bff0-8a62def89d29")
+		(property "Reference" "TP113"
+			(at 86.36 323.596 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15816,7 +16567,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 180.34 135.128 0)
+			(at 90.17 328.168 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15825,7 +16576,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 184.15 135.89 0)
+			(at 93.98 328.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15834,7 +16585,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 184.15 135.89 0)
+			(at 93.98 328.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15843,16 +16594,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 179.07 135.89 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
-			(at 179.07 135.89 0)
+			(at 88.9 328.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15861,12 +16603,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "517b0d91-416d-43b2-b6f8-350eb53ecf50")
+			(uuid "334368ca-73fc-4822-afa0-4ecf53b86474")
 		)
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "TP114")
+					(reference "TP113")
 					(unit 1)
 				)
 			)
@@ -18531,6 +19273,72 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 93.98 311.15 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "62fe9b8e-46da-49b9-a9fe-563af29d44f4")
+		(property "Reference" "#PWR0180"
+			(at 93.98 317.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 93.98 316.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 93.98 311.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 93.98 311.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 93.98 311.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "499ae992-f521-41cd-9665-51f9219e830c")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "#PWR0180")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector_Generic:Conn_01x04")
 		(at 372.11 110.49 0)
 		(unit 1)
@@ -19351,81 +20159,6 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "#PWR0140")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 167.64 133.35 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "73517a7e-74df-45e1-ae67-3e299882aa0d")
-		(property "Reference" "TP102"
-			(at 169.164 129.794 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 168.91 132.588 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 172.72 133.35 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 172.72 133.35 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 167.64 133.35 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
-			(at 167.64 133.35 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "439e6b11-4fe5-4ece-b88e-a7e9f84a761b")
-		)
-		(instances
-			(project "X68k-3mode-fdd-adapter"
-				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "TP102")
 					(unit 1)
 				)
 			)
@@ -20707,7 +21440,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 190.5 138.43 0)
+		(at 172.72 138.43 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -20715,7 +21448,7 @@
 		(dnp no)
 		(uuid "8455f5b6-3569-47da-aa31-33ef2321dd90")
 		(property "Reference" "TP105"
-			(at 192.024 134.874 0)
+			(at 174.244 134.874 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20724,7 +21457,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 191.77 137.668 0)
+			(at 173.99 137.668 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20733,7 +21466,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 195.58 138.43 0)
+			(at 177.8 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20742,7 +21475,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 195.58 138.43 0)
+			(at 177.8 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20751,7 +21484,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 190.5 138.43 0)
+			(at 172.72 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20760,7 +21493,7 @@
 			)
 		)
 		(property "LCIC" ""
-			(at 190.5 138.43 0)
+			(at 172.72 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21087,82 +21820,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 278.13 226.06 0)
-		(mirror y)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "8a24016d-3735-4329-a914-d5c1b68c21ea")
-		(property "Reference" "TP113"
-			(at 280.67 220.726 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 276.86 225.298 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 273.05 226.06 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 273.05 226.06 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 278.13 226.06 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
-			(at 278.13 226.06 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "6df0a75c-3cca-434f-b290-93eea862f6da")
-		)
-		(instances
-			(project "X68k-3mode-fdd-adapter"
-				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "TP113")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:+5V")
 		(at 148.59 106.68 0)
 		(unit 1)
@@ -21289,6 +21946,71 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "#PWR0114")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 93.98 306.07 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "8d5a8d81-381c-4e4f-96ac-25c92c4b425d")
+		(property "Reference" "#PWR0179"
+			(at 93.98 309.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "VDD_MCU"
+			(at 93.98 300.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 93.98 306.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 93.98 306.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 93.98 306.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8a48d26d-2516-403c-a9c6-73dd60829d29")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "#PWR0179")
 					(unit 1)
 				)
 			)
@@ -21953,6 +22675,72 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 86.36 331.47 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "98bbaf3f-12ec-472f-b9e4-d46b6b46478e")
+		(property "Reference" "TP112"
+			(at 83.82 326.136 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 87.63 330.708 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
+			(at 91.44 331.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 91.44 331.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 86.36 331.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "06ba90a9-3c2f-47e1-a8b7-8fa40daf2eda")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "TP112")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Jumper:Jumper_2_Small_Open")
 		(at 369.57 48.26 90)
 		(unit 1)
@@ -22162,6 +22950,76 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C_Small")
+		(at 93.98 308.61 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9d2fcc44-6aa3-47b7-bdb0-90f15c637ac0")
+		(property "Reference" "C109"
+			(at 96.52 307.3462 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1uF"
+			(at 96.52 309.8862 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 93.98 308.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 93.98 308.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 93.98 308.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "911892f1-f1e5-4c63-966d-bc4b5dd670d5")
+		)
+		(pin "2"
+			(uuid "270122b4-9bad-42c9-8fb5-50f81f7c85d5")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "C109")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
 		(at 33.02 106.68 0)
 		(mirror y)
@@ -22240,82 +23098,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 278.13 212.09 0)
-		(mirror y)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "a1d6d36f-dbbe-4f78-828c-0882746228de")
-		(property "Reference" "TP115"
-			(at 280.67 206.756 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 276.86 211.328 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 273.05 212.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 273.05 212.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 278.13 212.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
-			(at 278.13 212.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "3fa25d47-9d2b-4c76-9d6f-949b2015912a")
-		)
-		(instances
-			(project "X68k-3mode-fdd-adapter"
-				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "TP115")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Jumper:Jumper_2_Small_Open")
 		(at 354.33 48.26 90)
 		(unit 1)
@@ -22387,6 +23169,138 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "JP104")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "x68000-ext:SLG46826G(V2)")
+		(at 124.46 322.58 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "a36d426c-68d2-4bd0-89c4-73abd4d34b51")
+		(property "Reference" "U106"
+			(at 126.6033 342.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "SLG46826G(V2)"
+			(at 126.6033 345.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm"
+			(at 124.46 354.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.renesas.com/in/en/document/dst/slg46826-datasheet"
+			(at 124.46 351.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "GreenPAK Programmable Mixed-Signal Matrix with In-System Programmability, TSSOP-20"
+			(at 124.46 316.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C3281959"
+			(at 124.46 322.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "19"
+			(uuid "ca5d8964-9cab-42e1-a37b-4d2eb9dfe212")
+		)
+		(pin "17"
+			(uuid "95c80116-5820-4941-87f0-952963a75ab6")
+		)
+		(pin "16"
+			(uuid "6ee9f5cb-9451-42bf-8077-9595e54288b4")
+		)
+		(pin "14"
+			(uuid "4c79ee94-b989-41a6-b866-66239b17135d")
+		)
+		(pin "11"
+			(uuid "43bbd9c0-7590-431c-8b77-96821417ebea")
+		)
+		(pin "20"
+			(uuid "def75bf9-be18-4b92-924e-156f5a7b54be")
+		)
+		(pin "10"
+			(uuid "0d59d36f-8ec1-4489-900b-8ee637b813e0")
+		)
+		(pin "7"
+			(uuid "c64c6f47-b4e3-4c8d-b192-7d0ff983455f")
+		)
+		(pin "9"
+			(uuid "cf18e19a-8d30-487e-82bd-ff1ccab71345")
+		)
+		(pin "8"
+			(uuid "0746a104-5057-4dce-84ca-f4c1da72db80")
+		)
+		(pin "6"
+			(uuid "79974e01-d3d2-43e0-bc05-37dab32e1440")
+		)
+		(pin "5"
+			(uuid "bff513c5-f3ab-4637-b516-fc28149458cd")
+		)
+		(pin "4"
+			(uuid "c4c28bcb-f06b-436f-974b-1557446ce29d")
+		)
+		(pin "3"
+			(uuid "869cbd24-bb4c-4ebe-8484-8809a1d06c62")
+		)
+		(pin "2"
+			(uuid "b7892be8-922b-4e99-8d06-8017592747cb")
+		)
+		(pin "1"
+			(uuid "a51fb4f0-73e0-4a6f-ae5d-18750e7bbc46")
+		)
+		(pin "18"
+			(uuid "a4f60f01-a7ed-49d8-9057-d41c64781d76")
+		)
+		(pin "15"
+			(uuid "efda9413-81d7-4503-aba2-18faa29d30be")
+		)
+		(pin "12"
+			(uuid "a62079e7-e71b-43a8-a1a1-923066c9eb70")
+		)
+		(pin "13"
+			(uuid "ace2c790-652e-484b-8465-db006a163079")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "U106")
 					(unit 1)
 				)
 			)
@@ -22825,6 +23739,72 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "TP111")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 154.94 328.93 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "ac487dd8-e0da-43aa-8ff9-6d1cfabcf9ea")
+		(property "Reference" "TP113"
+			(at 156.464 325.374 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 156.21 328.168 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
+			(at 160.02 328.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 160.02 328.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 154.94 328.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8b416df2-2280-4863-b9ae-b981fc2cef84")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "TP113")
 					(unit 1)
 				)
 			)
@@ -23431,6 +24411,71 @@
 			(project ""
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "J107")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 121.92 304.8 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "be2f2767-9677-44dc-920f-aa4e0cc50ce8")
+		(property "Reference" "#PWR0181"
+			(at 121.92 308.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "VDD_FDDIF"
+			(at 117.856 300.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 121.92 304.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 121.92 304.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 121.92 304.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "91ac8812-39df-4583-b34c-c535e9b7a92c")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "#PWR0181")
 					(unit 1)
 				)
 			)
@@ -25167,6 +26212,71 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+5V")
+		(at 127 304.8 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d8248efa-76d4-4377-9237-4fba741c9923")
+		(property "Reference" "#PWR0183"
+			(at 127 308.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "VDD_MCU"
+			(at 130.81 300.736 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 127 304.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 127 304.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 127 304.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a4f9d4c0-c542-49a7-9664-c64e66bc02da")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "#PWR0183")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Switch:SW_Push")
 		(at 194.31 257.81 90)
 		(unit 1)
@@ -26171,6 +27281,72 @@
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
 					(reference "H107")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 124.46 342.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e6e837ff-84da-4e39-9428-c69f4298228d")
+		(property "Reference" "#PWR0182"
+			(at 124.46 349.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 124.46 347.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 124.46 342.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 124.46 342.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 124.46 342.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c625ddad-0f5e-447c-bc7a-abbbff9a1980")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "#PWR0182")
 					(unit 1)
 				)
 			)
