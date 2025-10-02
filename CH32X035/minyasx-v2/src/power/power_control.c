@@ -226,8 +226,8 @@ void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
         ui_print(UI_PAGE_DEBUG, "X68K PWR OFF\n");
         last_indexlow_ms = 0;
         enable_fdd_power(ctx, false);  // FDDの電源をOFFにする
-        // TODO 本来このタイミングではないが、ここでGP_ENABLEをOFFにしておく
-        GPIOC->BCR = (1 << 6);  // GP_ENABLE = OFF
+        // TODO 本来このタイミングではないが、ここでLOCK_REQUESTをかけておく
+        GPIOC->BSHR = (1 << 6);  // LOCK_REQUEST = ON
         return;
     } else if (is_x68k_pwr_on) {
         // ON状態の時は、OFF状態になったかどうかをチェックする
@@ -257,8 +257,8 @@ void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
             ui_print(UI_PAGE_DEBUG, "X68K PWR ON \n");
             last_indexlow_ms = 0;
             enable_fdd_power(ctx, true);  // FDDの電源をONにする
-            // TODO 本来このタイミングではないが、ここでGP_ENABLEをONにしておく
-            GPIOC->BSHR = (1 << 6);  // GP_ENABLE = ON
+            // TODO 本来このタイミングではないが、ここでLOCK_REQUESTを開放しておく
+            GPIOC->BCR = (1 << 6);  // LOCK_REQUEST 解放
             return;
         }
     }
