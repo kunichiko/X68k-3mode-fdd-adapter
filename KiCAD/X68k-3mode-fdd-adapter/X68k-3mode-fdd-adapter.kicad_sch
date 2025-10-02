@@ -7036,9 +7036,9 @@
 		)
 		(uuid "87ee3f35-4013-4229-bd6b-bedebdf2e20a")
 	)
-	(text "未使用"
+	(text "旧SIDE_SELECT_DOSV"
 		(exclude_from_sim no)
-		(at 282.702 213.614 0)
+		(at 276.352 213.868 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -12810,7 +12810,7 @@
 		)
 		(uuid "768fda94-8dd3-4e92-9cf0-2483c32e990f")
 	)
-	(label "SIDE_SELECT_DOSV_MCU"
+	(label "LOCK_ACK"
 		(at 256.54 214.63 0)
 		(effects
 			(font
