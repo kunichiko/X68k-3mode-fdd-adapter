@@ -1,3 +1,4 @@
+#include "greenpak/greenpak_control.h"
 #include "pcfdd/pcfdd_control.h"
 #include "power/power_control.h"
 #include "ui/ui_control.h"
@@ -35,6 +36,8 @@ void ui_page_setting_debug_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
     // debug Settingページのポーリング処理
     // PB4 : MOTOR_ON_DOSV output
     // PBN4の出力状態を読み取り、MOTORのON/OFFを表示する
+    // PB7 : LOCK_ACK input
+    // PC6 : LOCK input
     uint32_t portb = GPIOB->INDR;
     bool motor_enabled = (portb & (1 << 4));  // MOTOR_ON_DOSV is active high
     ui_cursor(pctx->page, 8, 1);
@@ -42,7 +45,7 @@ void ui_page_setting_debug_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
     // PCFDDのLOCK状態を読み取り、表示する
     uint32_t portc = GPIOC->INDR;
     bool lock_req = (portc & (1 << 6));  // LOCK is active high
-    bool lock_ack = false;               // tbd
+    bool lock_ack = (portb & (1 << 7));  // LOCK_ACK is active high
     ui_cursor(pctx->page, 8, 2);
     if (!lock_req && !lock_ack) {
         // Not Request
@@ -107,15 +110,18 @@ void ui_page_setting_debug_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
     if (keys & UI_KEY_ENTER) {
         switch (position) {
         case 1:
-            // MOTOR
             // MOTORのON/OFFをトグルする
-            if (GPIOB->INDR & (1 << 4)) {
+            // GreenPAK4の Vitrual Input に以下を接続している
+            // 7 (bit0)  = MOTOR_ON (正論理)
+            uint8_t gp4_vin = greenpak_get_virtualinput(4 - 1);
+            if (gp4_vin & (1 << 0)) {
                 // 現在ONなのでOFFにする
-                GPIOB->BCR = (1 << 4);  // MOTOR_ON_DOSV = OFF
+                gp4_vin &= ~(1 << 0);  // bit0 = 0 (MOTOR_ON)
             } else {
                 // 現在OFFなのでONにする
-                GPIOB->BSHR = (1 << 4);  // MOTOR_ON_DOSV = ON
+                gp4_vin |= (1 << 0);  // bit0 = 1 (MOTOR_ON)
             }
+            greenpak_set_virtualinput(4 - 1, gp4_vin);
             break;
         case 2:
             // GP ENABLE

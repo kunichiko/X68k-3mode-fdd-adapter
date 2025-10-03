@@ -35,12 +35,13 @@ extern void gp_write_seq(uint8_t addr7, uint16_t start, const uint8_t *data, uin
 void gp_program_with_erase(uint8_t addr7, uint16_t base, const uint8_t *img, uint16_t size) {
     if (!size) return;
     uint8_t nvm_addr7 = (uint8_t)((addr7 & 0xfc) + 2);  // NVMアドレスに変換 (addrは0x08,0x10,0x18,0x20,0x28のいずれか)
-    gp_erase_range(addr7, base, size);                  // 先に消去
+                                                        //    gp_erase_range(addr7, base, size);                  // 先に消去
     for (int i = 0; i < 16; i++) {
         // 16バイトずつウエイトを入れて書く
         ui_logf(UI_LOG_LEVEL_INFO, "%d ", 16 - i);
-        Delay_Ms(100);
+        gp_erase_page(nvm_addr7, i);
         gp_write_seq(nvm_addr7, base + i * 16, &img[i * 16], (size - i * 16 > 16) ? 16 : (size - i * 16));
+        Delay_Ms(100);
     }
 
     Delay_Ms(1000);  // 書き込み完了待ち

@@ -97,6 +97,13 @@ void x68fdd_init(minyasx_context_t* ctx) {
     // GP ENABLE
     // GPIOC->BSHR = (1 << 6);  // GP_ENABLE (High=Enable)
     GPIOC->BCR = (1 << 6);  // GP_ENABLE (Low=Disable)
+
+    // GreenPAK4の Vitrual Input に以下を接続している
+    // 7 (bit0)  = MOTOR_ON (正論理)
+    // 6 (bit1)  = DIRECTION (正論理)
+    // 5 (bit2)  = STEP (正論理)
+    // 4 (bit3)  = SIDE_SELECT (正論理)
+    greenpak_set_virtualinput(4 - 1, 0x00);  // 全部Lowにしておく
 }
 
 /*
@@ -187,25 +194,10 @@ void EXTI7_0_IRQHandler(void) {
     }
 }
 
-static void copy_drive_signals_to_dosv(void) {
-    // PA12: MOTOR_ON       -> PB4: MOTOR_ON_DOSV (論理逆)
-    // PA13: DIRECTION      -> PB5: DIRECTION_DOSV (論理逆)
-    // PA15: SIDE_SELECT    -> PB7: SIDE_SELECT_DOSV (論理逆)
-    uint32_t porta = GPIOA->INDR;
-    uint32_t mask = (1 << 15) | (1 << 13) | (1 << 12);
-    uint32_t active_bits = (~porta) & mask;  // Lowアクティブなので反転する
-    uint32_t inactive_bits = porta & mask;   // 1になっているビットを抽出
-
-    // bit12,13,15を bit4,5,7 に移動してGPIOBに反映する
-    GPIOB->BSHR = (active_bits >> 8);   // Highにする
-    GPIOB->BCR = (inactive_bits >> 8);  // Lowにする
-}
-
 void EXTI15_8_IRQHandler(void) __attribute__((interrupt));
 void EXTI15_8_IRQHandler(void) {
     exti_int_counter++;
 
-    copy_drive_signals_to_dosv();
     // EXTI14は未使用
     EXTI->INTFR = EXTI_INTF_INTF12 | EXTI_INTF_INTF13 | EXTI_INTF_INTF15;  // フラグをクリア
 }
