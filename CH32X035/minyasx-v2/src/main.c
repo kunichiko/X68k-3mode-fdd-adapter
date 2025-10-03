@@ -211,7 +211,7 @@ int main() {
     //    GPIOB->BCR = (1 << 6);
     // PB7: LOCK_ACK input
     GPIOB->CFGLR &= ~(0xf << (4 * 7));
-    GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_FLOATING) << (4 * 7);
+    GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * 7);
     GPIOB->BCR = (1 << 7);
     // PB8: DISK_CHANGE_DOSV input
     GPIOB->CFGHR &= ~(0xf << (4 * (8 - 8)));
@@ -298,7 +298,9 @@ int main() {
     uint8_t ds0 = (GPIOA->INDR >> 22) & 1;
     uint8_t ds1 = (GPIOA->INDR >> 23) & 1;
     for (int i = 0; i < 4; i++) {
-        greenpak_set_virtualinput(i, (ds1 ? 0x40 : 0x00) | (ds0 ? 0x80 : 0x00));
+        uint8_t vin = greenpak_get_virtualinput(i);
+        vin |= (ds1 ? 0x40 : 0x00) | (ds0 ? 0x80 : 0x00);
+        greenpak_set_virtualinput(i, vin);
     }
     uint8_t idA = (ds1 << 1) | ds0;
     ctx->drive[0].drive_id = idA;
@@ -335,8 +337,8 @@ int main() {
     // 音再生テスト
     // play_start_melody(ctx, &melody_power_on);
 
-    //    ui_log_set_level(UI_LOG_LEVEL_INFO);
-    ui_log_set_level(UI_LOG_LEVEL_TRACE);
+    ui_log_set_level(UI_LOG_LEVEL_INFO);
+    // ui_log_set_level(UI_LOG_LEVEL_TRACE);
 
     while (1) {
         uint64_t systick = SysTick->CNT;

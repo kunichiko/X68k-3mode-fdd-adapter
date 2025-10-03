@@ -505,10 +505,8 @@ void step_dosv(int drive, bool direction_inward) {
         return;
     }
     // GreenPAK4の Vitrual Input に以下を接続している
-    // 7 (bit0)  = MOTOR_ON (正論理)
     // 6 (bit1)  = DIRECTION (正論理)
     // 5 (bit2)  = STEP (正論理)
-    // 4 (bit3)  = SIDE_SELECT (正論理)
     // LOCK_ACKがアサートされている間だけ上記信号は有効になるので、
     // LOCKはすでに撮れた状態でこのメソッドを呼ぶこと
     uint8_t gp4_vin = greenpak_get_virtualinput(4 - 1);
@@ -548,11 +546,11 @@ bool seek_to_track0(int drive) {
     int seek_count = 0;
     // シーク Part1
     drive_select(drive, true);
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 100; i++) {
         step_dosv(drive, true);  // 内周方向にステップ
     }
     // ここで 100msec待つ(Track00以外でシークを一度確定しないとDISK_CHANGEがクリアされないドライブがある)
-    Delay_Ms(100);
+    Delay_Ms(10);
     // シーク Part2
     seek_count = 0;
     while (seek_count < 200) {
@@ -577,7 +575,6 @@ bool last_index_state = false;
 
 static void process_initializing(minyasx_context_t* ctx, int drive) {
     if (ctx->drive[drive].state != DRIVE_STATE_INITIALIZING) return;
-
     // 1. LOCK_REQをアサートして、LOCK_ACKがアサートされるまで待つ
     GPIOC->BSHR = GPIO_Pin_6;  // LOCK_REQ active (High=アクセス禁止)
     uint32_t systick_start = SysTick->CNTL;
@@ -642,7 +639,9 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
     //    GPIOB->BSHR = (1 << (2 + drive));  // Drive Select A/B active
     drive_select(drive, true);
     if ((GPIOB->INDR & (1 << 4)) == 0) {
-        GPIOB->BSHR = (1 << 4);  // MOTOR_ON_DOSV active
+        uint8_t gp4_in = greenpak_get_virtualinput(4 - 1);
+        gp4_in |= (1 << 0);  // bit0 = 1 (MOTOR_ON = 1)
+        greenpak_set_virtualinput(4 - 1, gp4_in);
         // モーターの回転が安定するまで 300msec待つ
         Delay_Ms(300);
     }
@@ -685,9 +684,11 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
     }
 
     // 6. Drive Selectを非アクティブにする
-    // MOTOR_ONはそのままでOK (X68000側でMOTOR_ONを解除すると、GPIO割り込みがかかって止まる)
-    //    GPIOB->BCR = (1 << (2 + drive));  // Drive Select A/B inactive
     drive_select(drive, false);
+
+    uint8_t gp4_in = greenpak_get_virtualinput(4 - 1);
+    gp4_in &= ~(1 << 0);  // bit0 = 0 (MOTOR_ON_DOSV = 0)
+    greenpak_set_virtualinput(4 - 1, gp4_in);
 
     // 6. ロックを解除する
     GPIOC->BCR = GPIO_Pin_6;  // LOCK_REQ inactive
