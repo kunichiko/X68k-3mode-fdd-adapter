@@ -185,7 +185,7 @@ bool fdd_power_is_enabled(void) {
 }
 
 static bool is_x68k_pwr_on = false;
-static const bool force_x68k_pwr_on = true;  // trueにすると、X68Kの電源ONを強制的に検出したことにする
+static const bool force_x68k_pwr_on = false;  // trueにすると、X68Kの電源ONを強制的に検出したことにする
 static uint32_t last_indexlow_ms = 0;
 
 const int GP_UNIT = 2;  // GreenPAK3を使う
