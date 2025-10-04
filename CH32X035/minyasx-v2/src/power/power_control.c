@@ -194,16 +194,33 @@ const int GP_UNIT = 2;  // GreenPAK3を使う
  * @brief X68Kの電源がONになったことを検出したかどうか
  * ● OFF状態から、ONになったことの検出方法
  * INDEX信号がX68000側でプルアップされることを利用し、
- *  GreenPAKの INDEX_OUTの端子の状態をチェックすることで電源ONになったと判定する。
- *  INDEX_OUT端子の入力は、GreenPAK2の Matrix Input 11 (IO12 Digital Input) に接続されている。
+ * GreenPAKの INDEX出力端子の入力状態をチェックすることで電源ONになったと判定する。
+ * INDEX端子は、GreenPAK3の Matrix Input 11 (IO12 Digital Input) に接続されている。
+ * この端子は Open-Drain 出力なので、X68K側でプルアップされている場合はHighになるため、
+ * HighになったらON状態になったと判断します。ただ、当然ながらドライブがINDEX信号を出している
+ * 瞬間はLowになるため、Lowになったからと言って即座にOFF状態になったとは判断せず、
+ * 以下のようにします。
+ * - INDEX端子の入力値をINDEX_IN、出力値をINDEX_OUTとする
+ * - INDEX信号は直接入力端子の値を読まずに、(!INDEX_OUT or !INDEX_IN) の論理式の値を読みます
+ *  - この値を INDEX_SNS と呼ぶことにします
+ *  - こうすることで、INDEX_OUTがLowのとき、つまりINDEXを出力中は必ずINDEX_SNSがHighになります
+ *  - INDEX_OUTがHighのとき、つまりINDEXを出力していないときは、INDEX_INの値がそのまま反映されます
+ *  - 結果、INDEX_SNSを使うと「出力していないのでプルアップされて1になるはずなのに0になっている」
+ *    ということが検出できます
+ * - さらに、他のドライブがINDEXをLowにしているケースを考慮するために、D-FFを使用します
+ *  - INDEX_SNSがLowであることを検出したら、D-FFをクリアします
+ *  - このD-FFはINDEX_INの立ち上がりエッジで1がセットされるようになっているため、このまま少し待つと
+ *    INDEXがディアクティベートされたタイミングでD-FFがセットされます
+ *  - これを1-2秒後くらいに検出することで、「一時的にINDEXがLowになっただけ」というケースを除外できます
+ * このINDEX_SNSはGP3のMatrix Input 18 (LUT3_0_DFF3_OUT) から読み取れます。
  */
 static bool detect_x68k_power_on(uint32_t systick_ms) {
     if (force_x68k_pwr_on) {
         return true;
     }
-    bool index_state = greenpak_get_matrixinput(GP_UNIT, 11);
-    // indexがHighならON状態になったと判断する
-    return index_state;
+    bool index_sns = greenpak_get_matrixinput(GP_UNIT, 18);  // index_sns = !index_out || !index_in
+    // INDEX_SNSが HighならON状態になったと判断する
+    return index_sns;
 }
 
 static bool detect_x68k_power_off(uint32_t systick_ms) {
@@ -211,14 +228,14 @@ static bool detect_x68k_power_off(uint32_t systick_ms) {
         return false;
     }
     if (last_indexlow_ms != 0) {
-        if (systick_ms < last_indexlow_ms + 500) {
-            return false;  // 500msec待つ
+        if (systick_ms < last_indexlow_ms + 2000) {
+            return false;  // 2000msec待つ
         }
-        // 500msec経過したので、D-FFの状態をチェックする
+        last_indexlow_ms = 0;
+        // 2000msec経過したので、D-FF (D-FF 16)の状態をチェックする
         bool dffq = greenpak_get_matrixinput(GP_UNIT, 46) ? 0x01 : 0x00;
         if (dffq) {
             // D-FFがセットされたままなのでON状態が継続していると判断する
-            last_indexlow_ms = 0;
             return false;
         }
         // D-FFがクリアされたままなのでOFF状態になったと判断する
@@ -231,14 +248,14 @@ static bool detect_x68k_power_off(uint32_t systick_ms) {
     greenpak_set_virtualinput(GP_UNIT, vin1);
     greenpak_set_virtualinput(GP_UNIT, vin0);
     greenpak_set_virtualinput(GP_UNIT, vin1);
-    // Matrix Input 11 (IO12 Digital Input) をチェックする
-    bool index_state = greenpak_get_matrixinput(GP_UNIT, 11);
-    if (index_state) {
+    // INDEX_SNS (Matrix Input 18) をチェックする
+    bool index_sns = greenpak_get_matrixinput(GP_UNIT, 18);
+    if (index_sns) {
         // HighなのでON状態が継続していると判断し判定終了
         last_indexlow_ms = 0;
         return false;
     }
-    // LowなのでOFF状態になった可能性があるので、500msec後にD-FFの状態をチェックする
+    // LowなのでOFF状態になった可能性があるので、少し待ってからD-FFの状態をチェックする
     last_indexlow_ms = systick_ms;
     return false;
 }

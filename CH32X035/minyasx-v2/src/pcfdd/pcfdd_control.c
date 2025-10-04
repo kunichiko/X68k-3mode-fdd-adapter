@@ -73,8 +73,8 @@ typedef enum { DRIVE_NONE = -1, DRIVE_A = 0, DRIVE_B = 1 } drive_t;
 static volatile drive_t s_current_drive = DRIVE_NONE;
 
 static inline drive_t current_drive_from_gpio(void) {
-    const bool ds_a = (GPIOB->INDR & (1 << 2)) != 0;
-    const bool ds_b = (GPIOB->INDR & (1 << 3)) != 0;
+    const bool ds_a = (GPIOA->INDR & (1 << 0)) != 0;
+    const bool ds_b = (GPIOA->INDR & (1 << 1)) != 0;
     if (ds_a && !ds_b) return DRIVE_A;
     if (!ds_a && ds_b) return DRIVE_B;
     // 想定外（両方0 or 両方1）は、前回を維持せず NONE とする
@@ -899,20 +899,31 @@ void pcfdd_update_setting(minyasx_context_t* ctx, int drive) {
     if (drive < 0 || drive > 1) return;
     // PCFDDコントローラの設定更新コードをここに追加
     // RPM設定が変わった場合に、MODE_SELECT_DOSVを切り替える
-    switch (ctx->drive[drive].rpm_control) {
+    drive_status_t* d = &ctx->drive[drive];
+    switch (d->rpm_control) {
     case FDD_RPM_CONTROL_360:
         // 360RPMモード
-        GPIOB->BSHR = (1 << 0);  // MODE_SELECT_DOSV = 1
-        ctx->drive[drive].rpm_setting = FDD_RPM_360;
-        ctx->drive[drive].rpm_measured = FDD_RPM_UNKNOWN;
-        ctx->drive[drive].bps_measured = BPS_UNKNOWN;
+        if (d->mode_select_inverted) {
+            // MODE_SELECT_DOSV = 0
+            GPIOB->BCR = (1 << 0);  // MODE_SELECT_DOSV = 0
+        } else {
+            GPIOB->BSHR = (1 << 0);  // MODE_SELECT_DOSV = 1
+        }
+        d->rpm_setting = FDD_RPM_360;
+        d->rpm_measured = FDD_RPM_UNKNOWN;
+        d->bps_measured = BPS_UNKNOWN;
         break;
     case FDD_RPM_CONTROL_300:
         // 300RPMモード
-        GPIOB->BCR = (1 << 0);  // MODE_SELECT_DOSV = 0
-        ctx->drive[drive].rpm_setting = FDD_RPM_300;
-        ctx->drive[drive].rpm_measured = FDD_RPM_UNKNOWN;
-        ctx->drive[drive].bps_measured = BPS_UNKNOWN;
+        if (d->mode_select_inverted) {
+            // MODE_SELECT_DOSV = 1
+            GPIOB->BSHR = (1 << 0);  // MODE_SELECT_DOSV = 1
+        } else {
+            GPIOB->BCR = (1 << 0);  // MODE_SELECT_DOSV = 0
+        }
+        d->rpm_setting = FDD_RPM_300;
+        d->rpm_measured = FDD_RPM_UNKNOWN;
+        d->bps_measured = BPS_UNKNOWN;
         break;
     case FDD_RPM_CONTROL_9SCDRV:
         // 9SCDRV互換モード
