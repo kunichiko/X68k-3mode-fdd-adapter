@@ -538,7 +538,7 @@ void drive_select(int drive, bool active) {
 }
 
 bool seek_to_track0(int drive) {
-    ui_printf(UI_PAGE_LOG, "Seek Track0 (D:%d)\n", drive);
+    ui_logf(UI_LOG_LEVEL_INFO, "Seek Track0 (D:%d)\n", drive);
     if (drive < 0 || drive > 1) {
         return false;
     }
@@ -553,7 +553,8 @@ bool seek_to_track0(int drive) {
     Delay_Ms(10);
     // シーク Part2
     seek_count = 0;
-    while (seek_count < 200) {
+    const int SEEK_COUNT_MAX = 100;
+    while (seek_count < SEEK_COUNT_MAX) {
         seek_count++;
         // TRACK0を見て、トラック0に到達したら抜ける
         if ((GPIOB->INDR & (1 << 10)) == 0) {
@@ -566,26 +567,48 @@ bool seek_to_track0(int drive) {
     drive_select(drive, false);
     Delay_Ms(100);
 
-    // 戻り値: 200ステップ以内にトラック0に到達したらtrue
-    return (seek_count < 200);
+    ui_logf(UI_LOG_LEVEL_INFO, "  Seeked %d steps\n", seek_count);
+    // 戻り値: SEEK_COUNT_MAX ステップ以内にトラック0に到達したらtrue
+    return (seek_count < SEEK_COUNT_MAX);
 }
 
 uint32_t last_index_ms = 0;
 bool last_index_state = false;
 
-static void process_initializing(minyasx_context_t* ctx, int drive) {
-    if (ctx->drive[drive].state != DRIVE_STATE_INITIALIZING) return;
-    // 1. LOCK_REQをアサートして、LOCK_ACKがアサートされるまで待つ
-    GPIOC->BSHR = GPIO_Pin_6;  // LOCK_REQ active (High=アクセス禁止)
+/**
+ * FDDバスのロックを取得します。
+ * LOCK_REQをアサートすると、GP1は DRIVE_SELECT_A/Bが両方ともアクティブじゃないタイミングで
+ * LOCK_ACK (PB7)をアサートします。
+ * LOCK_ACKがアサートされている間は、READY以外の信号がX68000側に届かなくなります。
+ * そうすると、X68000側にはINDEXが届かなくなるので、X68000のFDCはINDEXを待ち続けるため、
+ * その隙に　PCFDD側のDrive Selectをアクティブにしても問題なくなります。
+ */
+static bool get_fdd_lock() {
+    GPIOC->BSHR = GPIO_Pin_6;  // LOCK_REQ active (High=アクセス禁止要求)
     uint32_t systick_start = SysTick->CNTL;
     while ((GPIOB->INDR & GPIO_Pin_7) == 0) {
         // LOCK_ACKがアサートされるまで待つ
         // (100msec以上待っても来ない場合は、一旦リターンし次回の呼び出しで再度試みる)
         if ((SysTick->CNTL - systick_start) > (100 * 1000 * 48)) {
-            // 100msec以上待ってもLOCK_ACKが来らない場合は、一旦リターンする
+            // 100msec以上待ってもLOCK_ACKが来らない場合は失敗
             GPIOC->BCR = GPIO_Pin_6;  // LOCK_REQ inactive
-            return;
+            return false;             // LOCK取得失敗
         }
+    }
+    // LOCK_ACKがアサートされた(LOCK取得成功)
+    return true;
+}
+
+static void release_fdd_lock() {
+    GPIOC->BCR = GPIO_Pin_6;  // LOCK_REQ inactive
+}
+
+static void process_initializing(minyasx_context_t* ctx, int drive) {
+    if (ctx->drive[drive].state != DRIVE_STATE_INITIALIZING) return;
+    // 1. LOCK_REQをアサートして、LOCK_ACKがアサートされるまで待つ
+    if (!get_fdd_lock()) {
+        // LOCK取得失敗 (一旦リターンし次回の呼び出しで再度試みる)
+        return;
     }
 
     // シークしてトラック0に戻す
@@ -601,7 +624,7 @@ static void process_initializing(minyasx_context_t* ctx, int drive) {
     }
 
     // ロックを解除する
-    GPIOC->BCR = GPIO_Pin_6;  // LOCK_REQ inactive
+    release_fdd_lock();
 }
 
 static void process_media_detecting(minyasx_context_t* ctx, int drive) {
@@ -609,24 +632,10 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
 
     drive_status_t* d = &ctx->drive[drive];
 
-    // なにはともあれ、LOCK_REQ (PC6)をアサートしてアクセスを止める
-    // LOCK_REQをアサートすると、GP1は DRIVE_SELECT_A/Bが両方ともアクティブじゃないタイミングで
-    // LOCK_ACK (PB7)をアサートする
-    // LOCK_ACKがアサートされている間は、READY以外の信号がX68000側に届かなくなる
-    // そうすると、X68000側にはINDEXが届かなくなるので、X68000のFDCはINDEXを待ち続けるため、
-    // その隙に　PCFDD側のDrive Selectをアクティブにしても問題なくなる
-
     // 1. LOCK_REQをアサートして、LOCK_ACKがアサートされるまで待つ
-    GPIOC->BSHR = GPIO_Pin_6;  // LOCK_REQ active (High=アクセス禁止)
-    uint32_t systick_start = SysTick->CNTL;
-    while ((GPIOB->INDR & GPIO_Pin_7) == 0) {
-        // LOCK_ACKがアサートされるまで待つ
-        // (100msec以上待っても来ない場合は、一旦リターンし次回の呼び出しで再度試みる)
-        if ((SysTick->CNTL - systick_start) > (100 * 1000 * 48)) {
-            // 100msec以上待ってもLOCK_ACKが来らない場合は、一旦リターンする
-            GPIOC->BCR = GPIO_Pin_6;  // LOCK_REQ inactive
-            return;
-        }
+    if (!get_fdd_lock()) {
+        // LOCK取得失敗 (一旦リターンし次回の呼び出しで再度試みる)
+        return;
     }
 
     // TODO: ここでDRIVE_SELECT_A/Bが両方ともアクティブでないことを確認する
@@ -647,7 +656,7 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
     }
 
     // 4. 500msecの間に INDEXパルスが来るかを監視する
-    systick_start = SysTick->CNTL;
+    uint32_t systick_start = SysTick->CNTL;
     bool index_low_seen = false;
     bool index_high_seen = false;
     while ((SysTick->CNTL - systick_start) < (500 * 1000 * 48)) {
@@ -683,7 +692,7 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
         greenpak_set_virtualinput(3 - 1, gp3_vin);
     }
 
-    // 6. Drive Selectを非アクティブにする
+    // 6. Drive Selectを非アクティブにし、MOTOR_ONも非アクティブにする
     drive_select(drive, false);
 
     uint8_t gp4_in = greenpak_get_virtualinput(4 - 1);
@@ -691,7 +700,7 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
     greenpak_set_virtualinput(4 - 1, gp4_in);
 
     // 6. ロックを解除する
-    GPIOC->BCR = GPIO_Pin_6;  // LOCK_REQ inactive
+    release_fdd_lock();
 
     return;
 }

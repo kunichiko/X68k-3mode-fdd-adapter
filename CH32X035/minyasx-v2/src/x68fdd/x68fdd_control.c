@@ -10,8 +10,8 @@
 
 volatile uint32_t exti_int_counter = 0;
 
-const bool double_option_A_always = false;  // 強制的にOPTION_SELECT_Aが両方アサートされるようにする
-const bool double_option_B_always = false;  // 強制的にOPTION_SELECT_Bが両方アサートされるようにする
+const bool double_option_A_always = false;  // 強制的にOPTION_SELECT_A/Bが両方アサートされるようにする
+const bool double_option_B_always = false;  // 強制的にOPTION_SELECT_B/Bpairが両方アサートされるようにする
 
 volatile bool double_option_A = double_option_A_always;
 volatile bool double_option_B = double_option_B_always;
@@ -29,48 +29,27 @@ void x68fdd_init(minyasx_context_t* ctx) {
     // PA1 : DRIVE_SELECT_B
     // PA2 : OPTION_SELECT_A
     // PA3 : OPTION_SELECT_B
-    // PA12: MOTOR_ON
-    // PA13: DIRECTION
-    // PA15: SIDE_SELECT
-    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI0);   // EXTI0 の設定をクリア
-    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI0_PA;   // EXTI0 を PA (00) に設定
-    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI1);   // EXTI1 の設定をクリア
-    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI1_PA;   // EXTI1 を PA (00) に設定
-    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI2);   // EXTI2 の設定をクリア
-    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI2_PA;   // EXTI2 を PA (00) に設定
-    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI3);   // EXTI3 の設定をクリア
-    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI3_PA;   // EXTI3 を PA (00) に設定
-    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI12);  // EXTI12の設定をクリア
-    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI12_PA;  // EXTI12を PA (00) に設定
-    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI13);  // EXTI13の設定をクリア
-    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI13_PA;  // EXTI13を PA (00) に設定
-    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI15);  // EXTI15の設定をクリア
-    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI15_PA;  // EXTI15を PA (00) に設定
+    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI0);  // EXTI0 の設定をクリア
+    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI0_PA;  // EXTI0 を PA (00) に設定
+    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI1);  // EXTI1 の設定をクリア
+    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI1_PA;  // EXTI1 を PA (00) に設定
+    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI2);  // EXTI2 の設定をクリア
+    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI2_PA;  // EXTI2 を PA (00) に設定
+    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI3);  // EXTI3 の設定をクリア
+    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI3_PA;  // EXTI3 を PA (00) に設定
 
     // 一旦クリアしてから割り込みを有効にする
-    EXTI->INTENR &= ~(EXTI_INTENR_MR0 | EXTI_INTENR_MR1 | EXTI_INTENR_MR2 | EXTI_INTENR_MR3 |  // 割り込み無効化
-                      EXTI_INTENR_MR12 | EXTI_INTENR_MR13 | EXTI_INTENR_MR15);                 //
-    EXTI->RTENR &= ~(EXTI_RTENR_TR0 | EXTI_RTENR_TR1 | EXTI_RTENR_TR2 | EXTI_RTENR_TR3 |       // 立ち上がりエッジ検出をクリア
-                     EXTI_RTENR_TR12 | EXTI_RTENR_TR13 | EXTI_RTENR_TR15);                     //
-    EXTI->FTENR &= ~(EXTI_FTENR_TR0 | EXTI_FTENR_TR1 | EXTI_FTENR_TR2 | EXTI_FTENR_TR3 |       // 立ち下がりエッジ検出をクリア
-                     EXTI_FTENR_TR12 | EXTI_FTENR_TR13 | EXTI_FTENR_TR15);                     //
+    EXTI->INTENR &= ~(EXTI_INTENR_MR0 | EXTI_INTENR_MR1 | EXTI_INTENR_MR2 | EXTI_INTENR_MR3);  // 割り込み無効化
+    EXTI->RTENR &= ~(EXTI_RTENR_TR0 | EXTI_RTENR_TR1 | EXTI_RTENR_TR2 | EXTI_RTENR_TR3);       // 立ち上がりエッジ検出をクリア
+    EXTI->FTENR &= ~(EXTI_FTENR_TR0 | EXTI_FTENR_TR1 | EXTI_FTENR_TR2 | EXTI_FTENR_TR3);       // 立ち下がりエッジ検出をクリア
 
     // 有効化
-    EXTI->RTENR |= EXTI_RTENR_TR0 | EXTI_RTENR_TR1 | EXTI_RTENR_TR2 | EXTI_RTENR_TR3 |  // 立ち上がりエッジ検出をセット
-                   EXTI_RTENR_TR12 | EXTI_RTENR_TR13 | EXTI_RTENR_TR15;                 //
-    EXTI->FTENR |= EXTI_FTENR_TR0 | EXTI_FTENR_TR1 |                     // 立ち下がりエッジ検出をセット (OPTION_SELECT_A/Bは立ち上がりのみ)
-                   EXTI_FTENR_TR12 | EXTI_FTENR_TR13 | EXTI_FTENR_TR15;  //
+    EXTI->RTENR |= EXTI_RTENR_TR0 | EXTI_RTENR_TR1 | EXTI_RTENR_TR2 | EXTI_RTENR_TR3;  // 立ち上がりエッジ検出をセット
+    EXTI->FTENR |= EXTI_FTENR_TR0 | EXTI_FTENR_TR1;  // 立ち下がりエッジ検出をセット (OPTION_SELECT_A/Bは立ち上がりのみ)
+    EXTI->INTFR = EXTI_INTF_INTF0 | EXTI_INTF_INTF1 | EXTI_INTF_INTF2 | EXTI_INTF_INTF3;    // 割り込みフラグをクリア
+    EXTI->INTENR |= EXTI_INTENR_MR0 | EXTI_INTENR_MR1 | EXTI_INTENR_MR2 | EXTI_INTENR_MR3;  // 割り込み有効化
 
-    EXTI->INTFR = EXTI_INTF_INTF0 | EXTI_INTF_INTF1 | EXTI_INTF_INTF2 | EXTI_INTF_INTF3 |  // 割り込みフラグをクリア
-                  EXTI_INTF_INTF12 | EXTI_INTF_INTF13 | EXTI_INTF_INTF15;                  //
-
-    EXTI->INTENR |= EXTI_INTENR_MR0 | EXTI_INTENR_MR1 | EXTI_INTENR_MR2 | EXTI_INTENR_MR3 |  // 割り込み有効化
-                    EXTI_INTENR_MR12 | EXTI_INTENR_MR13 | EXTI_INTENR_MR15;                  //
-
-    NVIC_EnableIRQ(EXTI7_0_IRQn);   // EXTI 7-0割り込みを有効にする
-    NVIC_EnableIRQ(EXTI15_8_IRQn);  // EXTI 15-8割り込みを有効にする
-
-    NVIC_SetPriority(EXTI15_8_IRQn, 1);  // 優先度を高くする
+    NVIC_EnableIRQ(EXTI7_0_IRQn);  // EXTI 7-0割り込みを有効にする
 
     //
     // GPIO割り込みだけでは対応できない処理のために、SysTick割り込みを100usec単位で発生させる
@@ -94,10 +73,6 @@ void x68fdd_init(minyasx_context_t* ctx) {
     // Enable the SysTick IRQ
     NVIC_EnableIRQ(SysTicK_IRQn);
 
-    // GP ENABLE
-    // GPIOC->BSHR = (1 << 6);  // GP_ENABLE (High=Enable)
-    GPIOC->BCR = (1 << 6);  // GP_ENABLE (Low=Disable)
-
     // GreenPAK4の Vitrual Input に以下を接続している
     // 7 (bit0)  = MOTOR_ON (正論理)
     // 6 (bit1)  = DIRECTION (正論理)
@@ -119,12 +94,8 @@ void EXTI7_0_IRQHandler(void) {
     if (intfr & EXTI_INTF_INTF0) {
         // PA0 (DRIVE_SELECT_A) の割り込み
         EXTI->INTFR = EXTI_INTF_INTF0;  // フラグをクリア
-        if (porta & (1 << 0)) {
-            // DRIVE_SELECT_A_nがHigh(無効)になった
-            GPIOB->BCR = (1 << 2);                // DRIVE_SELECT_DOSV_A inactive (Low)
-            pcfdd_set_current_ds(PCFDD_DS_NONE);  // 現在のドライブ選択をNoneにセット
-        } else {
-            // DRIVE_SELECT_A_nがLow(有効)になった
+        if ((porta & (1 << 0))) {
+            // DRIVE_SELECT_AがHigh(有効)になった
             if (double_option_A) {
                 pcfdd_set_rpm_mode_select(&g_ctx->drive[0], FDD_RPM_300);
             } else {
@@ -133,17 +104,17 @@ void EXTI7_0_IRQHandler(void) {
             GPIOB->BCR = (1 << 3);            // DRIVE_SELECT_DOSV_B inactive (Low) to avoid both selected
             GPIOB->BSHR = (1 << 2);           // DRIVE_SELECT_DOSV_A active (High)
             pcfdd_set_current_ds(PCFDD_DS0);  // 現在のドライブ選択をAにセット
+        } else {
+            // DRIVE_SELECT_AがLow(無効)になった
+            GPIOB->BCR = (1 << 2);                // DRIVE_SELECT_DOSV_A inactive (Low)
+            pcfdd_set_current_ds(PCFDD_DS_NONE);  // 現在のドライブ選択をNoneにセット
         }
     }
     if (intfr & EXTI_INTF_INTF1) {
         // PA1 (DRIVE_SELECT_B) の割り込み
         EXTI->INTFR = EXTI_INTF_INTF1;  // フラグをクリア
         if (porta & (1 << 1)) {
-            // DRIVE_SELECT_B_nがHigh(無効)になった
-            GPIOB->BCR = (1 << 3);                // DRIVE_SELECT_DOSV_B inactive (Low)
-            pcfdd_set_current_ds(PCFDD_DS_NONE);  // 現在のドライブ選択をNoneにセット
-        } else {
-            // DRIVE_SELECT_B_nがLow(有効)になった
+            // DRIVE_SELECT_BがHigh(有効)になった
             if (double_option_B) {
                 pcfdd_set_rpm_mode_select(&g_ctx->drive[1], FDD_RPM_300);
             } else {
@@ -152,6 +123,10 @@ void EXTI7_0_IRQHandler(void) {
             GPIOB->BCR = (1 << 2);            // DRIVE_SELECT_DOSV_A inactive (Low) to avoid both selected
             GPIOB->BSHR = (1 << 3);           // DRIVE_SELECT_DOSV_B active (High)
             pcfdd_set_current_ds(PCFDD_DS1);  // 現在のドライブ選択をBにセット
+        } else {
+            // DRIVE_SELECT_BがLow(無効)になった
+            GPIOB->BCR = (1 << 3);                // DRIVE_SELECT_DOSV_B inactive (Low)
+            pcfdd_set_current_ds(PCFDD_DS_NONE);  // 現在のドライブ選択をNoneにセット
         }
     }
     if (intfr & EXTI_INTF_INTF2) {
@@ -194,14 +169,6 @@ void EXTI7_0_IRQHandler(void) {
     }
 }
 
-void EXTI15_8_IRQHandler(void) __attribute__((interrupt));
-void EXTI15_8_IRQHandler(void) {
-    exti_int_counter++;
-
-    // EXTI14は未使用
-    EXTI->INTFR = EXTI_INTF_INTF12 | EXTI_INTF_INTF13 | EXTI_INTF_INTF15;  // フラグをクリア
-}
-
 volatile uint32_t systick_irq_counter = 0;
 
 volatile uint32_t double_option_A_time = 0;
@@ -224,9 +191,6 @@ void SysTick_Handler(void) {
     // Clear the trigger state for the next IRQ
     SysTick->SR = 0x00000000;
 
-    // GPIO割り込み(EXTI)の取りこぼしがあっても反映されるように保険をいれておく
-    // copy_drive_signals_to_dosv();
-
     // 9SCDRVサポート
     // OPTION SELECT 信号の同時アサートによる回転数変更に対応する
     // ●戦略
@@ -242,8 +206,8 @@ void SysTick_Handler(void) {
     //  * その際、各ドライブの最後の回転数モードを記憶しておき、次回DRIVE＿SELECTがアサートされたときはそれに応じてMODE_SELECT_DOSVを設定する
     uint32_t PA = GPIOA->INDR;
     uint32_t PB = GPIOB->INDR;
-    bool ds_a = (PA & GPIO_Pin_0) == 0;         // Low active
-    bool ds_b = (PA & GPIO_Pin_1) == 0;         // Low active
+    bool ds_a = (PA & GPIO_Pin_0);              // High active
+    bool ds_b = (PA & GPIO_Pin_1);              // High active
     bool opt_a = (PA & GPIO_Pin_2) == 0;        // Low active
     bool opt_b = (PA & GPIO_Pin_3) == 0;        // Low active
     bool opt_a_pair = opt_b;                    // OPTION_SELECT_A のペアは OPTION_SELECT_B
