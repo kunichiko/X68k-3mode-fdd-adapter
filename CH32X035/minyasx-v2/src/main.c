@@ -25,6 +25,7 @@
 #include "oled/oled_control.h"
 #include "pcfdd/pcfdd_control.h"
 #include "power/power_control.h"
+#include "preferences/preferences_control.h"
 #include "sound/play_control.h"
 #include "ui/ui_control.h"
 #include "x68fdd/x68fdd_control.h"
@@ -268,7 +269,10 @@ int main() {
     Delay_Ms(1000);
     ui_change_page(UI_PAGE_LOG);
 
-    // INA3221を最初に初期化して電圧電流を測定できるようにする
+    // Preferencesを初期化する
+    preferences_init(ctx);
+
+    // INA3221を初期化して電圧電流を測定できるようにする
     ina3221_init();
 
     //
@@ -286,15 +290,19 @@ int main() {
     // Delay_Ms(1000);
 
     // LED制御を開始する
+    ui_log(UI_LOG_LEVEL_INFO, "LED Init");
     WS2812_SPI_init();
 
     Delay_Ms(500);
 
     //
+    ui_log(UI_LOG_LEVEL_INFO, "PCFDD Init");
     pcfdd_init(ctx);
+    ui_log(UI_LOG_LEVEL_INFO, "X68kFDD IF Init");
     x68fdd_init(ctx);
 
     // DIP SWの状態を GreenPAKにセットする
+    ui_log(UI_LOG_LEVEL_INFO, "Reading DIP SW");
     uint8_t ds0 = (GPIOA->INDR >> 22) & 1;
     uint8_t ds1 = (GPIOA->INDR >> 23) & 1;
     for (int i = 0; i < 4; i++) {
@@ -328,17 +336,23 @@ int main() {
 
     // 音再生コンテキストの初期化
     // タイマーの初期化の関係があるので pcfdd_init() の後に呼ぶ
+    ui_log(UI_LOG_LEVEL_INFO, "Play Init");
     play_init(ctx);
 
+    //
     // メインループ
+    //
     ui_clear(UI_PAGE_DEBUG);
     ui_change_page(UI_PAGE_MAIN);
 
     // 音再生テスト
     // play_start_melody(ctx, &melody_power_on);
 
-    ui_log_set_level(UI_LOG_LEVEL_INFO);
-    // ui_log_set_level(UI_LOG_LEVEL_TRACE);
+    // ui_log_set_level(UI_LOG_LEVEL_INFO);
+    ui_log_set_level(UI_LOG_LEVEL_TRACE);
+
+    // test
+    // ctx->drive[1].mode_select_inverted = true;
 
     while (1) {
         uint64_t systick = SysTick->CNT;
@@ -362,6 +376,8 @@ int main() {
             ui_log(UI_LOG_LEVEL_TRACE, "6");
             play_poll(ctx, ms);
             ui_log(UI_LOG_LEVEL_TRACE, "7");
+            preferences_poll(ctx, ms);
+            ui_log(UI_LOG_LEVEL_TRACE, "8");
         } else {
             // X68000側の電源ON要求が来るまで待機する
             ui_change_page(UI_PAGE_BOOT);
