@@ -88,6 +88,16 @@ typedef struct usbpd_status {
     usbpd_pod_t pod[8];  // PDO情報
 } usbpd_status_t;
 
+typedef struct preferences {
+    uint8_t signature[4];                  // "MYSX"
+    uint8_t version_m;                     // メジャーバージョン
+    uint8_t version_s;                     // マイナーバージョン
+    uint8_t reserved[2];                   // 予約領域
+    fdd_rpm_control_t fdd_rpm_control[2];  // FDDの回転数制御方式
+    fdd_in_use_mode_t fdd_in_use_mode[2];  // FDDのIN-USE信号の動作モード
+    bool mode_select_inverted[2];          // MODE SELECT信号の極性反転
+} preferences_t;
+
 typedef struct minyasx_context {
     // 起動ステータス
     bool power_on;
@@ -99,6 +109,8 @@ typedef struct minyasx_context {
     drive_status_t drive[2];  // ドライブA/B
     // Playコンテキスト
     play_context_t play;
+    // Preferences
+    preferences_t preferences;
 
 } minyasx_context_t;
 

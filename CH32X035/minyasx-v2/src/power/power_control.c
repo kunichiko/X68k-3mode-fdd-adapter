@@ -228,11 +228,11 @@ static bool detect_x68k_power_off(uint32_t systick_ms) {
         return false;
     }
     if (last_indexlow_ms != 0) {
-        if (systick_ms < last_indexlow_ms + 2000) {
-            return false;  // 2000msec待つ
+        if (systick_ms < last_indexlow_ms + 5000) {
+            return false;  // 5000msec待つ
         }
         last_indexlow_ms = 0;
-        // 2000msec経過したので、D-FF (D-FF 16)の状態をチェックする
+        // 5000msec経過したので、D-FF (D-FF 16)の状態をチェックする
         bool dffq = greenpak_get_matrixinput(GP_UNIT, 46) ? 0x01 : 0x00;
         if (dffq) {
             // D-FFがセットされたままなのでON状態が継続していると判断する
