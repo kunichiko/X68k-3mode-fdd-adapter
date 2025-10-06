@@ -189,15 +189,12 @@ int main() {
     GPIOB->CFGLR &= ~(0xf << (4 * 1));
     GPIOB->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 1);
     GPIOB->BCR = (1 << 1);
-    // PB2: DRIVE_SELECT_DOSV_A output
+    // PB2: DRIVE_SELECT_DOSV_A output (未使用)
     GPIOB->CFGLR &= ~(0xf << (4 * 2));
-    //    GPIOB->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 2);
-    //    GPIOB->BCR = (1 << 2);
     GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_FLOATING) << (4 * 2);
-    // PB3: DRIVE_SELECT_DOSV_B output
+    // PB3: DRIVE_SELECT_DOSV_B output (未使用)
     GPIOB->CFGLR &= ~(0xf << (4 * 3));
     GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_FLOATING) << (4 * 3);
-    GPIOB->BCR = (1 << 3);
     // PB4: MOTOR_ON_DOSV output
     GPIOB->CFGLR &= ~(0xf << (4 * 4));
     GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_FLOATING) << (4 * 4);
@@ -261,10 +258,7 @@ int main() {
 
     // UIシステムを初期化する
     ui_init(ctx);
-    ui_change_page(UI_PAGE_MAIN);
-    ui_cursor(UI_PAGE_BOOT, 0, 2);
-    ui_print(UI_PAGE_BOOT, "      Minyas X\n");
-    ui_print(UI_PAGE_BOOT, "    - Sleeping -\n");
+    ui_change_page(UI_PAGE_BOOT);
 
     Delay_Ms(1000);
     ui_change_page(UI_PAGE_LOG);
@@ -348,8 +342,8 @@ int main() {
     // 音再生テスト
     // play_start_melody(ctx, &melody_power_on);
 
-    // ui_log_set_level(UI_LOG_LEVEL_INFO);
-    ui_log_set_level(UI_LOG_LEVEL_TRACE);
+    ui_log_set_level(UI_LOG_LEVEL_INFO);
+    // ui_log_set_level(UI_LOG_LEVEL_TRACE);
 
     // test
     // ctx->drive[1].mode_select_inverted = true;
@@ -358,21 +352,17 @@ int main() {
         uint64_t systick = SysTick->CNT;
         uint32_t ms = systick / (F_CPU / 1000);
         power_control_poll(ctx, ms);
+        ui_poll(ctx, ms);
 
         if (ctx->power_on) {
-            if (ui_get_current_page() == UI_PAGE_BOOT) {
-                ui_change_page(UI_PAGE_MAIN);
-            }
             ui_log(UI_LOG_LEVEL_TRACE, "1");
-            WS2812_SPI_poll(ctx, ms);
+            // WS2812_SPI_poll(ctx, ms);
             ui_log(UI_LOG_LEVEL_TRACE, "2");
             ina3221_poll(ctx, ms);
             ui_log(UI_LOG_LEVEL_TRACE, "3");
             pcfdd_poll(ctx, ms);
             ui_log(UI_LOG_LEVEL_TRACE, "4");
             x68fdd_poll(ctx, ms);
-            ui_log(UI_LOG_LEVEL_TRACE, "5");
-            ui_poll(ctx, ms);
             ui_log(UI_LOG_LEVEL_TRACE, "6");
             play_poll(ctx, ms);
             ui_log(UI_LOG_LEVEL_TRACE, "7");

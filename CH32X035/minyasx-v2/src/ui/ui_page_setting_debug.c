@@ -38,6 +38,7 @@ void ui_page_setting_debug_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
     // PBN4の出力状態を読み取り、MOTORのON/OFFを表示する
     // PB7 : LOCK_ACK input
     // PC6 : LOCK input
+    uint32_t porta = GPIOA->INDR;
     uint32_t portb = GPIOB->INDR;
     bool motor_enabled = (portb & (1 << 4));  // MOTOR_ON_DOSV is active high
     ui_cursor(pctx->page, 8, 1);
@@ -65,11 +66,11 @@ void ui_page_setting_debug_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
     ui_cursor(pctx->page, 8, 3);
     ui_printf(pctx->page, "%4s", fddpw_enabled ? "ON       " : "OFF      ");
     // DS A (PB2) の状態を読み取り、表示する
-    bool ds_a_enabled = (portb & (1 << 2));  // FDD_DS_A is active high
+    bool ds_a_enabled = (porta & (1 << 0));  // FDD_DS_A is active high
     ui_cursor(pctx->page, 8, 4);
     ui_printf(pctx->page, "%4s", ds_a_enabled ? "ON       " : "OFF      ");
     // DS B (PB3) の状態を読み取り、表示する
-    bool ds_b_enabled = (portb & (1 << 3));  // FDD_DS_B is active high
+    bool ds_b_enabled = (porta & (1 << 1));  // FDD_DS_B is active high
     ui_cursor(pctx->page, 8, 5);
     ui_printf(pctx->page, "%4s", ds_b_enabled ? "ON       " : "OFF      ");
 }

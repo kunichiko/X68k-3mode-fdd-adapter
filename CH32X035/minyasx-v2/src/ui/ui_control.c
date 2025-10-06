@@ -245,6 +245,7 @@ void ui_init(minyasx_context_t *ctx) {
     current_page = UI_PAGE_MAIN;
 
     // 各ページの初期化
+    ui_page_boot_init(&ui_pages[UI_PAGE_BOOT]);
     ui_page_main_init(&ui_pages[UI_PAGE_MAIN]);
     ui_page_menu_init(&ui_pages[UI_PAGE_MENU]);
     ui_page_about_init(&ui_pages[UI_PAGE_ABOUT]);
