@@ -546,26 +546,25 @@ bool seek_to_track0(int drive) {
     int seek_count = 0;
     // シーク Part1
     drive_select(drive, true);
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 1; i++) {
         step_dosv(drive, true);  // 内周方向にステップ
     }
-    // ここで 100msec待つ(Track00以外でシークを一度確定しないとDISK_CHANGEがクリアされないドライブがある)
-    Delay_Ms(10);
+    // ここで 100msec待つ(Track00以外でシークを一度確定しないとDISK_CHANGEがクリアされないドライブがある?)
+    Delay_Ms(100);
     // シーク Part2
     seek_count = 0;
     const int SEEK_COUNT_MAX = 100;
     while (seek_count < SEEK_COUNT_MAX) {
-        seek_count++;
         // TRACK0を見て、トラック0に到達したら抜ける
         if ((GPIOB->INDR & (1 << 10)) == 0) {
             // TRACK0_DOSV = 0 (Low) になった
             break;
         }
         step_dosv(drive, false);  // 外周方向にステップ
+        seek_count++;
     }
-    Delay_Ms(100);
+    Delay_Ms(1);
     drive_select(drive, false);
-    Delay_Ms(100);
 
     ui_logf(UI_LOG_LEVEL_INFO, "  Seeked %d steps\n", seek_count);
     // 戻り値: SEEK_COUNT_MAX ステップ以内にトラック0に到達したらtrue
@@ -632,22 +631,50 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
 
     drive_status_t* d = &ctx->drive[drive];
 
+    // 0. READY_MCU_n/DISK_IN_x_nはディアサートし、もFDC側にメディア無しを通知する
+    GPIOB->BSHR = (drive == 0) ? GPIO_Pin_12 : GPIO_Pin_13;  // READY_MCU_A_n / READY_MCU_B_n (High=準備完了でない)
+    uint8_t gp3_vin = greenpak_get_virtualinput(3 - 1);
+    gp3_vin |= (1 << (5 - drive));  // bit4/5を0にして、DISK_IN_x_nをDisableにする
+    greenpak_set_virtualinput(3 - 1, gp3_vin);
+
     // 1. LOCK_REQをアサートして、LOCK_ACKがアサートされるまで待つ
+    ui_logf(UI_LOG_LEVEL_INFO, "Media Detecting (%d)\n", drive);
     if (!get_fdd_lock()) {
         // LOCK取得失敗 (一旦リターンし次回の呼び出しで再度試みる)
+        ui_logf(UI_LOG_LEVEL_INFO, " Lock failed\n");
         return;
     }
+    ui_logf(UI_LOG_LEVEL_INFO, " Lock acquired\n");
 
     // TODO: ここでDRIVE_SELECT_A/Bが両方ともアクティブでないことを確認する
 
     // 2. TRACK00にシークする
-    // これをするとPC FDDの DISK_CHANGEもクリアされる
+    // これをするとメディアが入っている時はPC FDDの DISK_CHANGEもクリアされる
+    // (メディアが入っていない時はDISK_CHANGEはクリアされない=常にLow)
     seek_to_track0(drive);
 
-    // 3. PC FDD側のDrive Selectをアクティブにし、MOTOR_ONもアクティブにする
-    //    GPIOB->BSHR = (1 << (2 + drive));  // Drive Select A/B active
+    // 3. PC FDD側のDrive Selectをアクティブにし、DISK_CHANGEがアクティブかを確認する
     drive_select(drive, true);
+    bool disk_change = (GPIOB->INDR & (1 << 8)) == 0;  // DISK_CHANGE_DOSV = 0 (Low) active
+    if (disk_change) {
+        // シークしたのにDISK_CHANGEがアクティブなまま
+        // →メディアが入っていないと判断する
+        drive_select(drive, false);  // Drive Selectを非アクティブにする
+        d->state = DRIVE_STATE_NO_MEDIA;
+        d->rpm_measured = FDD_RPM_UNKNOWN;
+        d->bps_measured = BPS_UNKNOWN;
+        uint8_t gp3_vin = greenpak_get_virtualinput(3 - 1);
+        gp3_vin |= (1 << (5 - drive));  // bit4/5を1にして、DISK_IN_x_nをDisableにする
+        greenpak_set_virtualinput(3 - 1, gp3_vin);
+        release_fdd_lock();
+        ui_logf(UI_LOG_LEVEL_INFO, " No Media (Disk Change)\n");
+        return;
+    }
+
+    // 4. メディアがありそうなのでMOTOR_ONもアクティブにし、INDEX計測できるようにする
     if ((GPIOB->INDR & (1 << 4)) == 0) {
+        // MOTOR_ON_DOSV (PB4) がアクティブじゃない場合は、アクティブにする
+        ui_logf(UI_LOG_LEVEL_INFO, " Motor On\n");
         uint8_t gp4_in = greenpak_get_virtualinput(4 - 1);
         gp4_in |= (1 << 0);  // bit0 = 1 (MOTOR_ON = 1)
         greenpak_set_virtualinput(4 - 1, gp4_in);
@@ -655,11 +682,11 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
         Delay_Ms(300);
     }
 
-    // 4. 500msecの間に INDEXパルスが来るかを監視する
+    // 5. 1000msecの間に INDEXパルスが来るかを監視する
     uint32_t systick_start = SysTick->CNTL;
     bool index_low_seen = false;
     bool index_high_seen = false;
-    while ((SysTick->CNTL - systick_start) < (500 * 1000 * 48)) {
+    while ((SysTick->CNTL - systick_start) < (1000 * 1000 * 48)) {
         uint32_t gpioa = GPIOA->INDR;
         if ((gpioa & (1 << 6)) == 0) {
             // INDEX_DOSV (PA6) = 0 (Low) になった
@@ -678,9 +705,13 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
     if (!(index_low_seen && index_high_seen)) {
         // INDEXパルスが来なかった
         // →メディア無しと判断する
+        ui_logf(UI_LOG_LEVEL_INFO, " No Index Pulse\n");
         d->state = DRIVE_STATE_NO_MEDIA;
         d->rpm_measured = FDD_RPM_UNKNOWN;
         d->bps_measured = BPS_UNKNOWN;
+        uint8_t gp3_vin = greenpak_get_virtualinput(3 - 1);
+        gp3_vin |= (1 << (5 - drive));  // bit4/5を1にして、DISK_IN_x_nをDisableにする
+        greenpak_set_virtualinput(3 - 1, gp3_vin);
     } else {
         // INDEXパルスが来た
         // →メディア有りと判断する
@@ -763,7 +794,6 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
             process_media_detecting(ctx, drive);
             break;
         case DRIVE_STATE_NO_MEDIA:
-
             process_no_media(ctx, drive);
             break;
         case DRIVE_STATE_READY:
@@ -774,51 +804,56 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
         }
     }
 
-    // DISK_CHANGE_DOSV (PB8) の変化を監視し、変化があったらメディア検出状態に遷移する
-#if 0
-    static int disk_change_count[2] = {0, 0};
+    //
+    // メディアの抜き差し検出
+    //
+
+    // DSがアサートされているかどうかを見て、その際にDISK_CHANGE_DOSV (PB8) のアサートを監視し、
+    // もしDISCK_CHANGEを検出したらメディア検出状態に遷移する
+    bool disk_change_det[2] = {true, true};
     for (int drive = 0; drive < 2; drive++) {
-        drive_status_t* drv = &ctx->drive[drive];
-        uint32_t gpiob = GPIOB->INDR;
-        bool drive_select = (gpiob & (1 << (2 + drive)));  // Drive Select A/B active?
-        bool disk_change = (gpiob & (1 << 8)) == 0;        // DISK_CHANGE_DOSV = 0 (Low) active?
-        if (drive_select) {
-            if (disk_change) {
-                disk_change_count[drive]++;
-                if (disk_change_count[drive] >= 3) {
-                    // 3回連続でDISK_CHANGEがアサートされている
-                    disk_change_count[drive] = 0;
-                    ui_printf(UI_PAGE_LOG, "D%d: Disk Chg det\n", drive);
-                    if (drv->state == DRIVE_STATE_READY) {
-                        // READY状態でDISK_CHANGEがアサートされたらメディア検出状態に遷移する
-                        // アクセス中なのでちょっと怖いが……
-                        drv->state = DRIVE_STATE_MEDIA_DETECTING;
-                    }
-                    if (drv->state == DRIVE_STATE_NO_MEDIA) {
-                        // NO_MEDIAでDISK_CHANGEがアサートされたらメディア検出状態に遷移する
-                        drv->state = DRIVE_STATE_MEDIA_DETECTING;
-                    }
-                }
-            } else {
-                disk_change_count[drive] = 0;
-            }
-        }
-    }
-#endif
-    for (int drive = 0; drive < 2; drive++) {
-        drive_status_t* drv = &ctx->drive[drive];
         uint32_t systick_start = SysTick->CNTL;
-        bool disk_change_det = true;
-        while ((SysTick->CNTL - systick_start) < (10 * 1000 * 48)) {  // 10msec継続しているか
-            uint32_t gpiob = GPIOB->INDR;
-            bool drive_select = (gpiob & (1 << (2 + drive)));  // Drive Select A/B active?
-            bool disk_change = (gpiob & (1 << 8)) == 0;        // DISK_CHANGE_DOSV = 0 (Low) active?
+        while ((SysTick->CNTL - systick_start) < (10 * 1000 * 48)) {      // 10msecだけ監視
+            bool drive_select = (GPIOA->INDR & (1 << (0 + drive))) != 0;  // Drive Select A/B active?
+            bool disk_change = (GPIOB->INDR & (1 << 8)) == 0;             // DISK_CHANGE_DOSV = 0 (Low) active
             if (!drive_select || !disk_change) {
-                disk_change_det = false;
+                disk_change_det[drive] = false;
                 break;
             }
         }
-        if (disk_change_det) {
+    }
+
+    // DSがアサートされていない場合はDISK_CHANGEの検知ができないので、
+    // 定期的にロックを取得して、DSをアサートしてDISK_CHANGEを監視する
+    static uint32_t last_media_check_time = 0;
+    if (systick_ms - last_media_check_time > 3000) {
+        last_media_check_time = systick_ms;
+        // 3秒に一度、LOCKを取得してDISK_CHANGEを監視する
+        if (get_fdd_lock()) {
+            // LOCK取得成功
+            for (int drive = 0; drive < 2; drive++) {
+                drive_select(drive, true);
+                Delay_Ms(1);                                       // 少し待つ
+                bool disk_change = (GPIOB->INDR & (1 << 8)) == 0;  // DISK_CHANGE_DOSV = 0 (Low) active
+                if (disk_change) {
+                    Delay_Ms(10);                                 // 念のためもう一度確認する (10msec)
+                    disk_change = (GPIOB->INDR & (1 << 8)) == 0;  // DISK_CHANGE_DOSV = 0 (Low) active
+                    if (disk_change) {
+                        // 2回ともDISK_CHANGEがアクティブだった
+                        ui_logf(UI_LOG_LEVEL_INFO, "Disk Change detected on Drive %d during polling\n", drive);
+                        disk_change_det[drive] = true;
+                    }
+                }
+                drive_select(drive, false);
+            }
+            release_fdd_lock();
+        }
+    }
+
+    // DISK_CHANGEが検出された場合の処理
+    for (int drive = 0; drive < 2; drive++) {
+        drive_status_t* drv = &ctx->drive[drive];
+        if (disk_change_det[drive]) {
             ui_printf(UI_PAGE_LOG, "Disk Chg det %1d\n", drive);
             if (drv->state == DRIVE_STATE_READY) {
                 // READY状態でDISK_CHANGEがアサートされたらメディア検出状態に遷移する
@@ -832,7 +867,9 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
         }
     }
 
+    //
     // RPMとBPSの計測を1秒毎に行う
+    //
     static uint64_t last_tick = 0;
     if (systick_ms - last_tick < 1000) {
         return;

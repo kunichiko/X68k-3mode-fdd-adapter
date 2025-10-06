@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GPDProject version="39" oldestCompatibleVersion="32" GPDVersion="6.50.002" lastChange="4 Oct 2025 16:17:26" projectChecksumState="1" projectChecksum="5d821fac">
+<GPDProject version="39" oldestCompatibleVersion="32" GPDVersion="6.50.002" lastChange="5 Oct 2025 09:44:08" projectChecksumState="1" projectChecksum="cbc45f6f">
     <generalProjectSettings/>
     <chip family="04" type="06" friendlyName="GreenPAK 6" partNumber="36" package="16">
         <nvmData registerLenght="2048">49 14 0 48 44 9C B 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 50 D3 47 4 0 0 0 0 0 0 0 0 0 0 0 0 2C 25 FC 3 0 0 0 0 0 0 0 0 0 0 0 0 0 E0 FC F 0 0 0 0 0 C5 9 40 C3 29 44 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 61 51 0 51 51 51 8 0 0 88 30 30 0 51 51 D 3D D D 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 14 22 30 C 0 0 0 0 0 0 0 BB 54 0 0 FE 0 0 F7 FE FB C0 0 E0 0 0 0 0 0 53 20 0 1 0 0 0 2 1 0 0 2 0 1 0 0 2 1 0 0 2 0 1 0 FE 2 1 10 0 B0 0 1 10 0 2 0 1 0 0 0 4 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 A5</nvmData>

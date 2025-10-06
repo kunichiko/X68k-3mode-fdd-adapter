@@ -61,6 +61,7 @@ typedef struct ui_page_context_t {
 void ui_change_page(ui_page_type_t page);
 ui_page_type_t ui_get_current_page(void);
 
+void ui_page_boot_init(ui_page_context_t* win);
 void ui_page_main_init(ui_page_context_t* win);
 void ui_page_menu_init(ui_page_context_t* win);
 void ui_page_about_init(ui_page_context_t* win);

@@ -185,7 +185,7 @@ bool fdd_power_is_enabled(void) {
 }
 
 static bool is_x68k_pwr_on = false;
-static const bool force_x68k_pwr_on = false;  // trueにすると、X68Kの電源ONを強制的に検出したことにする
+static bool force_pwr_on = false;  // trueにすると、X68Kの電源ONを強制的に検出したことにする
 static uint32_t last_indexlow_ms = 0;
 
 const int GP_UNIT = 2;  // GreenPAK3を使う
@@ -215,7 +215,7 @@ const int GP_UNIT = 2;  // GreenPAK3を使う
  * このINDEX_SNSはGP3のMatrix Input 18 (LUT3_0_DFF3_OUT) から読み取れます。
  */
 static bool detect_x68k_power_on(uint32_t systick_ms) {
-    if (force_x68k_pwr_on) {
+    if (force_pwr_on) {
         return true;
     }
     bool index_sns = greenpak_get_matrixinput(GP_UNIT, 18);  // index_sns = !index_out || !index_in
@@ -224,7 +224,7 @@ static bool detect_x68k_power_on(uint32_t systick_ms) {
 }
 
 static bool detect_x68k_power_off(uint32_t systick_ms) {
-    if (force_x68k_pwr_on) {
+    if (force_pwr_on) {
         return false;
     }
     if (last_indexlow_ms != 0) {
@@ -310,4 +310,8 @@ void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
         if (i % 4 == 0) ui_write(UI_PAGE_DEBUG, ' ');
         ui_write(UI_PAGE_DEBUG, val ? '1' : '0');
     }
+}
+
+void set_force_pwr_on(bool enable) {
+    force_pwr_on = enable;
 }
