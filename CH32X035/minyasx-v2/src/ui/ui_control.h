@@ -80,7 +80,7 @@ ui_write_t ui_get_writer(ui_page_type_t page);
 
 void ui_clear(ui_page_type_t page);
 void ui_cursor(ui_page_type_t page, uint8_t x, uint8_t y);
-void ui_print(ui_page_type_t page, char* str);
+void ui_print(ui_page_type_t page, const char* str);
 void ui_write(ui_page_type_t page, char c);
 char ui_read_char(ui_page_type_t page, uint8_t x, uint8_t y);
 

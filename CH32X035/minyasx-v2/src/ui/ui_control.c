@@ -84,7 +84,7 @@ void ui_cursor(ui_page_type_t page, uint8_t x, uint8_t y) {
     }
 }
 
-void ui_print(ui_page_type_t page, char *str) {
+void ui_print(ui_page_type_t page, const char *str) {
     while (*str) ui_write(page, *str++);
 }
 
