@@ -124,12 +124,12 @@ void ui_select_keyin(ui_select_t* select, ui_key_mask_t keys);
 #define UI_DIALOG_BACKUP_WIDTH 14
 #define UI_DIALOG_BACKUP_HEIGHT 4
 typedef struct {
-    ui_page_type_t page;   // ダイアログを表示するページ
-    const char* message;   // メッセージ（最大3行まで想定）
-    bool dialog_open;      // ダイアログが開いているか
-    bool result;           // true=OK, false=Cancel
-    bool selection_made;   // 選択が確定したか
-    int selected_button;   // 0=OK, 1=Cancel
+    ui_page_type_t page;                                           // ダイアログを表示するページ
+    const char* message;                                           // メッセージ（最大3行まで想定）
+    bool dialog_open;                                              // ダイアログが開いているか
+    bool result;                                                   // true=OK, false=Cancel
+    bool selection_made;                                           // 選択が確定したか
+    int selected_button;                                           // 0=OK, 1=Cancel
     char backup[UI_DIALOG_BACKUP_HEIGHT][UI_DIALOG_BACKUP_WIDTH];  // 背景のバックアップ
 } ui_dialog_t;
 void ui_dialog_init(ui_dialog_t* dialog);
@@ -140,9 +140,10 @@ void ui_dialog_close(ui_dialog_t* dialog);
 
 typedef enum {
     UI_LOG_LEVEL_TRACE = 0,  // トレース（詳細情報、デバッグ用）
-    UI_LOG_LEVEL_INFO = 1,   // 情報
-    UI_LOG_LEVEL_WARN = 2,   // 警告
-    UI_LOG_LEVEL_ERROR = 3,  // エラー
+    UI_LOG_LEVEL_DEBUG = 1,  // デバッグ（詳細情報、デバッグ用）
+    UI_LOG_LEVEL_INFO = 2,   // 情報
+    UI_LOG_LEVEL_WARN = 3,   // 警告
+    UI_LOG_LEVEL_ERROR = 4,  // エラー
 } ui_log_level_t;
 
 void ui_log_set_level(ui_log_level_t level);

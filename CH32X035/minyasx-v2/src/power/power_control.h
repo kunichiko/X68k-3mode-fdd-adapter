@@ -28,7 +28,7 @@ void power_pvd_init(void);
 power_state_t* power_get_state(void);
 
 // スリープ状態に遷移（低電圧検出時）
-void power_enter_sleep(minyasx_context_t* ctx);
+void power_enter_lv_sleep(minyasx_context_t* ctx);
 
 // USB-PDネゴシエーションの再実行（電圧不足時）
 bool power_renegotiate_pd(minyasx_context_t* ctx);

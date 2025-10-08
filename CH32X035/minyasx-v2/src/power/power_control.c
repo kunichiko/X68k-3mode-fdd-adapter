@@ -193,9 +193,9 @@ bool fdd_power_is_enabled(void) {
 }
 
 static bool is_x68k_pwr_on = false;
-static bool force_pwr_on = false;  // trueにすると、X68Kの電源ONを強制的に検出したことにする
+static bool force_pwr_on = false;           // trueにすると、X68Kの電源ONを強制的に検出したことにする
 static uint32_t force_pwr_on_start_ms = 0;  // 強制パワーオンが有効になった時刻
-static uint32_t last_key_activity_ms = 0;  // 最後にキー操作があった時刻
+static uint32_t last_key_activity_ms = 0;   // 最後にキー操作があった時刻
 static uint32_t last_indexlow_ms = 0;
 
 const int GP_UNIT = 2;  // GreenPAK3を使う
@@ -287,7 +287,7 @@ void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
             // PVDOがセット（低電圧検出）されたらリセット処理
             if (pvdo) {
                 ui_log(UI_LOG_LEVEL_ERROR, "Low voltage detected, resetting...\n");
-                power_enter_sleep(ctx);
+                power_enter_lv_sleep(ctx);
             }
         }
     }
@@ -432,15 +432,17 @@ void power_pvd_init(void) {
  * 低電圧検出時に呼ばれる。FDD電源を安全にOFFにし、電圧が回復するまで待機する。
  * 電圧が4V以上に回復したらリセットして起動処理をやり直す。
  */
-void power_enter_sleep(minyasx_context_t* ctx) {
+void power_enter_lv_sleep(minyasx_context_t* ctx) {
+    // 電源状態をOFFに設定（LEDのpollなどを停止）
+    ctx->power_on = false;
+    is_x68k_pwr_on = false;
+    power_state.x68k_power_on = false;
+
     // FDD電源を緊急OFFにする
     GPIOA->BCR = (1 << (20));  // Disable (+12V_EXT_EN=Low)
     GPIOA->BCR = (1 << (19));  // Disable (+12V_EN=Low)
     GPIOA->BCR = (1 << (18));  // Disable (+5V_EN=Low)
     power_state.fdd_power_on = false;
-
-    // 全LEDを消灯
-    WS2812_SPI_clear();
 
     // UI_PAGE_BOOTを使って警告メッセージを表示
     ui_page_type_t page = UI_PAGE_BOOT;
@@ -453,8 +455,12 @@ void power_enter_sleep(minyasx_context_t* ctx) {
     ui_print(page, "     (>4.0V)");
     ui_change_page(UI_PAGE_BOOT);
 
+    // ログにも警告メッセージを表示
     ui_log(UI_LOG_LEVEL_ERROR, "!!! LOW VOLTAGE !!!\n");
     ui_log(UI_LOG_LEVEL_ERROR, "Waiting for voltage recovery (>4V)...\n");
+
+    // 全LEDを消灯
+    WS2812_SPI_clear();
 
     // 電圧が回復するまで待機ループ
     while (1) {

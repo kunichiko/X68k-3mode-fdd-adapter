@@ -537,6 +537,10 @@ void drive_select(int drive, bool active) {
     greenpak_set_virtualinput(1 - 1, gp1_vin);
 }
 
+void pcfdd_drive_select(int drive, bool active) {
+    drive_select(drive, active);
+}
+
 bool seek_to_track0(int drive) {
     ui_logf(UI_LOG_LEVEL_TRACE, "Seek Track0 (D:%d)\n", drive);
     if (drive < 0 || drive > 1) {

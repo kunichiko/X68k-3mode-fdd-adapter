@@ -287,19 +287,19 @@ int main() {
     // Delay_Ms(1000);
 
     // LED制御を開始する
-    ui_log(UI_LOG_LEVEL_INFO, "LED Init");
+    ui_log(UI_LOG_LEVEL_INFO, "LED Init\n");
     WS2812_SPI_init();
 
     Delay_Ms(500);
 
     //
-    ui_log(UI_LOG_LEVEL_INFO, "PCFDD Init");
+    ui_log(UI_LOG_LEVEL_INFO, "PCFDD Init\n");
     pcfdd_init(ctx);
-    ui_log(UI_LOG_LEVEL_INFO, "X68kFDD IF Init");
+    ui_log(UI_LOG_LEVEL_INFO, "X68kFDD IF Init\n");
     x68fdd_init(ctx);
 
     // DIP SWの状態を GreenPAKにセットする
-    ui_log(UI_LOG_LEVEL_INFO, "Reading DIP SW");
+    ui_log(UI_LOG_LEVEL_INFO, "Reading DIP SW\n");
     uint8_t ds0 = (GPIOA->INDR >> 22) & 1;
     uint8_t ds1 = (GPIOA->INDR >> 23) & 1;
     for (int i = 0; i < 4; i++) {
@@ -333,7 +333,7 @@ int main() {
 
     // 音再生コンテキストの初期化
     // タイマーの初期化の関係があるので pcfdd_init() の後に呼ぶ
-    ui_log(UI_LOG_LEVEL_INFO, "Play Init");
+    ui_log(UI_LOG_LEVEL_INFO, "Play Init\n");
     play_init(ctx);
 
     //
@@ -345,7 +345,8 @@ int main() {
     // 音再生テスト
     // play_start_melody(ctx, &melody_power_on);
 
-    ui_log_set_level(UI_LOG_LEVEL_INFO);
+    // ui_log_set_level(UI_LOG_LEVEL_INFO);
+    ui_log_set_level(UI_LOG_LEVEL_DEBUG);
     // ui_log_set_level(UI_LOG_LEVEL_TRACE);
 
     // test
@@ -370,6 +371,7 @@ int main() {
         } else {
             // 電源OFFの場合、BOOT画面でなければBOOT画面に遷移
             if (ui_get_current_page() != UI_PAGE_BOOT) {
+                WS2812_SPI_clear();  // 全LEDを消灯
                 ui_change_page(UI_PAGE_BOOT);
             }
         }

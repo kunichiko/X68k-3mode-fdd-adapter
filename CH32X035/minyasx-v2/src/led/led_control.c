@@ -5,6 +5,7 @@
 
 #include "ch32fun.h"
 #include "minyasx.h"
+#include "ui/ui_control.h"
 
 // #define WSRBG //For WS2816C's.
 #define WSGRB  // For SK6805-EC15
@@ -21,6 +22,7 @@
 #define LED_GREEN 0xFF0000  // G=255, R=0, B=0
 #define LED_BLUE 0x0000FF   // G=0, R=0, B=255
 #define LED_RED 0x00FF00    // G=0, R=255, B=0
+#define LED_WHITE 0xFFFFFF  // G=255, R=255, B=255
 
 // 明るさ調整（1/8に減光）
 static inline uint32_t scale_brightness(uint32_t color) {
@@ -38,6 +40,9 @@ static uint32_t led_colors[NR_LEDS];
 
 // グローバルコンテキスト保存用
 static minyasx_context_t* g_led_ctx = NULL;
+
+// LEDテストモード状態
+static led_test_mode_t led_test_mode = LED_TEST_MODE_NORMAL;
 
 // 点滅制御用
 #define BLINK_INTERVAL_MS 500
@@ -59,20 +64,103 @@ void WS2812_SPI_init() {
     for (int i = 0; i < NR_LEDS; i++) {
         led_colors[i] = LED_OFF;
     }
+
+    // 即座に消灯を反映
+    WS2812BDMAStart(NR_LEDS);
+
+    // 送信完了を待機
+    int timeout = 10000;
+    while (WS2812BLEDInUse && timeout > 0) {
+        timeout--;
+    }
 }
 
 void WS2812_SPI_clear() {
+    ui_log(UI_LOG_LEVEL_INFO, "LED clear start\n");
+
+    // テストモードをNORMALにリセット
+    led_test_mode = LED_TEST_MODE_NORMAL;
+
     // 全LED消灯
     for (int i = 0; i < NR_LEDS; i++) {
         led_colors[i] = LED_OFF;
     }
+
+    // DMAの完了を待機（タイムアウト付き）
+    int timeout = 10000;
+    while (WS2812BLEDInUse && timeout > 0) {
+        timeout--;
+    }
+    if (timeout == 0) {
+        ui_log(UI_LOG_LEVEL_WARN, "LED clear: DMA busy timeout (pre)\n");
+    }
+
     // 即座に反映
     WS2812BDMAStart(NR_LEDS);
+
+    // 送信完了を待機
+    timeout = 10000;
+    while (WS2812BLEDInUse && timeout > 0) {
+        timeout--;
+    }
+    if (timeout == 0) {
+        ui_log(UI_LOG_LEVEL_WARN, "LED clear: DMA busy timeout (post)\n");
+    }
+
+    ui_log(UI_LOG_LEVEL_INFO, "LED clear done\n");
+}
+
+void WS2812_SPI_set_test_mode(led_test_mode_t mode) {
+    led_test_mode = mode;
+
+    // DMAの完了を待機（タイムアウト付き）
+    int timeout = 10000;
+    while (WS2812BLEDInUse && timeout > 0) {
+        timeout--;
+    }
+
+    // モードに応じてLEDを設定
+    switch (mode) {
+    case LED_TEST_MODE_ALL_ON:
+        // 全LEDを白(暗め)で点灯
+        for (int i = 0; i < NR_LEDS; i++) {
+            led_colors[i] = scale_brightness(LED_WHITE);
+        }
+        break;
+    case LED_TEST_MODE_ALL_OFF:
+        // 全LED消灯
+        for (int i = 0; i < NR_LEDS; i++) {
+            led_colors[i] = LED_OFF;
+        }
+        break;
+    case LED_TEST_MODE_NORMAL:
+    default:
+        // 通常モードに戻る（次のpollで更新される）
+        return;
+    }
+
+    // 即座に反映
+    WS2812BDMAStart(NR_LEDS);
+
+    // 送信完了を待機
+    timeout = 10000;
+    while (WS2812BLEDInUse && timeout > 0) {
+        timeout--;
+    }
+}
+
+led_test_mode_t WS2812_SPI_get_test_mode() {
+    return led_test_mode;
 }
 
 void WS2812_SPI_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     // コンテキストを保存
     g_led_ctx = ctx;
+
+    // テストモード時は何もしない
+    if (led_test_mode != LED_TEST_MODE_NORMAL) {
+        return;
+    }
 
     // 前回のDMA転送が完了するまで待機（非ブロッキング確認）
     if (WS2812BLEDInUse) {
