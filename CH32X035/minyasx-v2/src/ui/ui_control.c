@@ -440,29 +440,29 @@ void ui_select_keyin(ui_select_t *select, ui_key_mask_t keys) {
 void ui_dialog_init(ui_dialog_t* dialog) {
     ui_page_type_t page = dialog->page;
 
-    // 背景をバックアップ (x=5, y=2から14文字×4行)
+    // 背景をバックアップ (x=3, y=2から14文字×4行)
     for (int y = 0; y < UI_DIALOG_BACKUP_HEIGHT; y++) {
         for (int x = 0; x < UI_DIALOG_BACKUP_WIDTH; x++) {
-            dialog->backup[y][x] = ui_read_char(page, 5 + x, 2 + y);
+            dialog->backup[y][x] = ui_read_char(page, 3 + x, 2 + y);
         }
     }
 
     // ダイアログの枠を描画（中央に表示）
-    ui_cursor(page, 5, 2);
+    ui_cursor(page, 3, 2);
     ui_print(page, "+------------+");
-    ui_cursor(page, 5, 3);
+    ui_cursor(page, 3, 3);
     ui_print(page, "|            |");
-    ui_cursor(page, 5, 4);
+    ui_cursor(page, 3, 4);
     ui_print(page, "|            |");
-    ui_cursor(page, 5, 5);
+    ui_cursor(page, 3, 5);
     ui_print(page, "+------------+");
 
     // メッセージを表示
-    ui_cursor(page, 7, 3);
+    ui_cursor(page, 5, 3);
     ui_print(page, dialog->message);
 
     // OKボタンとCancelボタンを表示
-    ui_cursor(page, 6, 4);
+    ui_cursor(page, 4, 4);
     if (dialog->selected_button == 0) {
         ui_print(page, "[OK] Cancel ");
     } else {
@@ -489,7 +489,7 @@ void ui_dialog_keyin(ui_dialog_t* dialog, ui_key_mask_t keys) {
     }
 
     // ボタンの表示を更新
-    ui_cursor(dialog->page, 6, 4);
+    ui_cursor(dialog->page, 4, 4);
     if (dialog->selected_button == 0) {
         ui_print(dialog->page, "[OK] Cancel ");
     } else {
@@ -505,7 +505,7 @@ void ui_dialog_close(ui_dialog_t* dialog) {
 
     // バックアップした背景を復元
     for (int y = 0; y < UI_DIALOG_BACKUP_HEIGHT; y++) {
-        ui_cursor(page, 5, 2 + y);
+        ui_cursor(page, 3, 2 + y);
         for (int x = 0; x < UI_DIALOG_BACKUP_WIDTH; x++) {
             ui_write(page, dialog->backup[y][x]);
         }
