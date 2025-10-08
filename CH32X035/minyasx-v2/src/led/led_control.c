@@ -61,6 +61,15 @@ void WS2812_SPI_init() {
     }
 }
 
+void WS2812_SPI_clear() {
+    // 全LED消灯
+    for (int i = 0; i < NR_LEDS; i++) {
+        led_colors[i] = LED_OFF;
+    }
+    // 即座に反映
+    WS2812BDMAStart(NR_LEDS);
+}
+
 void WS2812_SPI_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     // コンテキストを保存
     g_led_ctx = ctx;

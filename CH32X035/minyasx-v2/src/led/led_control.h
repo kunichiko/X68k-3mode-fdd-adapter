@@ -11,5 +11,6 @@
 
 void WS2812_SPI_init();
 void WS2812_SPI_poll(minyasx_context_t* ctx, uint32_t systick_ms);
+void WS2812_SPI_clear();  // 全LEDを消灯
 
 #endif  //_LED_CONTROL_H

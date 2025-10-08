@@ -31,6 +31,7 @@
 
 #include "greenpak/greenpak_control.h"
 #include "ina3221/ina3221_control.h"
+#include "led/led_control.h"
 #include "ui/ui_control.h"
 #include "usbpd/usbpd_sink.h"
 
@@ -437,6 +438,9 @@ void power_enter_sleep(minyasx_context_t* ctx) {
     GPIOA->BCR = (1 << (19));  // Disable (+12V_EN=Low)
     GPIOA->BCR = (1 << (18));  // Disable (+5V_EN=Low)
     power_state.fdd_power_on = false;
+
+    // 全LEDを消灯
+    WS2812_SPI_clear();
 
     // UI_PAGE_BOOTを使って警告メッセージを表示
     ui_page_type_t page = UI_PAGE_BOOT;
