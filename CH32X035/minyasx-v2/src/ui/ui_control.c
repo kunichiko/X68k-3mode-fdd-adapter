@@ -1,6 +1,7 @@
 #include "ui_control.h"
 
 #include "greenpak/greenpak_control.h"
+#include "ui_page_log.h"
 
 static ui_page_context_t ui_pages[UI_PAGE_MAX];
 
@@ -197,7 +198,8 @@ void ui_write_10(char c) {
     ui_write(10, c);
 }
 void ui_write_11(char c) {
-    ui_write(11, c);
+    // UI_PAGE_LOG (11) の場合は専用の関数を使う
+    ui_page_log_write_char(c);
 }
 void ui_write_null(char c) {
     // 何もしない
@@ -259,6 +261,22 @@ void ui_init(minyasx_context_t *ctx) {
     ui_page_log_init(&ui_pages[UI_PAGE_LOG]);
 }
 
+// キー状態管理構造体
+typedef struct {
+    ui_key_mask_t current_keys;   // 現在押されているキー
+    ui_key_mask_t last_keys;      // 前回のキー状態
+    uint32_t press_start_time;    // 押され始めた時刻
+    uint32_t last_repeat_time;    // 最後にリピートした時刻
+    bool is_repeating;            // リピート中フラグ
+} key_state_t;
+
+// タイミング定数
+#define KEY_REPEAT_DELAY 500      // 長押し判定までの時間（ms）
+#define KEY_REPEAT_INTERVAL 100   // リピート間隔（ms）
+
+// リピート対象のキー（UP/DOWNのみ）
+#define KEY_REPEATABLE_MASK (UI_KEY_UP | UI_KEY_DOWN)
+
 void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
     // 各ページのポーリング処理
     for (int i = 0; i < UI_PAGE_MAX; i++) {
@@ -268,10 +286,11 @@ void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
         }
     }
 
-    // ここでキー入力のポーリングを行い、必要に応じてコールバックを呼び出す
-    // 例えば、キー状態を読み取る関数があると仮定
+    // キー状態管理（静的変数）
+    static key_state_t key_state = {0, 0, 0, 0, false};
+
+    // 現在のキー状態を読み取る
     ui_key_mask_t keys = UI_KEY_NONE;
-    static ui_key_mask_t last_keys = UI_KEY_NONE;
 
     // キー入力はGP5のIO端子をI2Cで読める
     // GPのIO端子の入力状態はレジスタ0x74,0x75で読める
@@ -294,15 +313,62 @@ void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
     if ((gp5_io8_15 & (1 << 4)) == 0) keys |= UI_KEY_EJECT_B;
     if ((gp5_io8_15 & (1 << 5)) == 0) keys |= UI_KEY_EJECT_A;
 
-    if (keys == last_keys) {
-        // キー状態が変化していない
-        return;
+    key_state.current_keys = keys;
+
+    // キー状態の変化を検出
+    bool keys_changed = (key_state.current_keys != key_state.last_keys);
+    bool should_trigger = false;
+
+    if (keys_changed) {
+        // キー状態が変化した
+        if (key_state.current_keys != UI_KEY_NONE) {
+            // 新しいキーが押された
+            key_state.press_start_time = systick_ms;
+            key_state.last_repeat_time = systick_ms;
+            key_state.is_repeating = false;
+            should_trigger = true;
+        } else {
+            // すべてのキーが離された
+            key_state.is_repeating = false;
+        }
+    } else {
+        // キー状態が変化していない（キーが押され続けている）
+        if (key_state.current_keys != UI_KEY_NONE) {
+            // リピート対象のキーが押されているかチェック
+            ui_key_mask_t repeatable_keys = key_state.current_keys & KEY_REPEATABLE_MASK;
+
+            if (repeatable_keys != UI_KEY_NONE) {
+                uint32_t elapsed = systick_ms - key_state.press_start_time;
+
+                if (!key_state.is_repeating) {
+                    // リピート開始判定
+                    if (elapsed >= KEY_REPEAT_DELAY) {
+                        key_state.is_repeating = true;
+                        key_state.last_repeat_time = systick_ms;
+                        should_trigger = true;
+                    }
+                } else {
+                    // リピート中
+                    uint32_t since_last_repeat = systick_ms - key_state.last_repeat_time;
+                    if (since_last_repeat >= KEY_REPEAT_INTERVAL) {
+                        key_state.last_repeat_time = systick_ms;
+                        should_trigger = true;
+                    }
+                }
+            }
+        }
     }
-    last_keys = keys;
-    ui_page_context_t *page = &ui_pages[current_page];
-    if (page->keyin) {
-        page->keyin(&ui_pages[current_page], keys);
+
+    // コールバック呼び出し
+    if (should_trigger && key_state.current_keys != UI_KEY_NONE) {
+        ui_page_context_t *page = &ui_pages[current_page];
+        if (page->keyin) {
+            page->keyin(&ui_pages[current_page], key_state.current_keys);
+        }
     }
+
+    // 状態を保存
+    key_state.last_keys = key_state.current_keys;
 }
 
 void ui_select_print(ui_select_t *select, bool inverted) {
