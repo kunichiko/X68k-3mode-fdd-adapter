@@ -87,8 +87,8 @@ void pcfdd_init(minyasx_context_t* ctx) {
         ctx->drive[i].state = DRIVE_STATE_POWER_OFF;
         ctx->drive[i].eject_masked = false;
         ctx->drive[i].led_blink = false;
-        //        ctx->drive[i].rpm_control = FDD_RPM_CONTROL_360;
-        ctx->drive[i].rpm_control = FDD_RPM_CONTROL_9SCDRV;
+        // rpm_controlはpreferences_init()で設定されるため、ここでは初期化しない
+        // ctx->drive[i].rpm_control = FDD_RPM_CONTROL_9SCDRV;
         ctx->drive[i].rpm_setting = FDD_RPM_360;
         ctx->drive[i].rpm_measured = FDD_RPM_UNKNOWN;
         ctx->drive[i].bps_measured = BPS_UNKNOWN;
