@@ -136,6 +136,11 @@ void ui_page_log_write_char(char c) {
         // バッファをクリア
         memset(current_line, 0, sizeof(current_line));
         current_line_pos = 0;
+
+        // 現在のページがLOGページでスクロールロックされていない場合、即座に更新
+        if (ui_get_current_page() == UI_PAGE_LOG && !log_buffer.scroll_locked) {
+            ui_refresh_log_page();
+        }
     } else if (c == '\r') {
         // キャリッジリターンは行の先頭に戻る
         current_line_pos = 0;
@@ -153,6 +158,11 @@ void ui_page_log_write_char(char c) {
             memset(current_line, 0, sizeof(current_line));
             current_line[0] = c;
             current_line_pos = 1;
+
+            // 即座に更新
+            if (ui_get_current_page() == UI_PAGE_LOG && !log_buffer.scroll_locked) {
+                ui_refresh_log_page();
+            }
         }
     }
 }

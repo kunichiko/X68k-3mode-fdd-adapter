@@ -638,13 +638,13 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
     greenpak_set_virtualinput(3 - 1, gp3_vin);
 
     // 1. LOCK_REQをアサートして、LOCK_ACKがアサートされるまで待つ
-    ui_logf(UI_LOG_LEVEL_INFO, "Media Detecting (%d)\n", drive);
+    ui_logf(UI_LOG_LEVEL_TRACE, "Media Detecting (%d)\n", drive);
     if (!get_fdd_lock()) {
         // LOCK取得失敗 (一旦リターンし次回の呼び出しで再度試みる)
-        ui_logf(UI_LOG_LEVEL_INFO, " Lock failed\n");
+        ui_logf(UI_LOG_LEVEL_TRACE, " Lock failed\n");
         return;
     }
-    ui_logf(UI_LOG_LEVEL_INFO, " Lock acquired\n");
+    ui_logf(UI_LOG_LEVEL_TRACE, " Lock acquired\n");
 
     // TODO: ここでDRIVE_SELECT_A/Bが両方ともアクティブでないことを確認する
 
@@ -667,14 +667,14 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
         gp3_vin |= (1 << (5 - drive));  // bit4/5を1にして、DISK_IN_x_nをDisableにする
         greenpak_set_virtualinput(3 - 1, gp3_vin);
         release_fdd_lock();
-        ui_logf(UI_LOG_LEVEL_INFO, " No Media (Disk Change)\n");
+        ui_logf(UI_LOG_LEVEL_TRACE, " No Media (Disk Change)\n");
         return;
     }
 
     // 4. メディアがありそうなのでMOTOR_ONもアクティブにし、INDEX計測できるようにする
     if ((GPIOB->INDR & (1 << 4)) == 0) {
         // MOTOR_ON_DOSV (PB4) がアクティブじゃない場合は、アクティブにする
-        ui_logf(UI_LOG_LEVEL_INFO, " Motor On\n");
+        ui_logf(UI_LOG_LEVEL_TRACE, " Motor On\n");
         uint8_t gp4_in = greenpak_get_virtualinput(4 - 1);
         gp4_in |= (1 << 0);  // bit0 = 1 (MOTOR_ON = 1)
         greenpak_set_virtualinput(4 - 1, gp4_in);

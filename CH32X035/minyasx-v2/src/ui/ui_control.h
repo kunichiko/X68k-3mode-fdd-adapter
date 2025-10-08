@@ -131,4 +131,7 @@ void ui_log(ui_log_level_t level, const char* message);
 ui_write_t ui_get_log_writer(ui_log_level_t level);
 #define ui_logf(level, f, ...) printF(ui_get_log_writer(level), f, ##__VA_ARGS__)
 
+// ログページの強制更新（現在のページがLOGの場合のみ）
+void ui_refresh_log_page(void);
+
 #endif  // UI_CONTROL_H

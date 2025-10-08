@@ -444,3 +444,10 @@ ui_write_t ui_get_log_writer(ui_log_level_t level) {
     }
     return ui_get_writer(UI_PAGE_LOG);
 }
+
+void ui_refresh_log_page(void) {
+    // ログページを強制的に更新（現在のページがLOGの場合のみ）
+    if (current_page == UI_PAGE_LOG) {
+        ui_page_log_refresh(&ui_pages[UI_PAGE_LOG]);
+    }
+}

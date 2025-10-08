@@ -281,6 +281,9 @@ int main() {
     // 電源制御を初期化する
     power_control_init(ctx);
 
+    // PVD（電源電圧検出）を初期化する
+    power_pvd_init();
+
     // Delay_Ms(1000);
 
     // LED制御を開始する
@@ -347,6 +350,11 @@ int main() {
 
     // test
     // ctx->drive[1].mode_select_inverted = true;
+
+    // メインループに入る前に、X68000の電源状態を初期チェック
+    uint64_t systick = SysTick->CNT;
+    uint32_t ms = systick / (F_CPU / 1000);
+    power_control_poll(ctx, ms);
 
     while (1) {
         uint64_t systick = SysTick->CNT;
