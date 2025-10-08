@@ -538,7 +538,7 @@ void drive_select(int drive, bool active) {
 }
 
 bool seek_to_track0(int drive) {
-    ui_logf(UI_LOG_LEVEL_INFO, "Seek Track0 (D:%d)\n", drive);
+    ui_logf(UI_LOG_LEVEL_TRACE, "Seek Track0 (D:%d)\n", drive);
     if (drive < 0 || drive > 1) {
         return false;
     }
@@ -566,7 +566,7 @@ bool seek_to_track0(int drive) {
     Delay_Ms(1);
     drive_select(drive, false);
 
-    ui_logf(UI_LOG_LEVEL_INFO, "  Seeked %d steps\n", seek_count);
+    ui_logf(UI_LOG_LEVEL_TRACE, "  Seeked %d steps\n", seek_count);
     // 戻り値: SEEK_COUNT_MAX ステップ以内にトラック0に到達したらtrue
     return (seek_count < SEEK_COUNT_MAX);
 }
@@ -626,7 +626,7 @@ static void process_initializing(minyasx_context_t* ctx, int drive) {
     release_fdd_lock();
 }
 
-static void process_media_detecting(minyasx_context_t* ctx, int drive) {
+static void process_media_detecting(minyasx_context_t* ctx, int drive, uint32_t systick_ms) {
     if (ctx->drive[drive].state != DRIVE_STATE_MEDIA_DETECTING) return;
 
     drive_status_t* d = &ctx->drive[drive];
@@ -660,9 +660,12 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
         // シークしたのにDISK_CHANGEがアクティブなまま
         // →メディアが入っていないと判断する
         drive_select(drive, false);  // Drive Selectを非アクティブにする
+        // MEDIA_WAITING状態に遷移
+        // タイムスタンプが0の場合（初回）のみ更新
+        if (d->media_waiting_start_ms == 0) {
+            d->media_waiting_start_ms = systick_ms;
+        }
         d->state = DRIVE_STATE_MEDIA_WAITING;
-        uint64_t systick = SysTick->CNT;
-        d->media_waiting_start_ms = systick / (F_CPU / 1000);  // MEDIA_WAITING開始時刻を記録
         d->rpm_measured = FDD_RPM_UNKNOWN;
         d->bps_measured = BPS_UNKNOWN;
         uint8_t gp3_vin = greenpak_get_virtualinput(3 - 1);
@@ -708,9 +711,12 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
         // INDEXパルスが来なかった
         // →メディア無しと判断する
         ui_logf(UI_LOG_LEVEL_INFO, " No Index Pulse\n");
+        // MEDIA_WAITING状態に遷移
+        // タイムスタンプが0の場合（初回）のみ更新
+        if (d->media_waiting_start_ms == 0) {
+            d->media_waiting_start_ms = systick_ms;
+        }
         d->state = DRIVE_STATE_MEDIA_WAITING;
-        uint64_t systick = SysTick->CNT;
-        d->media_waiting_start_ms = systick / (F_CPU / 1000);  // MEDIA_WAITING開始時刻を記録
         d->rpm_measured = FDD_RPM_UNKNOWN;
         d->bps_measured = BPS_UNKNOWN;
         uint8_t gp3_vin = greenpak_get_virtualinput(3 - 1);
@@ -720,6 +726,7 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
         // INDEXパルスが来た
         // →メディア有りと判断する
         d->state = DRIVE_STATE_READY;
+        d->media_waiting_start_ms = 0;  // タイムスタンプをクリア
         d->rpm_measured = FDD_RPM_UNKNOWN;
         d->bps_measured = BPS_UNKNOWN;
         uint8_t gp3_vin = greenpak_get_virtualinput(3 - 1);
@@ -744,8 +751,10 @@ static void process_media_waiting(minyasx_context_t* ctx, int drive, uint32_t sy
     if (ctx->drive[drive].state != DRIVE_STATE_MEDIA_WAITING) return;
 
     // 60秒経過したらEJECTED状態に遷移
-    if (systick_ms - ctx->drive[drive].media_waiting_start_ms >= 60000) {
+    uint32_t elapsed = systick_ms - ctx->drive[drive].media_waiting_start_ms;
+    if (elapsed >= 60000) {
         ctx->drive[drive].state = DRIVE_STATE_EJECTED;
+        ctx->drive[drive].media_waiting_start_ms = 0;  // タイムスタンプをクリア
         ui_logf(UI_LOG_LEVEL_INFO, "Drive %d: MEDIA_WAITING timeout -> EJECTED\n", drive);
         return;
     }
@@ -817,7 +826,7 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
         case DRIVE_STATE_DISABLED:
             break;
         case DRIVE_STATE_MEDIA_DETECTING:
-            process_media_detecting(ctx, drive);
+            process_media_detecting(ctx, drive, systick_ms);
             break;
         case DRIVE_STATE_MEDIA_WAITING:
             process_media_waiting(ctx, drive, systick_ms);
@@ -873,7 +882,7 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
                     disk_change = (GPIOB->INDR & (1 << 8)) == 0;  // DISK_CHANGE_DOSV = 0 (Low) active
                     if (disk_change) {
                         // 2回ともDISK_CHANGEがアクティブだった
-                        ui_logf(UI_LOG_LEVEL_INFO, "Disk Change detected on Drive %d during polling\n", drive);
+                        ui_logf(UI_LOG_LEVEL_TRACE, "DCHG detected on D%d during polling\n", drive);
                         disk_change_det[drive] = true;
                     }
                 }
@@ -887,7 +896,7 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     for (int drive = 0; drive < 2; drive++) {
         drive_status_t* drv = &ctx->drive[drive];
         if (disk_change_det[drive]) {
-            ui_printf(UI_PAGE_LOG, "Disk Chg det %1d\n", drive);
+            ui_printf(UI_LOG_LEVEL_TRACE, "DCHG detected on D%d\n", drive);
             if (drv->state == DRIVE_STATE_READY) {
                 // READY状態でDISK_CHANGEがアサートされたらメディア検出状態に遷移する
                 // アクセス中なのでちょっと怖いが……
@@ -895,7 +904,10 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
             }
             if (drv->state == DRIVE_STATE_MEDIA_WAITING) {
                 // MEDIA_WAITINGでDISK_CHANGEがアサートされたらメディア検出状態に遷移する
+                // ただし、タイムスタンプは保持する（MEDIA_WAITING開始時刻を引き継ぐ）
+                uint32_t saved_timestamp = drv->media_waiting_start_ms;
                 drv->state = DRIVE_STATE_MEDIA_DETECTING;
+                drv->media_waiting_start_ms = saved_timestamp;
             }
             if (drv->state == DRIVE_STATE_EJECTED) {
                 // EJECTEDでDISK_CHANGEがアサートされたらメディア検出状態に遷移する
