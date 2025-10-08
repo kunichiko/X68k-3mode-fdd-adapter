@@ -49,13 +49,14 @@ typedef enum {
 } fdd_bps_mode_t;
 
 typedef enum drive_state {
-    DRIVE_STATE_POWER_OFF = 0,        // 電源オフ状態
-    DRIVE_STATE_NOT_CONNECTED = 1,    // ドライブが物理的に接続されていない場合
-    DRIVE_STATE_DISABLED = 2,         // ドライブがDisableになっている場合
-    DRIVE_STATE_INITIALIZING = 3,     // ドライブに電源が供給された後、初期化中の状態。初期化に失敗するとNOT_CONNECTEDになる
-    DRIVE_STATE_MEDIA_DETECTING = 4,  // メディアの挿入状態を確認中
-    DRIVE_STATE_NO_MEDIA = 5,         // メディアが挿入されていない状態 (論理イジェクトとは関係ない物理的な検出状態)
-    DRIVE_STATE_READY = 6,            // ドライブがアクセス可能な状態 (メディア挿入検出済みだが、論理イジェクトとは関係ないので注意)
+    DRIVE_STATE_POWER_OFF = 0,         // 電源オフ状態
+    DRIVE_STATE_NOT_CONNECTED = 1,     // ドライブが物理的に接続されていない場合
+    DRIVE_STATE_DISABLED = 2,          // ドライブがDisableになっている場合
+    DRIVE_STATE_INITIALIZING = 3,      // ドライブに電源が供給された後、初期化中の状態。初期化に失敗するとNOT_CONNECTEDになる
+    DRIVE_STATE_MEDIA_DETECTING = 4,   // メディアの挿入状態を確認中
+    DRIVE_STATE_MEDIA_WAITING = 5,     // メディアが挿入されていない状態。定期的にメディア検出を試みる（点滅表示）
+    DRIVE_STATE_READY = 6,             // ドライブがアクセス可能な状態 (メディア挿入検出済みだが、論理イジェクトとは関係ないので注意)
+    DRIVE_STATE_EJECTED = 7,           // イジェクト後、1分以上メディア挿入がない状態（メディア検出停止、点滅なし）
 } drive_state_t;
 
 typedef struct drive_status {
@@ -66,9 +67,10 @@ typedef struct drive_status {
     bool mode_select_inverted;      // MODE SELECT信号の極性反転
     fdd_in_use_mode_t in_use_mode;  // IN-USE信号の動作モード
     fdd_rpm_control_t rpm_control;  // 回転数制御方式
-    fdd_rpm_mode_t rpm_setting;     // 設定された回転数
-    fdd_rpm_mode_t rpm_measured;    // 測定された回転数
-    fdd_bps_mode_t bps_measured;    // 測定されたBPS
+    fdd_rpm_mode_t rpm_setting;      // 設定された回転数
+    fdd_rpm_mode_t rpm_measured;     // 測定された回転数
+    fdd_bps_mode_t bps_measured;     // 測定されたBPS
+    uint32_t media_waiting_start_ms;  // MEDIA_WAITING状態になった時刻（1分後にEJECTEDに遷移）
 } drive_status_t;
 
 typedef struct power_status {

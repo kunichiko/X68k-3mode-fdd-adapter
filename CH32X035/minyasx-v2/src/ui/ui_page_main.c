@@ -41,7 +41,16 @@ void ui_page_main_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
     // ドライブ情報の表示
     for (int i = 0; i < 2; i++) {
         ui_cursor(page, 0, 0 + i * 4);
-        ui_printf(page, "%c[%s]", (i == 0 ? 'A' : 'B'), pcfdd_state_to_string(ctx->drive[i].state));
+        // MEDIA_WAITING状態の場合は1秒毎に点滅表示
+        if (ctx->drive[i].state == DRIVE_STATE_MEDIA_WAITING) {
+            if ((systick_ms / 1000) % 2 == 0) {
+                ui_printf(page, "%c[%s]", (i == 0 ? 'A' : 'B'), pcfdd_state_to_string(ctx->drive[i].state));
+            } else {
+                ui_printf(page, "%c[     ]", (i == 0 ? 'A' : 'B'));
+            }
+        } else {
+            ui_printf(page, "%c[%s]", (i == 0 ? 'A' : 'B'), pcfdd_state_to_string(ctx->drive[i].state));
+        }
         ui_cursor(page, 0, 1 + i * 4);
         ui_printf(page, " S:%3drpm", ctx->drive[i].rpm_setting == FDD_RPM_300 ? 300 : 360);
         //
@@ -77,8 +86,12 @@ void ui_page_main_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
             // 既に挿入されている場合は排出を試みる
             pcfdd_try_eject(pctx->ctx, 0);
             return;
-        } else if (pctx->ctx->drive[0].state == DRIVE_STATE_NO_MEDIA) {
+        } else if (pctx->ctx->drive[0].state == DRIVE_STATE_MEDIA_WAITING) {
             // 挿入されていない場合は挿入を試みる
+            pcfdd_detect_media(pctx->ctx, 0);
+            return;
+        } else if (pctx->ctx->drive[0].state == DRIVE_STATE_EJECTED) {
+            // EJECTED状態の場合はメディア検出を試みる
             pcfdd_detect_media(pctx->ctx, 0);
             return;
         }
@@ -89,8 +102,12 @@ void ui_page_main_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
             // 既に挿入されている場合は排出を試みる
             pcfdd_try_eject(pctx->ctx, 1);
             return;
-        } else if (pctx->ctx->drive[1].state == DRIVE_STATE_NO_MEDIA) {
+        } else if (pctx->ctx->drive[1].state == DRIVE_STATE_MEDIA_WAITING) {
             // 挿入されていない場合は挿入を試みる
+            pcfdd_detect_media(pctx->ctx, 1);
+            return;
+        } else if (pctx->ctx->drive[1].state == DRIVE_STATE_EJECTED) {
+            // EJECTED状態の場合はメディア検出を試みる
             pcfdd_detect_media(pctx->ctx, 1);
             return;
         }

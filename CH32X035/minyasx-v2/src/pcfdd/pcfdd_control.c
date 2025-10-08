@@ -660,7 +660,9 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
         // シークしたのにDISK_CHANGEがアクティブなまま
         // →メディアが入っていないと判断する
         drive_select(drive, false);  // Drive Selectを非アクティブにする
-        d->state = DRIVE_STATE_NO_MEDIA;
+        d->state = DRIVE_STATE_MEDIA_WAITING;
+        uint64_t systick = SysTick->CNT;
+        d->media_waiting_start_ms = systick / (F_CPU / 1000);  // MEDIA_WAITING開始時刻を記録
         d->rpm_measured = FDD_RPM_UNKNOWN;
         d->bps_measured = BPS_UNKNOWN;
         uint8_t gp3_vin = greenpak_get_virtualinput(3 - 1);
@@ -706,7 +708,9 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
         // INDEXパルスが来なかった
         // →メディア無しと判断する
         ui_logf(UI_LOG_LEVEL_INFO, " No Index Pulse\n");
-        d->state = DRIVE_STATE_NO_MEDIA;
+        d->state = DRIVE_STATE_MEDIA_WAITING;
+        uint64_t systick = SysTick->CNT;
+        d->media_waiting_start_ms = systick / (F_CPU / 1000);  // MEDIA_WAITING開始時刻を記録
         d->rpm_measured = FDD_RPM_UNKNOWN;
         d->bps_measured = BPS_UNKNOWN;
         uint8_t gp3_vin = greenpak_get_virtualinput(3 - 1);
@@ -736,10 +740,32 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive) {
     return;
 }
 
-static void process_no_media(minyasx_context_t* ctx, int drive) {
-    if (ctx->drive[drive].state != DRIVE_STATE_NO_MEDIA) return;
+static void process_media_waiting(minyasx_context_t* ctx, int drive, uint32_t systick_ms) {
+    if (ctx->drive[drive].state != DRIVE_STATE_MEDIA_WAITING) return;
 
-    // メディア無し状態の処理
+    // 60秒経過したらEJECTED状態に遷移
+    if (systick_ms - ctx->drive[drive].media_waiting_start_ms >= 60000) {
+        ctx->drive[drive].state = DRIVE_STATE_EJECTED;
+        ui_logf(UI_LOG_LEVEL_INFO, "Drive %d: MEDIA_WAITING timeout -> EJECTED\n", drive);
+        return;
+    }
+
+    // メディア待ち状態の処理
+    // 1. READY_MCUをInactiveにする
+    GPIOB->BSHR = (drive == 0) ? GPIO_Pin_12 : GPIO_Pin_13;  // READY_MCU_A_n / READY_MCU_B_n (High=準備完了でない)
+    // 2. GP2,GP3の DISK_IN_x_n をDisableにする
+    uint8_t gp2_vin = greenpak_get_virtualinput(2 - 1);
+    gp2_vin |= (1 << (5 - drive));  // bit4/5を1にして、DISK_IN_x_nをDisableにする
+    greenpak_set_virtualinput(2 - 1, gp2_vin);
+    uint8_t gp3_vin = greenpak_get_virtualinput(3 - 1);
+    gp3_vin |= (1 << (5 - drive));  // bit4/5を1にして、DISK_IN_x_nをDisableにする
+    greenpak_set_virtualinput(3 - 1, gp3_vin);
+}
+
+static void process_ejected(minyasx_context_t* ctx, int drive) {
+    if (ctx->drive[drive].state != DRIVE_STATE_EJECTED) return;
+
+    // EJECTED状態の処理 (メディア検出をストップした状態)
     // 1. READY_MCUをInactiveにする
     GPIOB->BSHR = (drive == 0) ? GPIO_Pin_12 : GPIO_Pin_13;  // READY_MCU_A_n / READY_MCU_B_n (High=準備完了でない)
     // 2. GP2,GP3の DISK_IN_x_n をDisableにする
@@ -793,8 +819,11 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
         case DRIVE_STATE_MEDIA_DETECTING:
             process_media_detecting(ctx, drive);
             break;
-        case DRIVE_STATE_NO_MEDIA:
-            process_no_media(ctx, drive);
+        case DRIVE_STATE_MEDIA_WAITING:
+            process_media_waiting(ctx, drive, systick_ms);
+            break;
+        case DRIVE_STATE_EJECTED:
+            process_ejected(ctx, drive);
             break;
         case DRIVE_STATE_READY:
             process_ready(ctx, drive);
@@ -832,6 +861,10 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
         if (get_fdd_lock()) {
             // LOCK取得成功
             for (int drive = 0; drive < 2; drive++) {
+                // EJECTED状態のドライブはスキップ
+                if (ctx->drive[drive].state == DRIVE_STATE_EJECTED) {
+                    continue;
+                }
                 drive_select(drive, true);
                 Delay_Ms(1);                                       // 少し待つ
                 bool disk_change = (GPIOB->INDR & (1 << 8)) == 0;  // DISK_CHANGE_DOSV = 0 (Low) active
@@ -860,8 +893,12 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
                 // アクセス中なのでちょっと怖いが……
                 drv->state = DRIVE_STATE_MEDIA_DETECTING;
             }
-            if (drv->state == DRIVE_STATE_NO_MEDIA) {
-                // NO_MEDIAでDISK_CHANGEがアサートされたらメディア検出状態に遷移する
+            if (drv->state == DRIVE_STATE_MEDIA_WAITING) {
+                // MEDIA_WAITINGでDISK_CHANGEがアサートされたらメディア検出状態に遷移する
+                drv->state = DRIVE_STATE_MEDIA_DETECTING;
+            }
+            if (drv->state == DRIVE_STATE_EJECTED) {
+                // EJECTEDでDISK_CHANGEがアサートされたらメディア検出状態に遷移する
                 drv->state = DRIVE_STATE_MEDIA_DETECTING;
             }
         }
@@ -984,7 +1021,7 @@ void pcfdd_force_eject(minyasx_context_t* ctx, int drive) {
     if (d->state != DRIVE_STATE_READY) {
         return;
     }
-    d->state = DRIVE_STATE_NO_MEDIA;
+    d->state = DRIVE_STATE_MEDIA_WAITING;
     d->rpm_measured = FDD_RPM_UNKNOWN;
     d->bps_measured = BPS_UNKNOWN;
 }
@@ -995,7 +1032,8 @@ void pcfdd_force_eject(minyasx_context_t* ctx, int drive) {
 void pcfdd_detect_media(minyasx_context_t* ctx, int drive) {
     if (drive < 0 || drive > 1) return;
     drive_status_t* d = &ctx->drive[drive];
-    if ((d->state != DRIVE_STATE_NO_MEDIA) &&  //
+    if ((d->state != DRIVE_STATE_MEDIA_WAITING) &&  //
+        (d->state != DRIVE_STATE_EJECTED) &&        //
         (d->state != DRIVE_STATE_READY)) {
         return;
     }
@@ -1016,7 +1054,9 @@ char* pcfdd_state_to_string(drive_state_t state) {
         return "Init.";
     case DRIVE_STATE_MEDIA_DETECTING:
         return ">>>>>";
-    case DRIVE_STATE_NO_MEDIA:
+    case DRIVE_STATE_MEDIA_WAITING:
+        return "Eject";
+    case DRIVE_STATE_EJECTED:
         return "Eject";
     case DRIVE_STATE_READY:
         return "Ready";
