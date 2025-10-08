@@ -193,6 +193,8 @@ bool fdd_power_is_enabled(void) {
 
 static bool is_x68k_pwr_on = false;
 static bool force_pwr_on = false;  // trueにすると、X68Kの電源ONを強制的に検出したことにする
+static uint32_t force_pwr_on_start_ms = 0;  // 強制パワーオンが有効になった時刻
+static uint32_t last_key_activity_ms = 0;  // 最後にキー操作があった時刻
 static uint32_t last_indexlow_ms = 0;
 
 const int GP_UNIT = 2;  // GreenPAK3を使う
@@ -289,6 +291,16 @@ void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
         }
     }
 
+    // 強制パワーオンのタイムアウトチェック（60秒）
+    if (force_pwr_on) {
+        uint32_t idle_time_ms = systick_ms - last_key_activity_ms;
+        if (idle_time_ms >= 60000) {
+            // 60秒間キー操作がない場合、強制パワーオンを解除
+            ui_log(UI_LOG_LEVEL_INFO, "Force power-on timeout, releasing...\n");
+            set_force_pwr_on(false);
+        }
+    }
+
     // 初回呼び出し時（last_systick_ms == 0）は必ずチェックする
     if (last_systick_ms != 0 && systick_ms - last_systick_ms < 500) {
         return;
@@ -354,7 +366,17 @@ void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
 }
 
 void set_force_pwr_on(bool enable) {
+    if (enable && !force_pwr_on) {
+        // 強制パワーオンを有効化
+        force_pwr_on_start_ms = SysTick->CNT / (F_CPU / 1000);
+        last_key_activity_ms = force_pwr_on_start_ms;
+    }
     force_pwr_on = enable;
+}
+
+void update_key_activity(void) {
+    // キー操作があったことを記録
+    last_key_activity_ms = SysTick->CNT / (F_CPU / 1000);
 }
 
 /**

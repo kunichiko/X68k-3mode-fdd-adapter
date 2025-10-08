@@ -20,6 +20,9 @@ bool fdd_power_is_enabled(void);
 // X68000電源ON強制設定（デバッグ用）
 void set_force_pwr_on(bool enable);
 
+// キー操作があったことを記録（強制パワーオンタイムアウト用）
+void update_key_activity(void);
+
 // PVD（電源電圧検出）の初期化と状態取得
 void power_pvd_init(void);
 power_state_t* power_get_state(void);

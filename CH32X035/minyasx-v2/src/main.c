@@ -360,11 +360,25 @@ int main() {
         uint64_t systick = SysTick->CNT;
         uint32_t ms = systick / (F_CPU / 1000);
         power_control_poll(ctx, ms);
+
+        // 電源状態に基づいた画面遷移を一元管理
+        if (ctx->power_on) {
+            // 電源ONの場合、BOOT画面ならMAIN画面に遷移
+            if (ui_get_current_page() == UI_PAGE_BOOT) {
+                ui_change_page(UI_PAGE_MAIN);
+            }
+        } else {
+            // 電源OFFの場合、BOOT画面でなければBOOT画面に遷移
+            if (ui_get_current_page() != UI_PAGE_BOOT) {
+                ui_change_page(UI_PAGE_BOOT);
+            }
+        }
+
         ui_poll(ctx, ms);
 
         if (ctx->power_on) {
             ui_log(UI_LOG_LEVEL_TRACE, "1");
-            // WS2812_SPI_poll(ctx, ms);
+            WS2812_SPI_poll(ctx, ms);
             ui_log(UI_LOG_LEVEL_TRACE, "2");
             ina3221_poll(ctx, ms);
             ui_log(UI_LOG_LEVEL_TRACE, "3");
@@ -376,9 +390,6 @@ int main() {
             ui_log(UI_LOG_LEVEL_TRACE, "7");
             preferences_poll(ctx, ms);
             ui_log(UI_LOG_LEVEL_TRACE, "8");
-        } else {
-            // X68000側の電源ON要求が来るまで待機する
-            ui_change_page(UI_PAGE_BOOT);
         }
     }
 }

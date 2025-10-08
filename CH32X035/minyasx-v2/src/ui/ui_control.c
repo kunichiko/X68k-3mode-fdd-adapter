@@ -1,6 +1,7 @@
 #include "ui_control.h"
 
 #include "greenpak/greenpak_control.h"
+#include "power/power_control.h"
 #include "ui_page_log.h"
 
 static ui_page_context_t ui_pages[UI_PAGE_MAX];
@@ -284,8 +285,8 @@ typedef struct {
 #define KEY_REPEAT_DELAY 500      // 長押し判定までの時間（ms）
 #define KEY_REPEAT_INTERVAL 100   // リピート間隔（ms）
 
-// リピート対象のキー（UP/DOWNのみ）
-#define KEY_REPEATABLE_MASK (UI_KEY_UP | UI_KEY_DOWN)
+// リピート対象のキー（UP/DOWN/ENTER）
+#define KEY_REPEATABLE_MASK (UI_KEY_UP | UI_KEY_DOWN | UI_KEY_ENTER)
 
 void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
     // 各ページのポーリング処理
@@ -337,6 +338,8 @@ void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
             key_state.last_repeat_time = systick_ms;
             key_state.is_repeating = false;
             should_trigger = true;
+            // 強制パワーオンタイムアウト用のキー操作記録
+            update_key_activity();
         } else {
             // すべてのキーが離された
             key_state.is_repeating = false;

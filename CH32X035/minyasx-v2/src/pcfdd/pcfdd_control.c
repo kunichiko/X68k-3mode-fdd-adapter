@@ -908,7 +908,7 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     for (int drive = 0; drive < 2; drive++) {
         drive_status_t* drv = &ctx->drive[drive];
         if (disk_change_det[drive]) {
-            ui_printf(UI_LOG_LEVEL_TRACE, "DCHG detected on D%d\n", drive);
+            ui_logf(UI_LOG_LEVEL_TRACE, "DCHG detected on D%d\n", drive);
             if (drv->state == DRIVE_STATE_READY) {
                 // READY状態でDISK_CHANGEがアサートされたらメディア検出状態に遷移する
                 // アクセス中なのでちょっと怖いが……
