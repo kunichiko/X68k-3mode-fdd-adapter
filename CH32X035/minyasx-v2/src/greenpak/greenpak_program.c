@@ -17,17 +17,6 @@ static void gp_erase_page(uint8_t addr7, uint8_t page) {
     Delay_Ms(GP_ERASE_T_MS);  // 自己タイミング消去の完了待ち
 }
 
-static void gp_erase_range(uint8_t addr7, uint16_t base, uint16_t size) {
-    if (!size) return;
-    uint16_t start_page = (base) / GP_PAGE_SIZE;
-    uint16_t end_page = (base + size - 1) / GP_PAGE_SIZE;
-    if (start_page > 15) start_page = 15;
-    if (end_page > 15) end_page = 15;
-    for (uint16_t p = start_page; p <= end_page; ++p) {
-        gp_erase_page(addr7, (uint8_t)p);
-    }
-}
-
 // 既存の連続書き込みを流用（そのまま）
 extern void gp_write_seq(uint8_t addr7, uint16_t start, const uint8_t *data, uint16_t len);
 
@@ -35,7 +24,6 @@ extern void gp_write_seq(uint8_t addr7, uint16_t start, const uint8_t *data, uin
 void gp_program_with_erase(uint8_t addr7, uint16_t base, const uint8_t *img, uint16_t size) {
     if (!size) return;
     uint8_t nvm_addr7 = (uint8_t)((addr7 & 0xfc) + 2);  // NVMアドレスに変換 (addrは0x08,0x10,0x18,0x20,0x28のいずれか)
-                                                        //    gp_erase_range(addr7, base, size);                  // 先に消去
     for (int i = 0; i < 16; i++) {
         // 16バイトずつウエイトを入れて書く
         ui_logf(UI_LOG_LEVEL_INFO, "%d ", 16 - i);
