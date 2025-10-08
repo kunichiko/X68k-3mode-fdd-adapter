@@ -1,3 +1,4 @@
+#include "pcfdd/pcfdd_control.h"
 #include "power/power_control.h"
 #include "preferences/preferences_control.h"
 #include "ui/ui_control.h"
@@ -116,6 +117,10 @@ void ui_page_setting_common_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
             if (reset_dialog.result) {
                 // OKが選択された場合、デフォルトに戻す
                 preferences_load_defaults(pctx->ctx);
+                preferences_apply(pctx->ctx);  // 設定をctx->drive[]に反映
+                // FDD設定を反映
+                pcfdd_update_setting(pctx->ctx, 0);
+                pcfdd_update_setting(pctx->ctx, 1);
                 preferences_save(pctx->ctx);
                 // カーソルを1番に戻してから画面を再描画
                 set_position(1);

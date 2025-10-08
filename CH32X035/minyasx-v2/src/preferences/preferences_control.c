@@ -59,6 +59,16 @@ void preferences_load_defaults(minyasx_context_t* ctx) {
     pref->speaker_enabled = true;                       // デフォルトはスピーカー有効
 }
 
+void preferences_apply(minyasx_context_t* ctx) {
+    // ctx->preferencesの設定をctx->drive[]に適用
+    ctx->drive[0].rpm_control = ctx->preferences.fdd_rpm_control[0];
+    ctx->drive[1].rpm_control = ctx->preferences.fdd_rpm_control[1];
+    ctx->drive[0].in_use_mode = ctx->preferences.fdd_in_use_mode[0];
+    ctx->drive[1].in_use_mode = ctx->preferences.fdd_in_use_mode[1];
+    ctx->drive[0].mode_select_inverted = ctx->preferences.mode_select_inverted[0];
+    ctx->drive[1].mode_select_inverted = ctx->preferences.mode_select_inverted[1];
+}
+
 static void preferences_load(minyasx_context_t* ctx) {
     preferences_t* pref = &ctx->preferences;
     if (pref->signature[0] != SIGNATURE[0] || pref->signature[1] != SIGNATURE[1] ||  //
@@ -71,12 +81,7 @@ static void preferences_load(minyasx_context_t* ctx) {
         preferences_save(ctx);
         return;
     }
-    ctx->drive[0].rpm_control = ctx->preferences.fdd_rpm_control[0];
-    ctx->drive[1].rpm_control = ctx->preferences.fdd_rpm_control[1];
-    ctx->drive[0].in_use_mode = ctx->preferences.fdd_in_use_mode[0];
-    ctx->drive[1].in_use_mode = ctx->preferences.fdd_in_use_mode[1];
-    ctx->drive[0].mode_select_inverted = ctx->preferences.mode_select_inverted[0];
-    ctx->drive[1].mode_select_inverted = ctx->preferences.mode_select_inverted[1];
+    preferences_apply(ctx);
 }
 
 void preferences_save(minyasx_context_t* ctx) {
