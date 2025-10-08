@@ -98,6 +98,9 @@ void ui_init(minyasx_context_t* ctx);
 
 void ui_poll(minyasx_context_t* ctx, uint32_t systick_ms);
 
+// 現在のキー状態を問い合わせる関数
+bool ui_is_key_pressed(ui_key_mask_t key);
+
 // 複数の選択肢を上下キーで選択し、Enterキーで決定するUIを表示する
 // 選択肢はNULL終端の文字列配列で与える
 // 戻り値は選択されたインデックス（0から始まる）

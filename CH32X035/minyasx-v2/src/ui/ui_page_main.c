@@ -6,6 +6,9 @@ static void ui_page_main_enter(ui_page_context_t* pctx);
 void ui_page_main_poll(ui_page_context_t* pctx, uint32_t systick_ms);
 void ui_page_main_keyin(ui_page_context_t* pctx, ui_key_mask_t keys);
 
+// Enterキーが押されたまま画面に入った場合のフラグ
+static bool enter_key_held_on_enter = false;
+
 void ui_page_main_init(ui_page_context_t* pctx) {
     pctx->enter = ui_page_main_enter;
     pctx->poll = ui_page_main_poll;
@@ -16,12 +19,27 @@ void ui_page_main_init(ui_page_context_t* pctx) {
 }
 
 void ui_page_main_enter(ui_page_context_t* pctx) {
+    // 画面に入る時点でEnterキーが押されているかチェック
+    if (ui_is_key_pressed(UI_KEY_ENTER)) {
+        // Enterキーが押されたまま画面に入った
+        enter_key_held_on_enter = true;
+    } else {
+        enter_key_held_on_enter = false;
+    }
 }
 
 void ui_page_main_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
     static uint64_t last_tick = 0;
     ui_page_type_t page = pctx->page;
     minyasx_context_t* ctx = pctx->ctx;
+
+    // Enterキーが離されたかチェック
+    if (enter_key_held_on_enter) {
+        if (!ui_is_key_pressed(UI_KEY_ENTER)) {
+            // Enterキーが離された
+            enter_key_held_on_enter = false;
+        }
+    }
 
     if (systick_ms - last_tick < 500) {
         return;
@@ -72,6 +90,11 @@ void ui_page_main_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
 }
 
 void ui_page_main_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
+    // Enterキーが押されたまま画面に入った場合は、離されるまでキー入力を無視
+    if (enter_key_held_on_enter) {
+        return;
+    }
+
     if (keys & UI_KEY_ENTER) {
         // メニューページに遷移
         ui_change_page(UI_PAGE_MENU);

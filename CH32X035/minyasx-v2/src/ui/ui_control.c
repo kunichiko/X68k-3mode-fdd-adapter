@@ -288,6 +288,13 @@ typedef struct {
 // リピート対象のキー（UP/DOWN/ENTER）
 #define KEY_REPEATABLE_MASK (UI_KEY_UP | UI_KEY_DOWN | UI_KEY_ENTER)
 
+// キー状態管理（グローバルstatic変数）
+static key_state_t key_state = {0, 0, 0, 0, false};
+
+bool ui_is_key_pressed(ui_key_mask_t key) {
+    return (key_state.current_keys & key) != 0;
+}
+
 void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
     // 各ページのポーリング処理
     for (int i = 0; i < UI_PAGE_MAX; i++) {
@@ -296,9 +303,6 @@ void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
             pcon->poll(pcon, systick_ms);
         }
     }
-
-    // キー状態管理（静的変数）
-    static key_state_t key_state = {0, 0, 0, 0, false};
 
     // 現在のキー状態を読み取る
     ui_key_mask_t keys = UI_KEY_NONE;
