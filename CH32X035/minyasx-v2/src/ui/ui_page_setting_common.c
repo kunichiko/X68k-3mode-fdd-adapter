@@ -10,7 +10,7 @@ static void ui_page_setting_common_keyin(ui_page_context_t* pctx, ui_key_mask_t 
 static const char* speaker_options[] = {"On", "Off", NULL};
 ui_select_t speaker_select = {
     .page = UI_PAGE_SETTING_COMMON,
-    .x = 11,
+    .x = 12,
     .y = 1,
     .width = 4,
     .options = speaker_options,
@@ -23,7 +23,7 @@ ui_select_t speaker_select = {
 static const char* auto_detect_options[] = {"Off", "60s", "Keep", NULL};
 ui_select_t auto_detect_select = {
     .page = UI_PAGE_SETTING_COMMON,
-    .x = 11,
+    .x = 12,
     .y = 2,
     .width = 4,
     .options = auto_detect_options,
@@ -63,24 +63,24 @@ void ui_page_setting_common_enter(ui_page_context_t* pctx) {
     ui_print(page, " RETURN");
 
     // Speakerの現在値を表示
-    ui_cursor(page, 11, 1);
+    ui_cursor(page, 12, 1);
     if (ctx->preferences.speaker_enabled) {
-        ui_print(page, "[On ]");
+        ui_print(page, "On ");
     } else {
-        ui_print(page, "[Off]");
+        ui_print(page, "Off");
     }
 
     // AutoDetectの現在値を表示
-    ui_cursor(page, 11, 2);
+    ui_cursor(page, 12, 2);
     switch (ctx->preferences.media_auto_detect) {
     case MEDIA_AUTO_DETECT_DISABLED:
-        ui_print(page, "[Off ]");
+        ui_print(page, "Off ");
         break;
     case MEDIA_AUTO_DETECT_60SEC:
-        ui_print(page, "[60s ]");
+        ui_print(page, "60s ");
         break;
     case MEDIA_AUTO_DETECT_UNLIMITED:
-        ui_print(page, "[Keep]");
+        ui_print(page, "Keep");
         break;
     }
 }
@@ -133,9 +133,7 @@ void ui_page_setting_common_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
         if (speaker_select.selection_made) {
             // 選択が確定した
             pctx->ctx->preferences.speaker_enabled = (speaker_select.current_index == 0);
-            // 画面を更新
-            ui_page_setting_common_enter(pctx);
-            set_position(1);  // Speakerの位置に戻す
+            preferences_save(pctx->ctx);  // 変更を保存
         }
         return;
     }
@@ -157,9 +155,7 @@ void ui_page_setting_common_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
                 pctx->ctx->preferences.media_auto_detect = MEDIA_AUTO_DETECT_UNLIMITED;
                 break;
             }
-            // 画面を更新
-            ui_page_setting_common_enter(pctx);
-            set_position(2);  // AutoDetectの位置に戻す
+            preferences_save(pctx->ctx);  // 変更を保存
         }
         return;
     }
