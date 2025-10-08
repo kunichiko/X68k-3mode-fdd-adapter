@@ -750,14 +750,26 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive, uint32_t 
 static void process_media_waiting(minyasx_context_t* ctx, int drive, uint32_t systick_ms) {
     if (ctx->drive[drive].state != DRIVE_STATE_MEDIA_WAITING) return;
 
-    // 60秒経過したらEJECTED状態に遷移
-    uint32_t elapsed = systick_ms - ctx->drive[drive].media_waiting_start_ms;
-    if (elapsed >= 60000) {
+    // メディア自動検出設定に応じた処理
+    media_auto_detect_t mode = ctx->preferences.media_auto_detect;
+
+    if (mode == MEDIA_AUTO_DETECT_DISABLED) {
+        // 自動検出しない：即座にEJECTED状態に遷移
         ctx->drive[drive].state = DRIVE_STATE_EJECTED;
-        ctx->drive[drive].media_waiting_start_ms = 0;  // タイムスタンプをクリア
-        ui_logf(UI_LOG_LEVEL_INFO, "Drive %d: MEDIA_WAITING timeout -> EJECTED\n", drive);
+        ctx->drive[drive].media_waiting_start_ms = 0;
+        ui_logf(UI_LOG_LEVEL_INFO, "Drive %d: MEDIA_WAITING -> EJECTED (auto-detect disabled)\n", drive);
         return;
+    } else if (mode == MEDIA_AUTO_DETECT_60SEC) {
+        // 60秒間トライ：60秒経過したらEJECTED状態に遷移
+        uint32_t elapsed = systick_ms - ctx->drive[drive].media_waiting_start_ms;
+        if (elapsed >= 60000) {
+            ctx->drive[drive].state = DRIVE_STATE_EJECTED;
+            ctx->drive[drive].media_waiting_start_ms = 0;
+            ui_logf(UI_LOG_LEVEL_INFO, "Drive %d: MEDIA_WAITING timeout -> EJECTED\n", drive);
+            return;
+        }
     }
+    // MEDIA_AUTO_DETECT_UNLIMITED の場合はタイムアウトしない（何もしない）
 
     // メディア待ち状態の処理
     // 1. READY_MCUをInactiveにする

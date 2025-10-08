@@ -55,6 +55,8 @@ void preferences_load_defaults(minyasx_context_t* ctx) {
     pref->fdd_in_use_mode[1] = FDD_IN_USE_LED;          // ドライブBのデフォルトはLEDで表示
     pref->mode_select_inverted[0] = false;              // ドライブAのMODE SELECT信号の極性反転なし
     pref->mode_select_inverted[1] = false;              // ドライブBのMODE SELECT信号の極性反転なし
+    pref->media_auto_detect = MEDIA_AUTO_DETECT_60SEC;  // デフォルトは60秒間トライ
+    pref->speaker_enabled = true;                       // デフォルトはスピーカー有効
 }
 
 static void preferences_load(minyasx_context_t* ctx) {

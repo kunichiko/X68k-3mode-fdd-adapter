@@ -27,6 +27,12 @@ typedef enum {
 } fdd_in_use_mode_t;
 
 typedef enum {
+    MEDIA_AUTO_DETECT_DISABLED = 0,  // 自動検出しない（即EJECTED）
+    MEDIA_AUTO_DETECT_60SEC = 1,     // 60秒間トライ
+    MEDIA_AUTO_DETECT_UNLIMITED = 2, // タイムアウトせずに続ける
+} media_auto_detect_t;
+
+typedef enum {
     FDD_RPM_UNKNOWN,
     FDD_RPM_300,
     FDD_RPM_360,
@@ -98,6 +104,8 @@ typedef struct preferences {
     fdd_rpm_control_t fdd_rpm_control[2];  // FDDの回転数制御方式
     fdd_in_use_mode_t fdd_in_use_mode[2];  // FDDのIN-USE信号の動作モード
     bool mode_select_inverted[2];          // MODE SELECT信号の極性反転
+    media_auto_detect_t media_auto_detect;  // メディア自動検出モード
+    bool speaker_enabled;                  // スピーカー有効/無効
 } preferences_t;
 
 typedef struct minyasx_context {

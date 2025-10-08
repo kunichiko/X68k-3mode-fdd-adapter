@@ -82,6 +82,7 @@ void ui_clear(ui_page_type_t page);
 void ui_cursor(ui_page_type_t page, uint8_t x, uint8_t y);
 void ui_print(ui_page_type_t page, char* str);
 void ui_write(ui_page_type_t page, char c);
+char ui_read_char(ui_page_type_t page, uint8_t x, uint8_t y);
 
 #include "print.h"
 #define ui_printD(p, n) printD(ui_get_writer(p), n)  // print decimal as string
@@ -115,6 +116,22 @@ typedef struct {
 } ui_select_t;
 void ui_select_init(ui_select_t* select);
 void ui_select_keyin(ui_select_t* select, ui_key_mask_t keys);
+
+// OK/Cancelダイアログ
+#define UI_DIALOG_BACKUP_WIDTH 14
+#define UI_DIALOG_BACKUP_HEIGHT 4
+typedef struct {
+    ui_page_type_t page;   // ダイアログを表示するページ
+    const char* message;   // メッセージ（最大3行まで想定）
+    bool dialog_open;      // ダイアログが開いているか
+    bool result;           // true=OK, false=Cancel
+    bool selection_made;   // 選択が確定したか
+    int selected_button;   // 0=OK, 1=Cancel
+    char backup[UI_DIALOG_BACKUP_HEIGHT][UI_DIALOG_BACKUP_WIDTH];  // 背景のバックアップ
+} ui_dialog_t;
+void ui_dialog_init(ui_dialog_t* dialog);
+void ui_dialog_keyin(ui_dialog_t* dialog, ui_key_mask_t keys);
+void ui_dialog_close(ui_dialog_t* dialog);
 
 // ログ表示用
 
