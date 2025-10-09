@@ -33,6 +33,14 @@ typedef enum {
 } media_auto_detect_t;
 
 typedef enum {
+    FDD_ID_MODE_DIP_SW = 0,  // DIPスイッチに従う
+    FDD_ID_MODE_0_1 = 1,     // DriveA=0, DriveB=1
+    FDD_ID_MODE_1 = 2,       // 両方1
+    FDD_ID_MODE_2_3 = 3,     // DriveA=2, DriveB=3
+    FDD_ID_MODE_3 = 4,       // 両方3
+} fdd_id_mode_t;
+
+typedef enum {
     FDD_RPM_UNKNOWN,
     FDD_RPM_300,
     FDD_RPM_360,
@@ -106,6 +114,7 @@ typedef struct preferences {
     bool mode_select_inverted[2];          // MODE SELECT信号の極性反転
     media_auto_detect_t media_auto_detect;  // メディア自動検出モード
     bool speaker_enabled;                  // スピーカー有効/無効
+    fdd_id_mode_t fdd_id_mode;             // FDDのドライブID設定モード
 } preferences_t;
 
 typedef struct minyasx_context {

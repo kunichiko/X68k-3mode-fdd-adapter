@@ -187,33 +187,45 @@ void WS2812_SPI_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
         // アクセスランプの制御
         bool drive_selected = (drive == 0) ? drive_select_a : drive_select_b;
 
-        if (drive_selected) {
-            // アクセス中
-            if (drv->rpm_setting == FDD_RPM_300) {
-                // 300RPMでアクセス中 → 青点灯
-                led_colors[led_access] = scale_brightness(LED_BLUE);
-            } else {
-                // 360RPMでアクセス中 → 赤点灯
-                led_colors[led_access] = scale_brightness(LED_RED);
-            }
+        if (drv->state == DRIVE_STATE_DISABLED) {
+            // ドライブがDisableされている → 消灯
+            led_colors[led_access] = LED_OFF;
         } else if ((drv->state != DRIVE_STATE_READY) && drv->led_blink) {
             // READY以外の状態でLED_BLINK有効 → 緑点滅
+            // この時はドライブセレクトがあっても点灯しない
             led_colors[led_access] = blink_state ? scale_brightness(LED_GREEN) : LED_OFF;
         } else if (drv->state == DRIVE_STATE_READY) {
-            // Ready状態 → 緑点灯
-            led_colors[led_access] = scale_brightness(LED_GREEN);
+            // Ready状態
+            if (drive_selected) {
+                // アクセス中
+                if (drv->rpm_setting == FDD_RPM_300) {
+                    // 300RPMでアクセス中 → 青点灯
+                    led_colors[led_access] = scale_brightness(LED_BLUE);
+                } else {
+                    // 360RPMでアクセス中 → 赤点灯
+                    led_colors[led_access] = scale_brightness(LED_RED);
+                }
+            } else {
+                // アクセスしていない → 緑点灯
+                led_colors[led_access] = scale_brightness(LED_GREEN);
+            }
         } else {
             // その他の状態 → 消灯
             led_colors[led_access] = LED_OFF;
         }
 
         // イジェクトランプの制御
-        if (!drv->eject_masked) {
-            // イジェクト可能 → 緑色
-            led_colors[led_eject] = scale_brightness(LED_GREEN);
-        } else {
-            // イジェクトマスク中 → 消灯
+        if (drv->state == DRIVE_STATE_DISABLED) {
+            // ドライブがDisableされている → 消灯
             led_colors[led_eject] = LED_OFF;
+        } else {
+            if (!drv->eject_masked) {
+                // イジェクト可能 → 緑色
+                led_colors[led_eject] = scale_brightness(LED_GREEN);
+            } else {
+                // イジェクトマスク中 → 消灯
+                led_colors[led_eject] = LED_OFF;
+            }
         }
     }
 

@@ -330,3 +330,69 @@ void x68fdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
 
     // EJECT, EJECT_MASK, LED_BLINKの監視はGPIO割り込みで行うのでここでは不要
 }
+
+void x68fdd_update_drive_id(minyasx_context_t* ctx) {
+    // FDD IDの設定を決定
+    uint8_t idA, idB;
+    bool driveB_enabled = false;
+
+    switch (ctx->preferences.fdd_id_mode) {
+    case FDD_ID_MODE_DIP_SW: {
+        // DIPスイッチから読み取る（従来の動作）
+        uint8_t ds0 = (GPIOA->INDR >> 22) & 1;
+        uint8_t ds1 = (GPIOA->INDR >> 23) & 1;
+        idA = (ds1 << 1) | ds0;
+        if (idA == 0 || idA == 2) {
+            idB = idA + 1;
+            driveB_enabled = true;
+        }
+        break;
+    }
+    case FDD_ID_MODE_0_1:
+        idA = 0;
+        idB = 1;
+        driveB_enabled = true;
+        break;
+    case FDD_ID_MODE_1:
+        idA = 1;
+        break;
+    case FDD_ID_MODE_2_3:
+        idA = 2;
+        idB = 3;
+        driveB_enabled = true;
+        break;
+    case FDD_ID_MODE_3:
+        idA = 3;
+        break;
+    default:
+        idA = 0;
+        idB = 1;
+        driveB_enabled = true;
+        break;
+    }
+
+    // 決定したIDをGreenPAKにセット
+    // idA の値に応じてGreenPAKのVirtual Inputをセット
+    // 0 -> ds1=0, ds0=0
+    // 1 -> ds1=0, ds0=1
+    // 2 -> ds1=1, ds0=0
+    // 3 -> ds1=1, ds0=1
+    uint8_t ds0 = idA & 1;
+    uint8_t ds1 = (idA >> 1) & 1;
+    for (int i = 0; i < 4; i++) {
+        uint8_t vin = greenpak_get_virtualinput(i);
+        vin &= ~0xC0;  // bit6, bit7 をクリア
+        vin |= (ds1 ? 0x40 : 0x00) | (ds0 ? 0x80 : 0x00);
+        greenpak_set_virtualinput(i, vin);
+    }
+
+    // ドライブIDを設定
+    ctx->drive[0].drive_id = idA;
+    ctx->drive[0].state = DRIVE_STATE_INITIALIZING;
+    if (driveB_enabled) {
+        ctx->drive[1].drive_id = idB;
+        ctx->drive[1].state = DRIVE_STATE_INITIALIZING;
+    } else {
+        ctx->drive[1].state = DRIVE_STATE_DISABLED;
+    }
+}

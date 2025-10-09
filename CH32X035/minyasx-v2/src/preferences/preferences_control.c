@@ -57,6 +57,7 @@ void preferences_load_defaults(minyasx_context_t* ctx) {
     pref->mode_select_inverted[1] = false;              // ドライブBのMODE SELECT信号の極性反転なし
     pref->media_auto_detect = MEDIA_AUTO_DETECT_60SEC;  // デフォルトは60秒間トライ
     pref->speaker_enabled = true;                       // デフォルトはスピーカー有効
+    pref->fdd_id_mode = FDD_ID_MODE_DIP_SW;             // デフォルトはDIPスイッチに従う
 }
 
 void preferences_apply(minyasx_context_t* ctx) {

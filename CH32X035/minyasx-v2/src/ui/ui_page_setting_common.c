@@ -2,6 +2,7 @@
 #include "power/power_control.h"
 #include "preferences/preferences_control.h"
 #include "ui/ui_control.h"
+#include "x68fdd/x68fdd_control.h"
 
 // Common Setting page
 static void ui_page_setting_common_enter(ui_page_context_t* pctx);
@@ -33,6 +34,19 @@ ui_select_t auto_detect_select = {
     .selection_made = true,  // falseで選択モードに入る
 };
 
+// FDD ID選択用UI
+static const char* fdd_id_options[] = {"DIP SW", "0,1", "1", "2,3", "3", NULL};
+ui_select_t fdd_id_select = {
+    .page = UI_PAGE_SETTING_COMMON,
+    .x = 12,
+    .y = 3,
+    .width = 6,
+    .options = fdd_id_options,
+    .option_count = 5,
+    .current_index = 0,
+    .selection_made = true,  // falseで選択モードに入る
+};
+
 // Reset Defaults確認ダイアログ
 ui_dialog_t reset_dialog = {
     .page = UI_PAGE_SETTING_COMMON,
@@ -57,7 +71,7 @@ void ui_page_setting_common_enter(ui_page_context_t* pctx) {
     ui_print(page, "[Common Setting]\n");
     ui_print(page, ">Speaker   [    ]\n");
     ui_print(page, " AutoDetect[    ]\n");
-    ui_print(page, "\n");
+    ui_print(page, " FDD ID    [      ]\n");
     ui_print(page, "\n");
     ui_print(page, " Reset Defaults\n");
     ui_print(page, "\n");
@@ -84,6 +98,26 @@ void ui_page_setting_common_enter(ui_page_context_t* pctx) {
         ui_print(page, "Keep");
         break;
     }
+
+    // FDD IDの現在値を表示
+    ui_cursor(page, 12, 3);
+    switch (ctx->preferences.fdd_id_mode) {
+    case FDD_ID_MODE_DIP_SW:
+        ui_print(page, "DIP SW");
+        break;
+    case FDD_ID_MODE_0_1:
+        ui_print(page, "0,1   ");
+        break;
+    case FDD_ID_MODE_1:
+        ui_print(page, "1     ");
+        break;
+    case FDD_ID_MODE_2_3:
+        ui_print(page, "2,3   ");
+        break;
+    case FDD_ID_MODE_3:
+        ui_print(page, "3     ");
+        break;
+    }
 }
 
 //
@@ -98,8 +132,8 @@ static void set_position(int pos) {
     int new_pos = pos;
     if (new_pos < 1) new_pos = 1;
     if (new_pos > 7) new_pos = 7;
-    // 空行（3, 4, 6行目）を飛ばす
-    while ((new_pos == 3) || (new_pos == 4) || (new_pos == 6)) {
+    // 空行（4, 6行目）を飛ばす
+    while ((new_pos == 4) || (new_pos == 6)) {
         new_pos = (new_pos < position) ? new_pos - 1 : new_pos + 1;
     }
     position = new_pos;
@@ -165,6 +199,18 @@ void ui_page_setting_common_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
         return;
     }
 
+    // FDD IDのプルダウンメニューが開いている場合
+    if (!fdd_id_select.selection_made) {
+        ui_select_keyin(&fdd_id_select, keys);
+        if (fdd_id_select.selection_made) {
+            // 選択が確定した
+            pctx->ctx->preferences.fdd_id_mode = (fdd_id_mode_t)fdd_id_select.current_index;
+            preferences_save(pctx->ctx);  // 変更を保存
+            x68fdd_update_drive_id(pctx->ctx);  // FDD IDを再設定
+        }
+        return;
+    }
+
     if (keys & UI_KEY_UP) {
         set_position(position - 1);
     }
@@ -190,6 +236,12 @@ void ui_page_setting_common_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
             auto_detect_select.current_index = pctx->ctx->preferences.media_auto_detect;
             auto_detect_select.selection_made = false;
             ui_select_init(&auto_detect_select);
+            return;
+        case 3:
+            // FDD ID - プルダウンメニューを開く
+            fdd_id_select.current_index = pctx->ctx->preferences.fdd_id_mode;
+            fdd_id_select.selection_made = false;
+            ui_select_init(&fdd_id_select);
             return;
         case 5:
             // Reset Defaults - ダイアログを表示

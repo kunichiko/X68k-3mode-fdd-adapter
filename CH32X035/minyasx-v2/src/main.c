@@ -298,23 +298,9 @@ int main() {
     ui_log(UI_LOG_LEVEL_INFO, "X68kFDD IF Init\n");
     x68fdd_init(ctx);
 
-    // DIP SWの状態を GreenPAKにセットする
-    ui_log(UI_LOG_LEVEL_INFO, "Reading DIP SW\n");
-    uint8_t ds0 = (GPIOA->INDR >> 22) & 1;
-    uint8_t ds1 = (GPIOA->INDR >> 23) & 1;
-    for (int i = 0; i < 4; i++) {
-        uint8_t vin = greenpak_get_virtualinput(i);
-        vin |= (ds1 ? 0x40 : 0x00) | (ds0 ? 0x80 : 0x00);
-        greenpak_set_virtualinput(i, vin);
-    }
-    uint8_t idA = (ds1 << 1) | ds0;
-    ctx->drive[0].drive_id = idA;
-    if (idA == 0 || idA == 2) {
-        // ドライブAが0か2にセットされた時のみドライブBが利用可能
-        ctx->drive[1].drive_id = idA + 1;
-    } else {
-        ctx->drive[1].state = DRIVE_STATE_DISABLED;
-    }
+    // FDD IDの設定
+    ui_log(UI_LOG_LEVEL_INFO, "Setting FDD ID\n");
+    x68fdd_update_drive_id(ctx);
 
     // 以下もセットする
     // GP2の DISK_IN_A_n (Virtual Input 2=bit5)
