@@ -1,4 +1,4 @@
-#include "greenpak/greenpak_control.h"
+#include "oled/ssd1306_txt.h"
 #include "pcfdd/pcfdd_control.h"
 #include "power/power_control.h"
 #include "ui_control.h"
@@ -7,6 +7,10 @@
 static void ui_page_boot_enter(ui_page_context_t* pctx);
 void ui_page_boot_poll(ui_page_context_t* pctx, uint32_t systick_ms);
 void ui_page_boot_keyin(ui_page_context_t* pctx, ui_key_mask_t keys);
+
+// スリープ状態管理
+static uint32_t sleep_start_ms = 0;
+static bool oled_cleared = false;
 
 void ui_page_boot_init(ui_page_context_t* win) {
     win->enter = ui_page_boot_enter;
@@ -23,7 +27,7 @@ void ui_page_boot_enter(ui_page_context_t* pctx) {
 }
 
 void ui_page_boot_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
-    static bool last_enter_state = false;
+    static bool last_power_on = true;
 
     if (ui_get_current_page() != UI_PAGE_BOOT) {
         return;
@@ -31,22 +35,31 @@ void ui_page_boot_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
     ui_page_type_t page = UI_PAGE_BOOT;
     minyasx_context_t* ctx = pctx->ctx;
 
-    // ENTERキーの状態を監視してリリース時にフラグをリセット
-    extern const uint8_t gp_target_addr[5];
-    uint8_t gp5_io0_7 = gp_reg_get(gp_target_addr[4], 0x74);
-    bool enter_pressed = ((gp5_io0_7 & (1 << 5)) == 0);
-
-    if (last_enter_state && !enter_pressed) {
-        // ENTERキーが離された
-        extern void ui_page_boot_reset_key_state(void);
-        ui_page_boot_reset_key_state();
+    // 電源状態の変化を検出
+    if (last_power_on && !ctx->power_on) {
+        // 電源がOFFになった（スリープ開始）
+        sleep_start_ms = systick_ms;
+        oled_cleared = false;
+    } else if (!last_power_on && ctx->power_on) {
+        // 電源がONになった（スリープ復帰）
+        if (oled_cleared) {
+            // OLEDを再表示
+            OLED_display(1);
+            oled_cleared = false;
+        }
     }
-    last_enter_state = enter_pressed;
+    last_power_on = ctx->power_on;
 
     // 表示のみを行う（画面遷移はmainループで管理）
     if (!ctx->power_on) {
         ui_cursor(page, 0, 3);
         ui_print(page, "    - Sleeping -\n");
+
+        // スリープ開始から60秒経過したらOLEDをクリア
+        if (!oled_cleared && (systick_ms - sleep_start_ms >= 60000)) {
+            OLED_display(0);
+            oled_cleared = true;
+        }
     }
 }
 
@@ -61,6 +74,14 @@ void ui_page_boot_reset_key_state(void) {
 
 void ui_page_boot_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
     if (keys & UI_KEY_ENTER) {
+        // OLEDがオフになっている場合は、表示を復帰
+        if (oled_cleared) {
+            OLED_display(1);
+            oled_cleared = false;
+            sleep_start_ms = SysTick->CNT / (F_CPU / 1000);  // スリープタイマーをリセット
+            return;
+        }
+
         uint32_t current_ms = SysTick->CNT / (F_CPU / 1000);
 
         if (!key_enter_first_press) {
@@ -78,6 +99,7 @@ void ui_page_boot_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
                     set_force_pwr_on(true);
                     force_pwr_activated = true;
                 }
+                key_enter_first_press = false;  // 次の押下を待つ
             }
         }
     }
