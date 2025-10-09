@@ -29,13 +29,9 @@ void ui_page_boot_enter(ui_page_context_t* pctx) {
 void ui_page_boot_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
     static bool last_power_on = true;
 
-    if (ui_get_current_page() != UI_PAGE_BOOT) {
-        return;
-    }
-    ui_page_type_t page = UI_PAGE_BOOT;
     minyasx_context_t* ctx = pctx->ctx;
 
-    // 電源状態の変化を検出
+    // 電源状態の変化を検出（ページに関係なく監視）
     if (last_power_on && !ctx->power_on) {
         // 電源がOFFになった（スリープ開始）
         sleep_start_ms = systick_ms;
@@ -49,6 +45,11 @@ void ui_page_boot_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
         }
     }
     last_power_on = ctx->power_on;
+
+    if (ui_get_current_page() != UI_PAGE_BOOT) {
+        return;
+    }
+    ui_page_type_t page = UI_PAGE_BOOT;
 
     // 表示のみを行う（画面遷移はmainループで管理）
     if (!ctx->power_on) {
