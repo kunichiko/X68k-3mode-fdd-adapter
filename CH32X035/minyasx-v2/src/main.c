@@ -72,7 +72,7 @@ int main() {
     // PA14: STEP (入力: Low→Highで1ステップ, Pull-Up) ?
     // PA15: SIDE_SELECT (入力: Low=SIDE0, High=SIDE1, Pull-Up) ?
     // PA16: X68_PWR (入力: Low=電源ON要求, Pull-Up)
-    // PA17: +12V_EXT_DET (Low=外部+12V電源接続, Pull-Up)
+    // PA17: +12V_EXT_DET (High=外部+12V電源接続, Pull-Up)
     // PA18: +5V_EN (Low=Enable, High=Disable)
     // PA19: +12V_EN (Low=Enable, High=Disable)
     // PA20: +12V_EXT_EN (Low=Enable, High=Disable))
@@ -164,7 +164,7 @@ int main() {
 
     // GPIOB
     // PB0 : MODE_SELECT_DOSV (出力: Low=360RPM, High=300RPM, 逆のものもあるらしい)
-    // PB1 : INUSE_DOSV (出力: Low=未使用, High=使用中) tbd
+    // PB1 : IN_USE_MCU (出力: Low=アクティブ, High=非アクティブ)
     // PB2 : DRIVE_SEL_DOSV_A (未使用)
     // PB3 : DRIVE_SEL_DOSV_B (未使用)
     // PB4 : MOTOR_ON_DOSV (未使用)
@@ -185,7 +185,7 @@ int main() {
     GPIOB->CFGLR &= ~(0xf << (4 * 0));
     GPIOB->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 0);
     GPIOB->BCR = (1 << 0);
-    // PB1: INUSE_DOSV output
+    // PB1: IN_USE_MCU output
     GPIOB->CFGLR &= ~(0xf << (4 * 1));
     GPIOB->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 1);
     GPIOB->BCR = (1 << 1);

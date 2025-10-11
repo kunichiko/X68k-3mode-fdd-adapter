@@ -9,7 +9,7 @@
 //
 // ● 1.外部+12V電源の検出
 // 外部+12V電源が接続されているかどうかを調べます。
-// 外部+12V電源が接続されていれば、+12V_EXT_DETがLowになります。
+// 外部+12V電源が接続されていれば、+12V_EXT_DETがHighになります。
 // この場合は、+12V_EXT ラインをEnableします。
 //
 // ● 2.USB-PDのネゴシエーション
@@ -137,7 +137,7 @@ bool activate_pd_12v(minyasx_context_t* ctx) {
  *   - FDDの電源OFF: +12V_EXT_EN=Low, +12V_EN=Low, +5V_EN=Low
  *
  *  GPIOのマッピングは以下の通り
- *   PA17: +12V_EXT_DET (Low=外部+12V電源接続, Pull-Up)
+ *   PA17: +12V_EXT_DET (High=外部+12V電源接続, Pull-Up)
  *   PA18: +5V_EN (Low=Disable, High=Enable)
  *   PA19: +12V_EN (Low=Disable, High=Enable)
  *   PA20: +12V_EXT_EN (Low=Disable, High=Enable))
@@ -145,9 +145,9 @@ bool activate_pd_12v(minyasx_context_t* ctx) {
 void enable_fdd_power(minyasx_context_t* ctx, bool enable) {
     if (enable) {
         // ● 1.外部+12V電源の検出
-        // 外部+12V電源が接続されていれば、+12V_EXT_DETがLowになります。
+        // 外部+12V電源が接続されていれば、+12V_EXT_DETがHighになります。
         // この場合は、+12V_EXT ラインをEnableします。
-        if ((GPIOA->INDR & (1 << 17)) == 0) {
+        if ((GPIOA->INDR & (1 << 17)) != 0) {
             // 外部+12V電源が接続されている
             GPIOA->BSXR = (1 << (20 - 16));  // Enable (+12V_EXT_EN=High)
             ui_log(UI_LOG_LEVEL_INFO, "+12V_EXT_DET active\n");
@@ -528,7 +528,7 @@ bool power_renegotiate_pd(minyasx_context_t* ctx) {
     GPIOA->BCR = (1 << (18));  // Disable (+5V_EN=Low)
 
     // 外部+12V電源をチェック
-    if ((GPIOA->INDR & (1 << 17)) == 0) {
+    if ((GPIOA->INDR & (1 << 17)) != 0) {
         // 外部+12V電源が接続されている
         GPIOA->BSXR = (1 << (20 - 16));  // Enable (+12V_EXT_EN=High)
         ui_log(UI_LOG_LEVEL_INFO, "+12V_EXT active\n");

@@ -142,7 +142,13 @@ void greenpak_autoprogram_verify(void) {
     // すべて見えている場合でも「差分があれば上書き」する
     for (;;) {
         // 全員が最終番地に居るか？
-        int all_seen = present[0] && present[1] && present[2] && present[3];
+        bool all_seen = true;
+        for (int i = 0; i < GP_NUM; i++) {
+            if (!present[i]) {
+                all_seen = false;
+                break;
+            }
+        }
 
         // 居るものは verify→差分があれば上書き（最終番地側へ書く）
         for (int i = 0; i < GP_NUM; i++) {
@@ -167,11 +173,12 @@ void greenpak_autoprogram_verify(void) {
             // 全員在席＋必要なら上書き済み → 完了
             return;
         }
+        ui_log(UI_LOG_LEVEL_INFO, "not all seen\n");
 
         // まだ見えていない最初のICを 0x0A（作業用）経由でプログラム
         // （基板のショートジャンパで、そのICだけがバスに接続されている前提）
         int target = -1;
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < GP_NUM; i++) {
             if (!present[i]) {
                 target = i;
                 break;
@@ -180,6 +187,7 @@ void greenpak_autoprogram_verify(void) {
 
         if (target < 0) {
             // 論理上起きないはずだが保険
+            ui_log(UI_LOG_LEVEL_INFO, "???\n");
             return;
         }
 

@@ -26,6 +26,14 @@ void ui_page_main_enter(ui_page_context_t* pctx) {
     } else {
         enter_key_held_on_enter = false;
     }
+
+    // MI68-2025のロゴを表示
+    ui_cursor(UI_PAGE_MAIN, 10, 7);
+    char buffer[12] = "=MI68-2025=";
+    for (int i = 0; i < 12 - 1; i++) {
+        buffer[i] |= 0x80;  // 反転表示
+    }
+    ui_print(UI_PAGE_MAIN, buffer);
 }
 
 void ui_page_main_poll(ui_page_context_t* pctx, uint32_t systick_ms) {

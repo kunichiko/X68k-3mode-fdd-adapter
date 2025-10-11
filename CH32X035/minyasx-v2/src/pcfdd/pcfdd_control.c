@@ -858,6 +858,19 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
         }
     }
 
+    // IN_USE信号の生成
+    for (int drive = 0; drive < 2; drive++) {
+        bool drive_select = (GPIOA->INDR & (1 << (0 + drive))) != 0;  // Drive Select A/B active?
+        if ((ctx->drive[drive].in_use_mode == FDD_IN_USE_LED) && drive_select) {
+            // Drive Selectがアクティブな間だけIN_USEもアクティブにする
+            // Drive Selectがアクティブ
+            GPIOB->BSHR = GPIO_Pin_1;
+        } else {
+            // それ以外はIN_USEを非アクティブにする
+            GPIOB->BCR = GPIO_Pin_1;
+        }
+    }
+
     //
     // メディアの抜き差し検出
     //
