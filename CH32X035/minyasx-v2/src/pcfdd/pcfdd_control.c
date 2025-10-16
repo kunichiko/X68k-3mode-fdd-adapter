@@ -765,6 +765,10 @@ static void process_media_waiting(minyasx_context_t* ctx, int drive, uint32_t sy
         return;
     } else if (mode == MEDIA_AUTO_DETECT_60SEC) {
         // 60秒間トライ：60秒経過したらEJECTED状態に遷移
+        if (ctx->drive[drive].media_waiting_start_ms == 0) {
+            // タイムスタンプが0の場合は、ここで更新する
+            ctx->drive[drive].media_waiting_start_ms = systick_ms;
+        }
         uint32_t elapsed = systick_ms - ctx->drive[drive].media_waiting_start_ms;
         if (elapsed >= 60000) {
             ctx->drive[drive].state = DRIVE_STATE_EJECTED;
@@ -1062,9 +1066,11 @@ void pcfdd_force_eject(minyasx_context_t* ctx, int drive) {
     if (d->state != DRIVE_STATE_READY) {
         return;
     }
+    ui_logf(UI_LOG_LEVEL_INFO, "Drive %d: Ejecting media\n", drive);
     d->state = DRIVE_STATE_MEDIA_WAITING;
     d->rpm_measured = FDD_RPM_UNKNOWN;
     d->bps_measured = BPS_UNKNOWN;
+    d->media_waiting_start_ms = 0;  // タイムスタンプをクリア
 }
 
 /**
@@ -1086,22 +1092,22 @@ void pcfdd_detect_media(minyasx_context_t* ctx, int drive) {
 char* pcfdd_state_to_string(drive_state_t state) {
     switch (state) {
     case DRIVE_STATE_POWER_OFF:
-        return "-----";
+        return "------";
     case DRIVE_STATE_NOT_CONNECTED:
-        return "*****";
+        return "******";
     case DRIVE_STATE_DISABLED:
-        return "Disbl";
+        return "Disabl";
     case DRIVE_STATE_INITIALIZING:
-        return "Init.";
+        return "Init..";
     case DRIVE_STATE_MEDIA_DETECTING:
-        return ">>>>>";
+        return ">>>>>>";
     case DRIVE_STATE_MEDIA_WAITING:
-        return "Eject";
+        return "Waitng";
     case DRIVE_STATE_EJECTED:
-        return "Eject";
+        return "Ejectd";
     case DRIVE_STATE_READY:
-        return "Ready";
+        return "Ready ";
     default:
-        return "Unknown";
+        return "Unknwn";
     }
 }

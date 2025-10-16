@@ -29,27 +29,57 @@ void x68fdd_init(minyasx_context_t* ctx) {
     // PA1 : DRIVE_SELECT_B
     // PA2 : OPTION_SELECT_A
     // PA3 : OPTION_SELECT_B
-    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI0);  // EXTI0 の設定をクリア
-    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI0_PA;  // EXTI0 を PA (00) に設定
-    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI1);  // EXTI1 の設定をクリア
-    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI1_PA;  // EXTI1 を PA (00) に設定
-    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI2);  // EXTI2 の設定をクリア
-    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI2_PA;  // EXTI2 を PA (00) に設定
-    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI3);  // EXTI3 の設定をクリア
-    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI3_PA;  // EXTI3 を PA (00) に設定
+    // PA13: EJECT (V2.0はPA4)
+    // PA14: EJECT_MASK (V2.0はPA5)
+    // PA15: LED_BLINK (V2.0はPA8)
+    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI0);   // EXTI0 の設定をクリア
+    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI0_PA;   // EXTI0 を PA (00) に設定
+    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI1);   // EXTI1 の設定をクリア
+    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI1_PA;   // EXTI1 を PA (00) に設定
+    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI2);   // EXTI2 の設定をクリア
+    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI2_PA;   // EXTI2 を PA (00) に設定
+    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI3);   // EXTI3 の設定をクリア
+    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI3_PA;   // EXTI3 を PA (00) に設定
+    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI4);   // EXTI4 の設定をクリア
+    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI4_PA;   // EXTI4 を PA (00) に設定
+    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI5);   // EXTI5 の設定をクリア
+    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI5_PA;   // EXTI5 を PA (00) に設定
+    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI8);   // EXTI8 の設定をクリア
+    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI8_PA;   // EXTI8 を PA (00) に設定
+    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI13);  // EXTI13 の設定をクリア
+    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI13_PA;  // EXTI13 を PA (00) に設定
+    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI14);  // EXTI14 の設定をクリア
+    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI14_PA;  // EXTI14 を PA (00) に設定
+    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI15);  // EXTI15 の設定をクリア
+    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI15_PA;  // EXTI15 を PA (00) に設定
 
     // 一旦クリアしてから割り込みを有効にする
-    EXTI->INTENR &= ~(EXTI_INTENR_MR0 | EXTI_INTENR_MR1 | EXTI_INTENR_MR2 | EXTI_INTENR_MR3);  // 割り込み無効化
-    EXTI->RTENR &= ~(EXTI_RTENR_TR0 | EXTI_RTENR_TR1 | EXTI_RTENR_TR2 | EXTI_RTENR_TR3);       // 立ち上がりエッジ検出をクリア
-    EXTI->FTENR &= ~(EXTI_FTENR_TR0 | EXTI_FTENR_TR1 | EXTI_FTENR_TR2 | EXTI_FTENR_TR3);       // 立ち下がりエッジ検出をクリア
+    EXTI->INTENR &= ~(EXTI_INTENR_MR0 | EXTI_INTENR_MR1 | EXTI_INTENR_MR2 | EXTI_INTENR_MR3 |  //
+                      EXTI_INTENR_MR4 | EXTI_INTENR_MR5 | EXTI_INTENR_MR8 |                    //
+                      EXTI_INTENR_MR13 | EXTI_INTENR_MR14 | EXTI_INTENR_MR15);                 // 割り込み無効化
+    EXTI->RTENR &= ~(EXTI_RTENR_TR0 | EXTI_RTENR_TR1 | EXTI_RTENR_TR2 | EXTI_RTENR_TR3 |       //
+                     EXTI_RTENR_TR4 | EXTI_RTENR_TR5 | EXTI_RTENR_TR8 |                        //
+                     EXTI_RTENR_TR13 | EXTI_RTENR_TR14 | EXTI_RTENR_TR15);                     // 立ち上がりエッジ検出をクリア
+    EXTI->FTENR &= ~(EXTI_FTENR_TR0 | EXTI_FTENR_TR1 | EXTI_FTENR_TR2 | EXTI_FTENR_TR3 |       //
+                     EXTI_FTENR_TR4 | EXTI_FTENR_TR5 | EXTI_FTENR_TR8 |                        //
+                     EXTI_FTENR_TR13 | EXTI_FTENR_TR14 | EXTI_FTENR_TR15);                     // 立ち下がりエッジ検出をクリア
 
     // 有効化
-    EXTI->RTENR |= EXTI_RTENR_TR0 | EXTI_RTENR_TR1 | EXTI_RTENR_TR2 | EXTI_RTENR_TR3;  // 立ち上がりエッジ検出をセット
-    EXTI->FTENR |= EXTI_FTENR_TR0 | EXTI_FTENR_TR1;  // 立ち下がりエッジ検出をセット (OPTION_SELECT_A/Bは立ち上がりのみ)
-    EXTI->INTFR = EXTI_INTF_INTF0 | EXTI_INTF_INTF1 | EXTI_INTF_INTF2 | EXTI_INTF_INTF3;    // 割り込みフラグをクリア
-    EXTI->INTENR |= EXTI_INTENR_MR0 | EXTI_INTENR_MR1 | EXTI_INTENR_MR2 | EXTI_INTENR_MR3;  // 割り込み有効化
+    EXTI->RTENR |= EXTI_RTENR_TR0 | EXTI_RTENR_TR1 | EXTI_RTENR_TR2 | EXTI_RTENR_TR3 |  //
+                   EXTI_RTENR_TR4 | EXTI_RTENR_TR5 | EXTI_RTENR_TR8 |                   //
+                   EXTI_RTENR_TR13 | EXTI_RTENR_TR14 | EXTI_RTENR_TR15;                 // 立ち上がりエッジ検出をセット
+    EXTI->FTENR |= EXTI_FTENR_TR0 | EXTI_FTENR_TR1 |                                    //
+                   EXTI_FTENR_TR4 | EXTI_FTENR_TR5 | EXTI_FTENR_TR8 |                   //
+                   EXTI_FTENR_TR13 | EXTI_FTENR_TR14 | EXTI_FTENR_TR15;  // 立ち下がりエッジ検出をセット (OPTION_SELECT_A/Bは立ち上がりのみ)
+    EXTI->INTFR = EXTI_INTF_INTF0 | EXTI_INTF_INTF1 | EXTI_INTF_INTF2 | EXTI_INTF_INTF3 |    //
+                  EXTI_INTF_INTF4 | EXTI_INTF_INTF5 | EXTI_INTF_INTF8 |                      //
+                  EXTI_INTF_INTF13 | EXTI_INTF_INTF14 | EXTI_INTF_INTF15;                    // 割り込みフラグをクリア
+    EXTI->INTENR |= EXTI_INTENR_MR0 | EXTI_INTENR_MR1 | EXTI_INTENR_MR2 | EXTI_INTENR_MR3 |  //
+                    EXTI_INTENR_MR4 | EXTI_INTENR_MR5 | EXTI_INTENR_MR8 |                    //
+                    EXTI_INTENR_MR13 | EXTI_INTENR_MR14 | EXTI_INTENR_MR15;                  // 割り込み有効化
 
-    NVIC_EnableIRQ(EXTI7_0_IRQn);  // EXTI 7-0割り込みを有効にする
+    NVIC_EnableIRQ(EXTI7_0_IRQn);   // EXTI 7-0割り込みを有効にする
+    NVIC_EnableIRQ(EXTI15_8_IRQn);  // EXTI 15-8割り込みを有効にする
 
     //
     // GPIO割り込みだけでは対応できない処理のために、SysTick割り込みを100usec単位で発生させる
@@ -80,6 +110,8 @@ void x68fdd_init(minyasx_context_t* ctx) {
     // 4 (bit3)  = SIDE_SELECT (正論理)
     greenpak_set_virtualinput(4 - 1, 0x00);  // 全部Lowにしておく
 }
+
+volatile bool last_eject_signal = false;  // 前回のEJECT信号の状態
 
 /*
   EXTI 7-0 Global Interrupt Handler
@@ -135,7 +167,11 @@ void EXTI7_0_IRQHandler(void) {
         // このタイミングで EJECT(PA4), EJECT_MASK(PA5), LED_BLINK(PA8)の状態を確認する
         drive_status_t* drive = &g_ctx->drive[0];  // Aドライブ
         if ((porta & (1 << 4)) == 0) {             // EJECT (Low=Eject)
-            pcfdd_force_eject(g_ctx, 0);           // Aドライブを強制排出
+            ui_logf(UI_LOG_LEVEL_INFO, "Eject signal A\n");
+            if (last_eject_signal) {
+                // 誤検出防止のために、じぜんにEJECT信号がアクティブになっていることを検知している時のみ有効とする
+                pcfdd_force_eject(g_ctx, 0);  // Aドライブを強制排出
+            }
         }
         if ((porta & (1 << 5)) == 0) {  // EJECT_MASK (Low=Mask)
             drive->eject_masked = true;
@@ -154,7 +190,10 @@ void EXTI7_0_IRQHandler(void) {
         // このタイミングで EJECT(PA4), EJECT_MASK(PA5), LED_BLINK(PA8)の状態を確認する
         drive_status_t* drive = &g_ctx->drive[1];  // Bドライブ
         if ((porta & (1 << 4)) == 0) {             // EJECT (Low=Eject)
-            pcfdd_force_eject(g_ctx, 1);           // Bドライブを強制排出
+            if (last_eject_signal) {
+                // 誤検出防止のために、じぜんにEJECT信号がアクティブになっていることを検知している時のみ有効とする
+                pcfdd_force_eject(g_ctx, 1);  // Bドライブを強制排出
+            }
         }
         if ((porta & (1 << 5)) == 0) {  // EJECT_MASK (Low=Mask)
             drive->eject_masked = true;
@@ -166,6 +205,56 @@ void EXTI7_0_IRQHandler(void) {
         } else {
             drive->led_blink = false;  // LEDが点滅中でない
         }
+    }
+    if (intfr & EXTI_INTF_INTF4) {
+        EXTI->INTFR = EXTI_INTF_INTF4;  // フラグをクリア
+        // PA4 (V2.0 EJECT) の割り込み
+        if ((porta & (1 << 4)) == 0) {  // EJECT (Low=Eject)
+            last_eject_signal = true;
+        } else {
+            last_eject_signal = false;
+        }
+    }
+    if (intfr & EXTI_INTF_INTF5) {
+        EXTI->INTFR = EXTI_INTF_INTF5;  // フラグをクリア
+        // PA7 (V2.0, EJECT_MASK) の割り込み
+        // 特に何もしない
+    }
+}
+
+/*
+  EXTI 15-8 Global Interrupt Handler
+ */
+void EXTI15_8_IRQHandler(void) __attribute__((interrupt));
+void EXTI15_8_IRQHandler(void) {
+    uint32_t porta = GPIOA->INDR;
+    uint32_t intfr = EXTI->INTFR;  // 割り込みフラグを取得
+
+    exti_int_counter++;
+
+    if (intfr & EXTI_INTF_INTF8) {
+        EXTI->INTFR = EXTI_INTF_INTF8;  // フラグをクリア
+        // PA8 (V2.0, LED_BLINK) の割り込み
+        // 特に何もしない
+    }
+    if (intfr & EXTI_INTF_INTF13) {
+        EXTI->INTFR = EXTI_INTF_INTF13;  // フラグをクリア
+        // PA13 (EJECT) の割り込み
+        if ((porta & (1 << 4)) == 0) {  // EJECT (Low=Eject)
+            last_eject_signal = true;
+        } else {
+            last_eject_signal = false;
+        }
+    }
+    if (intfr & EXTI_INTF_INTF14) {
+        EXTI->INTFR = EXTI_INTF_INTF14;  // フラグをクリア
+        // PA14 (EJECT_MASK) の割り込み
+        // 特に何もしない
+    }
+    if (intfr & EXTI_INTF_INTF15) {
+        EXTI->INTFR = EXTI_INTF_INTF15;  // フラグをクリア
+        // PA15 (LED_BLINK) の割り込み
+        // 特に何もしない
     }
 }
 

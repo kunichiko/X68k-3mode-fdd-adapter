@@ -72,7 +72,7 @@ void ui_page_main_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
             if ((systick_ms / 1000) % 2 == 0) {
                 ui_printf(page, "%c[%s]", (i == 0 ? 'A' : 'B'), pcfdd_state_to_string(ctx->drive[i].state));
             } else {
-                ui_printf(page, "%c[     ]", (i == 0 ? 'A' : 'B'));
+                ui_printf(page, "%c[      ]", (i == 0 ? 'A' : 'B'));
             }
         } else {
             ui_printf(page, "%c[%s]", (i == 0 ? 'A' : 'B'), pcfdd_state_to_string(ctx->drive[i].state));
