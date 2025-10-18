@@ -5779,7 +5779,7 @@
 							)
 						)
 					)
-					(alternate "T2C3" bidirectional line)
+					(alternate "TIM2CH3" bidirectional line)
 				)
 				(pin bidirectional line
 					(at -15.24 17.78 0)
@@ -17664,9 +17664,11 @@
 		)
 		(pin "12"
 			(uuid "670114be-f1d7-4942-b11f-47f342a3fb4a")
+			(alternate "TIM2CH3")
 		)
 		(pin "13"
 			(uuid "4412f657-2d98-40c0-864f-bf6b006b4ac8")
+			(alternate "TIM2CH4")
 		)
 		(pin "14"
 			(uuid "fc0661dc-9d51-4775-981b-dea6fe164605")
@@ -17706,6 +17708,7 @@
 		)
 		(pin "7"
 			(uuid "60cbf8a2-b052-4fc4-af4c-1299691ef948")
+			(alternate "RST")
 		)
 		(pin "8"
 			(uuid "e9f142b1-0be1-48c9-8dbb-5dff0139393b")
@@ -17760,6 +17763,7 @@
 		)
 		(pin "19"
 			(uuid "3901f9cd-81af-47de-8fc7-f444a110b287")
+			(alternate "MOSI_3")
 		)
 		(pin "32"
 			(uuid "1129ba94-31e3-4840-badc-244a9781776c")
@@ -17781,21 +17785,25 @@
 		)
 		(pin "17"
 			(uuid "624861c7-23fa-4878-9908-e457e2f29bfd")
+			(alternate "TIM3CH2")
 		)
 		(pin "40"
 			(uuid "bdc783ae-f5f0-4f1c-b4fe-c4a4a5835f4e")
 		)
 		(pin "41"
 			(uuid "4d10f249-25a2-4680-b412-c2dbe59f3e98")
+			(alternate "MOSI_1")
 		)
 		(pin "10"
 			(uuid "ec42e0ab-a95c-4730-ba27-a3975bcc6116")
 		)
 		(pin "29"
 			(uuid "33e99b5a-d307-4c18-be95-c21b881c48ad")
+			(alternate "TIM1CH1")
 		)
 		(pin "30"
 			(uuid "2aea76ec-8cba-478c-9aae-81f400ba509b")
+			(alternate "TIM1CH2")
 		)
 		(pin "15"
 			(uuid "0f6fd152-4743-4d58-9619-0f9ba4cb4b25")
