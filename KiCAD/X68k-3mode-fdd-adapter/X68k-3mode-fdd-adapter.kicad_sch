@@ -5136,7 +5136,7 @@
 					)
 				)
 			)
-			(property "Footprint" "Package_LQFP:LQFP-48-1EP_7x7mm_P0.5mm"
+			(property "Footprint" "Package_QFP:LQFP-48_7x7mm_P0.5mm"
 				(at 3.556 -49.022 0)
 				(effects
 					(font
@@ -5154,7 +5154,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "48MHz RISC-V MCU with USB PD phy (Sink, Source, DRP), USB 2.0 Full speed phy (Host, Device), 20KB RAM, 62KB Flash, WQFN-28"
+			(property "Description" "48MHz RISC-V MCU with USB PD phy (Sink, Source, DRP), USB 2.0 Full speed phy (Host, Device), 20KB RAM, 62KB Flash"
 				(at -6.35 -52.07 0)
 				(effects
 					(font
@@ -5237,7 +5237,7 @@
 							)
 						)
 					)
-					(alternate "T2C3" bidirectional line)
+					(alternate "TIM2CH3" bidirectional line)
 				)
 				(pin bidirectional line
 					(at -15.24 17.78 0)
@@ -5353,6 +5353,7 @@
 							)
 						)
 					)
+					(alternate "MISO_1" bidirectional line)
 				)
 				(pin bidirectional line
 					(at -15.24 1.27 0)
@@ -5371,6 +5372,8 @@
 							)
 						)
 					)
+					(alternate "MISO_2" bidirectional line)
+					(alternate "MOSI_1" bidirectional line)
 				)
 				(pin bidirectional line
 					(at -15.24 -1.27 0)
@@ -5389,6 +5392,7 @@
 							)
 						)
 					)
+					(alternate "MOSI_2" bidirectional line)
 				)
 				(pin bidirectional line
 					(at -15.24 -3.81 0)
@@ -17817,7 +17821,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "48MHz RISC-V MCU with USB PD phy (Sink, Source, DRP), USB 2.0 Full speed phy (Host, Device), 20KB RAM, 62KB Flash, WQFN-28"
+		(property "Description" "48MHz RISC-V MCU with USB PD phy (Sink, Source, DRP), USB 2.0 Full speed phy (Host, Device), 20KB RAM, 62KB Flash"
 			(at 234.95 274.32 0)
 			(effects
 				(font
@@ -17840,9 +17844,11 @@
 		)
 		(pin "12"
 			(uuid "670114be-f1d7-4942-b11f-47f342a3fb4a")
+			(alternate "TIM2CH3")
 		)
 		(pin "13"
 			(uuid "4412f657-2d98-40c0-864f-bf6b006b4ac8")
+			(alternate "TIM2CH4")
 		)
 		(pin "14"
 			(uuid "fc0661dc-9d51-4775-981b-dea6fe164605")
@@ -17882,7 +17888,6 @@
 		)
 		(pin "7"
 			(uuid "60cbf8a2-b052-4fc4-af4c-1299691ef948")
-			(alternate "RST")
 		)
 		(pin "8"
 			(uuid "e9f142b1-0be1-48c9-8dbb-5dff0139393b")
@@ -17982,7 +17987,6 @@
 		)
 		(pin "16"
 			(uuid "7caad24a-c048-4d7c-9f40-116a3988d07b")
-			(alternate "TIM3CH1")
 		)
 		(instances
 			(project ""
