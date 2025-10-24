@@ -1066,7 +1066,7 @@ void pcfdd_force_eject(minyasx_context_t* ctx, int drive) {
     if (d->state != DRIVE_STATE_READY) {
         return;
     }
-    ui_logf(UI_LOG_LEVEL_INFO, "Drive %d: Ejecting media\n", drive);
+    // ui_logf(UI_LOG_LEVEL_INFO, "Drive %d: Ejecting media\n", drive);
     d->state = DRIVE_STATE_MEDIA_WAITING;
     d->rpm_measured = FDD_RPM_UNKNOWN;
     d->bps_measured = BPS_UNKNOWN;

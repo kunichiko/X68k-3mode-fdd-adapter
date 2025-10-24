@@ -40,10 +40,11 @@ int main() {
     // IOPCEN = Port C clock enable
     // IOPBEN = Port B clock enable
     // IOPAEN = Port A clock enable
-    // TIM1 = Timer 1 module clock enable
-    // TIM3 = Timer 3 module clock enable
+    // TIM1EN = Timer 1 module clock enable
+    // TIM2EN = Timer 2 module clock enable
+    // TIM3EN = Timer 3 module clock enable
     // AFIO = Alternate Function I/O module clock enable
-    RCC->APB1PCENR |= RCC_TIM3EN;
+    RCC->APB1PCENR |= RCC_TIM2EN | RCC_TIM3EN;
     RCC->APB2PCENR = RCC_IOPDEN | RCC_IOPCEN | RCC_IOPBEN | RCC_IOPAEN | RCC_TIM1EN | RCC_SPI1EN | RCC_AFIOEN;
 
     // SPIをデフォルトのPA6,7(MISO,MOSI)から、PC6,7(MISO_3,MOSI_3)に変更するために、Remap Register 1 でリマップする
@@ -107,8 +108,8 @@ int main() {
     GPIOA->BSHR = (1 << 6);  // Pull-Up
     // PA7 : Buzzer output. TIM3_CH2 (PWM出力)
     GPIOA->CFGLR &= ~(0xf << (4 * 7));
-    GPIOA->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP_AF) << (4 * 7);
-    // GPIOA->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 7);
+    // GPIOA->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP_AF) << (4 * 7);
+    GPIOA->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 7);
     //  GPIOA->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * 7);
     GPIOA->BCR = (1 << 7);  // Low出力にする
     // GPIOA->BSHR = (1 << 7);  // High出力にする (Buzzer OFF)
