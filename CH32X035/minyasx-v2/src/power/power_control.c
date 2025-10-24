@@ -287,6 +287,7 @@ void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
             // PVDOがセット（低電圧検出）されたらリセット処理
             if (pvdo) {
                 ui_log(UI_LOG_LEVEL_ERROR, "Low voltage detected, resetting...\n");
+                Delay_Ms(500);
                 power_enter_lv_sleep(ctx);
             }
         }
@@ -396,11 +397,11 @@ void update_key_activity(void) {
  *   110: 3.2V
  *   111: 3.4V
  *
- * VDDが2.9V以下を検出したいので、PLS=100 (2.8V) を使用する。
+ * VDDが3.1V以下を検出したいので、PLS=101 (3.0V) を使用する。
  * PVDOフラグはVDD < V_PVD のときにセットされる。
- * PVDには約100mVのヒステリシスがあるため、2.8V設定時：
- *   - 電圧下降: 2.8V以下で検出（PVDO=1）
- *   - 電圧上昇: 2.9V程度で解除（PVDO=0）
+ * PVDには約100mVのヒステリシスがあるため、3.0V設定時：
+ *   - 電圧下降: 3.0V以下で検出（PVDO=1）
+ *   - 電圧上昇: 3.1V程度で解除（PVDO=0）
  */
 void power_pvd_init(void) {
     // PWRクロックを有効化
@@ -408,12 +409,12 @@ void power_pvd_init(void) {
 
     // PWR_CTLRレジスタの設定
     // - PVDE (bit 4): PVDを有効化
-    // - PLS[2:0] (bits 7-5): 閾値レベル設定 = 111 (3.4V)
+    // - PLS[2:0] (bits 7-5): 閾値レベル設定 = 101 (3.0V)
     // PVDには内部ヒステリシスがあり、約100mVのマージンがある
-    // 3.4V設定時: 下降時3.4V以下で検出、上昇時3.5V程度で解除
+    // 3.0V設定時: 下降時3.0V以下で検出、上昇時3.1V程度で解除
     uint32_t ctlr = PWR->CTLR;
     ctlr &= ~(0x7 << 5);  // PLS[2:0]をクリア
-    ctlr |= (0x7 << 5);   // PLS = 111 (3.4V)
+    ctlr |= (0x5 << 5);   // PLS = 101 (3.0V)
     ctlr |= (1 << 4);     // PVDE = 1 (PVD有効化)
     PWR->CTLR = ctlr;
 
@@ -423,7 +424,7 @@ void power_pvd_init(void) {
     // 初期化後の状態を確認
     uint32_t csr = PWR->CSR;
     bool pvdo = (csr & (1 << 2)) != 0;  // PVDO: bit 2
-    ui_logf(UI_LOG_LEVEL_INFO, "PVD init (3.4V, polling mode) PVDO=%d\n", pvdo);
+    ui_logf(UI_LOG_LEVEL_INFO, "PVD init (3.0V, polling mode) PVDO=%d\n", pvdo);
 }
 
 /**
