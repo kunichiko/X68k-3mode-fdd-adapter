@@ -79,6 +79,9 @@ void ui_page_setting_debug_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
     case LED_TEST_MODE_ALL_OFF:
         ui_print(pctx->page, "All OFF ");
         break;
+    case LED_TEST_MODE_BLINK:
+        ui_print(pctx->page, "Blink   ");
+        break;
     }
     // DS A (PB2) の状態を読み取り、表示する
     bool ds_a_enabled = (porta & (1 << 0));  // FDD_DS_A is active high
@@ -174,6 +177,11 @@ void ui_page_setting_debug_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
                     next_mode = LED_TEST_MODE_ALL_OFF;
                     break;
                 case LED_TEST_MODE_ALL_OFF:
+                    next_mode = LED_TEST_MODE_BLINK;
+                    break;
+                case LED_TEST_MODE_BLINK:
+                    next_mode = LED_TEST_MODE_NORMAL;
+                    break;
                 default:
                     next_mode = LED_TEST_MODE_NORMAL;
                     break;

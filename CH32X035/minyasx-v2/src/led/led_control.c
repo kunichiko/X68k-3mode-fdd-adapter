@@ -133,6 +133,12 @@ void WS2812_SPI_set_test_mode(led_test_mode_t mode) {
             led_colors[i] = LED_OFF;
         }
         break;
+    case LED_TEST_MODE_BLINK:
+        // 全LEDを点滅させる(処理はpollで行うので一旦消灯)
+        for (int i = 0; i < NR_LEDS; i++) {
+            led_colors[i] = LED_OFF;
+        }
+        break;
     case LED_TEST_MODE_NORMAL:
     default:
         // 通常モードに戻る（次のpollで更新される）
@@ -154,10 +160,36 @@ led_test_mode_t WS2812_SPI_get_test_mode() {
 }
 
 void WS2812_SPI_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
+    static uint32_t last_systick_ms = 0;
     // コンテキストを保存
     g_led_ctx = ctx;
 
-    // テストモード時は何もしない
+    if (systick_ms - last_systick_ms < 100) {
+        return;
+    }
+    last_systick_ms = systick_ms;
+
+    // テストモード判定
+    if (led_test_mode == LED_TEST_MODE_BLINK) {
+        // 点滅モード
+        // 点滅状態の更新（500msごとにトグル）
+        if (systick_ms - last_blink_toggle_ms >= BLINK_INTERVAL_MS) {
+            blink_state = !blink_state;
+            last_blink_toggle_ms = systick_ms;
+        }
+        // 全LEDを点滅させる
+        uint32_t r = (systick_ms & 0xf00) >> 8;
+        uint32_t g = (systick_ms & 0x0f0) >> 4;
+        uint32_t b = (systick_ms & 0x00f);
+        uint32_t base = (g << 20) | (r << 12) | (b << 4);  // GRB形式
+        uint32_t color = blink_state ? scale_brightness(base) : LED_OFF;
+        for (int i = 0; i < NR_LEDS; i++) {
+            led_colors[i] = color;
+        }
+        // LED更新開始
+        WS2812BDMAStart(NR_LEDS);
+        return;
+    }
     if (led_test_mode != LED_TEST_MODE_NORMAL) {
         return;
     }
