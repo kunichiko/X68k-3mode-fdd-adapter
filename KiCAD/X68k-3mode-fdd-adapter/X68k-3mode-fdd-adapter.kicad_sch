@@ -8069,7 +8069,11 @@
 		(uuid "fab4901e-644f-4c19-867c-692d8811f116")
 	)
 	(no_connect
-		(at 292.1 265.43)
+		(at 269.24 257.81)
+		(uuid "01065bda-35fa-4ba0-a3d8-d28c56fe5a35")
+	)
+	(no_connect
+		(at 281.94 265.43)
 		(uuid "0e3b897f-dc29-4905-8715-86de7e9df52e")
 	)
 	(no_connect
@@ -8077,19 +8081,11 @@
 		(uuid "289ceb62-e358-4389-94b1-803f1209a700")
 	)
 	(no_connect
-		(at 292.1 255.27)
-		(uuid "2d08d5ef-d024-4265-bfbf-80ed3006f837")
-	)
-	(no_connect
-		(at 279.4 265.43)
+		(at 269.24 265.43)
 		(uuid "4cd01602-17fb-4aba-8756-3acdab6f230d")
 	)
 	(no_connect
-		(at 292.1 260.35)
-		(uuid "9f7c40be-5401-47eb-8d81-2f4c4016d44e")
-	)
-	(no_connect
-		(at 292.1 262.89)
+		(at 281.94 262.89)
 		(uuid "a92123a3-6d03-4d95-a15d-3d3beea8e960")
 	)
 	(no_connect
@@ -8109,11 +8105,15 @@
 		(uuid "db7563a5-294d-4e0c-b431-2a7b93b879b3")
 	)
 	(no_connect
-		(at 292.1 257.81)
-		(uuid "de9791fd-23de-4e4c-96b4-945ff9bb937c")
+		(at 269.24 255.27)
+		(uuid "e0ac0b46-5101-41f3-a305-71456bb34fe9")
 	)
 	(no_connect
-		(at 279.4 262.89)
+		(at 269.24 260.35)
+		(uuid "f0669958-d569-4b6c-ba67-a0ba00a4e8e9")
+	)
+	(no_connect
+		(at 269.24 262.89)
 		(uuid "f098e17b-111c-4fae-88ef-4d638eaeddc0")
 	)
 	(no_connect
@@ -8590,16 +8590,6 @@
 	)
 	(wire
 		(pts
-			(xy 123.19 115.57) (xy 132.08 115.57)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1c807051-b491-41d2-a5f7-7b6047bef03b")
-	)
-	(wire
-		(pts
 			(xy 384.81 53.34) (xy 389.89 53.34)
 		)
 		(stroke
@@ -8610,7 +8600,7 @@
 	)
 	(wire
 		(pts
-			(xy 276.86 260.35) (xy 276.86 266.7)
+			(xy 285.75 260.35) (xy 285.75 266.7)
 		)
 		(stroke
 			(width 0)
@@ -9490,16 +9480,6 @@
 	)
 	(wire
 		(pts
-			(xy 279.4 260.35) (xy 276.86 260.35)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "58b37994-bedf-4c4f-af81-712d4c1973ca")
-	)
-	(wire
-		(pts
 			(xy 182.88 38.1) (xy 198.12 38.1)
 		)
 		(stroke
@@ -9547,6 +9527,16 @@
 			(type default)
 		)
 		(uuid "5ba53a98-254e-4010-98be-f56fe109edc3")
+	)
+	(wire
+		(pts
+			(xy 129.54 115.57) (xy 140.97 115.57)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5bbee7b2-fd84-4d9b-9b5c-30531d39d205")
 	)
 	(wire
 		(pts
@@ -10460,6 +10450,16 @@
 	)
 	(wire
 		(pts
+			(xy 281.94 260.35) (xy 285.75 260.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "97c7b8fd-7fb2-4356-962a-3c4c45c6961d")
+	)
+	(wire
+		(pts
 			(xy 358.14 165.1) (xy 358.14 167.64)
 		)
 		(stroke
@@ -11260,6 +11260,16 @@
 	)
 	(wire
 		(pts
+			(xy 123.19 113.03) (xy 140.97 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cf40c159-5b70-40f4-a0e0-58c63ce12faa")
+	)
+	(wire
+		(pts
 			(xy 217.17 152.4) (xy 213.36 152.4)
 		)
 		(stroke
@@ -11880,6 +11890,16 @@
 	)
 	(wire
 		(pts
+			(xy 123.19 115.57) (xy 124.46 115.57)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f133bee6-815f-4091-be8d-5cc884159edb")
+	)
+	(wire
+		(pts
 			(xy 83.82 107.95) (xy 102.87 107.95)
 		)
 		(stroke
@@ -11977,16 +11997,6 @@
 			(type default)
 		)
 		(uuid "f4fddb7b-cff8-4a7c-9ddd-44294bec165a")
-	)
-	(wire
-		(pts
-			(xy 123.19 113.03) (xy 132.08 113.03)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f5e1fffc-8cd7-43ef-b629-2dbfb068f08c")
 	)
 	(wire
 		(pts
@@ -12218,6 +12228,16 @@
 		)
 		(uuid "131df7a7-d8de-44c7-9327-f5fd4639d524")
 	)
+	(label "I2C_SCL"
+		(at 140.97 113.03 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "13b02798-96be-47f0-870e-acfd6feea28e")
+	)
 	(label "USB_D+"
 		(at 73.66 69.85 270)
 		(effects
@@ -12379,12 +12399,12 @@
 		(uuid "26b4421a-d55a-4163-b6d4-e050c781a199")
 	)
 	(label "SWDIO"
-		(at 279.4 257.81 180)
+		(at 281.94 257.81 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right bottom)
+			(justify left bottom)
 		)
 		(uuid "27a04bb0-5bc3-4e2a-8b21-50f88af2ff95")
 	)
@@ -12828,7 +12848,7 @@
 		)
 		(uuid "4b0c0425-3a75-4d4e-b035-26bd51624aaf")
 	)
-	(label "MODE_SELECT_MCU"
+	(label "MODE_SELECT_GP"
 		(at 316.23 95.25 180)
 		(effects
 			(font
@@ -12957,6 +12977,16 @@
 			(justify right bottom)
 		)
 		(uuid "57cf882c-2507-456f-94e9-cb6fa62086d1")
+	)
+	(label "I2C_SDA"
+		(at 140.97 115.57 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "5860da05-925f-413d-a306-aedcb5e20135")
 	)
 	(label "+12V_EXT_ENABLE_n"
 		(at 40.64 45.72 180)
@@ -13328,7 +13358,7 @@
 		)
 		(uuid "7c04025b-8987-4b90-8fdf-ab777cc3b5a6")
 	)
-	(label "MODE_SELECT_MCU"
+	(label "MODE_SELECT_GP"
 		(at 240.03 184.15 0)
 		(effects
 			(font
@@ -13489,12 +13519,12 @@
 		(uuid "92ac91bf-4592-44c3-b4e7-d76326b43656")
 	)
 	(label "SWCLK"
-		(at 279.4 255.27 180)
+		(at 281.94 255.27 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right bottom)
+			(justify left bottom)
 		)
 		(uuid "936f1a0c-fa29-4b84-849b-99ede358f389")
 	)
@@ -14059,16 +14089,6 @@
 		(uuid "cdb76e57-5a46-4ea8-87d2-75b261e95571")
 	)
 	(label "I2C_SDA"
-		(at 132.08 115.57 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "ce165aa7-71d1-4e34-b32b-1caf7d09f025")
-	)
-	(label "I2C_SDA"
 		(at 193.04 25.4 180)
 		(effects
 			(font
@@ -14197,6 +14217,16 @@
 			(justify right bottom)
 		)
 		(uuid "e00cf444-7c66-4abb-8498-fac51fde215f")
+	)
+	(label "MODE_SELECT_GP"
+		(at 123.19 107.95 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e239f669-49cf-42ac-a8c5-479793d89165")
 	)
 	(label "READY_MCU_A"
 		(at 240.03 217.17 0)
@@ -14398,16 +14428,6 @@
 		)
 		(uuid "f638d7e7-e07e-4908-9ac6-90d2e40407bb")
 	)
-	(label "I2C_SCL"
-		(at 132.08 113.03 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "f953554e-3854-43d9-a3bf-b77127e7bf95")
-	)
 	(label "USB_D+"
 		(at 240.03 233.68 0)
 		(effects
@@ -14437,6 +14457,74 @@
 			(justify right bottom)
 		)
 		(uuid "feb3935c-2741-4596-b8d8-762b60f32264")
+	)
+	(symbol
+		(lib_id "Jumper:Jumper_2_Small_Open")
+		(at 127 115.57 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "018a710e-fd98-482e-87ec-f4caea2a6d30")
+		(property "Reference" "JP101"
+			(at 126.746 117.348 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Jumper_2_Small_Open"
+			(at 127 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm"
+			(at 127 115.57 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 127 115.57 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Jumper, 2-pole, small symbol, open"
+			(at 127 115.57 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "8c83e326-fd06-409c-ba53-e3a680086377")
+		)
+		(pin "1"
+			(uuid "9976e59a-3640-4b56-8224-29cf17723b1e")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
+					(reference "JP101")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
@@ -16893,7 +16981,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_02x05_Odd_Even")
-		(at 284.48 260.35 0)
+		(at 274.32 260.35 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -16902,7 +16990,7 @@
 		(fields_autoplaced yes)
 		(uuid "32ad3f6a-65f5-42c2-a451-1284911b11e0")
 		(property "Reference" "J104"
-			(at 285.75 248.92 0)
+			(at 275.59 248.92 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16910,7 +16998,7 @@
 			)
 		)
 		(property "Value" "Conn_02x05_Odd_Even"
-			(at 285.75 251.46 0)
+			(at 275.59 251.46 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16918,7 +17006,7 @@
 			)
 		)
 		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_2x05_P2.54mm_Vertical"
-			(at 284.48 260.35 0)
+			(at 274.32 260.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16927,7 +17015,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 284.48 260.35 0)
+			(at 274.32 260.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16936,7 +17024,7 @@
 			)
 		)
 		(property "Description" "Generic connector, double row, 02x05, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 284.48 260.35 0)
+			(at 274.32 260.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16945,7 +17033,7 @@
 			)
 		)
 		(property "LCSC" "C492399"
-			(at 284.48 260.35 0)
+			(at 274.32 260.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17347,7 +17435,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "38f98c3e-13bb-4d03-9a97-f3506fca08f6")
-		(property "Reference" "JP101"
+		(property "Reference" "JP102"
 			(at 126.746 168.148 0)
 			(effects
 				(font
@@ -17400,7 +17488,7 @@
 		(instances
 			(project ""
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "JP101")
+					(reference "JP102")
 					(unit 1)
 				)
 			)
@@ -19658,7 +19746,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6dc87cb0-8b52-43dc-89a8-947ba9b56e2b")
-		(property "Reference" "JP104"
+		(property "Reference" "JP105"
 			(at 186.69 30.48 0)
 			(effects
 				(font
@@ -19710,7 +19798,7 @@
 		(instances
 			(project ""
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "JP104")
+					(reference "JP105")
 					(unit 1)
 				)
 			)
@@ -20324,7 +20412,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "772e02a0-8d95-44b5-9806-8b533582bd4e")
-		(property "Reference" "JP107"
+		(property "Reference" "JP108"
 			(at 386.588 48.514 0)
 			(effects
 				(font
@@ -20377,7 +20465,7 @@
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "JP107")
+					(reference "JP108")
 					(unit 1)
 				)
 			)
@@ -21326,7 +21414,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "879ef553-3707-4f06-8eda-4a4a2175938e")
-		(property "Reference" "JP102"
+		(property "Reference" "JP103"
 			(at 126.746 217.678 0)
 			(effects
 				(font
@@ -21379,7 +21467,7 @@
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "JP102")
+					(reference "JP103")
 					(unit 1)
 				)
 			)
@@ -22224,7 +22312,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "9ad85186-81fe-4156-a03b-365d01975aa3")
-		(property "Reference" "JP106"
+		(property "Reference" "JP107"
 			(at 371.348 48.514 0)
 			(effects
 				(font
@@ -22277,7 +22365,7 @@
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "JP106")
+					(reference "JP107")
 					(unit 1)
 				)
 			)
@@ -22568,7 +22656,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a288409b-6b29-4fb0-845e-ccee69b780ed")
-		(property "Reference" "JP105"
+		(property "Reference" "JP106"
 			(at 356.108 48.514 0)
 			(effects
 				(font
@@ -22621,7 +22709,7 @@
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "JP105")
+					(reference "JP106")
 					(unit 1)
 				)
 			)
@@ -23101,7 +23189,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 276.86 266.7 0)
+		(at 285.75 266.7 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -23110,7 +23198,7 @@
 		(fields_autoplaced yes)
 		(uuid "ab6cd259-8fdb-4549-b38a-3a5aa0a93abd")
 		(property "Reference" "#PWR0154"
-			(at 276.86 273.05 0)
+			(at 285.75 273.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -23119,7 +23207,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 276.86 271.78 0)
+			(at 285.75 271.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -23127,7 +23215,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 276.86 266.7 0)
+			(at 285.75 266.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -23136,7 +23224,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 276.86 266.7 0)
+			(at 285.75 266.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -23145,7 +23233,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 276.86 266.7 0)
+			(at 285.75 266.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -24312,7 +24400,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c3b738b3-980a-40dc-8f9b-20eb9056e548")
-		(property "Reference" "JP108"
+		(property "Reference" "JP109"
 			(at 396.24 77.216 0)
 			(effects
 				(font
@@ -24364,7 +24452,7 @@
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "JP108")
+					(reference "JP109")
 					(unit 1)
 				)
 			)
@@ -26010,7 +26098,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "db924d1e-fe16-4184-9398-398c10a27c1a")
-		(property "Reference" "JP103"
+		(property "Reference" "JP104"
 			(at 126.746 268.478 0)
 			(effects
 				(font
@@ -26063,7 +26151,7 @@
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564"
-					(reference "JP103")
+					(reference "JP104")
 					(unit 1)
 				)
 			)
