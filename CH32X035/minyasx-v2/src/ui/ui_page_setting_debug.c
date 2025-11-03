@@ -35,18 +35,17 @@ void ui_page_setting_debug_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
         return;
     }
     // debug Settingページのポーリング処理
-    // PB4 : MOTOR_ON_DOSV output
-    // PBN4の出力状態を読み取り、MOTORのON/OFFを表示する
-    // PB7 : LOCK_ACK input
-    // PC6 : LOCK input
+    // PA12 : MOTOR_ON_GP (正論理)
+    //        GPのMOTOR_ON出力状態を読み取り、MOTORのON/OFFを表示する
+    // PB6 : LOCK_REQ
+    // PB7 : LOCK_ACK
     uint32_t porta = GPIOA->INDR;
     uint32_t portb = GPIOB->INDR;
-    bool motor_enabled = (portb & (1 << 4));  // MOTOR_ON_DOSV is active high
+    bool motor_enabled = (porta & (1 << 12));  // MOTOR_ON_GP is active high
     ui_cursor(pctx->page, 11, 1);
     ui_print(pctx->page, motor_enabled ? "ON      " : "OFF     ");
     // PCFDDのLOCK状態を読み取り、表示する
-    uint32_t portc = GPIOC->INDR;
-    bool lock_req = (portc & (1 << 6));  // LOCK is active high
+    bool lock_req = (portb & (1 << 6));  // LOCK_REQ is active high
     bool lock_ack = (portb & (1 << 7));  // LOCK_ACK is active high
     ui_cursor(pctx->page, 11, 2);
     if (!lock_req && !lock_ack) {
@@ -143,14 +142,14 @@ void ui_page_setting_debug_keyin(ui_page_context_t* pctx, ui_key_mask_t keys) {
             greenpak_set_virtualinput(4 - 1, gp4_vin);
             break;
         case 2:
-            // GP ENABLE
-            // GP ENABLEのON/OFFをトグルする
-            if (GPIOC->INDR & (1 << 6)) {
+            // LOCK_REQ
+            // LOCK_REQのON/OFFをトグルする
+            if (GPIOB->INDR & (1 << 6)) {
                 // 現在ONなのでOFFにする
-                GPIOC->BCR = (1 << 6);  // GP_ENABLE = OFF
+                GPIOB->BCR = (1 << 6);  // LOCK_REQ = OFF
             } else {
                 // 現在OFFなのでONにする
-                GPIOC->BSHR = (1 << 6);  // GP_ENABLE = ON
+                GPIOB->BSHR = (1 << 6);  // LOCK_REQ = ON
             }
             break;
         case 3:

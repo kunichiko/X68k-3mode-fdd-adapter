@@ -52,9 +52,11 @@ void pcfdd_set_rpm_mode_select(drive_status_t* drive, fdd_rpm_mode_t rpm) {
     drive->rpm_setting = rpm;
     // MODE_SELECT_DOSV の設定
     if (((rpm == FDD_RPM_300) && !inverted) || ((rpm == FDD_RPM_360) && inverted)) {
-        GPIOB->BCR = flag;  // MODE_SELECT_DOSV = 300RPM mode
+        // TODO:MODE_SELECT をGreenPAK のVirtual Input 経由で設定するように変更する
+        //        GPIOB->BCR = flag;  // MODE_SELECT_DOSV = 300RPM mode
     } else {
-        GPIOB->BSHR = flag;  // MODE_SELECT_DOSV = 360RPM mode
+        // TODO:MODE_SELECT をGreenPAK のVirtual Input 経由で設定するように変更する
+        //        GPIOB->BSHR = flag;  // MODE_SELECT_DOSV = 360RPM mode
     }
 }
 
@@ -508,7 +510,7 @@ void step_dosv(int drive, bool direction_inward) {
     // 6 (bit1)  = DIRECTION (正論理)
     // 5 (bit2)  = STEP (正論理)
     // LOCK_ACKがアサートされている間だけ上記信号は有効になるので、
-    // LOCKはすでに撮れた状態でこのメソッドを呼ぶこと
+    // LOCKが取れている状態でこのメソッドを呼ぶこと
     uint8_t gp4_vin = greenpak_get_virtualinput(4 - 1);
     gp4_vin |= (1 << 2);  // bit2 = 1 (STEP = 1)
     if (direction_inward) {
@@ -527,12 +529,12 @@ void drive_select(int drive, bool active) {
     if (drive < 0 || drive > 1) {
         return;
     }
-    // GreenPAK1の Virtual Input 5/6 (bit2/1) に DS0/DS1 を接続している
+    // GreenPAK1の Virtual Input 6/7 (bit1/0) に DS0/DS1 を接続している
     uint8_t gp1_vin = greenpak_get_virtualinput(1 - 1);
     if (active) {
-        gp1_vin |= (1 << (2 - drive));  // bit2/1 = 1 (DS0/DS1 active)
+        gp1_vin |= (1 << (1 - drive));  // bit1/0 = 1 (DS0/DS1 active)
     } else {
-        gp1_vin &= ~(1 << (2 - drive));  // bit2/1 = 0 (DS0/DS1 inactive)
+        gp1_vin &= ~(1 << (1 - drive));  // bit1/0 = 0 (DS0/DS1 inactive)
     }
     greenpak_set_virtualinput(1 - 1, gp1_vin);
 }
@@ -542,7 +544,7 @@ void pcfdd_drive_select(int drive, bool active) {
 }
 
 bool seek_to_track0(int drive) {
-    ui_logf(UI_LOG_LEVEL_TRACE, "Seek Track0 (D:%d)\n", drive);
+    ui_logf(UI_LOG_LEVEL_DEBUG, "Seek Track0 (D:%d)\n", drive);
     if (drive < 0 || drive > 1) {
         return false;
     }
@@ -551,6 +553,7 @@ bool seek_to_track0(int drive) {
     // シーク Part1
     drive_select(drive, true);
     for (int i = 0; i < 1; i++) {
+        //        ui_logf(UI_LOG_LEVEL_DEBUG, " Step:%d)\n", i);
         step_dosv(drive, true);  // 内周方向にステップ
     }
     // ここで 100msec待つ(Track00以外でシークを一度確定しないとDISK_CHANGEがクリアされないドライブがある?)
@@ -560,7 +563,7 @@ bool seek_to_track0(int drive) {
     const int SEEK_COUNT_MAX = 100;
     while (seek_count < SEEK_COUNT_MAX) {
         // TRACK0を見て、トラック0に到達したら抜ける
-        if ((GPIOB->INDR & (1 << 10)) == 0) {
+        if ((GPIOB->INDR & (1 << 11)) == 0) {
             // TRACK0_DOSV = 0 (Low) になった
             break;
         }
@@ -570,7 +573,7 @@ bool seek_to_track0(int drive) {
     Delay_Ms(1);
     drive_select(drive, false);
 
-    ui_logf(UI_LOG_LEVEL_TRACE, "  Seeked %d steps\n", seek_count);
+    ui_logf(UI_LOG_LEVEL_DEBUG, "  Seeked %d steps\n", seek_count);
     // 戻り値: SEEK_COUNT_MAX ステップ以内にトラック0に到達したらtrue
     return (seek_count < SEEK_COUNT_MAX);
 }
@@ -587,14 +590,14 @@ bool last_index_state = false;
  * その隙に　PCFDD側のDrive Selectをアクティブにしても問題なくなります。
  */
 static bool get_fdd_lock() {
-    GPIOC->BSHR = GPIO_Pin_6;  // LOCK_REQ active (High=アクセス禁止要求)
+    GPIOB->BSHR = GPIO_Pin_6;  // LOCK_REQ active (High=アクセス禁止要求)
     uint32_t systick_start = SysTick->CNTL;
     while ((GPIOB->INDR & GPIO_Pin_7) == 0) {
         // LOCK_ACKがアサートされるまで待つ
         // (100msec以上待っても来ない場合は、一旦リターンし次回の呼び出しで再度試みる)
         if ((SysTick->CNTL - systick_start) > (100 * 1000 * 48)) {
             // 100msec以上待ってもLOCK_ACKが来らない場合は失敗
-            GPIOC->BCR = GPIO_Pin_6;  // LOCK_REQ inactive
+            GPIOB->BCR = GPIO_Pin_6;  // LOCK_REQ inactive
             return false;             // LOCK取得失敗
         }
     }
@@ -603,7 +606,7 @@ static bool get_fdd_lock() {
 }
 
 static void release_fdd_lock() {
-    GPIOC->BCR = GPIO_Pin_6;  // LOCK_REQ inactive
+    GPIOB->BCR = GPIO_Pin_6;  // LOCK_REQ inactive
 }
 
 static void process_initializing(minyasx_context_t* ctx, int drive) {
@@ -642,13 +645,13 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive, uint32_t 
     greenpak_set_virtualinput(3 - 1, gp3_vin);
 
     // 1. LOCK_REQをアサートして、LOCK_ACKがアサートされるまで待つ
-    ui_logf(UI_LOG_LEVEL_TRACE, "Media Detecting (%d)\n", drive);
+    ui_logf(UI_LOG_LEVEL_DEBUG, "Media Detecting (%d)\n", drive);
     if (!get_fdd_lock()) {
         // LOCK取得失敗 (一旦リターンし次回の呼び出しで再度試みる)
-        ui_logf(UI_LOG_LEVEL_TRACE, " Lock failed\n");
+        ui_logf(UI_LOG_LEVEL_DEBUG, " Lock failed\n");
         return;
     }
-    ui_logf(UI_LOG_LEVEL_TRACE, " Lock acquired\n");
+    ui_logf(UI_LOG_LEVEL_DEBUG, " Lock acquired\n");
 
     // TODO: ここでDRIVE_SELECT_A/Bが両方ともアクティブでないことを確認する
 
@@ -659,7 +662,7 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive, uint32_t 
 
     // 3. PC FDD側のDrive Selectをアクティブにし、DISK_CHANGEがアクティブかを確認する
     drive_select(drive, true);
-    bool disk_change = (GPIOB->INDR & (1 << 8)) == 0;  // DISK_CHANGE_DOSV = 0 (Low) active
+    bool disk_change = (GPIOB->INDR & (1 << 4)) == 0;  // DISK_CHANGE_DOSV = 0 (Low) active
     if (disk_change) {
         // シークしたのにDISK_CHANGEがアクティブなまま
         // →メディアが入っていないと判断する
@@ -676,14 +679,14 @@ static void process_media_detecting(minyasx_context_t* ctx, int drive, uint32_t 
         gp3_vin |= (1 << (5 - drive));  // bit4/5を1にして、DISK_IN_x_nをDisableにする
         greenpak_set_virtualinput(3 - 1, gp3_vin);
         release_fdd_lock();
-        ui_logf(UI_LOG_LEVEL_TRACE, " No Media (Disk Change)\n");
+        ui_logf(UI_LOG_LEVEL_DEBUG, " No Media (Disk Change)\n");
         return;
     }
 
     // 4. メディアがありそうなのでMOTOR_ONもアクティブにし、INDEX計測できるようにする
-    if ((GPIOB->INDR & (1 << 4)) == 0) {
-        // MOTOR_ON_DOSV (PB4) がアクティブじゃない場合は、アクティブにする
-        ui_logf(UI_LOG_LEVEL_TRACE, " Motor On\n");
+    if ((GPIOA->INDR & (1 << 12)) == 0) {
+        // MOTOR_ON_GP (PA12) がアクティブじゃない場合は、アクティブにする
+        ui_logf(UI_LOG_LEVEL_DEBUG, " Motor On\n");
         uint8_t gp4_in = greenpak_get_virtualinput(4 - 1);
         gp4_in |= (1 << 0);  // bit0 = 1 (MOTOR_ON = 1)
         greenpak_set_virtualinput(4 - 1, gp4_in);
@@ -903,16 +906,23 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
         if (get_fdd_lock()) {
             // LOCK取得成功
             for (int drive = 0; drive < 2; drive++) {
-                // EJECTED状態のドライブはスキップ
-                if (ctx->drive[drive].state == DRIVE_STATE_EJECTED) {
+                //  以下の状態のドライブはスキップ
+                switch (ctx->drive[drive].state) {
+                case DRIVE_STATE_POWER_OFF:
+                case DRIVE_STATE_NOT_CONNECTED:
+                case DRIVE_STATE_DISABLED:
+                case DRIVE_STATE_INITIALIZING:
+                case DRIVE_STATE_EJECTED:
                     continue;
+                default:
+                    break;
                 }
                 drive_select(drive, true);
                 Delay_Ms(1);                                       // 少し待つ
-                bool disk_change = (GPIOB->INDR & (1 << 8)) == 0;  // DISK_CHANGE_DOSV = 0 (Low) active
+                bool disk_change = (GPIOB->INDR & (1 << 4)) == 0;  // DISK_CHANGE_DOSV = 0 (Low) active
                 if (disk_change) {
                     Delay_Ms(10);                                 // 念のためもう一度確認する (10msec)
-                    disk_change = (GPIOB->INDR & (1 << 8)) == 0;  // DISK_CHANGE_DOSV = 0 (Low) active
+                    disk_change = (GPIOB->INDR & (1 << 4)) == 0;  // DISK_CHANGE_DOSV = 0 (Low) active
                     if (disk_change) {
                         // 2回ともDISK_CHANGEがアクティブだった
                         ui_logf(UI_LOG_LEVEL_TRACE, "DCHG detected on D%d during polling\n", drive);
@@ -1024,8 +1034,10 @@ void pcfdd_update_setting(minyasx_context_t* ctx, int drive) {
         // 360RPMモード
         if (d->mode_select_inverted) {
             // MODE_SELECT_DOSV = 0
+            // TODO:MODE_SELECT をGreenPAK のVirtual Input 経由で設定するように変更する
             GPIOB->BCR = (1 << 0);  // MODE_SELECT_DOSV = 0
         } else {
+            // TODO:MODE_SELECT をGreenPAK のVirtual Input 経由で設定するように変更する
             GPIOB->BSHR = (1 << 0);  // MODE_SELECT_DOSV = 1
         }
         d->rpm_setting = FDD_RPM_360;
@@ -1036,8 +1048,10 @@ void pcfdd_update_setting(minyasx_context_t* ctx, int drive) {
         // 300RPMモード
         if (d->mode_select_inverted) {
             // MODE_SELECT_DOSV = 1
+            // TODO:MODE_SELECT をGreenPAK のVirtual Input 経由で設定するように変更する
             GPIOB->BSHR = (1 << 0);  // MODE_SELECT_DOSV = 1
         } else {
+            // TODO:MODE_SELECT をGreenPAK のVirtual Input 経由で設定するように変更する
             GPIOB->BCR = (1 << 0);  // MODE_SELECT_DOSV = 0
         }
         d->rpm_setting = FDD_RPM_300;

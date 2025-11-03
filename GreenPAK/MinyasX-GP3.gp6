@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GPDProject version="39" oldestCompatibleVersion="32" GPDVersion="6.50.002" lastChange="17 Oct 2025 08:48:37" projectChecksumState="1" projectChecksum="4a8ac25d">
+<GPDProject version="39" oldestCompatibleVersion="32" GPDVersion="6.50.003" lastChange="2 Nov 2025 15:34:37" projectChecksumState="1" projectChecksum="65b94e3d">
     <generalProjectSettings/>
     <chip family="04" type="06" friendlyName="GreenPAK 6" partNumber="36" package="16">
         <nvmData registerLenght="2048">49 14 0 48 44 9C B A4 14 E7 9 0 0 0 0 0 0 0 0 0 0 0 50 D3 47 4 0 0 0 0 0 0 0 0 0 0 0 0 2C 25 FC 3 0 0 0 0 0 0 0 0 0 0 0 0 0 E0 FC F 0 0 0 0 0 C0 4 40 C3 29 44 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 61 51 0 51 51 51 8 0 0 88 30 30 0 51 51 3D 3D D D 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 14 22 30 C 0 0 0 0 0 0 0 BB 54 0 0 FE 40 0 F7 FE FB 80 0 E0 0 0 0 0 0 53 20 0 1 0 0 0 2 1 0 0 2 0 1 0 0 2 1 0 0 2 0 1 0 FE 2 1 10 0 B0 0 1 10 0 2 0 1 0 0 0 4 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 A5</nvmData>
@@ -43,7 +43,7 @@
         <IOPad id="6" useCaseMode="2">
             <item id="6" caption="PIN 14 (IO5)">
                 <graphics pos="(5.62,354.74)" angle="180" flipping="2" hidden="0" tOrigin="(20.00,10.00)"/>
-                <textLabel pos="(78.06,47.00)" angle="-180.00" textColor="#ffff00ff" backgroundColor="#14141464">WRITE_GATE_DOSV_n</textLabel>
+                <textLabel pos="(65.69,47.00)" angle="-180.00" textColor="#ffff00ff" backgroundColor="#14141464">WRITE_DATA_GP</textLabel>
             </item>
         </IOPad>
         <IOPad id="7" useCaseMode="1">
@@ -61,7 +61,7 @@
         <IOPad id="9" useCaseMode="2">
             <item id="9" caption="PIN 11 (IO6)">
                 <graphics pos="(5.62,468.15)" angle="180" flipping="2" hidden="0" tOrigin="(20.00,10.00)"/>
-                <textLabel pos="(72.61,47.00)" angle="-180.00" textColor="#ffff00ff" backgroundColor="#14141464">WRITE_DATA_DOSV</textLabel>
+                <textLabel pos="(65.63,47.00)" angle="-180.00" textColor="#ffff00ff" backgroundColor="#14141464">WRITE_GATE_GP</textLabel>
             </item>
         </IOPad>
         <item id="10" caption="GND (PIN 10)">
@@ -86,13 +86,13 @@
         <IOPad id="14" useCaseMode="1">
             <item id="14" caption="PIN 6 (IO9)">
                 <graphics pos="(-505.14,472.91)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
-                <textLabel pos="(-16.00,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">WRITE_DATA</textLabel>
+                <textLabel pos="(-21.45,-26.19)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">WRITE_GATE_n</textLabel>
             </item>
         </IOPad>
         <IOPad id="15" useCaseMode="1">
             <item id="15" caption="PIN 5 (IO10)">
                 <graphics pos="(-505.14,363.61)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
-                <textLabel pos="(-21.46,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">WRITE_GATE_n</textLabel>
+                <textLabel pos="(-16.01,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">WRITE_DATA</textLabel>
             </item>
         </IOPad>
         <IOPad id="16" useCaseMode="4">

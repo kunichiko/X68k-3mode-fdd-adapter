@@ -56,27 +56,29 @@ int main() {
     RCC->APB1PRSTR &= ~RCC_APB1Periph_TIM3;
 
     // GPIOA
-    // PA0 : DRIVE_SELECT_A (入力: Low=active, High=inactive, Pull-Up)
-    // PA1 : DRIVE_SELECT_B (入力: Low=active, High=inactive, Pull-Up)
-    // PA2 : OPTION_SELECT_A (入力: Low=active, High=inactive, Pull-Up)
-    // PA3 : OPTION_SELECT_B (入力: Low=active, High=inactive, Pull-Up)
-    // PA4 : EJECT (入力: Low=イジェクト, Pull-Up)
-    // PA5 : EJECT_MASK (入力: Low=イジェクト禁止, Pull-Up)
+    // PA0 : DRIVE_SELECT_A (入力: Low=inactive, High=active, Pull-Up)
+    // PA1 : DRIVE_SELECT_B (入力: Low=inactive, High=active, Pull-Up)
+    // PA2 : OPTION_SELECT_A (入力: Low=inactive, High=active, Pull-Up)
+    // PA3 : OPTION_SELECT_B (入力: Low=inactive, High=active, Pull-Up)
+    // PA4 : OPTION_SELECT_B_PAIR (入力: Low=inactive, High=active, Pull-Up)
+    // PA5 : DISK_TYPE_SELECT (入力: Pull-Up, 未使用)
     // PA6 : INDEX_DOSV (入力: INDEX信号, Pull-Up)
     // PA7 : Buzzer (出力: PWM)
-    // PA8 : LED_BLINK (入力: Low=点灯, Pull-Up)
-    // PA9 : DISK_TYPE_SELECT (入力: Pull-Up, 未使用)
+    // PA8 : WRITE_GATE_MCU (出力: 将来拡張用)
+    // PA9 : WRITE_DATA_MCU (出力: 将来拡張用)
     // PA10: I2C_SCL (I2Cクロック)
     // PA11: I2C_SDA (I2Cデータ)
     // PA12: MOTOR_ON (入力: Low=ON, High=OFF, Pull-Up)
-    // PA13: DIRECTION (入力: Low=正転, High=逆転, Pull-Up) ?
-    // PA14: STEP (入力: Low→Highで1ステップ, Pull-Up) ?
-    // PA15: SIDE_SELECT (入力: Low=SIDE0, High=SIDE1, Pull-Up) ?
+    // PA13: EJECT_n (入力: Low=イジェクト, Pull-Up)
+    // PA14: EJECT_MASK_n (入力: Low=イジェクト禁止, Pull-Up)
+    // PA15: LED_BLINK_n (入力: Low=点灯, Pull-Up)
     // PA16: X68_PWR (入力: Low=電源ON要求, Pull-Up)
     // PA17: +12V_EXT_DET (High=外部+12V電源接続, Pull-Up)
     // PA18: +5V_EN (Low=Enable, High=Disable)
     // PA19: +12V_EN (Low=Enable, High=Disable)
     // PA20: +12V_EXT_EN (Low=Enable, High=Disable))
+    // PA22: DIPSW_DS0 (入力: Pull-Up)
+    // PA23: DIPSW_DS1 (入力: Pull-Up)
 
     // PA0: DRIVE_SELECT_A input
     GPIOA->CFGLR &= ~(0xf << (4 * 0));
@@ -94,11 +96,11 @@ int main() {
     GPIOA->CFGLR &= ~(0xf << (4 * 3));
     GPIOA->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * 3);
     GPIOA->BSHR = (1 << 3);  // Pull-Up
-    // PA4: EJECT input
+    // PA4: OPTION_SELECT_B_PAIR input
     GPIOA->CFGLR &= ~(0xf << (4 * 4));
     GPIOA->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * 4);
     GPIOA->BSHR = (1 << 4);  // Pull-Up
-    // PA5: EJECT_MASK input
+    // PA5: DISK_TYPE_SELECT input
     GPIOA->CFGLR &= ~(0xf << (4 * 5));
     GPIOA->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * 5);
     GPIOA->BSHR = (1 << 5);  // Pull-Up
@@ -113,29 +115,29 @@ int main() {
     //  GPIOA->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * 7);
     GPIOA->BCR = (1 << 7);  // Low出力にする
     // GPIOA->BSHR = (1 << 7);  // High出力にする (Buzzer OFF)
-    //  PA8: LED_BLINK input
+    // PA8: WRITE_GATE_MCU output
     GPIOA->CFGHR &= ~(0xf << (4 * (8 - 8)));
-    GPIOA->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (8 - 8));
-    GPIOA->BSHR = (1 << 8);  // Pull-Up
-    // PA9: DISK_TYPE_SELECT input
+    GPIOA->CFGHR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * (8 - 8));
+    GPIOA->BCR = (1 << 8);  // 0を出力 (この先にいるFETをOFFにする)
+    // PA9: WRITE_DATA_MCU output
     GPIOA->CFGHR &= ~(0xf << (4 * (9 - 8)));
-    GPIOA->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (9 - 8));
-    GPIOA->BSHR = (1 << 9);  // Pull-Up
+    GPIOA->CFGHR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * (9 - 8));
+    GPIOA->BCR = (1 << 9);  // 0を出力 (この先にいるFETをOFFにする)
     // PA10: I2C_SCL
     // PA11: I2C_SDA
     // PA12: MOTOR_ON input
     GPIOA->CFGHR &= ~(0xf << (4 * (12 - 8)));
     GPIOA->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (12 - 8));
     GPIOA->BSHR = (1 << 12);  // Pull-Up
-    // PA13: DIRECTION input
+    // PA13: EJECT_n input
     GPIOA->CFGHR &= ~(0xf << (4 * (13 - 8)));
     GPIOA->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (13 - 8));
     GPIOA->BSHR = (1 << 13);  // Pull-Up
-    // PA14: STEP input
+    // PA14: EJECT_MASK_n input
     GPIOA->CFGHR &= ~(0xf << (4 * (14 - 8)));
     GPIOA->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (14 - 8));
     GPIOA->BSHR = (1 << 14);  // Pull-Up
-    // PA15: SIDE_SELECT input
+    // PA15: LED_BLINK_n input
     GPIOA->CFGHR &= ~(0xf << (4 * (15 - 8)));
     GPIOA->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (15 - 8));
     GPIOA->BSHR = (1 << 15);  // Pull-Up
@@ -163,29 +165,34 @@ int main() {
     GPIOA->BCR = (1 << (20));  // Disable (+12V_EXT_EN=Low)
     // GPIOA->BSXR = (1 << (20 - 16)); // Enable (+12V_EXT_EN=High)
 
+    // PA22: DIPSW_DS0 input
+    GPIOA->CFGXR &= ~(0xf << (4 * (22 - 16)));
+    GPIOA->CFGXR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (22 - 16));
+    GPIOA->BSXR = (1 << (22 - 16));  // Pull-Up
+    // PA23: DIPSW_DS1 input
+    GPIOA->CFGXR &= ~(0xf << (4 * (23 - 16)));
+    GPIOA->CFGXR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (23 - 16));
+    GPIOA->BSXR = (1 << (23 - 16));  // Pull-Up
+
     // GPIOB
-    // PB0 : MODE_SELECT_DOSV (出力: Low=360RPM, High=300RPM, 逆のものもあるらしい)
+    // PB0 : MODE_SELECT_GP (入力: Low=360RPM, High=300RPM, 逆のものもあるらしい)
     // PB1 : IN_USE_MCU (出力: Low=アクティブ, High=非アクティブ)
-    // PB2 : DRIVE_SEL_DOSV_A (未使用)
-    // PB3 : DRIVE_SEL_DOSV_B (未使用)
-    // PB4 : MOTOR_ON_DOSV (未使用)
-    // PB5 : DIRECTION_DOSV (未使用)
-    // PB6 : STEP_DOSV (未使用)
-    // PB7 : SIDE_SELECT_DOSV (未使用)→　この端子はLOCK_ACKに変更しました
-    // PB8 : DISK_CHANGE_DOSV (入力: Low=ディスクチェンジ, Pull-Up)
-    // PB9 : READ_DATA_DOSV (入力: フロッピーディスクの読み出しデータ: Pull-Up)
-    // PB10: TRACK0_DOSV (入力: Low=トラック0, Pull-Up)
-    // PB11: OPTION_SELECT_B_PAIR (入力: Low=active, High=inactive, Pull-Up)
+    // PB2 : DRIVE_SEL_DOSV_A (未使用, High-Z)
+    // PB3 : DRIVE_SEL_DOSV_B (未使用, High-Z)
+    // PB4 : DISK_CHANGE_DOSV (入力: Low=ディスクチェンジ, Pull-Up)
+    // PB5 : (未使用)
+    // PB6 : LOCK_REQ (出力: Low=要求, High=非要求)
+    // PB7 : LOCK_ACK (入力: High=アクティブ, Pull-Down)
+    // PB8 : WRITE_GATE_GP (入力: フロッピーディスクの書き込み許可信号)
+    // PB9 : READ_DATA_DOSV (入力: フロッピーディスクの読み出しデータ)
+    // PB10: WRITE_DATA_DOSV (入力: フロッピーディスクの書き込みデータ)
+    // PB11: TRACK0_DOSV (入力: Low=トラック0, Pull-Up)
     // PB12: READY_MCU_A (出力: Low=準備完了, High=準備完了でない)
     // PB13: READY_MCU_B (出力: Low=準備完了
-    //
-    // PA22: DIPSW_DS0 (入力: Pull-Up)
-    // PA23: DIPSW_DS1 (入力: Pull-Up)
 
-    // PB0: MODE_SELECT_DOSV output
+    // PB0: MODE_SELECT_GP input
     GPIOB->CFGLR &= ~(0xf << (4 * 0));
-    GPIOB->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 0);
-    GPIOB->BCR = (1 << 0);
+    GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_FLOATING) << (4 * 0);
     // PB1: IN_USE_MCU output
     GPIOB->CFGLR &= ~(0xf << (4 * 1));
     GPIOB->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 1);
@@ -196,35 +203,34 @@ int main() {
     // PB3: DRIVE_SELECT_DOSV_B output (未使用)
     GPIOB->CFGLR &= ~(0xf << (4 * 3));
     GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_FLOATING) << (4 * 3);
-    // PB4: MOTOR_ON_DOSV output
+    // PB4: DISK_CHANGE_DOSV input
     GPIOB->CFGLR &= ~(0xf << (4 * 4));
-    GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_FLOATING) << (4 * 4);
+    GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * 4);
     GPIOB->BCR = (1 << 4);
-    // PB5: DIRECTION_DOSV (Not-Used)
+    // PB5: (未使用)
     GPIOB->CFGLR &= ~(0xf << (4 * 5));
     GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_FLOATING) << (4 * 5);
-    // GPIOB->BCR = (1 << 5);
-    //  PB6: STEP_DOSV (Not-Used)
+    // PB6: LOCK_REQ output
     GPIOB->CFGLR &= ~(0xf << (4 * 6));
-    GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_FLOATING) << (4 * 6);
-    //    GPIOB->BCR = (1 << 6);
+    GPIOB->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 6);
+    GPIOB->BCR = (0 << 6);
     // PB7: LOCK_ACK input
     GPIOB->CFGLR &= ~(0xf << (4 * 7));
     GPIOB->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * 7);
-    GPIOB->BCR = (1 << 7);
-    // PB8: DISK_CHANGE_DOSV input
+    GPIOB->BCR = (1 << 7);  // Pull-Up
+    // PB8: WRITE_GATE_GP input
     GPIOB->CFGHR &= ~(0xf << (4 * (8 - 8)));
-    GPIOB->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (8 - 8));
-    GPIOB->BSHR = (1 << 8);  // Pull-Up
+    GPIOB->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_FLOATING) << (4 * (8 - 8));
+    GPIOB->BSHR = (1 << 8);
     // PB9: READ_DATA_DOSV input
     GPIOB->CFGHR &= ~(0xf << (4 * (9 - 8)));
     GPIOB->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (9 - 8));
     GPIOB->BSHR = (1 << 9);  // Pull-Up
-    // PB10: TRACK0_DOSV input
+    // PB10: WRITE_DATA_DOSV input
     GPIOB->CFGHR &= ~(0xf << (4 * (10 - 8)));
     GPIOB->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (10 - 8));
     GPIOB->BSHR = (1 << 10);  // Pull-Up
-    // PB11: OPTION_SELECT_B_PAIR input
+    // PB11: TRACK0_DOSV input
     GPIOB->CFGHR &= ~(0xf << (4 * (11 - 8)));
     GPIOB->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (11 - 8));
     GPIOB->BSHR = (1 << 11);  // Pull-Up
@@ -237,20 +243,11 @@ int main() {
     GPIOB->CFGHR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * (13 - 8));
     GPIOB->BSHR = (1 << 13);
 
-    // PA22: DIPSW_DS0 input
-    GPIOA->CFGXR &= ~(0xf << (4 * (22 - 16)));
-    GPIOA->CFGXR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (22 - 16));
-    GPIOA->BSXR = (1 << (22 - 16));  // Pull-Up
-    // PA23: DIPSW_DS1 input
-    GPIOA->CFGXR &= ~(0xf << (4 * (23 - 16)));
-    GPIOA->CFGXR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (23 - 16));
-    GPIOA->BSXR = (1 << (23 - 16));  // Pull-Up
-
     // GPIOC
-    // PC6 : LOCK_REQ (出力: High=LocRequest, Low=NotRequest)
+    // PC6 : CONTROLLER_PUSH input
     GPIOC->CFGLR &= ~(0xf << (4 * 6));
-    GPIOC->CFGLR |= (GPIO_Speed_50MHz | GPIO_CNF_OUT_PP) << (4 * 6);
-    GPIOC->BCR = (1 << 6);  // Disable (Low)
+    GPIOC->CFGLR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * 6);
+    GPIOC->BCR = (1 << 6);  // Pull-Up
 
     //
     // コンテキストの初期化

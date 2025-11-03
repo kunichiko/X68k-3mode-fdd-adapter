@@ -329,7 +329,7 @@ void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
             last_indexlow_ms = 0;
             enable_fdd_power(ctx, false);  // FDDの電源をOFFにする
             // TODO 本来このタイミングではないが、ここでLOCK_REQUESTをかけておく
-            GPIOC->BSHR = (1 << 6);  // LOCK_REQUEST = ON
+            GPIOB->BSHR = (1 << 6);  // LOCK_REQUEST = ON
             return;
         }
     }
@@ -354,7 +354,7 @@ void power_control_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
 
             enable_fdd_power(ctx, true);  // FDDの電源をONにする
             // TODO 本来このタイミングではないが、ここでLOCK_REQUESTを開放しておく
-            GPIOC->BCR = (1 << 6);  // LOCK_REQUEST 解放
+            GPIOB->BCR = (1 << 6);  // LOCK_REQUEST 解放
             return;
         }
     }
@@ -374,6 +374,7 @@ void set_force_pwr_on(bool enable) {
         last_key_activity_ms = force_pwr_on_start_ms;
     }
     force_pwr_on = enable;
+    Delay_Ms(1000);  // 少し待つ
 }
 
 void update_key_activity(void) {

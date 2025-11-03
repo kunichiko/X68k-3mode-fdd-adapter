@@ -133,12 +133,6 @@ void x68fdd_init(minyasx_context_t* ctx) {
     AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI2_PA;   // EXTI2 を PA (00) に設定
     AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI3);   // EXTI3 の設定をクリア
     AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI3_PA;   // EXTI3 を PA (00) に設定
-    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI4);   // EXTI4 の設定をクリア
-    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI4_PA;   // EXTI4 を PA (00) に設定
-    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI5);   // EXTI5 の設定をクリア
-    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI5_PA;   // EXTI5 を PA (00) に設定
-    AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI8);   // EXTI8 の設定をクリア
-    AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI8_PA;   // EXTI8 を PA (00) に設定
     AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI13);  // EXTI13 の設定をクリア
     AFIO->EXTICR1 |= AFIO_EXTICR1_EXTI13_PA;  // EXTI13 を PA (00) に設定
     AFIO->EXTICR1 &= ~(AFIO_EXTICR1_EXTI14);  // EXTI14 の設定をクリア
@@ -148,27 +142,20 @@ void x68fdd_init(minyasx_context_t* ctx) {
 
     // 一旦クリアしてから割り込みを有効にする
     EXTI->INTENR &= ~(EXTI_INTENR_MR0 | EXTI_INTENR_MR1 | EXTI_INTENR_MR2 | EXTI_INTENR_MR3 |  //
-                      EXTI_INTENR_MR4 | EXTI_INTENR_MR5 | EXTI_INTENR_MR8 |                    //
                       EXTI_INTENR_MR13 | EXTI_INTENR_MR14 | EXTI_INTENR_MR15);                 // 割り込み無効化
     EXTI->RTENR &= ~(EXTI_RTENR_TR0 | EXTI_RTENR_TR1 | EXTI_RTENR_TR2 | EXTI_RTENR_TR3 |       //
-                     EXTI_RTENR_TR4 | EXTI_RTENR_TR5 | EXTI_RTENR_TR8 |                        //
                      EXTI_RTENR_TR13 | EXTI_RTENR_TR14 | EXTI_RTENR_TR15);                     // 立ち上がりエッジ検出をクリア
     EXTI->FTENR &= ~(EXTI_FTENR_TR0 | EXTI_FTENR_TR1 | EXTI_FTENR_TR2 | EXTI_FTENR_TR3 |       //
-                     EXTI_FTENR_TR4 | EXTI_FTENR_TR5 | EXTI_FTENR_TR8 |                        //
                      EXTI_FTENR_TR13 | EXTI_FTENR_TR14 | EXTI_FTENR_TR15);                     // 立ち下がりエッジ検出をクリア
 
     // 有効化
     EXTI->RTENR |= EXTI_RTENR_TR0 | EXTI_RTENR_TR1 | EXTI_RTENR_TR2 | EXTI_RTENR_TR3 |       //
-                   EXTI_RTENR_TR4 | EXTI_RTENR_TR5 | EXTI_RTENR_TR8 |                        //
                    EXTI_RTENR_TR13 | EXTI_RTENR_TR14 | EXTI_RTENR_TR15;                      // 立ち上がりエッジ検出をセット
     EXTI->FTENR |= EXTI_FTENR_TR0 | EXTI_FTENR_TR1 | EXTI_FTENR_TR2 | EXTI_FTENR_TR3 |       //
-                   EXTI_FTENR_TR4 | EXTI_FTENR_TR5 | EXTI_FTENR_TR8 |                        //
                    EXTI_FTENR_TR13 | EXTI_FTENR_TR14 | EXTI_FTENR_TR15;                      // 立ち下がりエッジ検出をセット
     EXTI->INTFR = EXTI_INTF_INTF0 | EXTI_INTF_INTF1 | EXTI_INTF_INTF2 | EXTI_INTF_INTF3 |    //
-                  EXTI_INTF_INTF4 | EXTI_INTF_INTF5 | EXTI_INTF_INTF8 |                      //
                   EXTI_INTF_INTF13 | EXTI_INTF_INTF14 | EXTI_INTF_INTF15;                    // 割り込みフラグをクリア
     EXTI->INTENR |= EXTI_INTENR_MR0 | EXTI_INTENR_MR1 | EXTI_INTENR_MR2 | EXTI_INTENR_MR3 |  //
-                    EXTI_INTENR_MR4 | EXTI_INTENR_MR5 | EXTI_INTENR_MR8 |                    //
                     EXTI_INTENR_MR13 | EXTI_INTENR_MR14 | EXTI_INTENR_MR15;                  // 割り込み有効化
 
     NVIC_EnableIRQ(EXTI7_0_IRQn);   // EXTI 7-0割り込みを有効にする
@@ -208,8 +195,8 @@ volatile bool last_eject_signal_A = false;  // 前回のEJECT信号の状態
 volatile bool last_eject_signal_B = false;  // 前回のEJECT信号の状態
 
 void update_eject_signal(uint32_t porta) {
-    bool eject = (porta & (1 << 4)) == 0;  // EJECT (Low=Eject)
-    if ((porta & (1 << 2)) == 0) {         // OPTION_SELECT_A
+    bool eject = (porta & (1 << 13)) == 0;  // EJECT (Low=Eject)
+    if ((porta & (1 << 2)) == 0) {          // OPTION_SELECT_A
         if (eject) {
             last_eject_signal_A = true;
         } else {
@@ -279,19 +266,19 @@ void EXTI7_0_IRQHandler(void) {
         // PA2 (OPTION_SELECT_A) の割り込み
         EXTI->INTFR = EXTI_INTF_INTF2;  // フラグをクリア
         if ((porta & (1 << 2)) != 0) {  // 立ち上がり
-            // このタイミングで EJECT(PA4), EJECT_MASK(PA5), LED_BLINK(PA8)の状態を確認する
+            // このタイミングで EJECT(PA13), EJECT_MASK(PA14), LED_BLINK(PA15)の状態を確認する
             drive_status_t* drive = &g_ctx->drive[0];  // Aドライブ
             if (last_eject_signal_A) {
                 // 誤検出防止のために、事前にEJECT信号がアクティブになっていることを検知している時のみ有効とする
                 pcfdd_force_eject(g_ctx, 0);  // Aドライブを強制排出
             }
-            if ((porta & (1 << 5)) == 0) {  // EJECT_MASK (Low=Mask)
+            if ((porta & (1 << 14)) == 0) {  // EJECT_MASK (Low=Mask)
                 drive->eject_masked = true;
             } else {
                 drive->eject_masked = false;
             }
-            if ((porta & (1 << 8)) == 0) {  // LED_BLINK (Low=Blink)
-                drive->led_blink = true;    // LEDが点滅中
+            if ((porta & (1 << 15)) == 0) {  // LED_BLINK (Low=Blink)
+                drive->led_blink = true;     // LEDが点滅中
             } else {
                 drive->led_blink = false;  // LEDが点滅中でない
             }
@@ -301,32 +288,23 @@ void EXTI7_0_IRQHandler(void) {
         // PA3 (OPTION_SELECT_B) の割り込み
         EXTI->INTFR = EXTI_INTF_INTF3;  // フラグをクリア
         if ((porta & (1 << 3)) != 0) {  // 立ち上がり
-            // このタイミングで EJECT(PA4), EJECT_MASK(PA5), LED_BLINK(PA8)の状態を確認する
+            // このタイミングで EJECT(PA13), EJECT_MASK(PA14), LED_BLINK(PA15)の状態を確認する
             drive_status_t* drive = &g_ctx->drive[1];  // Bドライブ
             if (last_eject_signal_B) {
                 // 誤検出防止のために、事前にEJECT信号がアクティブになっていることを検知している時のみ有効とする
                 pcfdd_force_eject(g_ctx, 1);  // Bドライブを強制排出
             }
-            if ((porta & (1 << 5)) == 0) {  // EJECT_MASK (Low=Mask)
+            if ((porta & (1 << 14)) == 0) {  // EJECT_MASK (Low=Mask)
                 drive->eject_masked = true;
             } else {
                 drive->eject_masked = false;
             }
-            if ((porta & (1 << 8)) == 0) {  // LED_BLINK (Low=Blink)
-                drive->led_blink = true;    // LEDが点滅中
+            if ((porta & (1 << 15)) == 0) {  // LED_BLINK (Low=Blink)
+                drive->led_blink = true;     // LEDが点滅中
             } else {
                 drive->led_blink = false;  // LEDが点滅中でない
             }
         }
-    }
-    if (intfr & EXTI_INTF_INTF4) {
-        EXTI->INTFR = EXTI_INTF_INTF4;  // フラグをクリア
-        // PA4 (V2.0 EJECT) の割り込み
-    }
-    if (intfr & EXTI_INTF_INTF5) {
-        EXTI->INTFR = EXTI_INTF_INTF5;  // フラグをクリア
-        // PA7 (V2.0, EJECT_MASK) の割り込み
-        // 特に何もしない
     }
     update_eject_signal(porta);
     GPIOA->BCR = (1 << 7);  // PA7 Low (Buzzer, Debug)
@@ -342,11 +320,6 @@ void EXTI15_8_IRQHandler(void) {
 
     exti_int_counter++;
 
-    if (intfr & EXTI_INTF_INTF8) {
-        EXTI->INTFR = EXTI_INTF_INTF8;  // フラグをクリア
-        // PA8 (V2.0, LED_BLINK) の割り込み
-        // 特に何もしない
-    }
     if (intfr & EXTI_INTF_INTF13) {
         EXTI->INTFR = EXTI_INTF_INTF13;  // フラグをクリア
                                          // PA13 (EJECT) の割り込み
@@ -387,7 +360,6 @@ void SysTick_Handler(void) {
     SysTick->SR = 0x00000000;
 
     uint32_t PA = GPIOA->INDR;
-    uint32_t PB = GPIOB->INDR;
 
     // EJECT信号のラッチ
     update_eject_signal(PA);
@@ -405,12 +377,12 @@ void SysTick_Handler(void) {
     //  * DRIVE_SELECT がアサートされていない場合を初期状態(IDLE)とする
     //  * DRIVE_SELECTがアサートされているあいだは、定期的に double_option の状態を監視し、その対に応じて MODE_SELECT_DOSVを切り替える
     //  * その際、各ドライブの最後の回転数モードを記憶しておき、次回DRIVE＿SELECTがアサートされたときはそれに応じてMODE_SELECT_DOSVを設定する
-    bool ds_a = (PA & GPIO_Pin_0);              // High active
-    bool ds_b = (PA & GPIO_Pin_1);              // High active
-    bool opt_a = (PA & GPIO_Pin_2) == 0;        // Low active
-    bool opt_b = (PA & GPIO_Pin_3) == 0;        // Low active
-    bool opt_a_pair = opt_b;                    // OPTION_SELECT_A のペアは OPTION_SELECT_B
-    bool opt_b_pair = (PB & GPIO_Pin_11) == 0;  // OPTION_SELECT_B_PAIR
+    bool ds_a = (PA & GPIO_Pin_0);             // High active
+    bool ds_b = (PA & GPIO_Pin_1);             // High active
+    bool opt_a = (PA & GPIO_Pin_2) == 0;       // Low active
+    bool opt_b = (PA & GPIO_Pin_3) == 0;       // Low active
+    bool opt_a_pair = opt_b;                   // OPTION_SELECT_A のペアは OPTION_SELECT_B
+    bool opt_b_pair = (PA & GPIO_Pin_4) == 0;  // OPTION_SELECT_B_PAIR
 
     //
     // OPTION_SELECT 同時アサートのローパスフィルタ
@@ -522,7 +494,7 @@ void x68fdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
     uint8_t opt_a = (GPIOA->INDR & GPIO_Pin_2) ? 1 : 0;
     uint8_t opt_b = (GPIOA->INDR & GPIO_Pin_3) ? 1 : 0;
     uint8_t opt_a_pair = opt_b;  // OPTION_SELECT_A のペアは OPTION_SELECT_B
-    uint8_t opt_b_pair = (GPIOB->INDR & GPIO_Pin_11) ? 1 : 0;
+    uint8_t opt_b_pair = (GPIOA->INDR & GPIO_Pin_4) ? 1 : 0;
     uint8_t amode = double_option_A ? 'Q' : 'D';
     uint8_t bmode = double_option_B ? 'Q' : 'D';
     ui_printf(UI_PAGE_DEBUG, "OP A%d%d%c B%d%d%c %d", opt_a, opt_a_pair, amode, opt_b, opt_b_pair, bmode, systick_irq_counter);
