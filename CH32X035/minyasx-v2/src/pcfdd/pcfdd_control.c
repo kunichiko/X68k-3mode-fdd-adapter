@@ -818,7 +818,7 @@ static void process_ready(minyasx_context_t* ctx, int drive) {
     // MOTOR ON信号(PA12)がアクティブならREADY信号をアクティブにする
     // GreenPAKは各ドライブにDriveSelect信号がアサートされると、
     // このREADY信号の値を返却します
-    if (!(GPIOA->INDR & GPIO_Pin_12)) {
+    if (GPIOA->INDR & GPIO_Pin_12) {
         // MOTOR_ON アクティブ
         GPIOB->BCR = (drive == 0) ? GPIO_Pin_12 : GPIO_Pin_13;  // READY_MCU_A_n / READY_MCU_B_n (Low=準備完了)
     } else {
@@ -889,7 +889,7 @@ void pcfdd_poll(minyasx_context_t* ctx, uint32_t systick_ms) {
         uint32_t systick_start = SysTick->CNTL;
         while ((SysTick->CNTL - systick_start) < (10 * 1000 * 48)) {      // 10msecだけ監視
             bool drive_select = (GPIOA->INDR & (1 << (0 + drive))) != 0;  // Drive Select A/B active?
-            bool disk_change = (GPIOB->INDR & (1 << 8)) == 0;             // DISK_CHANGE_DOSV = 0 (Low) active
+            bool disk_change = (GPIOB->INDR & (1 << 4)) == 0;             // DISK_CHANGE_DOSV = 0 (Low) active
             if (!drive_select || !disk_change) {
                 disk_change_det[drive] = false;
                 break;
