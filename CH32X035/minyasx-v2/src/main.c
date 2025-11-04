@@ -185,7 +185,7 @@ int main() {
     // PB7 : LOCK_ACK (入力: High=アクティブ, Pull-Down)
     // PB8 : WRITE_GATE_GP (入力: フロッピーディスクの書き込み許可信号)
     // PB9 : READ_DATA_DOSV (入力: フロッピーディスクの読み出しデータ)
-    // PB10: WRITE_DATA_DOSV (入力: フロッピーディスクの書き込みデータ)
+    // PB10: WRITE_DATA_GP (入力: フロッピーディスクの書き込みデータ)
     // PB11: TRACK0_DOSV (入力: Low=トラック0, Pull-Up)
     // PB12: READY_MCU_A (出力: Low=準備完了, High=準備完了でない)
     // PB13: READY_MCU_B (出力: Low=準備完了
@@ -221,15 +221,15 @@ int main() {
     // PB8: WRITE_GATE_GP input
     GPIOB->CFGHR &= ~(0xf << (4 * (8 - 8)));
     GPIOB->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_FLOATING) << (4 * (8 - 8));
-    GPIOB->BSHR = (1 << 8);
-    // PB9: READ_DATA_DOSV input
+    // GPIOB->BSHR = (1 << 8);
+    //  PB9: READ_DATA_DOSV input
     GPIOB->CFGHR &= ~(0xf << (4 * (9 - 8)));
     GPIOB->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (9 - 8));
     GPIOB->BSHR = (1 << 9);  // Pull-Up
     // PB10: WRITE_DATA_DOSV input
     GPIOB->CFGHR &= ~(0xf << (4 * (10 - 8)));
-    GPIOB->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (10 - 8));
-    GPIOB->BSHR = (1 << 10);  // Pull-Up
+    GPIOB->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_FLOATING) << (4 * (10 - 8));
+    // GPIOB->BSHR = (1 << 10);  // Pull-Up
     // PB11: TRACK0_DOSV input
     GPIOB->CFGHR &= ~(0xf << (4 * (11 - 8)));
     GPIOB->CFGHR |= (GPIO_Speed_In | GPIO_CNF_IN_PUPD) << (4 * (11 - 8));

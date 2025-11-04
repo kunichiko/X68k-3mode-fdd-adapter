@@ -78,7 +78,7 @@ void ui_page_main_poll(ui_page_context_t* pctx, uint32_t systick_ms) {
             ui_printf(page, "%c[%s]", (i == 0 ? 'A' : 'B'), pcfdd_state_to_string(ctx->drive[i].state));
         }
         ui_cursor(page, 0, 1 + i * 4);
-        ui_printf(page, " S:%3drpm", ctx->drive[i].rpm_setting == FDD_RPM_300 ? 300 : 360);
+        ui_printf(page, " S:%srpm", fdd_rpm_mode_to_string(ctx->drive[i].rpm_setting));
         //
         ui_cursor(page, 0, 2 + i * 4);
         if (ctx->drive[i].rpm_measured == FDD_RPM_UNKNOWN) {

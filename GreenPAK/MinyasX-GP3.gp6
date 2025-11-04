@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GPDProject version="39" oldestCompatibleVersion="32" GPDVersion="6.50.003" lastChange="2 Nov 2025 15:34:37" projectChecksumState="1" projectChecksum="65b94e3d">
+<GPDProject version="39" oldestCompatibleVersion="32" GPDVersion="6.50.003" lastChange="4 Nov 2025 23:51:30" projectChecksumState="1" projectChecksum="6857724c">
     <generalProjectSettings/>
     <chip family="04" type="06" friendlyName="GreenPAK 6" partNumber="36" package="16">
-        <nvmData registerLenght="2048">49 14 0 48 44 9C B A4 14 E7 9 0 0 0 0 0 0 0 0 0 0 0 50 D3 47 4 0 0 0 0 0 0 0 0 0 0 0 0 2C 25 FC 3 0 0 0 0 0 0 0 0 0 0 0 0 0 E0 FC F 0 0 0 0 0 C0 4 40 C3 29 44 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 61 51 0 51 51 51 8 0 0 88 30 30 0 51 51 3D 3D D D 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 14 22 30 C 0 0 0 0 0 0 0 BB 54 0 0 FE 40 0 F7 FE FB 80 0 E0 0 0 0 0 0 53 20 0 1 0 0 0 2 1 0 0 2 0 1 0 0 2 1 0 0 2 0 1 0 FE 2 1 10 0 B0 0 1 10 0 2 0 1 0 0 0 4 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 A5</nvmData>
+        <nvmData registerLenght="2048">49 14 0 48 44 9C B A4 14 E7 9 0 0 0 0 0 0 0 0 0 0 0 50 D3 47 4 0 0 0 0 0 0 0 0 0 0 0 0 2C 25 FC 3 0 0 0 0 0 0 0 0 0 0 0 0 0 E0 FC F 0 0 0 0 0 C0 4 40 C3 29 44 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 61 51 0 51 51 51 0 0 0 80 30 30 0 51 51 3D 3D D D 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 14 22 30 C 0 0 0 0 0 0 0 44 54 0 0 FE 40 0 F7 FE FB 80 0 E0 0 0 0 0 0 53 20 0 1 0 0 0 2 1 0 0 2 0 1 0 0 2 1 0 0 2 0 1 0 FE 2 1 10 0 B0 0 1 10 0 2 0 1 0 0 0 4 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 A5</nvmData>
         <eepromData id="0">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</eepromData>
-        <checksum crc32="0x5E3EED2B" version="7"/>
+        <checksum crc32="0xCE1EB0D8" version="7"/>
         <VDDItem id="0">
             <item id="0" caption="VDD (PIN 20)">
                 <graphics pos="(439.89,-321.19)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
@@ -60,7 +60,7 @@
         </IOPad>
         <IOPad id="9" useCaseMode="2">
             <item id="9" caption="PIN 11 (IO6)">
-                <graphics pos="(5.62,468.15)" angle="180" flipping="2" hidden="0" tOrigin="(20.00,10.00)"/>
+                <graphics pos="(5.62,468.98)" angle="180" flipping="2" hidden="0" tOrigin="(20.00,10.00)"/>
                 <textLabel pos="(65.63,47.00)" angle="-180.00" textColor="#ffff00ff" backgroundColor="#14141464">WRITE_GATE_GP</textLabel>
             </item>
         </IOPad>
@@ -166,7 +166,7 @@
         </item>
         <LUT id="35" regularShape="0" mode="0">
             <item id="35" caption="2-bit LUT0/DFF/LATCH0">
-                <graphics pos="(-132.95,353.44)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
+                <graphics pos="(-132.95,353.27)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
             </item>
         </LUT>
         <LUT id="36" regularShape="0" mode="0">

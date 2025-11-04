@@ -27,9 +27,9 @@ typedef enum {
 } fdd_in_use_mode_t;
 
 typedef enum {
-    MEDIA_AUTO_DETECT_DISABLED = 0,  // 自動検出しない（即EJECTED）
-    MEDIA_AUTO_DETECT_60SEC = 1,     // 60秒間トライ
-    MEDIA_AUTO_DETECT_UNLIMITED = 2, // タイムアウトせずに続ける
+    MEDIA_AUTO_DETECT_DISABLED = 0,   // 自動検出しない（即EJECTED）
+    MEDIA_AUTO_DETECT_60SEC = 1,      // 60秒間トライ
+    MEDIA_AUTO_DETECT_UNLIMITED = 2,  // タイムアウトせずに続ける
 } media_auto_detect_t;
 
 typedef enum {
@@ -45,6 +45,8 @@ typedef enum {
     FDD_RPM_300,
     FDD_RPM_360,
 } fdd_rpm_mode_t;
+
+char* fdd_rpm_mode_to_string(fdd_rpm_mode_t mode);
 
 // bps 判定結果
 // 観測しうるBPSカテゴリ
@@ -63,27 +65,28 @@ typedef enum {
 } fdd_bps_mode_t;
 
 typedef enum drive_state {
-    DRIVE_STATE_POWER_OFF = 0,         // 電源オフ状態
-    DRIVE_STATE_NOT_CONNECTED = 1,     // ドライブが物理的に接続されていない場合
-    DRIVE_STATE_DISABLED = 2,          // ドライブがDisableになっている場合
-    DRIVE_STATE_INITIALIZING = 3,      // ドライブに電源が供給された後、初期化中の状態。初期化に失敗するとNOT_CONNECTEDになる
-    DRIVE_STATE_MEDIA_DETECTING = 4,   // メディアの挿入状態を確認中
-    DRIVE_STATE_MEDIA_WAITING = 5,     // メディアが挿入されていない状態。定期的にメディア検出を試みる（点滅表示）
-    DRIVE_STATE_READY = 6,             // ドライブがアクセス可能な状態 (メディア挿入検出済みだが、論理イジェクトとは関係ないので注意)
-    DRIVE_STATE_EJECTED = 7,           // イジェクト後、1分以上メディア挿入がない状態（メディア検出停止、点滅なし）
+    DRIVE_STATE_POWER_OFF = 0,        // 電源オフ状態
+    DRIVE_STATE_NOT_CONNECTED = 1,    // ドライブが物理的に接続されていない場合
+    DRIVE_STATE_DISABLED = 2,         // ドライブがDisableになっている場合
+    DRIVE_STATE_INITIALIZING = 3,     // ドライブに電源が供給された後、初期化中の状態。初期化に失敗するとNOT_CONNECTEDになる
+    DRIVE_STATE_MEDIA_DETECTING = 4,  // メディアの挿入状態を確認中
+    DRIVE_STATE_MEDIA_WAITING = 5,    // メディアが挿入されていない状態。定期的にメディア検出を試みる（点滅表示）
+    DRIVE_STATE_READY = 6,            // ドライブがアクセス可能な状態 (メディア挿入検出済みだが、論理イジェクトとは関係ないので注意)
+    DRIVE_STATE_EJECTED = 7,          // イジェクト後、1分以上メディア挿入がない状態（メディア検出停止、点滅なし）
 } drive_state_t;
 
 typedef struct drive_status {
-    drive_state_t state;            // ドライブの状態
-    uint8_t drive_id;               // ドライブID (0-3)
-    bool eject_masked;              // イジェクト操作がマスクされているか
-    bool led_blink;                 // LEDが点滅中か
-    bool mode_select_inverted;      // MODE SELECT信号の極性反転
-    fdd_in_use_mode_t in_use_mode;  // IN-USE信号の動作モード
-    fdd_rpm_control_t rpm_control;  // 回転数制御方式
-    fdd_rpm_mode_t rpm_setting;      // 設定された回転数
-    fdd_rpm_mode_t rpm_measured;     // 測定された回転数
-    fdd_bps_mode_t bps_measured;     // 測定されたBPS
+    int drive_index;                  // ドライブインデックス (0=FDD_A, 1=FDD_B) ※ドライブIDは別
+    drive_state_t state;              // ドライブの状態
+    uint8_t drive_id;                 // ドライブID (0-3)
+    bool eject_masked;                // イジェクト操作がマスクされているか
+    bool led_blink;                   // LEDが点滅中か
+    bool mode_select_inverted;        // MODE SELECT信号の極性反転
+    fdd_in_use_mode_t in_use_mode;    // IN-USE信号の動作モード
+    fdd_rpm_control_t rpm_control;    // 回転数制御方式
+    fdd_rpm_mode_t rpm_setting;       // 設定された回転数
+    fdd_rpm_mode_t rpm_measured;      // 測定された回転数
+    fdd_bps_mode_t bps_measured;      // 測定されたBPS
     uint32_t media_waiting_start_ms;  // MEDIA_WAITING状態になった時刻（1分後にEJECTEDに遷移）
 } drive_status_t;
 
@@ -105,16 +108,16 @@ typedef struct usbpd_status {
 } usbpd_status_t;
 
 typedef struct preferences {
-    uint8_t signature[4];                  // "MYSX"
-    uint8_t version_m;                     // メジャーバージョン
-    uint8_t version_s;                     // マイナーバージョン
-    uint8_t reserved[2];                   // 予約領域
-    fdd_rpm_control_t fdd_rpm_control[2];  // FDDの回転数制御方式
-    fdd_in_use_mode_t fdd_in_use_mode[2];  // FDDのIN-USE信号の動作モード
-    bool mode_select_inverted[2];          // MODE SELECT信号の極性反転
+    uint8_t signature[4];                   // "MYSX"
+    uint8_t version_m;                      // メジャーバージョン
+    uint8_t version_s;                      // マイナーバージョン
+    uint8_t reserved[2];                    // 予約領域
+    fdd_rpm_control_t fdd_rpm_control[2];   // FDDの回転数制御方式
+    fdd_in_use_mode_t fdd_in_use_mode[2];   // FDDのIN-USE信号の動作モード
+    bool mode_select_inverted[2];           // MODE SELECT信号の極性反転
     media_auto_detect_t media_auto_detect;  // メディア自動検出モード
-    bool speaker_enabled;                  // スピーカー有効/無効
-    fdd_id_mode_t fdd_id_mode;             // FDDのドライブID設定モード
+    bool speaker_enabled;                   // スピーカー有効/無効
+    fdd_id_mode_t fdd_id_mode;              // FDDのドライブID設定モード
 } preferences_t;
 
 typedef struct minyasx_context {

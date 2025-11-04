@@ -20,14 +20,48 @@ static volatile uint32_t cap_buf_ds0[READ_DATA_CAP_N];
 static volatile uint32_t cap_buf_ds1[READ_DATA_CAP_N];
 static volatile uint32_t* cap_buf_active = cap_buf_ds0; /* 切替用 */
 
+static void set_mode_select(drive_status_t* drive, fdd_rpm_mode_t rpm) {
+    // GreenPAK1の Vitrual Input に以下を接続している
+    // 4 (bit3)  = MODE_SELECT_A (ドライブA用)
+    // 5 (bit2)  = MODE_SELECT_B (ドライブB用)
+    // いわゆる3モードドライブはWindows向けのため通常動作が 300RPM (1.44MB) であると考えられるので、
+    // * MODE_SELECT信号をディアサーとすると300RPM
+    // * MODE_SELECT信号をアサートすると360RPM
+    // が通常動作とした。逆のドライブ（5インチドライブに多い）の場合は mode_select_inverted を true にすることで対応する。
+    bool inverted = drive->mode_select_inverted;
+    bool asserted = false;
+    switch (rpm) {
+    case FDD_RPM_UNKNOWN:
+        // 不明モード (MODE_SELECTはディアサートし、ドライブのデフォルト動作に任せる)
+        asserted = false;
+        break;
+    case FDD_RPM_300:
+        // 300RPMモード
+        asserted = inverted;
+        break;
+    case FDD_RPM_360:
+        // 360RPMモード
+        asserted = !inverted;
+        break;
+    }
+    uint8_t gp1_vin = greenpak_get_virtualinput(1 - 1);
+    uint8_t gp1_vin_current = gp1_vin;
+    if (asserted) {
+        gp1_vin |= (1 << (3 - drive->drive_index));
+    } else {
+        gp1_vin &= ~(1 << (3 - drive->drive_index));
+    }
+    if (gp1_vin != gp1_vin_current) {
+        ui_logf(UI_LOG_LEVEL_DEBUG, "PCFDD: Set MODE SELECT %0x\n", gp1_vin);
+        greenpak_set_virtualinput(1 - 1, gp1_vin);
+    }
+}
+
 /**
  * PC FDDのMODE SELECT信号を設定し、回転数変更を試みます
  * ただし、rpm_controlの設定が固定になっている場合は変更しません。
  */
 void pcfdd_set_rpm_mode_select(drive_status_t* drive, fdd_rpm_mode_t rpm) {
-    uint32_t flag = (1 << 0);  // MODE_SELECT_DOSV のビット位置
-    bool inverted = drive->mode_select_inverted;
-
     switch (drive->rpm_control) {
     case FDD_RPM_CONTROL_300:
         rpm = FDD_RPM_300;
@@ -38,7 +72,6 @@ void pcfdd_set_rpm_mode_select(drive_status_t* drive, fdd_rpm_mode_t rpm) {
     case FDD_RPM_CONTROL_NONE:
         // NONEの場合は、rpm引数は無視される
         // 回転数制御なしの場合は、ドライブのデフォルト動作に任せるので、MODE_SELECTはディアサートする
-        GPIOB->BCR = flag;  // MODE_SELECT_DOSVをクリア
         drive->rpm_setting = FDD_RPM_UNKNOWN;
         return;
     case FDD_RPM_CONTROL_9SCDRV:
@@ -50,14 +83,9 @@ void pcfdd_set_rpm_mode_select(drive_status_t* drive, fdd_rpm_mode_t rpm) {
         return;
     }
     drive->rpm_setting = rpm;
-    // MODE_SELECT_DOSV の設定
-    if (((rpm == FDD_RPM_300) && !inverted) || ((rpm == FDD_RPM_360) && inverted)) {
-        // TODO:MODE_SELECT をGreenPAK のVirtual Input 経由で設定するように変更する
-        //        GPIOB->BCR = flag;  // MODE_SELECT_DOSV = 300RPM mode
-    } else {
-        // TODO:MODE_SELECT をGreenPAK のVirtual Input 経由で設定するように変更する
-        //        GPIOB->BSHR = flag;  // MODE_SELECT_DOSV = 360RPM mode
-    }
+    // MODE_SELECT の設定変更はメインループコンテキストで行う必要があるので
+    // ここでは直接変更せず、後でメインループで反映する
+    // set_mode_select(drive, rpm);
 }
 
 // ---- 設定に応じて調整する定数 ----
@@ -86,6 +114,7 @@ static inline drive_t current_drive_from_gpio(void) {
 void pcfdd_init(minyasx_context_t* ctx) {
     // PCFDDコントローラの初期化コードをここに追加
     for (int i = 0; i < 2; i++) {
+        ctx->drive[i].drive_index = i;
         ctx->drive[i].state = DRIVE_STATE_POWER_OFF;
         ctx->drive[i].eject_masked = false;
         ctx->drive[i].led_blink = false;
@@ -814,6 +843,10 @@ static void process_ready(minyasx_context_t* ctx, int drive) {
 
     // READY状態の処理
 
+    // 0. MODEL_SELECTの反映
+    drive_status_t* d = &ctx->drive[drive];
+    set_mode_select(d, d->rpm_setting);
+
     // 1. READY_MCUをActiveにする
     // MOTOR ON信号(PA12)がアクティブならREADY信号をアクティブにする
     // GreenPAKは各ドライブにDriveSelect信号がアサートされると、
@@ -1032,28 +1065,14 @@ void pcfdd_update_setting(minyasx_context_t* ctx, int drive) {
     switch (d->rpm_control) {
     case FDD_RPM_CONTROL_360:
         // 360RPMモード
-        if (d->mode_select_inverted) {
-            // MODE_SELECT_DOSV = 0
-            // TODO:MODE_SELECT をGreenPAK のVirtual Input 経由で設定するように変更する
-            GPIOB->BCR = (1 << 0);  // MODE_SELECT_DOSV = 0
-        } else {
-            // TODO:MODE_SELECT をGreenPAK のVirtual Input 経由で設定するように変更する
-            GPIOB->BSHR = (1 << 0);  // MODE_SELECT_DOSV = 1
-        }
+        set_mode_select(d, FDD_RPM_360);
         d->rpm_setting = FDD_RPM_360;
         d->rpm_measured = FDD_RPM_UNKNOWN;
         d->bps_measured = BPS_UNKNOWN;
         break;
     case FDD_RPM_CONTROL_300:
         // 300RPMモード
-        if (d->mode_select_inverted) {
-            // MODE_SELECT_DOSV = 1
-            // TODO:MODE_SELECT をGreenPAK のVirtual Input 経由で設定するように変更する
-            GPIOB->BSHR = (1 << 0);  // MODE_SELECT_DOSV = 1
-        } else {
-            // TODO:MODE_SELECT をGreenPAK のVirtual Input 経由で設定するように変更する
-            GPIOB->BCR = (1 << 0);  // MODE_SELECT_DOSV = 0
-        }
+        set_mode_select(d, FDD_RPM_300);
         d->rpm_setting = FDD_RPM_300;
         d->rpm_measured = FDD_RPM_UNKNOWN;
         d->bps_measured = BPS_UNKNOWN;

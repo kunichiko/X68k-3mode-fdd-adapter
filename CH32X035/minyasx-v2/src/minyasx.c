@@ -13,3 +13,16 @@ minyasx_context_t* minyasx_init(void) {
 
     return &ctx;
 }
+
+char* fdd_rpm_mode_to_string(fdd_rpm_mode_t mode) {
+    switch (mode) {
+    case FDD_RPM_UNKNOWN:
+        return "---";
+    case FDD_RPM_300:
+        return "300";
+    case FDD_RPM_360:
+        return "360";
+    default:
+        return "***";
+    }
+}
