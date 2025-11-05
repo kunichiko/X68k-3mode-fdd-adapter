@@ -61,6 +61,7 @@ typedef struct ui_page_context_t {
 void ui_change_page(ui_page_type_t page);
 ui_page_type_t ui_get_current_page(void);
 
+void ui_page_boot_init(ui_page_context_t* win);
 void ui_page_main_init(ui_page_context_t* win);
 void ui_page_menu_init(ui_page_context_t* win);
 void ui_page_about_init(ui_page_context_t* win);
@@ -79,8 +80,9 @@ ui_write_t ui_get_writer(ui_page_type_t page);
 
 void ui_clear(ui_page_type_t page);
 void ui_cursor(ui_page_type_t page, uint8_t x, uint8_t y);
-void ui_print(ui_page_type_t page, char* str);
+void ui_print(ui_page_type_t page, const char* str);
 void ui_write(ui_page_type_t page, char c);
+char ui_read_char(ui_page_type_t page, uint8_t x, uint8_t y);
 
 #include "print.h"
 #define ui_printD(p, n) printD(ui_get_writer(p), n)  // print decimal as string
@@ -95,6 +97,9 @@ void ui_write(ui_page_type_t page, char c);
 void ui_init(minyasx_context_t* ctx);
 
 void ui_poll(minyasx_context_t* ctx, uint32_t systick_ms);
+
+// 現在のキー状態を問い合わせる関数
+bool ui_is_key_pressed(ui_key_mask_t key);
 
 // 複数の選択肢を上下キーで選択し、Enterキーで決定するUIを表示する
 // 選択肢はNULL終端の文字列配列で与える
@@ -115,18 +120,39 @@ typedef struct {
 void ui_select_init(ui_select_t* select);
 void ui_select_keyin(ui_select_t* select, ui_key_mask_t keys);
 
+// OK/Cancelダイアログ
+#define UI_DIALOG_BACKUP_WIDTH 14
+#define UI_DIALOG_BACKUP_HEIGHT 4
+typedef struct {
+    ui_page_type_t page;                                           // ダイアログを表示するページ
+    const char* message;                                           // メッセージ（最大3行まで想定）
+    bool dialog_open;                                              // ダイアログが開いているか
+    bool result;                                                   // true=OK, false=Cancel
+    bool selection_made;                                           // 選択が確定したか
+    int selected_button;                                           // 0=OK, 1=Cancel
+    char backup[UI_DIALOG_BACKUP_HEIGHT][UI_DIALOG_BACKUP_WIDTH];  // 背景のバックアップ
+} ui_dialog_t;
+void ui_dialog_init(ui_dialog_t* dialog);
+void ui_dialog_keyin(ui_dialog_t* dialog, ui_key_mask_t keys);
+void ui_dialog_close(ui_dialog_t* dialog);
+
 // ログ表示用
 
 typedef enum {
     UI_LOG_LEVEL_TRACE = 0,  // トレース（詳細情報、デバッグ用）
-    UI_LOG_LEVEL_INFO = 1,   // 情報
-    UI_LOG_LEVEL_WARN = 2,   // 警告
-    UI_LOG_LEVEL_ERROR = 3,  // エラー
+    UI_LOG_LEVEL_DEBUG = 1,  // デバッグ（詳細情報、デバッグ用）
+    UI_LOG_LEVEL_INFO = 2,   // 情報
+    UI_LOG_LEVEL_WARN = 3,   // 警告
+    UI_LOG_LEVEL_ERROR = 4,  // エラー
 } ui_log_level_t;
 
 void ui_log_set_level(ui_log_level_t level);
 ui_log_level_t ui_log_get_level(void);
-void ui_log_print(ui_log_level_t level, const char* message);
-void ui_log_printf(ui_log_level_t level, const char* format, ...);
+void ui_log(ui_log_level_t level, const char* message);
+ui_write_t ui_get_log_writer(ui_log_level_t level);
+#define ui_logf(level, f, ...) printF(ui_get_log_writer(level), f, ##__VA_ARGS__)
+
+// ログページの強制更新（現在のページがLOGの場合のみ）
+void ui_refresh_log_page(void);
 
 #endif  // UI_CONTROL_H

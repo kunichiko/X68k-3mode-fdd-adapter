@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git config:*)",
+      "Bash(git checkout:*)",
+      "Bash(git log:*)",
+      "Bash(git filter-branch:*)",
+      "Read(//Users/ohnaka/work/X68000/X68k-3mode-fdd-adapter/**)",
+      "Bash(git stash:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(make:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -5,6 +5,261 @@
 	(uuid "cfd5864b-5ded-4888-ac19-555fc3b9d426")
 	(paper "A4")
 	(lib_symbols
+		(symbol "LED:WS2812B-2020"
+			(pin_names
+				(offset 0.254)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "D"
+				(at 5.08 5.715 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify right bottom)
+				)
+			)
+			(property "Value" "WS2812B-2020"
+				(at 1.27 -5.715 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" "LED_SMD:LED_WS2812B-2020_PLCC4_2.0x2.0mm"
+				(at 1.27 -7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/4684/4684_WS2812B-2020_V1.3_EN.pdf"
+				(at 2.54 -9.525 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Description" "RGB LED with integrated controller, 2.0 x 2.0 mm, 12 mA"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "RGB LED NeoPixel Nano addressable"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "LED*WS2812*-2020_PLCC4*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "WS2812B-2020_0_0"
+				(text "RGB"
+					(at 2.286 -4.191 0)
+					(effects
+						(font
+							(size 0.762 0.762)
+						)
+					)
+				)
+			)
+			(symbol "WS2812B-2020_0_1"
+				(polyline
+					(pts
+						(xy 1.27 -2.54) (xy 1.778 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -3.556) (xy 1.778 -3.556)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.286 -1.524) (xy 1.27 -2.54) (xy 1.27 -2.032)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.286 -2.54) (xy 1.27 -3.556) (xy 1.27 -3.048)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.683 -1.016) (xy 3.683 -3.556) (xy 3.683 -4.064)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 4.699 -1.524) (xy 2.667 -1.524) (xy 3.683 -3.556) (xy 4.699 -1.524)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 4.699 -3.556) (xy 2.667 -3.556)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 5.08 5.08)
+					(end -5.08 -5.08)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "WS2812B-2020_1_1"
+				(pin input line
+					(at -7.62 0 0)
+					(length 2.54)
+					(name "DIN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 7.62 270)
+					(length 2.54)
+					(name "VDD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 -7.62 90)
+					(length 2.54)
+					(name "VSS"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 7.62 0 180)
+					(length 2.54)
+					(name "DOUT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "power:+5V"
 			(power)
 			(pin_numbers
@@ -231,189 +486,24 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "x68000-ext:SK6812MINI-HS"
-			(pin_names
-				(offset 1.016)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "LED"
-				(at 3.81 -5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "SK6812MINI-HS"
-				(at 5.08 8.89 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "x68k-lib:SK6812MINI-HS"
-				(at 15.24 -7.62 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 -1.27 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "RGB LED with integrated controller"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "LCSC" "C2922787"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "RGB LED NeoPixel"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "SK6812MINI-HS_0_1"
-				(rectangle
-					(start -6.35 6.35)
-					(end 6.35 -3.81)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type background)
-					)
-				)
-			)
-			(symbol "SK6812MINI-HS_1_1"
-				(pin input line
-					(at -8.89 1.27 0)
-					(length 2.54)
-					(name "DIN"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 0 8.89 270)
-					(length 2.54)
-					(name "VDD"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 0 -6.35 90)
-					(length 2.54)
-					(name "VSS"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin output line
-					(at 8.89 1.27 180)
-					(length 2.54)
-					(name "DOUT"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 	)
 	(no_connect
-		(at 180.34 101.6)
+		(at 179.07 101.6)
 		(uuid "ec57e3d0-a64e-42fa-bacb-6a37894ca705")
 	)
 	(wire
 		(pts
-			(xy 92.71 101.6) (xy 101.6 101.6)
+			(xy 118.11 101.6) (xy 137.16 101.6)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "1f25bb52-8c65-4ca5-b0e0-96d776697116")
+		(uuid "009950cd-6cec-41a7-b286-e349d1c63131")
 	)
 	(wire
 		(pts
-			(xy 119.38 101.6) (xy 135.89 101.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4022761d-5053-400b-b769-025f7f9d6666")
-	)
-	(wire
-		(pts
-			(xy 57.15 101.6) (xy 74.93 101.6)
+			(xy 57.15 101.6) (xy 76.2 101.6)
 		)
 		(stroke
 			(width 0)
@@ -443,16 +533,6 @@
 	)
 	(wire
 		(pts
-			(xy 153.67 101.6) (xy 162.56 101.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "85ccb434-6ad1-41af-8308-336c5e58051d")
-	)
-	(wire
-		(pts
 			(xy 171.45 113.03) (xy 171.45 109.22)
 		)
 		(stroke
@@ -463,6 +543,16 @@
 	)
 	(wire
 		(pts
+			(xy 152.4 101.6) (xy 163.83 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aaf6766f-655d-4dc7-86c8-868efc5a4a43")
+	)
+	(wire
+		(pts
 			(xy 83.82 113.03) (xy 83.82 109.22)
 		)
 		(stroke
@@ -470,6 +560,16 @@
 			(type default)
 		)
 		(uuid "cd55724b-1aca-48b7-8058-d759450f76c9")
+	)
+	(wire
+		(pts
+			(xy 91.44 101.6) (xy 102.87 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dd3ec44c-8d94-41dc-9c28-868a888534d1")
 	)
 	(hierarchical_label "LED_DATA"
 		(shape input)
@@ -483,184 +583,6 @@
 		(uuid "1b621800-17da-4f5e-8956-38ed87c9da74")
 	)
 	(symbol
-		(lib_id "x68000-ext:SK6812MINI-HS")
-		(at 144.78 102.87 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "08ead243-f468-42d5-a93c-a6e6d4be5a2d")
-		(property "Reference" "D1103"
-			(at 149.86 91.948 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SK6812MINI"
-			(at 152.908 94.488 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "x68k-lib:SK6812MINI-HS"
-			(at 160.02 110.49 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/2686/SK6812MINI_REV.01-1-2.pdf"
-			(at 144.78 104.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "ACCESS B"
-			(at 144.78 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C2922787"
-			(at 144.78 102.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
-			(at 144.78 102.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "4"
-			(uuid "9cc7ca9b-ac53-415a-a283-6733391ceefd")
-		)
-		(pin "2"
-			(uuid "6e233acd-bc2f-4797-b782-a3dd0f4ac6da")
-		)
-		(pin "3"
-			(uuid "f219a4e2-b35b-4809-9100-a4cca97c877b")
-		)
-		(pin "1"
-			(uuid "68006648-63df-4602-a19f-fc14f3d71ffc")
-		)
-		(instances
-			(project "X68k-3mode-fdd-adapter"
-				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/31293df3-a871-47ca-8f5f-1d9e3b862849"
-					(reference "D1103")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "x68000-ext:SK6812MINI-HS")
-		(at 83.82 102.87 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "1e5e3d49-dd60-47cb-b13b-7d939758e519")
-		(property "Reference" "D1101"
-			(at 88.9 91.948 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SK6812MINI"
-			(at 91.948 94.488 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "x68k-lib:SK6812MINI-HS"
-			(at 99.06 110.49 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/2686/SK6812MINI_REV.01-1-2.pdf"
-			(at 83.82 104.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "ACCESS A"
-			(at 83.82 84.836 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C2922787"
-			(at 83.82 102.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
-			(at 83.82 102.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "4"
-			(uuid "3eb2aecf-4fb7-4221-842e-d2f6ed940a40")
-		)
-		(pin "2"
-			(uuid "35656227-31e9-4104-bd9f-4bfec10397e1")
-		)
-		(pin "3"
-			(uuid "2500caad-e4fd-4924-b048-96f1f3b0f971")
-		)
-		(pin "1"
-			(uuid "dc296d55-be68-47e9-9287-6aa83cd7bdde")
-		)
-		(instances
-			(project "X68k-3mode-fdd-adapter"
-				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/31293df3-a871-47ca-8f5f-1d9e3b862849"
-					(reference "D1101")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 144.78 113.03 0)
 		(unit 1)
@@ -670,7 +592,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "43b24edb-f5e5-46bc-926d-cddcfbb9e160")
-		(property "Reference" "#PWR01107"
+		(property "Reference" "#PWR01506"
 			(at 144.78 119.38 0)
 			(effects
 				(font
@@ -720,47 +642,60 @@
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/31293df3-a871-47ca-8f5f-1d9e3b862849"
-					(reference "#PWR01107")
+					(reference "#PWR01506")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "x68000-ext:SK6812MINI-HS")
-		(at 171.45 102.87 0)
+		(lib_id "LED:WS2812B-2020")
+		(at 110.49 101.6 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "60681d8f-1790-4243-86c7-fe243dc1e95d")
-		(property "Reference" "D1104"
-			(at 175.768 92.71 0)
+		(fields_autoplaced yes)
+		(uuid "53ba129f-c0de-4c4c-9051-c7fb3322efb1")
+		(property "Reference" "D1502"
+			(at 124.46 95.1798 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "SK6812MINI"
-			(at 179.578 94.742 0)
+		(property "Value" "WS2812B-2020"
+			(at 124.46 97.7198 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" "x68k-lib:SK6812MINI-HS"
-			(at 186.69 110.49 0)
+		(property "Footprint" "LED_SMD:LED_WS2812B-2020_PLCC4_2.0x2.0mm"
+			(at 111.76 109.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left top)
+				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/2686/SK6812MINI_REV.01-1-2.pdf"
-			(at 171.45 104.14 0)
+		(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/4684/4684_WS2812B-2020_V1.3_EN.pdf"
+			(at 113.03 111.125 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "RGB LED with integrated controller, 2.0 x 2.0 mm, 12 mA"
+			(at 110.49 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -768,48 +703,31 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "EJECT B"
-			(at 171.45 85.344 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C2922787"
-			(at 171.45 102.87 0)
+		(property "LCSC" "C965555"
+			(at 110.49 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(hide yes)
 			)
-		)
-		(property "LCIC" ""
-			(at 171.45 102.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "60fd4ca3-7743-4211-9cad-77ba172bf4d8")
-		)
-		(pin "3"
-			(uuid "16aeb34d-a466-4210-b806-4b37a5fa518e")
-		)
-		(pin "4"
-			(uuid "884fbf68-1bf1-4d36-afe6-1a02b1b53912")
 		)
 		(pin "2"
-			(uuid "6a70059e-b8bb-467c-b914-243644ba5407")
+			(uuid "73694a77-81c9-4066-91e4-ae115db2e2a7")
+		)
+		(pin "1"
+			(uuid "188de4aa-e621-465c-95b9-362ad1635c24")
+		)
+		(pin "3"
+			(uuid "825fe8e2-7847-4b1d-8b71-4e27f9ac1af5")
+		)
+		(pin "4"
+			(uuid "8c7d9116-ae79-4688-907b-aff99fa576a2")
 		)
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/31293df3-a871-47ca-8f5f-1d9e3b862849"
-					(reference "D1104")
+					(reference "D1502")
 					(unit 1)
 				)
 			)
@@ -825,7 +743,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6fc8271c-f29f-4300-8cd7-0e0429ef6255")
-		(property "Reference" "#PWR01108"
+		(property "Reference" "#PWR01508"
 			(at 171.45 119.38 0)
 			(effects
 				(font
@@ -875,7 +793,7 @@
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/31293df3-a871-47ca-8f5f-1d9e3b862849"
-					(reference "#PWR01108")
+					(reference "#PWR01508")
 					(unit 1)
 				)
 			)
@@ -891,7 +809,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7d9abfc8-6725-4502-a427-be84aadae509")
-		(property "Reference" "#PWR01105"
+		(property "Reference" "#PWR01502"
 			(at 83.82 119.38 0)
 			(effects
 				(font
@@ -941,7 +859,7 @@
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/31293df3-a871-47ca-8f5f-1d9e3b862849"
-					(reference "#PWR01105")
+					(reference "#PWR01502")
 					(unit 1)
 				)
 			)
@@ -957,7 +875,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "86cd2f14-6cf3-45a9-9ad5-108cebe3a47d")
-		(property "Reference" "#PWR01101"
+		(property "Reference" "#PWR01501"
 			(at 83.82 97.79 0)
 			(effects
 				(font
@@ -1007,7 +925,177 @@
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/31293df3-a871-47ca-8f5f-1d9e3b862849"
-					(reference "#PWR01101")
+					(reference "#PWR01501")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "LED:WS2812B-2020")
+		(at 83.82 101.6 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8845005d-3c15-49e5-ba70-441518d46461")
+		(property "Reference" "D1501"
+			(at 97.79 95.1798 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "WS2812B-2020"
+			(at 97.79 97.7198 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "LED_SMD:LED_WS2812B-2020_PLCC4_2.0x2.0mm"
+			(at 85.09 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/4684/4684_WS2812B-2020_V1.3_EN.pdf"
+			(at 86.36 111.125 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "RGB LED with integrated controller, 2.0 x 2.0 mm, 12 mA"
+			(at 83.82 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C965555"
+			(at 83.82 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "cdace28a-97f9-4ca3-9e16-45d6c198dfb4")
+		)
+		(pin "1"
+			(uuid "0558de2a-ce71-4d4c-a188-e1a9150bfeda")
+		)
+		(pin "3"
+			(uuid "64b0bc4c-720b-4734-bda7-a812ddca1d95")
+		)
+		(pin "4"
+			(uuid "a5b8c73f-c92d-4e48-ba79-3787176f86a9")
+		)
+		(instances
+			(project ""
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/31293df3-a871-47ca-8f5f-1d9e3b862849"
+					(reference "D1501")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "LED:WS2812B-2020")
+		(at 144.78 101.6 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9f688d46-8d6a-4aeb-8e67-ac0c4d14e8d5")
+		(property "Reference" "D1503"
+			(at 158.75 95.1798 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "WS2812B-2020"
+			(at 158.75 97.7198 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "LED_SMD:LED_WS2812B-2020_PLCC4_2.0x2.0mm"
+			(at 146.05 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/4684/4684_WS2812B-2020_V1.3_EN.pdf"
+			(at 147.32 111.125 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "RGB LED with integrated controller, 2.0 x 2.0 mm, 12 mA"
+			(at 144.78 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C965555"
+			(at 144.78 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "7454b1b1-bdc4-426f-a6c8-2d37e5c516d5")
+		)
+		(pin "1"
+			(uuid "c6851669-b669-4712-b703-d1d464880785")
+		)
+		(pin "3"
+			(uuid "e62b3973-a0bb-4a9b-b7a9-89d0a6635046")
+		)
+		(pin "4"
+			(uuid "a39130c4-719c-49c6-b3d6-35b99f818674")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/31293df3-a871-47ca-8f5f-1d9e3b862849"
+					(reference "D1503")
 					(unit 1)
 				)
 			)
@@ -1023,7 +1111,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "bfc6c779-d83e-4568-8189-93cd7a8b76d0")
-		(property "Reference" "#PWR01104"
+		(property "Reference" "#PWR01507"
 			(at 171.45 97.79 0)
 			(effects
 				(font
@@ -1073,7 +1161,7 @@
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/31293df3-a871-47ca-8f5f-1d9e3b862849"
-					(reference "#PWR01104")
+					(reference "#PWR01507")
 					(unit 1)
 				)
 			)
@@ -1089,7 +1177,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "dadd6f81-b317-4fc5-a33d-1f8d6da559cc")
-		(property "Reference" "#PWR01106"
+		(property "Reference" "#PWR01504"
 			(at 110.49 119.38 0)
 			(effects
 				(font
@@ -1139,7 +1227,7 @@
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/31293df3-a871-47ca-8f5f-1d9e3b862849"
-					(reference "#PWR01106")
+					(reference "#PWR01504")
 					(unit 1)
 				)
 			)
@@ -1155,7 +1243,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "db595134-4518-4b42-a575-dddf1ede8f4e")
-		(property "Reference" "#PWR01103"
+		(property "Reference" "#PWR01505"
 			(at 144.78 97.79 0)
 			(effects
 				(font
@@ -1205,7 +1293,92 @@
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/31293df3-a871-47ca-8f5f-1d9e3b862849"
-					(reference "#PWR01103")
+					(reference "#PWR01505")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "LED:WS2812B-2020")
+		(at 171.45 101.6 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "eb258c39-570f-41fe-a3f0-df0408b1769a")
+		(property "Reference" "D1504"
+			(at 185.42 95.1798 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "WS2812B-2020"
+			(at 185.42 97.7198 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "LED_SMD:LED_WS2812B-2020_PLCC4_2.0x2.0mm"
+			(at 172.72 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/4684/4684_WS2812B-2020_V1.3_EN.pdf"
+			(at 173.99 111.125 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "RGB LED with integrated controller, 2.0 x 2.0 mm, 12 mA"
+			(at 171.45 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C965555"
+			(at 171.45 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "d85f84ab-53a3-43f9-9849-74b95c6ad062")
+		)
+		(pin "1"
+			(uuid "5675645c-6c29-450d-863e-b7f802fd2732")
+		)
+		(pin "3"
+			(uuid "6159fb4f-cab7-4647-8499-e5ae76156ec7")
+		)
+		(pin "4"
+			(uuid "baf92e4c-e039-45c7-81c5-fc177812b913")
+		)
+		(instances
+			(project "X68k-3mode-fdd-adapter"
+				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/31293df3-a871-47ca-8f5f-1d9e3b862849"
+					(reference "D1504")
 					(unit 1)
 				)
 			)
@@ -1221,7 +1394,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "fea3bb00-c68a-4782-b7b2-b1a4926f02c7")
-		(property "Reference" "#PWR01102"
+		(property "Reference" "#PWR01503"
 			(at 110.49 97.79 0)
 			(effects
 				(font
@@ -1271,96 +1444,7 @@
 		(instances
 			(project "X68k-3mode-fdd-adapter"
 				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/31293df3-a871-47ca-8f5f-1d9e3b862849"
-					(reference "#PWR01102")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "x68000-ext:SK6812MINI-HS")
-		(at 110.49 102.87 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "ffa86407-b713-4c0c-88d7-9cc49dca57f9")
-		(property "Reference" "D1102"
-			(at 114.808 92.71 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SK6812MINI"
-			(at 118.618 94.742 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "x68k-lib:SK6812MINI-HS"
-			(at 125.73 110.49 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/2686/SK6812MINI_REV.01-1-2.pdf"
-			(at 110.49 104.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "EJECT A"
-			(at 110.49 84.836 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C2922787"
-			(at 105.41 105.41 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCIC" ""
-			(at 110.49 102.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "1f37f0f9-f48f-4777-a801-7e6301932594")
-		)
-		(pin "3"
-			(uuid "8d4a83f3-dbf1-4265-a76f-c68ab3d5205b")
-		)
-		(pin "4"
-			(uuid "946278ff-c0b8-47f6-82dd-65b19be18267")
-		)
-		(pin "2"
-			(uuid "b9178f5f-2c8b-4e57-ae65-1e97f36a4f31")
-		)
-		(instances
-			(project "X68k-3mode-fdd-adapter"
-				(path "/13b3a4ee-84d6-44b3-962d-9cf7c36d7564/31293df3-a871-47ca-8f5f-1d9e3b862849"
-					(reference "D1102")
+					(reference "#PWR01503")
 					(unit 1)
 				)
 			)

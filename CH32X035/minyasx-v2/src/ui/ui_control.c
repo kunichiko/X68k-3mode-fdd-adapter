@@ -1,6 +1,8 @@
 #include "ui_control.h"
 
 #include "greenpak/greenpak_control.h"
+#include "power/power_control.h"
+#include "ui_page_log.h"
 
 static ui_page_context_t ui_pages[UI_PAGE_MAX];
 
@@ -82,8 +84,18 @@ void ui_cursor(ui_page_type_t page, uint8_t x, uint8_t y) {
     }
 }
 
-void ui_print(ui_page_type_t page, char *str) {
+void ui_print(ui_page_type_t page, const char *str) {
     while (*str) ui_write(page, *str++);
+}
+
+char ui_read_char(ui_page_type_t page, uint8_t x, uint8_t y) {
+    if (page < 0 || page >= UI_PAGE_MAX) {
+        return ' ';  // 無効なページ番号
+    }
+    ui_page_context_t *pcon = &ui_pages[page];
+    if (x < 0 || x >= 21) return ' ';
+    if (y < 0 || y >= 8) return ' ';
+    return pcon->buf[y][x];
 }
 
 static void ui_show_cursor(ui_page_context_t *pcon) {
@@ -197,7 +209,8 @@ void ui_write_10(char c) {
     ui_write(10, c);
 }
 void ui_write_11(char c) {
-    ui_write(11, c);
+    // UI_PAGE_LOG (11) の場合は専用の関数を使う
+    ui_page_log_write_char(c);
 }
 void ui_write_null(char c) {
     // 何もしない
@@ -245,6 +258,7 @@ void ui_init(minyasx_context_t *ctx) {
     current_page = UI_PAGE_MAIN;
 
     // 各ページの初期化
+    ui_page_boot_init(&ui_pages[UI_PAGE_BOOT]);
     ui_page_main_init(&ui_pages[UI_PAGE_MAIN]);
     ui_page_menu_init(&ui_pages[UI_PAGE_MENU]);
     ui_page_about_init(&ui_pages[UI_PAGE_ABOUT]);
@@ -258,6 +272,29 @@ void ui_init(minyasx_context_t *ctx) {
     ui_page_log_init(&ui_pages[UI_PAGE_LOG]);
 }
 
+// キー状態管理構造体
+typedef struct {
+    ui_key_mask_t current_keys;   // 現在押されているキー
+    ui_key_mask_t last_keys;      // 前回のキー状態
+    uint32_t press_start_time;    // 押され始めた時刻
+    uint32_t last_repeat_time;    // 最後にリピートした時刻
+    bool is_repeating;            // リピート中フラグ
+} key_state_t;
+
+// タイミング定数
+#define KEY_REPEAT_DELAY 500      // 長押し判定までの時間（ms）
+#define KEY_REPEAT_INTERVAL 100   // リピート間隔（ms）
+
+// リピート対象のキー（UP/DOWN/ENTER）
+#define KEY_REPEATABLE_MASK (UI_KEY_UP | UI_KEY_DOWN | UI_KEY_ENTER)
+
+// キー状態管理（グローバルstatic変数）
+static key_state_t key_state = {0, 0, 0, 0, false};
+
+bool ui_is_key_pressed(ui_key_mask_t key) {
+    return (key_state.current_keys & key) != 0;
+}
+
 void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
     // 各ページのポーリング処理
     for (int i = 0; i < UI_PAGE_MAX; i++) {
@@ -267,12 +304,10 @@ void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
         }
     }
 
-    // ここでキー入力のポーリングを行い、必要に応じてコールバックを呼び出す
-    // 例えば、キー状態を読み取る関数があると仮定
+    // 現在のキー状態を読み取る
     ui_key_mask_t keys = UI_KEY_NONE;
-    static ui_key_mask_t last_keys = UI_KEY_NONE;
 
-    // キー入力はGP4のIO端子をI2Cで読める
+    // キー入力はGP5のIO端子をI2Cで読める
     // GPのIO端子の入力状態はレジスタ0x74,0x75で読める
     // 0x74:
     // - bit1: IO0 (UP)
@@ -283,25 +318,74 @@ void ui_poll(minyasx_context_t *ctx, uint32_t systick_ms) {
     // 0x75:
     // - bit4: IO13 (EJECT_B)
     // - bit5: IO14 (EJECT_A)
-    uint8_t gp4_io0_7 = gp_reg_get(gp_target_addr[3], 0x74);
-    uint8_t gp4_io8_15 = gp_reg_get(gp_target_addr[3], 0x75);
-    if ((gp4_io0_7 & (1 << 1)) == 0) keys |= UI_KEY_UP;
-    if ((gp4_io0_7 & (1 << 2)) == 0) keys |= UI_KEY_DOWN;
-    if ((gp4_io0_7 & (1 << 3)) == 0) keys |= UI_KEY_LEFT;
-    if ((gp4_io0_7 & (1 << 4)) == 0) keys |= UI_KEY_RIGHT;
-    if ((gp4_io0_7 & (1 << 5)) == 0) keys |= UI_KEY_ENTER;
-    if ((gp4_io8_15 & (1 << 4)) == 0) keys |= UI_KEY_EJECT_B;
-    if ((gp4_io8_15 & (1 << 5)) == 0) keys |= UI_KEY_EJECT_A;
+    uint8_t gp5_io0_7 = gp_reg_get(gp_target_addr[4], 0x74);
+    uint8_t gp5_io8_15 = gp_reg_get(gp_target_addr[4], 0x75);
+    if ((gp5_io0_7 & (1 << 1)) == 0) keys |= UI_KEY_UP;
+    if ((gp5_io0_7 & (1 << 2)) == 0) keys |= UI_KEY_DOWN;
+    if ((gp5_io0_7 & (1 << 3)) == 0) keys |= UI_KEY_LEFT;
+    if ((gp5_io0_7 & (1 << 4)) == 0) keys |= UI_KEY_RIGHT;
+    if ((gp5_io0_7 & (1 << 5)) == 0) keys |= UI_KEY_ENTER;
+    if ((gp5_io8_15 & (1 << 4)) == 0) keys |= UI_KEY_EJECT_B;
+    if ((gp5_io8_15 & (1 << 5)) == 0) keys |= UI_KEY_EJECT_A;
 
-    if (keys == last_keys) {
-        // キー状態が変化していない
-        return;
+    key_state.current_keys = keys;
+
+    // キー状態の変化を検出
+    bool keys_changed = (key_state.current_keys != key_state.last_keys);
+    bool should_trigger = false;
+
+    if (keys_changed) {
+        // キー状態が変化した
+        if (key_state.current_keys != UI_KEY_NONE) {
+            // 新しいキーが押された
+            key_state.press_start_time = systick_ms;
+            key_state.last_repeat_time = systick_ms;
+            key_state.is_repeating = false;
+            should_trigger = true;
+            // 強制パワーオンタイムアウト用のキー操作記録
+            update_key_activity();
+        } else {
+            // すべてのキーが離された
+            key_state.is_repeating = false;
+        }
+    } else {
+        // キー状態が変化していない（キーが押され続けている）
+        if (key_state.current_keys != UI_KEY_NONE) {
+            // リピート対象のキーが押されているかチェック
+            ui_key_mask_t repeatable_keys = key_state.current_keys & KEY_REPEATABLE_MASK;
+
+            if (repeatable_keys != UI_KEY_NONE) {
+                uint32_t elapsed = systick_ms - key_state.press_start_time;
+
+                if (!key_state.is_repeating) {
+                    // リピート開始判定
+                    if (elapsed >= KEY_REPEAT_DELAY) {
+                        key_state.is_repeating = true;
+                        key_state.last_repeat_time = systick_ms;
+                        should_trigger = true;
+                    }
+                } else {
+                    // リピート中
+                    uint32_t since_last_repeat = systick_ms - key_state.last_repeat_time;
+                    if (since_last_repeat >= KEY_REPEAT_INTERVAL) {
+                        key_state.last_repeat_time = systick_ms;
+                        should_trigger = true;
+                    }
+                }
+            }
+        }
     }
-    last_keys = keys;
-    ui_page_context_t *page = &ui_pages[current_page];
-    if (page->keyin) {
-        page->keyin(&ui_pages[current_page], keys);
+
+    // コールバック呼び出し
+    if (should_trigger && key_state.current_keys != UI_KEY_NONE) {
+        ui_page_context_t *page = &ui_pages[current_page];
+        if (page->keyin) {
+            page->keyin(&ui_pages[current_page], key_state.current_keys);
+        }
     }
+
+    // 状態を保存
+    key_state.last_keys = key_state.current_keys;
 }
 
 void ui_select_print(ui_select_t *select, bool inverted) {
@@ -354,6 +438,86 @@ void ui_select_keyin(ui_select_t *select, ui_key_mask_t keys) {
     ui_select_print(select, true);
 }
 
+/**
+ * OK/Cancelダイアログの表示
+ */
+void ui_dialog_init(ui_dialog_t* dialog) {
+    ui_page_type_t page = dialog->page;
+
+    // 背景をバックアップ (x=3, y=2から14文字×4行)
+    for (int y = 0; y < UI_DIALOG_BACKUP_HEIGHT; y++) {
+        for (int x = 0; x < UI_DIALOG_BACKUP_WIDTH; x++) {
+            dialog->backup[y][x] = ui_read_char(page, 3 + x, 2 + y);
+        }
+    }
+
+    // ダイアログの枠を描画（中央に表示）
+    ui_cursor(page, 3, 2);
+    ui_print(page, "+------------+");
+    ui_cursor(page, 3, 3);
+    ui_print(page, "|            |");
+    ui_cursor(page, 3, 4);
+    ui_print(page, "|            |");
+    ui_cursor(page, 3, 5);
+    ui_print(page, "+------------+");
+
+    // メッセージを表示
+    ui_cursor(page, 5, 3);
+    ui_print(page, dialog->message);
+
+    // OKボタンとCancelボタンを表示
+    ui_cursor(page, 4, 4);
+    if (dialog->selected_button == 0) {
+        ui_print(page, "[OK] Cancel ");
+    } else {
+        ui_print(page, " OK [Cancel]");
+    }
+
+    dialog->dialog_open = true;
+    dialog->selection_made = false;
+}
+
+/**
+ * OK/Cancelダイアログのキー入力処理
+ */
+void ui_dialog_keyin(ui_dialog_t* dialog, ui_key_mask_t keys) {
+    if (keys & UI_KEY_LEFT) {
+        dialog->selected_button = 0;  // OK
+    } else if (keys & UI_KEY_RIGHT) {
+        dialog->selected_button = 1;  // Cancel
+    } else if (keys & UI_KEY_ENTER) {
+        dialog->result = (dialog->selected_button == 0);
+        dialog->selection_made = true;
+        dialog->dialog_open = false;
+        return;
+    }
+
+    // ボタンの表示を更新
+    ui_cursor(dialog->page, 4, 4);
+    if (dialog->selected_button == 0) {
+        ui_print(dialog->page, "[OK] Cancel ");
+    } else {
+        ui_print(dialog->page, " OK [Cancel]");
+    }
+}
+
+/**
+ * OK/Cancelダイアログを閉じて背景を復元
+ */
+void ui_dialog_close(ui_dialog_t* dialog) {
+    ui_page_type_t page = dialog->page;
+
+    // バックアップした背景を復元
+    for (int y = 0; y < UI_DIALOG_BACKUP_HEIGHT; y++) {
+        ui_cursor(page, 3, 2 + y);
+        for (int x = 0; x < UI_DIALOG_BACKUP_WIDTH; x++) {
+            ui_write(page, dialog->backup[y][x]);
+        }
+    }
+
+    dialog->dialog_open = false;
+}
+
 static ui_log_level_t current_log_level = UI_LOG_LEVEL_INFO;
 
 void ui_log_set_level(ui_log_level_t level) {
@@ -364,19 +528,23 @@ ui_log_level_t ui_log_get_level(void) {
     return current_log_level;
 }
 
-void ui_log_print(ui_log_level_t level, const char *message) {
+void ui_log(ui_log_level_t level, const char *message) {
     if (level < current_log_level) {
         return;  // 現在のログレベルより低いログは無視
     }
     ui_printf(UI_PAGE_LOG, message);
 }
 
-void ui_log_printf(ui_log_level_t level, const char *format, ...) {
+ui_write_t ui_get_log_writer(ui_log_level_t level) {
     if (level < current_log_level) {
-        return;  // 現在のログレベルより低いログは無視
+        return ui_write_null;  // 現在のログレベルより低いログは無視
     }
-    va_list args;
-    va_start(args, format);
-    ui_printf(UI_PAGE_LOG, format, args);
-    va_end(args);
+    return ui_get_writer(UI_PAGE_LOG);
+}
+
+void ui_refresh_log_page(void) {
+    // ログページを強制的に更新（現在のページがLOGの場合のみ）
+    if (current_page == UI_PAGE_LOG) {
+        ui_page_log_refresh(&ui_pages[UI_PAGE_LOG]);
+    }
 }

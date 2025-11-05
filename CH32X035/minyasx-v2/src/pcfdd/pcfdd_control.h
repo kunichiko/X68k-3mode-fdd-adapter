@@ -45,4 +45,6 @@ void pcfdd_detect_media(minyasx_context_t* ctx, int drive);  // drive: 0=FDD_A o
 
 char* pcfdd_state_to_string(drive_state_t state);
 
+void pcfdd_drive_select(int drive, bool active);
+
 #endif

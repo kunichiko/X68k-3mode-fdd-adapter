@@ -60,7 +60,11 @@
       ],
       "drc_exclusions": [
         [
-          "silk_over_copper|196390000|137284664|4e4814fb-74ce-4dfa-baae-0d6eaf9280cb|00000000-0000-0000-0000-000000000000",
+          "silk_over_copper|196990000|137018308|db977c79-763d-4925-99cd-d5211b1c9bc9|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "silk_over_copper|196990000|57168308|61d865bd-9c7d-4049-a18a-9f46a177e2b5|00000000-0000-0000-0000-000000000000",
           ""
         ]
       ],
@@ -466,6 +470,7 @@
       "single_global_label": "ignore",
       "unannotated": "error",
       "unconnected_wire_endpoint": "warning",
+      "undefined_netclass": "error",
       "unit_value_mismatch": "error",
       "unresolved_variable": "error",
       "wire_dangling": "error"
@@ -582,12 +587,6 @@
         },
         {
           "group_by": false,
-          "label": "LCIC",
-          "name": "LCIC",
-          "show": false
-        },
-        {
-          "group_by": false,
           "label": "説明",
           "name": "Description",
           "show": false
@@ -609,8 +608,8 @@
       "group_symbols": true,
       "include_excluded_from_bom": false,
       "name": "",
-      "sort_asc": true,
-      "sort_field": "Reference"
+      "sort_asc": false,
+      "sort_field": "Description"
     },
     "connection_grid_size": 50.0,
     "drawing": {
@@ -690,12 +689,36 @@
       "open_drain_buffer7"
     ],
     [
+      "7defe649-9190-42cf-8c3c-7fea8463f0db",
+      "open_drain_buffer8"
+    ],
+    [
+      "ce2e0d8c-ca2f-4f70-94dd-1ea4b4041b72",
+      "open_drain_buffer9"
+    ],
+    [
+      "9965fc1b-c90c-4091-9614-e8aa97b8edcb",
+      "open_drain_buffer10"
+    ],
+    [
+      "440c4d81-b807-434d-97cd-d9c1801a4b02",
+      "open_drain_buffer11"
+    ],
+    [
       "e2bad364-aaa3-4f08-8f3b-45fc5db28f5a",
       "USB-PD-PWR"
     ],
     [
       "31293df3-a871-47ca-8f5f-1d9e3b862849",
       "SerialLEDs"
+    ],
+    [
+      "32f246e0-25a3-49df-abad-facdcad22d94",
+      "mounting_hole"
+    ],
+    [
+      "56189f92-271f-40fd-aef5-b6ecb2392856",
+      "speaker"
     ]
   ],
   "text_variables": {}
